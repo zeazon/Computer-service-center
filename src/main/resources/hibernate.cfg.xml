@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+    "-//Hibernate/Hibernate Configuration DTD//EN"
+    "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+ 
+<hibernate-configuration>
+    <session-factory>
+    	<mapping class="com.twobytes.model.Employee" />
+    	<mapping class="com.twobytes.model.Role" />
+    	<mapping class="com.twobytes.model.Menu" />
+    	<mapping class="com.twobytes.model.Brand" />
+    	<mapping class="com.twobytes.model.Type" />
+    	<mapping class="com.twobytes.model.TransportCompany" />
+    	<mapping class="com.twobytes.model.Province" />
+    	<mapping class="com.twobytes.model.District" />
+    	<mapping class="com.twobytes.model.Subdistrict" />
+    	<mapping class="com.twobytes.model.OutsiteCompany" />
+    	<mapping class="com.twobytes.model.Customer" />
+    	<mapping class="com.twobytes.model.DocRunning" />
+    	<mapping class="com.twobytes.model.ServiceOrder" />
+    	<mapping class="com.twobytes.model.OutsiteService" />
+    	<mapping class="com.twobytes.model.OutsiteServiceDetail" />
+    	<mapping class="com.twobytes.model.Product" />
+    	<mapping class="com.twobytes.model.Model" />
+    	<mapping class="com.twobytes.model.CustomerType" />
+    </session-factory>
+
+</hibernate-configuration>

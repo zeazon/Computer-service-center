@@ -1,0 +1,202 @@
+*{ margin:0; padding:0;}
+/*body{ font:100% normal Arial, Helvetica, sans-serif; background:#ffffff;}*/
+body{ font:100% Arial, Helvetica, sans-serif; background:#ffffff;}
+
+/*label.error { float: none; color: red; padding-left: .5em; vertical-align: top;}*/
+/*.error { color: red; padding-left:4px;}*/
+
+button#lov{
+	float:left;
+	margin-left:3px;
+	margin-top:-2px;
+}
+
+button.lov_button{
+	float:left;
+	margin-left:3px;
+	margin-top:-2px;
+}
+
+.textareaMockup{
+	background-color:#FAFBFC;
+	border:1px solid #dbdbdb;
+	padding:5px;
+	border-radius: 4px 4px 4px 4px;
+	-webkit-border-radius:3px;
+	-moz-border-radius:3px;
+	color: #000;
+	border-top: 1px solid #A8A8A8;
+	border-left: 1px solid #A8A8A8;
+	border-right: 1px solid #D8D8D8;
+	border-bottom: 1px solid #D8D8D8;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:14px;
+	/*color:#404040;*/
+}
+
+.textareaMockup_focus{
+	background-color:#F9FBFD;
+	border:1px solid #dbdbdb;
+	padding:5px;
+	border-radius: 4px 4px 4px 4px;
+	-webkit-border-radius:3px;
+	-moz-border-radius:3px;
+	color: #000;
+	border-top: 1px solid #AACDEA;
+	border-left: 1px solid #AACDEA;
+	border-right: 1px solid #DEEBF7;
+	border-bottom: 1px solid #DEEBF7;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:14px;
+	/*color:#404040;*/
+}
+
+.textareaMockup_hover{
+	background-color:#F9FBFD;
+	border:1px solid #dbdbdb;
+	padding:5px;
+	border-radius: 4px 4px 4px 4px;
+	-webkit-border-radius:3px;
+	-moz-border-radius:3px;
+	color: #000;
+	border-top: 1px solid #C0CAD2;
+	border-left: 1px solid #C0CAD2;
+	border-right: 1px solid #E7EAEE;
+	border-bottom: 1px solid #E7EAEE;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:14px;
+	/*color:#404040;*/
+}
+
+/* html 5 version*/
+.textboxMockup{
+	float:left;
+	background-color:#FAFBFC;
+	padding-left:5px;
+	/*border-radius: 4px 4px 4px 4px;*/
+	border-radius: 4px;
+	-webkit-border-radius:4px;
+	-moz-border-radius:4px;
+	color: #000;
+	border-top: 1px solid #A8A8A8;
+	border-left: 1px solid #A8A8A8;
+	border-right: 1px solid #D8D8D8;
+	border-bottom: 1px solid #D8D8D8;	
+	height:29px;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:14px;
+	/*color:#404040;*/
+}
+
+.textboxMockup_focus{
+	float:left;
+	background-color:#F9FBFD;
+	padding-left:5px;
+	border-radius: 4px;
+	-webkit-border-radius:4px;
+	-moz-border-radius:4px;
+	color: #000;
+	border-top: 1px solid #AACDEA;
+	border-left: 1px solid #AACDEA;
+	border-right: 1px solid #DEEBF7;
+	border-bottom: 1px solid #DEEBF7;
+	height:29px;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:14px;
+	/*color:#404040;*/
+}
+
+.textboxMockup_hover{
+	float:left;
+	background-color:#F9FBFD;
+	padding-left:5px;
+	border-radius: 4px;
+	-webkit-border-radius:4px;
+	-moz-border-radius:4px;
+	color: #000;
+	border-top: 1px solid #C0CAD2;
+	border-left: 1px solid #C0CAD2;
+	border-right: 1px solid #E7EAEE;
+	border-bottom: 1px solid #E7EAEE;
+	height:29px;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:14px;
+	/*color:#404040;*/
+}
+
+.textboxMockup_disabled{
+	background-color:#DEDEDE;
+}
+
+/*
+.textboxMockup{
+	//float:left;
+	background-color:#FAFBFC;
+	border:1px solid #dbdbdb;
+	padding:5px;
+	border-radius: 4px 4px 4px 4px;
+	-webkit-border-radius:3px;
+	-moz-border-radius:3px;
+	color: #000;
+	border-top: 1px solid #A8A8A8;
+	border-left: 1px solid #A8A8A8;
+	border-right: 1px solid #D8D8D8;
+	border-bottom: 1px solid #D8D8D8;
+	height:19px;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:14px;
+	color:#404040;
+}
+
+.textboxMockup_focus{
+	//float:left;
+	background-color:#F9FBFD;
+	border:1px solid #dbdbdb;
+	padding:5px;
+	border-radius: 4px 4px 4px 4px;
+	-webkit-border-radius:3px;
+	-moz-border-radius:3px;
+	color: #000;
+	border-top: 1px solid #AACDEA;
+	border-left: 1px solid #AACDEA;
+	border-right: 1px solid #DEEBF7;
+	border-bottom: 1px solid #DEEBF7;
+	height:19px;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:14px;
+	color:#404040;
+}
+
+.textboxMockup_hover{
+	//float:left;
+	background-color:#F9FBFD;
+	border:1px solid #dbdbdb;
+	padding:5px;
+	border-radius: 4px 4px 4px 4px;
+	-webkit-border-radius:3px;
+	-moz-border-radius:3px;
+	color: #000;
+	border-top: 1px solid #C0CAD2;
+	border-left: 1px solid #C0CAD2;
+	border-right: 1px solid #E7EAEE;
+	border-bottom: 1px solid #E7EAEE;
+	height:19px;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:14px;
+	color:#404040;
+}
+*/
+
+/* Overide css code กำหนดความกว้างของปฏิทินและอื่นๆ */  
+.ui-datepicker{  
+    width:200px;
+    font-family:tahoma;  
+    font-size:11px;  
+    text-align:center;
+}
+
+pre.display{
+	font-size:16px;
+	margin-top:-5px;
+	line-height: 25px;
+}

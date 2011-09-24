@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC  
+	"-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"  
+	"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+	
+<tiles-definitions>
+	<definition name=".pageTemplate" template="/WEB-INF/templates/pageTemplate.jsp" />
+	
+	<definition name=".noMenuTemplate" template="/WEB-INF/templates/noMenuTemplate.jsp" />
+	
+	<definition name=".noBorderTemplate" template="/WEB-INF/templates/noBorderTemplate.jsp" />
+	
+	<definition name="index" template="/index.jsp">
+	</definition>
+	
+	<definition name="loginScreen" extends=".noMenuTemplate">
+		<put-attribute name="body" value="/WEB-INF/jsp/login.jsp"/>
+	</definition>
+	
+	<definition name="firstScreen" extends=".noBorderTemplate">
+		<put-attribute name="body" value="/WEB-INF/jsp/firstScreen.jsp"/>
+	</definition>
+	
+	<definition name="employee.search" extends=".pageTemplate">
+		<put-attribute name="pageName" value="พนักงาน" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/master/employeeSearch.jsp"/>
+	</definition>
+	
+	<definition name="employee.form" extends=".pageTemplate">
+		<put-attribute name="pageName" value="พนักงาน" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/master/employeeForm.jsp"/>
+	</definition>
+	
+	<definition name="brand.search" extends=".pageTemplate">
+		<put-attribute name="pageName" value="ยี่ห้อ" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/master/brandSearch.jsp"/>
+	</definition>
+	
+	<definition name="brand.form" extends=".pageTemplate">
+		<put-attribute name="pageName" value="ยี่ห้อ" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/master/brandForm.jsp"/>
+	</definition>
+	
+	<definition name="type.search" extends=".pageTemplate">
+		<put-attribute name="pageName" value="ประเภท" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/master/typeSearch.jsp"/>
+	</definition>
+	
+	<definition name="type.form" extends=".pageTemplate">
+		<put-attribute name="pageName" value="ประเภท" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/master/typeForm.jsp"/>
+	</definition>
+	
+	<definition name="transportCompany.search" extends=".pageTemplate">
+		<put-attribute name="pageName" value="บริษัทขนส่ง" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/master/transportCompanySearch.jsp"/>
+	</definition>
+	
+	<definition name="transportCompany.form" extends=".pageTemplate">
+		<put-attribute name="pageName" value="บริษัทขนส่ง" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/master/transportCompanyForm.jsp"/>
+	</definition>
+	
+	<definition name="outsiteCompany.search" extends=".pageTemplate">
+		<put-attribute name="pageName" value="บริษัทนอกที่รับซ่อม" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/master/outsiteCompanySearch.jsp"/>
+	</definition>
+	
+	<definition name="outsiteCompany.form" extends=".pageTemplate">
+		<put-attribute name="pageName" value="บริษัทนอกที่รับซ่อม" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/master/outsiteCompanyForm.jsp"/>
+	</definition>
+	
+	<definition name="customer.search" extends=".pageTemplate">
+		<put-attribute name="pageName" value="ลูกค้า" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/master/customerSearch.jsp"/>
+	</definition>
+	
+	<definition name="customer.form" extends=".pageTemplate">
+		<put-attribute name="pageName" value="ลูกค้า" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/master/customerForm.jsp"/>
+	</definition>
+	
+	<definition name="shopCustomer.search" extends=".pageTemplate">
+		<put-attribute name="pageName" value="ลูกค้าใน" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/master/shopCustomerSearch.jsp"/>
+	</definition>
+	
+	<definition name="shopCustomer.form" extends=".pageTemplate">
+		<put-attribute name="pageName" value="ลูกค้าใน" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/master/shopCustomerForm.jsp"/>
+	</definition>
+	
+	<definition name="model.search" extends=".pageTemplate">
+		<put-attribute name="pageName" value="โมเดล" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/master/modelSearch.jsp"/>
+	</definition>
+	
+	<definition name="model.form" extends=".pageTemplate">
+		<put-attribute name="pageName" value="โมเดล" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/master/modelForm.jsp"/>
+	</definition>
+	
+	<definition name="product.search" extends=".pageTemplate">
+		<put-attribute name="pageName" value="สินค้า" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/master/productSearch.jsp"/>
+	</definition>
+	
+	<definition name="product.form" extends=".pageTemplate">
+		<put-attribute name="pageName" value="สินค้า" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/master/productForm.jsp"/>
+	</definition>
+	
+	<definition name="customerType.search" extends=".pageTemplate">
+		<put-attribute name="pageName" value="ประเภทลูกค้า" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/master/customerTypeSearch.jsp"/>
+	</definition>
+	
+	<definition name="customerType.form" extends=".pageTemplate">
+		<put-attribute name="pageName" value="ประเภทลูกค้า" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/master/customerTypeForm.jsp"/>
+	</definition>
+	
+	<!-- Repair -->
+	
+	<definition name="serviceOrder.search" extends=".pageTemplate">
+		<put-attribute name="pageName" value="ใบแจ้งบริการ" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/repair/serviceOrderSearch.jsp"/>
+	</definition>
+	
+	<definition name="serviceOrder.form" extends=".pageTemplate">
+		<put-attribute name="pageName" value="ใบแจ้งบริการ" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/repair/serviceOrderForm.jsp"/>
+	</definition>
+	
+	<definition name="getServiceOrder.search" extends=".pageTemplate">
+		<put-attribute name="pageName" value="รับงานซ่อม" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/repair/getServiceOrderSearch.jsp"/>
+	</definition>
+	
+	<definition name="outsiteService.search" extends=".pageTemplate">
+		<put-attribute name="pageName" value="ส่งซ่อมต่อภายนอก" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/repair/outsiteServiceSearch.jsp"/>
+	</definition>
+	
+	<definition name="outsiteService.form" extends=".pageTemplate">
+		<put-attribute name="pageName" value="ส่งซ่อมต่อภายนอก" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/repair/outsiteServiceForm.jsp"/>
+	</definition>
+	
+	<definition name="sentOutsiteService.search" extends=".pageTemplate">
+		<put-attribute name="pageName" value="บันทึกส่งซ่อม" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/repair/sentOutsiteServiceSearch.jsp"/>
+	</definition>
+	
+	<definition name="sentOutsiteService.form" extends=".pageTemplate">
+		<put-attribute name="pageName" value="บันทึกส่งซ่อม" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/repair/sentOutsiteServiceForm.jsp"/>
+	</definition>
+	
+	<definition name="receivedOutsiteService.search" extends=".pageTemplate">
+		<put-attribute name="pageName" value="บันทึกรับของ" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/repair/receivedOutsiteServiceSearch.jsp"/>
+	</definition>
+	
+	<definition name="receivedOutsiteService.form" extends=".pageTemplate">
+		<put-attribute name="pageName" value="บันทึกรับของ" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/repair/receivedOutsiteServiceForm.jsp"/>
+	</definition>
+	
+	<definition name="closeServiceOrder.search" extends=".pageTemplate">
+		<put-attribute name="pageName" value="ปิดงานซ่อม" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/repair/closeServiceOrderSearch.jsp"/>
+	</definition>
+	
+	<definition name="closeServiceOrder.form" extends=".pageTemplate">
+		<put-attribute name="pageName" value="ปิดงานซ่อม" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/repair/closeServiceOrderForm.jsp"/>
+	</definition>
+	
+</tiles-definitions>
