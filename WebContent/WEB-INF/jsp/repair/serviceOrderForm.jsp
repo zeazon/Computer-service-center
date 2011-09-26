@@ -36,7 +36,11 @@
 					</tr>
 					<tr>
 						<td><label><fmt:message key="appointmentDate"/>:</label></td>
-						<td colspan="5"><div class="rowElem" style="z-index:200"><form:input path="appointmentDate" class="textboxMockup" id="appointmentDate"/></div></td>
+						<td colspan="5">
+							<div class="rowElem" style="z-index:200">
+								<form:input path="appointmentDate" class="textboxMockup" id="appointmentDate"/>
+							</div>
+						</td>
 					</tr>
 					<tr align="left">
 						<td colspan="6">
@@ -74,7 +78,7 @@
 							</div>
 						</td>
 					</tr>
-					<!-- tr>
+					<%-- tr>
 						<td><label><fmt:message key="address" />:</label></td>
 						<td colspan="5" align="left"><div class="rowElem"><span id="address">${fullAddr}&nbsp;</span></div></td>
 					</tr>
@@ -85,7 +89,7 @@
 						<td><div class="rowElem"><span id="tel">${customer.tel}&nbsp;</span></td>
 						<td><label><fmt:message key="mobileTel" />:</label></td>
 						<td><div class="rowElem"><span id="mobileTel">${customer.mobileTel}&nbsp;</span></td>
-					</tr-->
+					</tr--%>
 					
 					
 					<tr>
@@ -101,13 +105,13 @@
 								<col width="13%">
 								<tr>
 									<td><label><fmt:message key="contactName" />:</label></td>
-									<td><div class="rowElem"><span id="contactName">&nbsp;</span></div></td>
+									<td><div class="rowElem"><span id="contactName">${customer.name}&nbsp;</span></div></td>
 									<td><label><fmt:message key="email" />:</label></td>
-									<td><div class="rowElem"><span id="email">&nbsp;</span></div></td>
+									<td><div class="rowElem"><span id="email">${customer.email}&nbsp;</span></div></td>
 									<td><label><fmt:message key="tel" />:</label></td>
-									<td><div class="rowElem"><span id="tel">&nbsp;</span></div></td>
+									<td><div class="rowElem"><span id="tel">${customer.tel}&nbsp;</span></div></td>
 									<td><label><fmt:message key="mobileTel"/>:</label></td>
-									<td><div class="rowElem"><span id="mobileTel">&nbsp;</span></div></td>
+									<td><div class="rowElem"><span id="mobileTel">${customer.mobileTel}&nbsp;</span></div></td>
 								</tr>
 								<tr>
 									<td><label><fmt:message key="address" />:</label></td>
@@ -191,7 +195,12 @@
 						<td><label><fmt:message key="product" />:</label></td>
 						<td colspan="5">
 							<div class="rowElem">
-								<form:input path="productID" class="textboxMockup" style="float:left" id="productID" readonly="true" size="18" maxlength="20"/> <input type="button" id="productLov" value="..." > <label class="error" for="productID" generated="true" style="display: none; float:left; padding-left:10px"></label>
+								<c:if test="${mode == 'add'}">
+									<form:input path="productID" class="textboxMockup" style="float:left" id="productID" readonly="true" size="18" maxlength="20"/> <input type="button" id="productLov" value="..." > <label class="error" for="productID" generated="true" style="display: none; float:left; padding-left:10px"></label>
+								</c:if>
+								<c:if test="${mode == 'edit'}">
+									<form:input path="productID" class="textboxMockup" style="float:left" id="productID" readonly="true" size="18" maxlength="20"/>
+								</c:if>
 							</div>
 						</td>
 					</tr>
@@ -199,25 +208,27 @@
 						<td><label><fmt:message key="type" />:</label></td>
 						<td colspan="2">
 							<div class="rowElem">
-								<form:select path="typeID" id="type">
+								<%-->form:select path="typeID" id="type">
 									<form:options items="${typeList}" itemValue="typeID" itemLabel="name"/>
-								</form:select>
+								</form:select--%>
+								<span id="typeTxt">${product.type.name}&nbsp;</span>
 							</div>
 						</td>
 						<td><label><fmt:message key="brand" />:</label></td>
 						<td colspan="2">
 							<div class="rowElem">
-								<form:select path="brandID" id="brand">
+								<%--form:select path="brandID" id="brand">
 									<form:options items="${brandList}" itemValue="brandID" itemLabel="name"/>
-								</form:select>
+								</form:select--%>
+								<span id="brandTxt">${product.brand.name}&nbsp;</span>
 							</div>
 						</td>
 					</tr>
 					<tr>
 						<td><label><fmt:message key="model" />:</label></td>
-						<td colspan="2"><div class="rowElem"><form:input path="model" class="textboxMockup" maxlength="100"/></div></td>
+						<td colspan="2"><div class="rowElem"><%--form:input path="model" class="textboxMockup" maxlength="100"/--%><span id="modelTxt">${product.model.name}&nbsp;</span></span></div></td>
 						<td><label><fmt:message key="serialNo" />:</label></td>
-						<td colspan="2"><div class="rowElem"><form:input path="serialNo" class="textboxMockup" maxlength="100"/></div></td>
+						<td colspan="2"><div class="rowElem"><%-->form:input path="serialNo" class="textboxMockup" maxlength="100"/--%><span id="serialNoTxt">${product.serialNo}&nbsp;</span></div></td>
 					</tr>
 					<tr>
 						<td><label><fmt:message key="accessories" />:</label></td>
@@ -419,7 +430,7 @@
 									<select id="lovBrand">
 										<option value="">-</option>
 											<c:forEach var="brand" items="${brandList}">
-												<c:if test="${fn:length(brand.brandID) > 0}">
+												<c:if test="${brand.brandID != null }">
 													<option value="${brand.brandID}">${brand.name}</option>
 												</c:if>
 											</c:forEach>
@@ -1037,6 +1048,13 @@ $(document).ready(function(){
 		var lov_brand_val = $("#lov_product_brand").val();
 		var lov_model_val = $("#lov_product_model").val();
 		var lov_serialNo_val = $("#lov_product_serialNo").val();
+		
+		$("#productID").val(lov_id_val);
+		$("#typeTxt").html(lov_type_val);
+		$("#brandTxt").html(lov_brand_val);
+		$("#modelTxt").html(lov_model_val);
+		$("#serialNoTxt").html(lov_serialNo_val);
+		
 		/*$("#custID").val(lov_id_val);
 		$("#address").html($("#lov_shopCustomer_address").val());
 		$("#tel").html(lov_tel_val);*/

@@ -11,10 +11,10 @@
 						<td><label><fmt:message key="name" />:</label></td>
 						<td><div class="rowElem"><form:input path="name" type="text" id="name" class="textboxMockup" /></div></td>
 					</tr>
-					<tr>
+					<%--r>
 						<td><label><fmt:message key="surname" />:</label></td>
 						<td><div class="rowElem"><form:input path="surname" type="text" id="surname" class="textboxMockup" /></div></td>
-					</tr>
+					</tr--%>
 					<!-- tr>
 						<td><label><fmt:message key="date" />:</label></td>
 						<td><div class="rowElem" style="z-index:200"><form:input path="date" type="text" class="textboxMockup" id="dateInput" size="9"/></div></td>
@@ -87,7 +87,7 @@
 			colModel:[
 				{name:'serviceOrderID',index:'serviceOrderID', width:'200'},
 				{name:'serviceOrderDate', index:'serviceOrderDate', align:'center', sorttype:'date',formatter:'date', formatoptions: {srcformat:'d/m/Y',newformat:'d/m/Y'}, width:'100', firstSortOrder:'desc'},
-				{name:'fullName',index:'fullName'},				
+				{name:'name',index:'name'},				
 				{name:'tel',index:'tel', sortable:false},
 				{name:'mobileTel',index:'mobileTel', sortable:false, width:'170'},
 				{name:'type',index:'type', sortable:false},

@@ -28,6 +28,7 @@ import com.twobytes.master.service.CustomerTypeService;
 import com.twobytes.master.service.DistrictService;
 import com.twobytes.master.service.DocRunningService;
 import com.twobytes.master.service.EmployeeService;
+import com.twobytes.master.service.ModelService;
 import com.twobytes.master.service.ProductService;
 import com.twobytes.master.service.ProvinceService;
 import com.twobytes.master.service.SubdistrictService;
@@ -39,6 +40,7 @@ import com.twobytes.model.CustomerType;
 import com.twobytes.model.District;
 import com.twobytes.model.Employee;
 import com.twobytes.model.GridResponse;
+import com.twobytes.model.Model;
 import com.twobytes.model.Product;
 import com.twobytes.model.Province;
 import com.twobytes.model.ServiceOrder;
@@ -64,6 +66,9 @@ public class ServiceOrderController {
 	@Autowired
 	private BrandService brandService;
 
+	@Autowired
+	private ModelService modelService;
+	
 	@Autowired
 	private SubdistrictService sdService;
 
@@ -139,7 +144,6 @@ public class ServiceOrderController {
 	public @ResponseBody
 	GridResponse getData(
 			@RequestParam(value = "name", required = false) String name,
-			@RequestParam(value = "surname", required = false) String surname,
 			@RequestParam(value = "startDate", required = false) String startDate,
 			@RequestParam(value = "endDate", required = false) String endDate,
 			@RequestParam(value = "type", required = false) String type,
@@ -155,9 +159,6 @@ public class ServiceOrderController {
 		try {
 			if (null != name) {
 				name = new String(name.getBytes("iso-8859-1"), "tis620");
-			}
-			if (null != surname) {
-				surname = new String(surname.getBytes("iso-8859-1"), "tis620");
 			}
 			if (null != startDate && !startDate.equals("")) {
 				startDate = new String(startDate.getBytes("iso-8859-1"),
@@ -190,7 +191,7 @@ public class ServiceOrderController {
 		}
 
 		// System.out.println("searchDate = "+searchDate);
-		List<ServiceOrder> soList = soService.selectByCriteria(name, surname,
+		List<ServiceOrder> soList = soService.selectByCriteria(name,
 				searchStartDate, searchEndDate, type, serialNo, rows, page,
 				sidx, sord);
 		GridResponse response = new GridResponse();
@@ -229,7 +230,7 @@ public class ServiceOrderController {
 							"serviceOrderType_refix", null, new Locale("th", "TH"));
 				}
 				gridData.setServiceType(serviceType);
-				if(so.getCustomerType().equals(ServiceOrder.CUSTOMERTYPE_WALKIIN)){
+//				if(so.getCustomerType().equals(ServiceOrder.CUSTOMERTYPE_WALKIIN)){
 					Customer customer = so.getCustomer();
 					gridData.setName(customer.getName());
 //					gridData.setSurname(customer.getSurname());
@@ -253,7 +254,7 @@ public class ServiceOrderController {
 							+ this.messages.getMessage("province_abbr", null,
 									new Locale("th", "TH")) + " "
 							+ customer.getProvince().getName());
-				}
+//				}
 				gridData.setStatus(so.getStatus());
 				gridData.setType(so.getProduct().getType().getName());
 				gridData.setBrand(so.getProduct().getBrand().getName());
@@ -408,7 +409,7 @@ public class ServiceOrderController {
 			msg = this.messages.getMessage("msg.addComplete", null, new Locale(
 					"th", "TH"));
 		}
-		if(form.getCustomerType().equals("walkin")){
+//		if(form.getCustomerType().equals("walkin")){
 			Customer customer = new Customer();
 			try {
 				customer = customerService.selectByID(form.getCustomerID());
@@ -417,26 +418,51 @@ public class ServiceOrderController {
 			}
 			so.setCustomer(customer);
 			model.addAttribute("customer", customer);
-		}else if(form.getCustomerType().equals("shop")){
-			Armas armas = new Armas();
-			armas = armasService.selectByID(form.getCustomerID());
-			so.setShopCustomerID(armas.getCuscod());
-			model.addAttribute("armas", armas);
-		}
-		Type type = new Type();
-		try {
-			type = typeService.selectByID(form.getTypeID());
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
-		Brand brand = new Brand();
-		try {
-			brand = brandService.selectByID(form.getBrandID());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+			
+			
+			model.addAttribute(
+					"fullAddr",
+					so.getCustomer().getAddress()
+							+ " "
+							+ this.messages.getMessage("subdistrict_abbr", null,
+									new Locale("th", "TH"))
+							+ " "
+							+ so.getCustomer().getSubdistrict().getName()
+							+ " "
+							+ this.messages.getMessage("district_abbr", null,
+									new Locale("th", "TH"))
+							+ " "
+							+ so.getCustomer().getDistrict().getName()
+							+ " "
+							+ this.messages.getMessage("province_abbr", null,
+									new Locale("th", "TH")) + " "
+							+ so.getCustomer().getProvince().getName());
+
+			model.addAttribute("product", so.getProduct());
+
+			
+			
+//		}else if(form.getCustomerType().equals("shop")){
+//			Armas armas = new Armas();
+//			armas = armasService.selectByID(form.getCustomerID());
+//			so.setShopCustomerID(armas.getCuscod());
+//			model.addAttribute("armas", armas);
+//		}
+//		Type type = new Type();
+//		try {
+//			type = typeService.selectByID(form.getTypeID());
+//		} catch (Exception e1) {
+//			e1.printStackTrace();
+//		}
+//		Brand brand = new Brand();
+//		try {
+//			brand = brandService.selectByID(form.getBrandID());
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 		Product product = new Product();
 		product = productService.selectByID(form.getProductID());
+		so.setProduct(product);
 //		so.setType(type);
 //		so.setBrand(brand);
 //		so.setModel(form.getModel());
@@ -462,21 +488,21 @@ public class ServiceOrderController {
 			e.printStackTrace();
 			model.addAttribute("errMsg", e.getMessage());
 			
-			if(form.getCustomerType().equals("walkin")){
-				Customer customer = new Customer();
+//			if(form.getCustomerType().equals("walkin")){
+				Customer customer1 = new Customer();
 				try {
-					customer = customerService.selectByID(form.getCustomerID());
+					customer1 = customerService.selectByID(form.getCustomerID());
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
-				so.setCustomer(customer);
-				model.addAttribute("customer", customer);
-			}else if(form.getCustomerType().equals("shop")){
-				Armas armas = new Armas();
-				armas = armasService.selectByID(form.getCustomerID());
-				so.setShopCustomerID(armas.getCuscod());
-				model.addAttribute("armas", armas);
-			}
+				so.setCustomer(customer1);
+				model.addAttribute("customer", customer1);
+//			}else if(form.getCustomerType().equals("shop")){
+//				Armas armas = new Armas();
+//				armas = armasService.selectByID(form.getCustomerID());
+//				so.setShopCustomerID(armas.getCuscod());
+//				model.addAttribute("armas", armas);
+//			}
 			
 			List<Type> typeList = new ArrayList<Type>();
 			try {
@@ -484,11 +510,16 @@ public class ServiceOrderController {
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
-
+			Type type = typeList.get(0);
+			
+			List<Model> modelList = new ArrayList<Model>();
 			List<Brand> brandList = new ArrayList<Brand>();
 			if (type.getBrands().size() > 0) {
 				brandList = type.getBrands();
 				form.setBrandID(form.getBrandID());
+				
+				Brand brand = brandList.get(0);
+				modelList = modelService.getModelByTypeAndBrand(type.getTypeID(), brand.getBrandID());
 			} else {
 				Brand blankBrand = new Brand();
 				blankBrand.setBrandID(null);
@@ -498,6 +529,7 @@ public class ServiceOrderController {
 
 			model.addAttribute("typeList", typeList);
 			model.addAttribute("brandList", brandList);
+			model.addAttribute("modelList", modelList);
 
 			// get data for customer form
 			List<Province> provinceList = provinceService.getAll();
@@ -528,42 +560,48 @@ public class ServiceOrderController {
 			model.addAttribute("errMsg", this.messages.getMessage(
 					"error.cannotSave", null, new Locale("th", "TH")));
 			
-			if(form.getCustomerType().equals("walkin")){
-				Customer customer = new Customer();
+//			if(form.getCustomerType().equals("walkin")){
+				Customer customer1 = new Customer();
 				try {
-					customer = customerService.selectByID(form.getCustomerID());
+					customer1 = customerService.selectByID(form.getCustomerID());
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
-				so.setCustomer(customer);
-				model.addAttribute("customer", customer);
-			}else if(form.getCustomerType().equals("shop")){
-				Armas armas = new Armas();
-				armas = armasService.selectByID(form.getCustomerID());
-				so.setShopCustomerID(armas.getCuscod());
-				model.addAttribute("armas", armas);
-			}
+				so.setCustomer(customer1);
+				model.addAttribute("customer", customer1);
+	//		}else if(form.getCustomerType().equals("shop")){
+	//			Armas armas = new Armas();
+	//			armas = armasService.selectByID(form.getCustomerID());
+	//			so.setShopCustomerID(armas.getCuscod());
+	//			model.addAttribute("armas", armas);
+	//		}
 			
 			List<Type> typeList = new ArrayList<Type>();
 			try {
 				typeList = typeService.getAll();
-			} catch (Exception e) {
-				e.printStackTrace();
+			} catch (Exception e1) {
+				e1.printStackTrace();
 			}
-
+			Type type = typeList.get(0);
+			
+			List<Model> modelList = new ArrayList<Model>();
 			List<Brand> brandList = new ArrayList<Brand>();
 			if (type.getBrands().size() > 0) {
 				brandList = type.getBrands();
 				form.setBrandID(form.getBrandID());
+				
+				Brand brand = brandList.get(0);
+				modelList = modelService.getModelByTypeAndBrand(type.getTypeID(), brand.getBrandID());
 			} else {
 				Brand blankBrand = new Brand();
 				blankBrand.setBrandID(null);
 				blankBrand.setName("");
 				brandList.add(blankBrand);
 			}
-
+	
 			model.addAttribute("typeList", typeList);
 			model.addAttribute("brandList", brandList);
+			model.addAttribute("modelList", modelList);
 
 			// get data for customer form
 			List<Province> provinceList = provinceService.getAll();
@@ -602,11 +640,16 @@ public class ServiceOrderController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		Type type = typeList.get(0);
+		
 		List<Brand> brandList = new ArrayList<Brand>();
+		List<Model> modelList = new ArrayList<Model>();
 		if (type.getBrands().size() > 0) {
 			brandList = type.getBrands();
 			form.setBrandID(form.getBrandID());
+			
+			Brand brand = brandList.get(0);
+			modelList = modelService.getModelByTypeAndBrand(type.getTypeID(), brand.getBrandID());
 		} else {
 			Brand blankBrand = new Brand();
 			blankBrand.setBrandID(null);
@@ -616,6 +659,7 @@ public class ServiceOrderController {
 
 		model.addAttribute("typeList", typeList);
 		model.addAttribute("brandList", brandList);
+		model.addAttribute("modelList", modelList);
 
 		// get data for customer form
 		List<Province> provinceList = provinceService.getAll();
@@ -640,12 +684,12 @@ public class ServiceOrderController {
 		ServiceOrderDocForm docForm = new ServiceOrderDocForm();
 		docForm.setServiceOrderID(so.getServiceOrderID());
 		docForm.setServiceOrderDate(sdfDateTime.format(so.getServiceOrderDate()));
-		if(so.getCustomerType().equals("walkin")){
+//		if(so.getCustomerType().equals("walkin")){
 //			docForm.setContactName(so.getCustomer().getName() + " "
 //					+ so.getCustomer().getSurname());
-		}else if(so.getCustomerType().equals("shop")){
-			docForm.setContactName("");
-		}
+//		}else if(so.getCustomerType().equals("shop")){
+//			docForm.setContactName("");
+//		}
 		docForm.setTel(so.getCustomer().getTel());
 		docForm.setMobileTel(so.getCustomer().getMobileTel());
 		docForm.setTypeID(so.getProduct().getType().getTypeID().toString());
@@ -680,6 +724,7 @@ public class ServiceOrderController {
 		form.setServiceOrderID(so.getServiceOrderID());
 		form.setServiceOrderDate(sdfDateTime.format(so.getServiceOrderDate()));
 		form.setServiceType(so.getServiceType());
+		form.setAppointmentDate(sdfDateTime.format(so.getAppointmentDate()));
 		form.setRefServiceOrder(so.getRefServiceOrder());
 		form.setCustomerType(so.getCustomerType());
 		form.setCustomerID(so.getCustomer().getCustomerID().toString());
@@ -728,19 +773,27 @@ public class ServiceOrderController {
 								new Locale("th", "TH")) + " "
 						+ so.getCustomer().getProvince().getName());
 
+		model.addAttribute("product", so.getProduct());
+		
+		Type type = typeList.get(0);
 		List<Brand> brandList = new ArrayList<Brand>();
+		List<Model> modelList = new ArrayList<Model>();
 		if (so.getProduct().getType().getBrands().size() > 0) {
 			brandList = so.getProduct().getType().getBrands();
 			form.setBrandID(form.getBrandID());
+			
+			Brand brand = brandList.get(0);
+			modelList = modelService.getModelByTypeAndBrand(type.getTypeID(), brand.getBrandID());
 		} else {
 			Brand blankBrand = new Brand();
 			blankBrand.setBrandID(null);
 			blankBrand.setName("");
 			brandList.add(blankBrand);
 		}
-
+		
 		model.addAttribute("typeList", typeList);
 		model.addAttribute("brandList", brandList);
+		model.addAttribute("modelList", modelList);
 
 		CustomerForm custForm = new CustomerForm();
 		custForm.setProvinceID(7);

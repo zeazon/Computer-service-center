@@ -39,7 +39,7 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<ServiceOrder> selectByCriteria(String name, String surname,
+	public List<ServiceOrder> selectByCriteria(String name,
 			String startDate, String endDate, String type, String serialNo,
 			Integer rows, Integer page, String orderBy, String orderType) throws Exception{
 		StringBuilder sql = new StringBuilder();
@@ -47,9 +47,9 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 		if(null != name && !name.equals("")){
 			sql.append("and serviceOrder.customer.name like :name ");
 		}
-		if(null != surname && !surname.equals("")){
-			sql.append("and serviceOrder.customer.surname like :surname ");
-		}
+//		if(null != surname && !surname.equals("")){
+//			sql.append("and serviceOrder.customer.surname like :surname ");
+//		}
 		if((null != startDate && !startDate.equals("")) && (null != endDate && !endDate.equals(""))){
 			sql.append("and DATE(serviceOrderDate) between :startDate and :endDate ");
 		}else if((null != startDate && !startDate.equals("")) && (null == endDate || endDate.equals(""))){
@@ -58,10 +58,10 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 			sql.append("and DATE(serviceOrderDate) <= :endDate ");
 		}
 		if(null != type && !type.equals("")){
-			sql.append("and type = :type ");
+			sql.append("and serviceOrder.product.type.typeID = :type ");
 		}
 		if(null != serialNo && !serialNo.equals("")){
-			sql.append("and serialNo like :serialNo ");
+			sql.append("and serviceOrder.product.serialNo like :serialNo ");
 		}
 		
 		sql.append("and serviceOrder.status != 'cancel' ");
@@ -83,9 +83,9 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 		if(null != name && !name.equals("")) {
 			q.setString("name", name);
 		}
-		if(null != surname && !surname.equals("")) {
-			q.setString("surname", surname);
-		}
+//		if(null != surname && !surname.equals("")) {
+//			q.setString("surname", surname);
+//		}
 		if((null != startDate && !startDate.equals("")) && (null != endDate && !endDate.equals(""))){
 			q.setString("startDate", startDate);
 			q.setString("endDate", endDate);
