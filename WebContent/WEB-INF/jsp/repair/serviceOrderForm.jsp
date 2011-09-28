@@ -25,10 +25,18 @@
 						<td colspan="5">
 							<div class="rowElem">
 								<c:if test="${mode=='add'}">
-									<form:radiobutton path="serviceType" value="1" cssStyle="margin-top:4px;" id="serviceType_repair" onclick="checkServiceType()" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_repair" /></label> <form:radiobutton path="serviceType" value="2" cssStyle="margin-top:4px" id="serviceType_fix" onclick="checkServiceType()" /><label style="float:left; margin-top:4px;"><fmt:message key="serviceOrderType_refix" /></label><form:input path="refServiceOrder" class="textboxMockup" id="refServiceOrder" maxlength="20" />
+									<form:radiobutton path="serviceType" value="1" cssStyle="margin-top:4px" id="serviceType_guarantee" onclick="checkServiceType()" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_guarantee" /></label><form:select path="guaranteeNo" id="guaranteeNo" ><c:forEach var="i" begin="1" end="7" step="1"><form:option value="${i}" /></c:forEach></form:select>
+									<form:radiobutton path="serviceType" value="2" cssStyle="margin-top:4px;" id="serviceType_repair" onclick="checkServiceType()" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_repair" /></label>
+									<form:radiobutton path="serviceType" value="3" cssStyle="margin-top:4px" id="serviceType_claim" onclick="checkServiceType()" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_claim" /></label>
+									<form:radiobutton path="serviceType" value="4" cssStyle="margin-top:4px" id="serviceType_outsiteService" onclick="checkServiceType()" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_outsiteService" /></label><form:input path="refJobID" class="textboxMockup" id="refJobID" maxlength="30" />
+									<form:radiobutton path="serviceType" value="5" cssStyle="margin-top:4px" id="serviceType_refix" onclick="checkServiceType()" /><label style="float:left; margin-top:4px;"><fmt:message key="serviceOrderType_refix" /></label><form:input path="refServiceOrder" class="textboxMockup" id="refServiceOrder" maxlength="20" />
 								</c:if>
 								<c:if test="${mode=='edit'}">
-									<form:radiobutton path="serviceType" value="1" cssStyle="margin-top:4px;" id="serviceType_repair" disabled="true" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_repair" /></label> <form:radiobutton path="serviceType" value="2" cssStyle="margin-top:4px" id="serviceType_fix" disabled="true" /><label style="float:left; margin-top:4px;"><fmt:message key="serviceOrderType_refix" /></label><form:input path="refServiceOrder" class="textboxMockup" id="refServiceOrder" maxlength="20" readonly="true" />
+									<form:radiobutton path="serviceType" value="1" cssStyle="margin-top:4px" id="serviceType_guarantee" disabled="true" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_guarantee" /></label><form:select path="guaranteeNo" id="guaranteeNo" disabled="true" ><c:forEach var="i" begin="1" end="7" step="1"><form:option value="${i}" /></c:forEach></form:select>
+									<form:radiobutton path="serviceType" value="2" cssStyle="margin-top:4px;" id="serviceType_repair" disabled="true" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_repair" /></label>
+									<form:radiobutton path="serviceType" value="3" cssStyle="margin-top:4px" id="serviceType_claim" disabled="true" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_claim" /></label>
+									<form:radiobutton path="serviceType" value="4" cssStyle="margin-top:4px" id="serviceType_outsiteService" disabled="true" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_outsiteService" /></label> 
+									<form:radiobutton path="serviceType" value="5" cssStyle="margin-top:4px" id="serviceType_refix" disabled="true" /><label style="float:left; margin-top:4px;"><fmt:message key="serviceOrderType_refix" /></label><form:input path="refServiceOrder" class="textboxMockup" id="refServiceOrder" maxlength="20" readonly="true" />
 									<form:hidden path="serviceType"/>
 								</c:if>
 							</div>
@@ -1018,17 +1026,18 @@ $(document).ready(function(){
 		onSelectRow: function(id){
 			selectProductRow(id);
 		}
-	}).navGrid("#productPager",{edit:false,add:false,del:false,search:false,refresh:false,cloneToTop:true})
-	.navButtonAdd('#list_toppager',
+	}).navGrid("#productPager",{edit:false,add:false,del:false,search:false,refresh:false,cloneToTop:true});
+	/*.navButtonAdd('#productList_toppager',
 	{
 		caption:"",
 		title:"<fmt:message key='button.add' />",
 		buttonicon:"ui-icon-plus",
-		onClickButton: function(){ 
-			window.location = '<c:url value="/product.html?do=preAdd" />';
+		onClickButton: function(){
+			$( "#add-form" ).dialog( "open" );
+			//window.location = '<c:url value="/product.html?do=preAdd" />';
 		}, 
 		position:"last"
-	});
+	});*/
 
 	// product paging
 	var topPagerDiv = $("#productList_toppager")[0];
@@ -1181,14 +1190,50 @@ $(document).ready(function(){
 });
 
 function checkServiceType(){
-	if(document.getElementById('serviceType_repair').checked){
-		document.getElementById('refServiceOrder').value="";
-		document.getElementById('refServiceOrder').disabled = true;
-		$("#refServiceOrder").addClass('textboxMockup_disabled');
+	
+	if(document.getElementById('serviceType_repair').checked || document.getElementById('serviceType_guarantee').checked || document.getElementById('serviceType_claim').checked){
+		// disable ref job ID
+		if(!document.getElementById('refJobID').disabled){
+			document.getElementById('refJobID').value="";
+			document.getElementById('refJobID').disabled = true;
+			$("#refJobID").addClass('textboxMockup_disabled');
+		}
+		
+		// disable ref service order
+		if(!document.getElementById('refServiceOrder').disabled){
+			document.getElementById('refServiceOrder').value="";
+			document.getElementById('refServiceOrder').disabled = true;
+			$("#refServiceOrder").addClass('textboxMockup_disabled');
+		}
+		
+		if(document.getElementById('serviceType_guarantee').checked){
+			document.getElementById('guaranteeNo').disabled = false;
+		}else{
+			document.getElementById('guaranteeNo').disabled = true;
+		}
+		
 	}
-	if(document.getElementById('serviceType_fix').checked){
+	if(document.getElementById('serviceType_outsiteService').checked){
+		document.getElementById('refJobID').disabled = false;
+		$("#refJobID").removeClass('textboxMockup_disabled');
+		
+		// disable ref service order if it not disabled
+		if(!document.getElementById('refServiceOrder').disabled){
+			document.getElementById('refServiceOrder').value="";
+			document.getElementById('refServiceOrder').disabled = true;
+			$("#refServiceOrder").addClass('textboxMockup_disabled');
+		}
+	}
+	if(document.getElementById('serviceType_refix').checked){
 		document.getElementById('refServiceOrder').disabled = false;
 		$("#refServiceOrder").removeClass('textboxMockup_disabled');
+		
+		// disable ref job ID if it not disabled
+		if(!document.getElementById('refJobID').disabled){
+			document.getElementById('refJobID').value="";
+			document.getElementById('refJobID').disabled = true;
+			$("#refJobID").addClass('textboxMockup_disabled');
+		}
 	}
 }
 

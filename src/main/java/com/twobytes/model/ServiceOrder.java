@@ -20,6 +20,8 @@ public class ServiceOrder extends BaseColumn implements Serializable {
 	private Date serviceOrderDate;
 	private Integer serviceType;
 	private String refServiceOrder;
+	private String refJobID;
+	private Integer guaranteeNo;
 	private String customerType;
 	private Customer customer = new Customer();
 	private String shopCustomerID;
@@ -91,6 +93,24 @@ public class ServiceOrder extends BaseColumn implements Serializable {
 		this.refServiceOrder = refServiceOrder;
 	}
 	
+	@Column(name="refJobID")
+	public String getRefJobID() {
+		return refJobID;
+	}
+
+	public void setRefJobID(String refJobID) {
+		this.refJobID = refJobID;
+	}
+
+	@Column(name="guaranteeNo")
+	public Integer getGuaranteeNo() {
+		return guaranteeNo;
+	}
+
+	public void setGuaranteeNo(Integer guaranteeNo) {
+		this.guaranteeNo = guaranteeNo;
+	}
+
 	@Column(name="customerType")
 	public String getCustomerType() {
 		return customerType;

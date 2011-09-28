@@ -301,7 +301,7 @@ public class ServiceOrderController {
 		// System.out.println("sdfDateTimeNoLocale.parse(form.getServiceOrderDate()) = "+sdfDateTimeNoLocale.parse(form.getServiceOrderDate()));
 		// System.out.println("sdfDateTimeUSLocale.parse(form.getServiceOrderDate()) = "+sdfDateTimeUSLocale.parse(form.getServiceOrderDate()));
 		// System.out.println("sdfDateTime2.parse(form.getServiceOrderDate()) = "+sdfDateTime2.parse(form.getServiceOrderDate()));
-		form.setServiceType(1);
+		form.setServiceType(2);
 		form.setCustomerType(ServiceOrder.CUSTOMERTYPE_SHOP);
 		List<Type> typeList = new ArrayList<Type>();
 		try {

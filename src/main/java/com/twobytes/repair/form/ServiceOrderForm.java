@@ -6,6 +6,8 @@ public class ServiceOrderForm {
 	private String serviceOrderDate;
 	private Integer serviceType;
 	private String refServiceOrder;
+	private String refJobID;
+	private Integer guaranteeNo;
 	private String customerType;
 	private String shopCustomerID;
 	private String customerID;
@@ -182,6 +184,22 @@ public class ServiceOrderForm {
 
 	public void setProductID(String productID) {
 		this.productID = productID;
+	}
+
+	public String getRefJobID() {
+		return refJobID;
+	}
+
+	public void setRefJobID(String refJobID) {
+		this.refJobID = refJobID;
+	}
+
+	public Integer getGuaranteeNo() {
+		return guaranteeNo;
+	}
+
+	public void setGuaranteeNo(Integer guaranteeNo) {
+		this.guaranteeNo = guaranteeNo;
 	}
 	
 }
