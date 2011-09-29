@@ -109,7 +109,7 @@ public class ServiceOrderController {
 	private String VIEWNAME_SEARCH = "serviceOrder.search";
 	private String VIEWNAME_FORM = "serviceOrder.form";
 
-	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", new Locale ("US"));
 	/*private SimpleDateFormat sdfDateTime = new SimpleDateFormat(
 			"dd/MM/yyyy HH:mm", new Locale("th", "TH"));*/
 	private SimpleDateFormat sdfDateTime = new SimpleDateFormat(
@@ -120,6 +120,7 @@ public class ServiceOrderController {
 			"dd/MM/yyyy HH:mm");
 	private SimpleDateFormat sdfDateTimeUSLocale = new SimpleDateFormat(
 			"dd/MM/yyyy HH:mm", new Locale("US"));
+	private SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm", new Locale("US"));
 
 	@RequestMapping(value = "/serviceOrder")
 	public String view(ModelMap model, HttpServletRequest request) {
@@ -683,7 +684,9 @@ public class ServiceOrderController {
 		// get data for print document
 		ServiceOrderDocForm docForm = new ServiceOrderDocForm();
 		docForm.setServiceOrderID(so.getServiceOrderID());
-		docForm.setServiceOrderDate(sdfDateTime.format(so.getServiceOrderDate()));
+		docForm.setServiceOrderDate(sdf.format(so.getServiceOrderDate()));
+		docForm.setServiceOrderTime(sdfTime.format(so.getServiceOrderDate()));
+		docForm.setAppointmentDate(sdfDateTime.format(so.getServiceOrderDate()));
 //		if(so.getCustomerType().equals("walkin")){
 //			docForm.setContactName(so.getCustomer().getName() + " "
 //					+ so.getCustomer().getSurname());
@@ -803,7 +806,10 @@ public class ServiceOrderController {
 
 		ServiceOrderDocForm docForm = new ServiceOrderDocForm();
 		docForm.setServiceOrderID(so.getServiceOrderID());
-		docForm.setServiceOrderDate(sdfDateTime.format(so.getServiceOrderDate()));
+//		docForm.setServiceOrderDate(sdfDateTime.format(so.getServiceOrderDate()));
+		docForm.setServiceOrderDate(sdf.format(so.getServiceOrderDate()));
+		docForm.setServiceOrderTime(sdfTime.format(so.getServiceOrderDate()));
+		docForm.setAppointmentDate(sdfDateTime.format(so.getServiceOrderDate()));
 //		docForm.setContactName(so.getCustomer().getName() + " "
 //				+ so.getCustomer().getSurname());
 		docForm.setTel(so.getCustomer().getTel());

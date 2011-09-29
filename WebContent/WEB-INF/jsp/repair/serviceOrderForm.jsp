@@ -35,7 +35,7 @@
 									<form:radiobutton path="serviceType" value="1" cssStyle="margin-top:4px" id="serviceType_guarantee" disabled="true" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_guarantee" /></label><form:select path="guaranteeNo" id="guaranteeNo" disabled="true" ><c:forEach var="i" begin="1" end="7" step="1"><form:option value="${i}" /></c:forEach></form:select>
 									<form:radiobutton path="serviceType" value="2" cssStyle="margin-top:4px;" id="serviceType_repair" disabled="true" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_repair" /></label>
 									<form:radiobutton path="serviceType" value="3" cssStyle="margin-top:4px" id="serviceType_claim" disabled="true" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_claim" /></label>
-									<form:radiobutton path="serviceType" value="4" cssStyle="margin-top:4px" id="serviceType_outsiteService" disabled="true" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_outsiteService" /></label> 
+									<form:radiobutton path="serviceType" value="4" cssStyle="margin-top:4px" id="serviceType_outsiteService" disabled="true" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_outsiteService" /></label> <form:input path="refJobID" class="textboxMockup" id="refJobID" maxlength="30" />
 									<form:radiobutton path="serviceType" value="5" cssStyle="margin-top:4px" id="serviceType_refix" disabled="true" /><label style="float:left; margin-top:4px;"><fmt:message key="serviceOrderType_refix" /></label><form:input path="refServiceOrder" class="textboxMockup" id="refServiceOrder" maxlength="20" readonly="true" />
 									<form:hidden path="serviceType"/>
 								</c:if>
@@ -561,6 +561,8 @@
 <form:form commandName="docForm" id="printJasperForm" method="post" action="serviceOrder.html?do=print" target="original" onSubmit="window.open('', 'original', 'width=450,height=300,status=yes,resizable=yes,scrollbars=yes')">
 	<form:hidden path="serviceOrderID" />
 	<form:hidden path="serviceOrderDate" />
+	<form:hidden path="serviceOrderTime" />
+	<form:hidden path="appointmentDate" />
 	<form:hidden path="contactName" />
 	<form:hidden path="tel" />
 	<form:hidden path="mobileTel" />
@@ -1211,6 +1213,10 @@ function checkServiceType(){
 		}else{
 			document.getElementById('guaranteeNo').disabled = true;
 		}
+		
+		<c:if test="${mode=='edit'}">
+			document.getElementById('guaranteeNo').disabled = true;
+		</c:if>
 		
 	}
 	if(document.getElementById('serviceType_outsiteService').checked){

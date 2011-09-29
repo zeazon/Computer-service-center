@@ -8,6 +8,8 @@ public class ServiceOrderDocForm implements Serializable {
 	
 	private String serviceOrderID;
 	private String serviceOrderDate;
+	private String serviceOrderTime;
+	private String appointmentDate;
 	private String contactName;
 	private String tel;
 	private String mobileTel;
@@ -112,4 +114,17 @@ public class ServiceOrderDocForm implements Serializable {
 	public void setMobileTel(String mobileTel) {
 		this.mobileTel = mobileTel;
 	}
+	public String getServiceOrderTime() {
+		return serviceOrderTime;
+	}
+	public void setServiceOrderTime(String serviceOrderTime) {
+		this.serviceOrderTime = serviceOrderTime;
+	}
+	public String getAppointmentDate() {
+		return appointmentDate;
+	}
+	public void setAppointmentDate(String appointmentDate) {
+		this.appointmentDate = appointmentDate;
+	}
+	
 }
