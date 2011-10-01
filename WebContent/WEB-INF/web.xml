@@ -34,6 +34,7 @@
   <servlet-mapping>
 	<servlet-name>spring</servlet-name>
 	<url-pattern>*.html</url-pattern>
+	<url-pattern>*.xls</url-pattern>
   </servlet-mapping>
   
   <!-- Define the basename for a resource bundle for I18N -->

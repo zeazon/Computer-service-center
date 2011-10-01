@@ -5,8 +5,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -377,9 +379,21 @@ public class ServiceOrderController {
 			// add
 			// DocRunning docRunning = docRunningService.getDoc("SO");
 			// String serviceOrderID =
-			// docRunning.getPrefix()+"-"+docRunning.getYear()+docRunning.getMonth()+"-"+docRunning.getRunningNumber();
+			// docRunning.getPref ix()+"-"+docRunning.getYear()+docRunning.getMonth()+"-"+docRunning.getRunningNumber();
 			// String serviceOrderID = genDocNo();
 			String serviceOrderID = docRunningUtil.genDoc("SO");
+			so.setServiceType(form.getServiceType());
+			if(form.getServiceType() == 1){
+				so.setGuaranteeNo(form.getGuaranteeNo());
+			}
+			
+			if(form.getServiceType() == 4){
+				so.setRefJobID(form.getRefJobID());
+			}
+			
+			if(form.getServiceType() == 5){
+				so.setRefServiceOrder(form.getRefServiceOrder());
+			}
 			// System.out.println("serviceOrderID = "+serviceOrderID);
 			try {
 				so.setServiceOrderDate(sdfDateTime.parse(form
@@ -394,15 +408,6 @@ public class ServiceOrderController {
 			}
 
 			so.setServiceOrderID(serviceOrderID);
-			so.setServiceType(form.getServiceType());
-			so.setRefServiceOrder(form.getRefServiceOrder());
-			if(!form.getAppointmentDate().equals(null) && !form.getAppointmentDate().equals("")){
-				try {
-					so.setAppointmentDate(sdfDateTime.parse(form.getAppointmentDate()));
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
-			}
 			so.setEmpOpen(user);
 			so.setCreatedBy(user.getEmployeeID());
 			so.setCreatedDate(now);
@@ -410,6 +415,16 @@ public class ServiceOrderController {
 			msg = this.messages.getMessage("msg.addComplete", null, new Locale(
 					"th", "TH"));
 		}
+		
+		if(!form.getAppointmentDate().equals(null) && !form.getAppointmentDate().equals("")){
+			try {
+				so.setAppointmentDate(sdfDateTime.parse(form.getAppointmentDate()));
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		
 //		if(form.getCustomerType().equals("walkin")){
 			Customer customer = new Customer();
 			try {
@@ -682,32 +697,9 @@ public class ServiceOrderController {
 		model.addAttribute("customerForm", custForm);
 
 		// get data for print document
-		ServiceOrderDocForm docForm = new ServiceOrderDocForm();
-		docForm.setServiceOrderID(so.getServiceOrderID());
-		docForm.setServiceOrderDate(sdf.format(so.getServiceOrderDate()));
-		docForm.setServiceOrderTime(sdfTime.format(so.getServiceOrderDate()));
-		docForm.setAppointmentDate(sdfDateTime.format(so.getServiceOrderDate()));
-//		if(so.getCustomerType().equals("walkin")){
-//			docForm.setContactName(so.getCustomer().getName() + " "
-//					+ so.getCustomer().getSurname());
-//		}else if(so.getCustomerType().equals("shop")){
-//			docForm.setContactName("");
-//		}
-		docForm.setTel(so.getCustomer().getTel());
-		docForm.setMobileTel(so.getCustomer().getMobileTel());
-		docForm.setTypeID(so.getProduct().getType().getTypeID().toString());
-		docForm.setType(so.getProduct().getType().getName());
-		docForm.setBrandID(so.getProduct().getBrand().getBrandID().toString());
-		docForm.setBrand(so.getProduct().getBrand().getName());
-		docForm.setModel(so.getProduct().getModel().getName());
-		docForm.setSerialNo(so.getProduct().getSerialNo());
-		docForm.setAccessories(so.getAccessories());
-		docForm.setProblem(so.getProblem());
-		docForm.setEmpOpenID(so.getEmpOpen().getEmployeeID().toString());
-		docForm.setEmpOpen(so.getEmpOpen().getName() + " "
-				+ so.getEmpOpen().getSurname());
-		model.addAttribute("docForm", docForm);
+		ServiceOrderDocForm docForm = setDocPrintForm(so);
 
+		model.addAttribute("docForm", docForm);
 		model.addAttribute("action", "print");
 		model.addAttribute("mode", "edit");
 		return VIEWNAME_FORM;
@@ -804,27 +796,8 @@ public class ServiceOrderController {
 		custForm.setDistrictID(160);
 		model.addAttribute("customerForm", custForm);
 
-		ServiceOrderDocForm docForm = new ServiceOrderDocForm();
-		docForm.setServiceOrderID(so.getServiceOrderID());
-//		docForm.setServiceOrderDate(sdfDateTime.format(so.getServiceOrderDate()));
-		docForm.setServiceOrderDate(sdf.format(so.getServiceOrderDate()));
-		docForm.setServiceOrderTime(sdfTime.format(so.getServiceOrderDate()));
-		docForm.setAppointmentDate(sdfDateTime.format(so.getServiceOrderDate()));
-//		docForm.setContactName(so.getCustomer().getName() + " "
-//				+ so.getCustomer().getSurname());
-		docForm.setTel(so.getCustomer().getTel());
-		docForm.setMobileTel(so.getCustomer().getMobileTel());
-		docForm.setTypeID(so.getProduct().getType().getTypeID().toString());
-		docForm.setType(so.getProduct().getType().getName());
-		docForm.setBrandID(so.getProduct().getBrand().getBrandID().toString());
-		docForm.setBrand(so.getProduct().getBrand().getName());
-		docForm.setModel(so.getProduct().getModel().getName());
-		docForm.setSerialNo(so.getProduct().getSerialNo());
-		docForm.setAccessories(so.getAccessories());
-		docForm.setProblem(so.getProblem());
-		docForm.setEmpOpenID(so.getEmpOpen().getEmployeeID().toString());
-		docForm.setEmpOpen(so.getEmpOpen().getName() + " "
-				+ so.getEmpOpen().getSurname());
+		ServiceOrderDocForm docForm = setDocPrintForm(so);
+		
 		model.addAttribute("docForm", docForm);
 
 		model.addAttribute("mode", "edit");
@@ -921,6 +894,93 @@ public class ServiceOrderController {
 
 		model.addAttribute("serviceOrderResultList", resultList);
 
-		return "serviceOrderDoc";
+//		return "serviceOrderDoc";
+		
+		// test excel view
+		
+		Map map = new HashMap();
+        List wordList = new ArrayList();
+        wordList.add("hello");
+        wordList.add("world");
+        map.put("wordList", wordList);
+        
+        model.addAttribute("wordList", wordList);
+        
+        return "serviceOrderDocExcel";
+	}
+	
+	@RequestMapping(value = "/serviceOrder", params = "do=printExcel")
+	public String doPrintExcel(@ModelAttribute ServiceOrderDocForm docForm,
+			HttpServletRequest request, ModelMap model) {
+		
+        List wordList = new ArrayList();
+        wordList.add("hello");
+        wordList.add("world");
+		
+        model.addAttribute("wordList", wordList);
+        model.addAttribute("form", docForm);
+        
+		return "serviceOrderDocExcel";
+	}
+	
+	private ServiceOrderDocForm setDocPrintForm(ServiceOrder so){
+		ServiceOrderDocForm docForm = new ServiceOrderDocForm();
+		docForm.setServiceOrderID(so.getServiceOrderID());
+//		docForm.setServiceOrderDate(sdfDateTime.format(so.getServiceOrderDate()));
+		docForm.setServiceOrderDate(sdf.format(so.getServiceOrderDate()));
+		docForm.setServiceOrderTime(sdfTime.format(so.getServiceOrderDate()));
+		docForm.setAppointmentDate(sdfDateTime.format(so.getServiceOrderDate()));
+		docForm.setServiceType(so.getServiceType());
+		docForm.setServiceType(so.getServiceType());
+		if(so.getServiceType() == 1){
+			docForm.setGuaranteeNo(so.getGuaranteeNo());
+		}
+		if(so.getServiceType() == 4){
+			docForm.setRefJobID(so.getRefJobID());
+		}
+		if(so.getServiceType() == 5){
+			docForm.setRefServiceOrder(so.getRefServiceOrder());
+		}
+		
+//		docForm.setContactName(so.getCustomer().getName() + " "
+//				+ so.getCustomer().getSurname());
+		
+		
+//		if(so.getCustomerType().equals("walkin")){
+//			docForm.setContactName(so.getCustomer().getName() + " "
+//				+ so.getCustomer().getSurname());
+//		}else if(so.getCustomerType().equals("shop")){
+//			docForm.setContactName("");
+//		}
+		
+		
+		docForm.setCustomerID(so.getCustomer().getCustomerID());
+		docForm.setName(so.getCustomer().getName());
+		docForm.setEmail(so.getCustomer().getEmail());
+		docForm.setTel(so.getCustomer().getTel());
+		docForm.setMobileTel(so.getCustomer().getMobileTel());
+		docForm.setAddress(so.getCustomer().getAddress());
+		docForm.setSubdistrict(so.getCustomer().getSubdistrict().getName());
+		docForm.setDistrict(so.getCustomer().getDistrict().getName());
+		docForm.setProvince(so.getCustomer().getProvince().getName());
+		docForm.setZipcode(so.getCustomer().getSubdistrict().getZipcode().toString());
+		docForm.setDeliveryCustomer(so.getDeliveryCustomer());
+		docForm.setDeliveryEmail(so.getDeliveryEmail());
+		docForm.setDeliveryMobileTel(so.getDeliveryMobileTel());
+		docForm.setDeliveryTel(so.getDeliveryTel());
+		docForm.setTypeID(so.getProduct().getType().getTypeID().toString());
+		docForm.setType(so.getProduct().getType().getName());
+		docForm.setBrandID(so.getProduct().getBrand().getBrandID().toString());
+		docForm.setBrand(so.getProduct().getBrand().getName());
+		docForm.setModel(so.getProduct().getModel().getName());
+		docForm.setSerialNo(so.getProduct().getSerialNo());
+		docForm.setAccessories(so.getAccessories());
+		docForm.setDesc(so.getDescription());
+		docForm.setProblem(so.getProblem());
+		docForm.setEmpOpenID(so.getEmpOpen().getEmployeeID().toString());
+		docForm.setEmpOpen(so.getEmpOpen().getName() + " "
+				+ so.getEmpOpen().getSurname());
+
+		return docForm; 
 	}
 }

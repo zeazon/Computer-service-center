@@ -78,10 +78,10 @@
 						<td align="left" colspan="5">
 							<div class="rowElem">
 								<c:if test="${mode=='add'}">
-									<form:input path="customerID" class="textboxMockup" style="float:left" id="custID" readonly="true" size="8" maxlength="10"/> <input type="button" id="lov" value="..." > <label class="error" for="custID" generated="true" style="display: none; float:left; padding-left:10px"></label>
+									<form:input path="customerID" class="textboxMockup" style="float:left" id="custID" readonly="true" size="9" maxlength="10"/> <input type="button" id="lov" value="..." > <label class="error" for="custID" generated="true" style="display: none; float:left; padding-left:10px"></label>
 								</c:if>
 								<c:if test="${mode=='edit'}">
-									<form:input path="customerID" class="textboxMockup" style="float:left" id="custID" readonly="true" size="8" maxlength="10"/>
+									<form:input path="customerID" class="textboxMockup" style="float:left" id="custID" readonly="true" size="9" maxlength="10"/>
 								</c:if>
 							</div>
 						</td>
@@ -558,19 +558,38 @@
 <!-- End product lov -->
 
 
-<form:form commandName="docForm" id="printJasperForm" method="post" action="serviceOrder.html?do=print" target="original" onSubmit="window.open('', 'original', 'width=450,height=300,status=yes,resizable=yes,scrollbars=yes')">
+<!-- form:form commandName="docForm" id="printJasperForm" method="post" action="serviceOrder.xls?do=printExcel" target="original" onSubmit="window.open('', 'original', 'width=450,height=300,status=yes,resizable=yes,scrollbars=yes')"-->
+<form:form commandName="docForm" id="printJasperForm" method="post" action="serviceOrder.xls?do=printExcel">
 	<form:hidden path="serviceOrderID" />
 	<form:hidden path="serviceOrderDate" />
 	<form:hidden path="serviceOrderTime" />
 	<form:hidden path="appointmentDate" />
-	<form:hidden path="contactName" />
+	<form:hidden path="serviceType" />
+	<form:hidden path="guaranteeNo" />
+	<form:hidden path="refJobID" />
+	<form:hidden path="refServiceOrder" />
+ 	<form:hidden path="customerID" />
+	<form:hidden path="name" />
+	<form:hidden path="address" />
+	<form:hidden path="subdistrict" />
+	<form:hidden path="district" />
+	<form:hidden path="province" />
+	<form:hidden path="zipcode" />
+	<form:hidden path="email" />
 	<form:hidden path="tel" />
 	<form:hidden path="mobileTel" />
+	<form:hidden path="deliveryCustomer" />
+	<form:hidden path="deliveryEmail" />
+	<form:hidden path="deliveryTel" />
+	<form:hidden path="deliveryMobileTel" />
 	<form:hidden path="typeID" />
+	<form:hidden path="type" />
 	<form:hidden path="brandID" />
+	<form:hidden path="brand" />
 	<form:hidden path="model" />
 	<form:hidden path="serialNo" />
 	<form:hidden path="accessories" />
+	<form:hidden path="desc" />
 	<form:hidden path="problem" />
 	<form:hidden path="empOpenID" />
 </form:form>
