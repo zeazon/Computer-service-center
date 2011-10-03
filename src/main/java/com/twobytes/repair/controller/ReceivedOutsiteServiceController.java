@@ -52,8 +52,8 @@ public class ReceivedOutsiteServiceController {
 	private String VIEWNAME_SEARCH = "receivedOutsiteService.search";
 	private String VIEWNAME_FORM = "receivedOutsiteService.form";
 	
-	private SimpleDateFormat sdfDateTime = new SimpleDateFormat("dd/MM/yyyy HH:mm", new Locale("th", "TH"));
-	private SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy", new Locale("th", "TH"));
+	private SimpleDateFormat sdfDateTime = new SimpleDateFormat("dd/MM/yyyy HH:mm", new Locale("US"));
+	private SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy", new Locale("US"));
 	
 	@RequestMapping(value = "/receivedOutsiteService")
 	public String view(ModelMap model, HttpServletRequest request) {
@@ -75,7 +75,7 @@ public class ReceivedOutsiteServiceController {
 	}
 	
 	@RequestMapping(value="/searchReceivedOutsiteService")
-	public @ResponseBody GridResponse getData(@RequestParam(value="name", required=false) String name, @RequestParam(value="surname", required=false) String surname, @RequestParam(value="date", required=false) String date, @RequestParam(value="type", required=false) String type, @RequestParam("rows") Integer rows, @RequestParam("page") Integer page, @RequestParam("sidx") String sidx, @RequestParam("sord") String sord){
+	public @ResponseBody GridResponse getData(@RequestParam(value="name", required=false) String name, @RequestParam(value="date", required=false) String date, @RequestParam(value="type", required=false) String type, @RequestParam("rows") Integer rows, @RequestParam("page") Integer page, @RequestParam("sidx") String sidx, @RequestParam("sord") String sord){
 		// Because default Tomcat URI encoding is iso-8859-1 so it must encode back to tis620
 		String[] datePart;
 		String searchDate = null;
@@ -83,16 +83,13 @@ public class ReceivedOutsiteServiceController {
 			if(null != name){
 				name = new String(name.getBytes("iso-8859-1"), "tis620");	
 			}
-			if(null != surname){
-				surname = new String(surname.getBytes("iso-8859-1"), "tis620");	
-			}
 			if(null != date && !date.equals("")){
 				date = new String(date.getBytes("iso-8859-1"), "tis620");
 				datePart = date.split("/");
 				// Change year to Christ year
-				Integer year = Integer.parseInt(datePart[2]);				
-				year = year - 543;
-				searchDate = year.toString()+"-"+datePart[1]+"-"+datePart[0];
+//				Integer year = Integer.parseInt(datePart[2]);				
+//				year = year - 543;
+				searchDate = datePart[2]+"-"+datePart[1]+"-"+datePart[0];
 			}
 			if(null != type){
 				type = new String(type.getBytes("iso-8859-1"), "tis620");	
@@ -101,7 +98,7 @@ public class ReceivedOutsiteServiceController {
 			e.printStackTrace();
 		}
 		
-		List<OutsiteService> osList = osService.selectSentOSByCriteria(name, surname, searchDate, type, rows, page, sidx, sord);
+		List<OutsiteService> osList = osService.selectSentOSByCriteria(name, searchDate, type, rows, page, sidx, sord);
 		GridResponse response = new GridResponse();
 		
 		List<OutsiteServiceGridData> rowsList = new ArrayList<OutsiteServiceGridData>();

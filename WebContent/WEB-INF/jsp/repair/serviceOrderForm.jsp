@@ -128,7 +128,6 @@
 								<tr>
 									<td><label><fmt:message key="deliveryCustomer" />:</label></td>
 									<td><div class="rowElem"><form:input path="deliveryCustomer" class="textboxMockup" style="float:left" id="deliveryCustomer" size="30" maxlength="255"/></div></td>
-									
 									<td><label><fmt:message key="email" />:</label></td>
 									<td><div class="rowElem"><form:input path="deliveryEmail" class="textboxMockup" style="float:left" id="deliveryEmail" maxlength="50"/></div></td>
 									<td><label><fmt:message key="tel" />:</label></td>
@@ -200,7 +199,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td><label><fmt:message key="product" />:</label></td>
+						<td><label><fmt:message key="productID" />:</label></td>
 						<td colspan="5">
 							<div class="rowElem">
 								<c:if test="${mode == 'add'}">

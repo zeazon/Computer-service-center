@@ -133,15 +133,12 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<ServiceOrder> selectNewSOByCriteria(String name,
-			String surname, String date, String type, Integer rows,
+			String date, String type, Integer rows,
 			Integer page, String orderBy, String orderType) throws Exception{
 		StringBuilder sql = new StringBuilder();
 		sql.append("from ServiceOrder as serviceOrder where 1=1 ");
 		if(null != name && !name.equals("")){
 			sql.append("and serviceOrder.customer.name like :name ");
-		}
-		if(null != surname && !surname.equals("")){
-			sql.append("and serviceOrder.customer.surname like :surname ");
 		}
 		if(null != date && !date.equals("")){
 			sql.append("and DATE(serviceOrderDate) = :serviceOrderDate ");
@@ -155,8 +152,6 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 		if(!orderBy.equals("")){
 			if(orderBy.equals("name")){
 				orderBy = "serviceOrder.customer.name";
-			}else if(orderBy.equals("surname")){
-				orderBy = "serviceOrder.customer.surname";
 			}else if(orderBy.equals("tel")){
 				orderBy = "serviceOrder.customer.tel";
 			}else if(orderBy.equals("mobileTel")){
@@ -170,9 +165,6 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 		Query q = sessionFactory.getCurrentSession().createQuery(sql.toString());
 		if(null != name && !name.equals("")) {
 			q.setString("name", name);
-		}
-		if(null != surname && !surname.equals("")) {
-			q.setString("surname", surname);
 		}
 		if(null != date && !date.equals("")) {
 			q.setString("serviceOrderDate", date);

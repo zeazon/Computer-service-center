@@ -11,6 +11,6 @@ public interface OutsiteServiceDAO {
 	public boolean edit(OutsiteService outsiteService) throws Exception;
 	public boolean delete(OutsiteService outsiteService, Integer employeeID) throws Exception;
 	
-	public List<OutsiteService> selectNewOSByCriteria(String name, String surname, String date, String type, Integer rows, Integer page, String orderBy, String orderType) throws Exception;
-	public List<OutsiteService> selectSentOSByCriteria(String name, String surname, String date, String type, Integer rows, Integer page, String orderBy, String orderType) throws Exception;
+	public List<OutsiteService> selectNewOSByCriteria(String name, String date, String type, Integer rows, Integer page, String orderBy, String orderType) throws Exception;
+	public List<OutsiteService> selectSentOSByCriteria(String name, String date, String type, Integer rows, Integer page, String orderBy, String orderType) throws Exception;
 }

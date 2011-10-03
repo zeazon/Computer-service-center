@@ -193,7 +193,6 @@ public class ServiceOrderController {
 			e.printStackTrace();
 		}
 
-		// System.out.println("searchDate = "+searchDate);
 		List<ServiceOrder> soList = soService.selectByCriteria(name,
 				searchStartDate, searchEndDate, type, serialNo, rows, page,
 				sidx, sord);
@@ -225,19 +224,45 @@ public class ServiceOrderController {
 				gridData.setServiceOrderDate(sdfDateTime.format(so
 						.getServiceOrderDate()));
 				String serviceType = "";
+				
+//				<form:radiobutton path="serviceType" value="1" cssStyle="margin-top:4px" id="serviceType_guarantee" onclick="checkServiceType()" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_guarantee" /></label><form:select path="guaranteeNo" id="guaranteeNo" ><c:forEach var="i" begin="1" end="7" step="1"><form:option value="${i}" /></c:forEach></form:select>
+//				<form:radiobutton path="serviceType" value="2" cssStyle="margin-top:4px;" id="serviceType_repair" onclick="checkServiceType()" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_repair" /></label>
+//				<form:radiobutton path="serviceType" value="3" cssStyle="margin-top:4px" id="serviceType_claim" onclick="checkServiceType()" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_claim" /></label>
+//				<form:radiobutton path="serviceType" value="4" cssStyle="margin-top:4px" id="serviceType_outsiteService" onclick="checkServiceType()" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_outsiteService" /></label><form:input path="refJobID" class="textboxMockup" id="refJobID" maxlength="30" />
+//				<form:radiobutton path="serviceType" value="5" cssStyle="margin-top:4px" id="serviceType_refix" onclick="checkServiceType()" /><label style="float:left; margin-top:4px;"><fmt:message key="serviceOrderType_refix" /></label><form:input path="refServiceOrder" class="textboxMockup" id="refServiceOrder" maxlength="20" />
+				
+				
 				if (so.getServiceType() == 1) {
 					serviceType = this.messages.getMessage(
-							"serviceOrderType_repair", null, new Locale("th", "TH"));
+							"serviceOrderType_guarantee", null, new Locale("th", "TH"));
+					if(so.getGuaranteeNo() != null){
+						serviceType = serviceType + " " + this.messages.getMessage("guarantee_No", null, new Locale("th", "TH")) + " " + so.getGuaranteeNo().toString();
+					}
 				} else if (so.getServiceType() == 2) {
 					serviceType = this.messages.getMessage(
-							"serviceOrderType_refix", null, new Locale("th", "TH"));
+							"serviceOrderType_repair", null, new Locale("th", "TH"));
+				} else if (so.getServiceType() == 3) {
+					serviceType = this.messages.getMessage(
+							"serviceOrderType_claim", null, new Locale("th", "TH"));
+				} else if (so.getServiceType() == 4) {
+					serviceType = this.messages.getMessage(
+							"serviceOrderType_outsiteService", null, new Locale("th", "TH")) + " " +
+							this.messages.getMessage("reference", null, new Locale("th", "TH")) + " " +
+							so.getRefJobID();
+				} else if (so.getServiceType() == 5) {
+					serviceType = this.messages.getMessage(
+							"serviceOrderType_refix", null, new Locale("th", "TH"))+ " " +
+							this.messages.getMessage("reference", null, new Locale("th", "TH")) + " " +
+							so.getRefServiceOrder();
 				}
 				gridData.setServiceType(serviceType);
+				gridData.setAppointmentDate(sdfDateTime.format(so.getAppointmentDate()));
 //				if(so.getCustomerType().equals(ServiceOrder.CUSTOMERTYPE_WALKIIN)){
 					Customer customer = so.getCustomer();
 					gridData.setName(customer.getName());
 //					gridData.setSurname(customer.getSurname());
 //					gridData.setFullName(customer.getName()+" "+customer.getSurname());
+					gridData.setEmail(customer.getEmail());
 					gridData.setTel(customer.getTel());
 					gridData.setMobileTel(customer.getMobileTel());
 					
@@ -258,7 +283,12 @@ public class ServiceOrderController {
 									new Locale("th", "TH")) + " "
 							+ customer.getProvince().getName());
 //				}
+				gridData.setDeliveryCustomer(so.getDeliveryCustomer());
+				gridData.setDeliveryEmail(so.getDeliveryEmail());
+				gridData.setDeliveryTel(so.getDeliveryTel());
+				gridData.setDeliveryMobileTel(so.getDeliveryMobileTel());
 				gridData.setStatus(so.getStatus());
+				gridData.setProductID(so.getProduct().getProductID());
 				gridData.setType(so.getProduct().getType().getName());
 				gridData.setBrand(so.getProduct().getBrand().getName());
 				gridData.setModel(so.getProduct().getModel().getName());

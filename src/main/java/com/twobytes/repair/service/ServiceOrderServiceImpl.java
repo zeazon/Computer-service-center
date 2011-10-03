@@ -74,17 +74,14 @@ public class ServiceOrderServiceImpl implements ServiceOrderService {
 	@Override
 	@Transactional
 	public List<ServiceOrder> selectNewSOByCriteria(String name,
-			String surname, String date, String type, Integer rows,
+			String date, String type, Integer rows,
 			Integer page, String orderBy, String orderType) {
 		if(null != name && !name.equals("")) {
 			name = "%"+name+"%";
 		}
-		if(null != surname && !surname.equals("")) {
-			surname = "%"+surname+"%";
-		}
 		List<ServiceOrder> modelList = new ArrayList<ServiceOrder>();
 		try {
-			modelList = soDAO.selectNewSOByCriteria(name, surname, date, type, rows, page, orderBy, orderType);
+			modelList = soDAO.selectNewSOByCriteria(name, date, type, rows, page, orderBy, orderType);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

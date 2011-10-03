@@ -6,11 +6,18 @@ public class ServiceOrderGridData {
 	private String serviceOrderID;
 	private String serviceOrderDate;
 	private String serviceType;
+	private String appointmentDate;
 	private String name;
 	private String surname;
 	private String fullName;
+	private String email;
 	private String tel;
 	private String mobileTel;
+	private String deliveryCustomer;
+	private String deliveryEmail;
+	private String deliveryTel;
+	private String deliveryMobileTel;
+	private String productID;
 	private String type;
 	private String brand;
 	private String model;
@@ -137,6 +144,48 @@ public class ServiceOrderGridData {
 	}
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
+	}
+	public String getAppointmentDate() {
+		return appointmentDate;
+	}
+	public void setAppointmentDate(String appointmentDate) {
+		this.appointmentDate = appointmentDate;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getDeliveryCustomer() {
+		return deliveryCustomer;
+	}
+	public void setDeliveryCustomer(String deliveryCustomer) {
+		this.deliveryCustomer = deliveryCustomer;
+	}
+	public String getDeliveryEmail() {
+		return deliveryEmail;
+	}
+	public void setDeliveryEmail(String deliveryEmail) {
+		this.deliveryEmail = deliveryEmail;
+	}
+	public String getDeliveryTel() {
+		return deliveryTel;
+	}
+	public void setDeliveryTel(String deliveryTel) {
+		this.deliveryTel = deliveryTel;
+	}
+	public String getDeliveryMobileTel() {
+		return deliveryMobileTel;
+	}
+	public void setDeliveryMobileTel(String deliveryMobileTel) {
+		this.deliveryMobileTel = deliveryMobileTel;
+	}
+	public String getProductID() {
+		return productID;
+	}
+	public void setProductID(String productID) {
+		this.productID = productID;
 	}
 
 }

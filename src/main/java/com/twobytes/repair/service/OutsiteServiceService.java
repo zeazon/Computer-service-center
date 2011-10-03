@@ -14,6 +14,6 @@ public interface OutsiteServiceService {
 	public boolean sent(OutsiteService outsiteService) throws Exception;
 	public boolean received(OutsiteService outsiteService, List<OutsiteServiceDetail> outsiteServiceDetailList) throws Exception;
 	
-	public List<OutsiteService> selectNewOSByCriteria(String name, String surname, String date, String type, Integer rows, Integer page, String orderBy, String orderType);
-	public List<OutsiteService> selectSentOSByCriteria(String name, String surname, String date, String type, Integer rows, Integer page, String orderBy, String orderType);
+	public List<OutsiteService> selectNewOSByCriteria(String name, String date, String type, Integer rows, Integer page, String orderBy, String orderType);
+	public List<OutsiteService> selectSentOSByCriteria(String name, String date, String type, Integer rows, Integer page, String orderBy, String orderType);
 }

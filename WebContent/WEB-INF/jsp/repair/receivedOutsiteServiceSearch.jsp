@@ -11,10 +11,10 @@
 						<td><label><fmt:message key="name" />:</label></td>
 						<td><div class="rowElem"><form:input path="name" type="text" id="name" class="textboxMockup" /></div></td>
 					</tr>
-					<tr>
+					<%--tr>
 						<td><label><fmt:message key="surname" />:</label></td>
 						<td><div class="rowElem"><form:input path="surname" type="text" id="surname" class="textboxMockup" /></div></td>
-					</tr>
+					</tr--%>
 					<tr>
 						<td><label><fmt:message key="date" />:</label></td>
 						<td><div class="rowElem" style="z-index:200"><form:input path="date" type="text" class="textboxMockup" id="dateInput" size="9"/></div></td>
@@ -60,7 +60,7 @@
 </table>
 
 <script type="text/javascript">
-	$("#dateInput").calendarsPicker($.extend({calendar: $.calendars.instance('thai','th')}));
+	$("#dateInput").calendarsPicker($.extend({calendar: $.calendars.instance('gregorian','th')}));
 
 	jQuery().ready(function (){
 		//find all form with class jqtransform and apply the plugin
@@ -71,12 +71,11 @@
 			datatype: "json",
 			height: "100%",
 			autowidth: true,
-			colNames:['<fmt:message key="outsiteServiceID" />','<fmt:message key="date" />','<fmt:message key="name" />','<fmt:message key="surname" />','<fmt:message key="type" />','<fmt:message key="brand" />','<fmt:message key="model" />','<fmt:message key="problem" />','<fmt:message key="status" />'],
+			colNames:['<fmt:message key="outsiteServiceID" />','<fmt:message key="date" />','<fmt:message key="name" />','<fmt:message key="type" />','<fmt:message key="brand" />','<fmt:message key="model" />','<fmt:message key="problem" />','<fmt:message key="status" />'],
 			colModel:[
 				{name:'outsiteServiceID',index:'outsiteServiceID'},
 				{name:'outsiteServiceDate', index:'outsiteServiceDate', align:'center', sorttype:'date',formatter:'date', formatoptions: {srcformat:'d/m/Y',newformat:'d/m/Y'}, width:'100', firstSortOrder:'desc'},
 				{name:'name',index:'name'},
-				{name:'surname',index:'surname'},
 				{name:'type',index:'type', sortable:false, width:'90'},
 				{name:'brand',index:'brand', sortable:false, width:'90'},
 				{name:'model',index:'model', sortable:false, width:'90'},
@@ -142,9 +141,8 @@
 	
 	function gridReload(){
 		var name = jQuery("#name").val();
-		var surname = jQuery("#surname").val();
 		var date = jQuery("#dateInput").val();
 		var type = jQuery("#type").val();
-		jQuery("#list").jqGrid('setGridParam',{url:"searchReceivedOutsiteService.html?name="+name+"&surname="+surname+"&date="+date+"&type="+type,page:1}).trigger("reloadGrid");
+		jQuery("#list").jqGrid('setGridParam',{url:"searchReceivedOutsiteService.html?name="+name+"&date="+date+"&type="+type,page:1}).trigger("reloadGrid");
 	}
 </script>

@@ -47,7 +47,8 @@ public class GetServiceOrderController {
 	
 	private String VIEWNAME_SEARCH = "getServiceOrder.search";
 	
-	private SimpleDateFormat sdfDateTime = new SimpleDateFormat("dd/MM/yyyy HH:mm", new Locale("th", "TH"));
+//	private SimpleDateFormat sdfDateTime = new SimpleDateFormat("dd/MM/yyyy HH:mm", new Locale("th", "TH"));
+	private SimpleDateFormat sdfDateTime = new SimpleDateFormat("dd/MM/yyyy HH:mm", new Locale ( "US" ));
 	
 	@RequestMapping(value = "/getServiceOrder")
 	public String view(ModelMap model, HttpServletRequest request) {
@@ -84,9 +85,9 @@ public class GetServiceOrderController {
 				date = new String(date.getBytes("iso-8859-1"), "tis620");
 				datePart = date.split("/");
 				// Change year to Christ year
-				Integer year = Integer.parseInt(datePart[2]);				
-				year = year - 543;
-				searchDate = year.toString()+"-"+datePart[1]+"-"+datePart[0];
+//				Integer year = Integer.parseInt(datePart[2]);				
+//				year = year - 543;
+				searchDate = datePart[2]+"-"+datePart[1]+"-"+datePart[0];
 			}
 			if(null != type){
 				type = new String(type.getBytes("iso-8859-1"), "tis620");	
@@ -95,7 +96,7 @@ public class GetServiceOrderController {
 			e.printStackTrace();
 		}
 		
-		List<ServiceOrder> soList = soService.selectNewSOByCriteria(name, surname, searchDate, type, rows, page, sidx, sord);
+		List<ServiceOrder> soList = soService.selectNewSOByCriteria(name, searchDate, type, rows, page, sidx, sord);
 		GridResponse response = new GridResponse();
 		
 		List<ServiceOrderGridData> rowsList = new ArrayList<ServiceOrderGridData>();

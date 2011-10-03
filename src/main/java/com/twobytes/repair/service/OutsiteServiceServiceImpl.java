@@ -109,17 +109,14 @@ public class OutsiteServiceServiceImpl implements OutsiteServiceService {
 	@Override
 	@Transactional
 	public List<OutsiteService> selectNewOSByCriteria(String name,
-			String surname, String date, String type, Integer rows,
+			String date, String type, Integer rows,
 			Integer page, String orderBy, String orderType) {
 		if(null != name && !name.equals("")) {
 			name = "%"+name+"%";
 		}
-		if(null != surname && !surname.equals("")) {
-			surname = "%"+surname+"%";
-		}
 		List<OutsiteService> modelList = new ArrayList<OutsiteService>();
 		try {
-			modelList = osDAO.selectNewOSByCriteria(name, surname, date, type, rows, page, orderBy, orderType);
+			modelList = osDAO.selectNewOSByCriteria(name, date, type, rows, page, orderBy, orderType);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -129,17 +126,14 @@ public class OutsiteServiceServiceImpl implements OutsiteServiceService {
 	@Override
 	@Transactional
 	public List<OutsiteService> selectSentOSByCriteria(String name,
-			String surname, String date, String type, Integer rows,
+			String date, String type, Integer rows,
 			Integer page, String orderBy, String orderType) {
 		if(null != name && !name.equals("")) {
 			name = "%"+name+"%";
 		}
-		if(null != surname && !surname.equals("")) {
-			surname = "%"+surname+"%";
-		}
 		List<OutsiteService> modelList = new ArrayList<OutsiteService>();
 		try {
-			modelList = osDAO.selectSentOSByCriteria(name, surname, date, type, rows, page, orderBy, orderType);
+			modelList = osDAO.selectSentOSByCriteria(name, date, type, rows, page, orderBy, orderType);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

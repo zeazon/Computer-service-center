@@ -11,10 +11,10 @@
 						<td><label><fmt:message key="name" />:</label></td>
 						<td><div class="rowElem"><form:input path="name" type="text" id="name" class="textboxMockup" /></div></td>
 					</tr>
-					<tr>
+					<%--tr>
 						<td><label><fmt:message key="surname" />:</label></td>
 						<td><div class="rowElem"><form:input path="surname" type="text" id="surname" class="textboxMockup" /></div></td>
-					</tr>
+					</tr--%>
 					<!-- tr>
 						<td><label><fmt:message key="date" />:</label></td>
 						<td><div class="rowElem" style="z-index:200"><form:input path="date" type="text" class="textboxMockup" id="dateInput" size="9"/></div></td>
@@ -69,8 +69,8 @@
 </table>
 
 <script type="text/javascript">
-	$("#dateInput").calendarsPicker($.extend({calendar: $.calendars.instance('thai','th')}));
-	$("#endDateInput").calendarsPicker($.extend({calendar: $.calendars.instance('thai','th')}));
+	$("#dateInput").calendarsPicker($.extend({calendar: $.calendars.instance('gregorian','th')}));
+	$("#endDateInput").calendarsPicker($.extend({calendar: $.calendars.instance('gregorian','th')}));
 
 	jQuery().ready(function (){
 		//find all form with class jqtransform and apply the plugin
@@ -81,12 +81,11 @@
 			datatype: "json",
 			height: "100%",
 			autowidth: true,
-			colNames:['<fmt:message key="serviceOrderID" />','<fmt:message key="date" />','<fmt:message key="name" />','<fmt:message key="surname" />','<fmt:message key="tel" />','<fmt:message key="mobileTel" />','<fmt:message key="type" />','<fmt:message key="brand" />','<fmt:message key="model" />','<fmt:message key="serialNo" />','<fmt:message key="status" />'],
+			colNames:['<fmt:message key="serviceOrderID" />','<fmt:message key="date" />','<fmt:message key="name" />','<fmt:message key="tel" />','<fmt:message key="mobileTel" />','<fmt:message key="type" />','<fmt:message key="brand" />','<fmt:message key="model" />','<fmt:message key="serialNo" />','<fmt:message key="status" />'],
 			colModel:[
 				{name:'serviceOrderID',index:'serviceOrderID', width:'200'},
 				{name:'serviceOrderDate', index:'serviceOrderDate', align:'center', sorttype:'date',formatter:'date', formatoptions: {srcformat:'d/m/Y',newformat:'d/m/Y'}, width:'100', firstSortOrder:'desc'},
 				{name:'name',index:'name'},
-				{name:'surname',index:'surname'},
 				{name:'tel',index:'tel', sortable:false},
 				{name:'mobileTel',index:'mobileTel', sortable:false, width:'170'},
 				{name:'type',index:'type', sortable:false},
@@ -221,11 +220,10 @@
 	
 	function gridReload(){
 		var name = jQuery("#name").val();
-		var surname = jQuery("#surname").val();
 		var startDate = jQuery("#dateInput").val();
 		var endDate = jQuery("#endDateInput").val();
 		var type = jQuery("#type").val();
 		var serialNo = jQuery("#serialNo").val();
-		jQuery("#list").jqGrid('setGridParam',{url:"searchServiceOrder.html?name="+name+"&surname="+surname+"&startDate="+startDate+"&endDate="+endDate+"&type="+type+"&serialNo="+serialNo,page:1}).trigger("reloadGrid");
+		jQuery("#list").jqGrid('setGridParam',{url:"searchServiceOrder.html?name="+name+"&startDate="+startDate+"&endDate="+endDate+"&type="+type+"&serialNo="+serialNo,page:1}).trigger("reloadGrid");
 	}
 </script>

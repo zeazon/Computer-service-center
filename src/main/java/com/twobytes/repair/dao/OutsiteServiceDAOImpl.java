@@ -53,7 +53,7 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 			sql.append("and DATE(outsiteServiceDate) = :outsiteServiceDate ");
 		}
 		if(null != type && !type.equals("")){
-			sql.append("and outsiteService.serviceOrder.type = :type ");
+			sql.append("and outsiteService.serviceOrder.product.type.typeID = :type ");
 		}
 		
 		sql.append("and outsiteService.status != 'cancel' ");
@@ -115,21 +115,18 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<OutsiteService> selectNewOSByCriteria(String name,
-			String surname, String date, String type, Integer rows,
+			String date, String type, Integer rows,
 			Integer page, String orderBy, String orderType) throws Exception{
 		StringBuilder sql = new StringBuilder();
 		sql.append("from OutsiteService as outsiteService where 1=1 ");
 		if(null != name && !name.equals("")){
 			sql.append("and outsiteService.serviceOrder.customer.name like :name ");
 		}
-		if(null != surname && !surname.equals("")){
-			sql.append("and outsiteService.serviceOrder.customer.surname like :surname ");
-		}
 		if(null != date && !date.equals("")){
 			sql.append("and DATE(outsiteServiceDate) = :outsiteServiceDate ");
 		}
 		if(null != type && !type.equals("")){
-			sql.append("and outsiteService.serviceOrder.type = :type ");
+			sql.append("and outsiteService.serviceOrder.product.type.typeID = :type ");
 		}
 		
 		sql.append("and outsiteService.status = '"+OutsiteService.NEW+"' ");
@@ -137,8 +134,6 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 		if(!orderBy.equals("")){
 			if(orderBy.equals("name")){
 				orderBy = "outsiteService.serviceOrder.customer.name";
-			}else if(orderBy.equals("surname")){
-				orderBy = "outsiteService.serviceOrder.customer.surname";
 			}
 			sql.append("order by "+orderBy+" "+orderType);
 		}else{
@@ -148,9 +143,6 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 		Query q = sessionFactory.getCurrentSession().createQuery(sql.toString());
 		if(null != name && !name.equals("")) {
 			q.setString("name", name);
-		}
-		if(null != surname && !surname.equals("")) {
-			q.setString("surname", surname);
 		}
 		if(null != date && !date.equals("")) {
 			q.setString("outsiteServiceDate", date);
@@ -165,21 +157,18 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<OutsiteService> selectSentOSByCriteria(String name,
-			String surname, String date, String type, Integer rows,
+			String date, String type, Integer rows,
 			Integer page, String orderBy, String orderType) throws Exception{
 		StringBuilder sql = new StringBuilder();
 		sql.append("from OutsiteService as outsiteService where 1=1 ");
 		if(null != name && !name.equals("")){
 			sql.append("and outsiteService.serviceOrder.customer.name like :name ");
 		}
-		if(null != surname && !surname.equals("")){
-			sql.append("and outsiteService.serviceOrder.customer.surname like :surname ");
-		}
 		if(null != date && !date.equals("")){
 			sql.append("and DATE(outsiteServiceDate) = :outsiteServiceDate ");
 		}
 		if(null != type && !type.equals("")){
-			sql.append("and outsiteService.serviceOrder.type = :type ");
+			sql.append("and outsiteService.serviceOrder.product.type.typeID = :type ");
 		}
 		
 		sql.append("and outsiteService.status = '"+OutsiteService.SENT+"' ");
@@ -187,8 +176,6 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 		if(!orderBy.equals("")){
 			if(orderBy.equals("name")){
 				orderBy = "outsiteService.serviceOrder.customer.name";
-			}else if(orderBy.equals("surname")){
-				orderBy = "outsiteService.serviceOrder.customer.surname";
 			}
 			sql.append("order by "+orderBy+" "+orderType);
 		}else{
@@ -198,9 +185,6 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 		Query q = sessionFactory.getCurrentSession().createQuery(sql.toString());
 		if(null != name && !name.equals("")) {
 			q.setString("name", name);
-		}
-		if(null != surname && !surname.equals("")) {
-			q.setString("surname", surname);
 		}
 		if(null != date && !date.equals("")) {
 			q.setString("outsiteServiceDate", date);

@@ -11,5 +11,5 @@ public interface ServiceOrderDAO {
 	public boolean edit(ServiceOrder serviceOrder) throws Exception;
 	public boolean delete(ServiceOrder serviceOrder, Integer employeeID) throws Exception;
 	
-	public List<ServiceOrder> selectNewSOByCriteria(String name, String surname, String date, String type, Integer rows, Integer page, String orderBy, String orderType) throws Exception;
+	public List<ServiceOrder> selectNewSOByCriteria(String name, String date, String type, Integer rows, Integer page, String orderBy, String orderType) throws Exception;
 }

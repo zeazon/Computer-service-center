@@ -67,8 +67,8 @@ public class OutsiteServiceController {
 	private String VIEWNAME_SEARCH = "outsiteService.search";
 	private String VIEWNAME_FORM = "outsiteService.form";
 	
-	private SimpleDateFormat sdfDateTime = new SimpleDateFormat("dd/MM/yyyy HH:mm", new Locale("th", "TH"));
-	private SimpleDateFormat sdfDateTimeMin = new SimpleDateFormat("d-MMM-yy HH:mm", new Locale("th", "TH"));
+	private SimpleDateFormat sdfDateTime = new SimpleDateFormat("dd/MM/yyyy HH:mm", new Locale("US"));
+	private SimpleDateFormat sdfDateTimeMin = new SimpleDateFormat("d-MMM-yy HH:mm", new Locale("US"));
 	
 	@RequestMapping(value = "/outsiteService")
 	public String view(ModelMap model, HttpServletRequest request) {
@@ -105,9 +105,9 @@ public class OutsiteServiceController {
 				date = new String(date.getBytes("iso-8859-1"), "tis620");
 				datePart = date.split("/");
 				// Change year to Christ year
-				Integer year = Integer.parseInt(datePart[2]);				
-				year = year - 543;
-				searchDate = year.toString()+"-"+datePart[1]+"-"+datePart[0];
+//				Integer year = Integer.parseInt(datePart[2]);				
+//				year = year - 543;
+				searchDate = datePart[2]+"-"+datePart[1]+"-"+datePart[0];
 			}
 			if(null != type){
 				type = new String(type.getBytes("iso-8859-1"), "tis620");	
