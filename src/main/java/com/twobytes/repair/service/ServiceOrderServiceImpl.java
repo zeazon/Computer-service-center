@@ -88,4 +88,24 @@ public class ServiceOrderServiceImpl implements ServiceOrderService {
 		return modelList;
 	}
 
+	@Override
+	@Transactional
+	public List<ServiceOrder> selectSOForCloseByCriteria(String name,
+			String startDate, String endDate, String type, String serialNo,
+			Integer rows, Integer page, String orderBy, String orderType) {
+		if(null != name && !name.equals("")) {
+			name = "%"+name+"%";
+		}
+		if(null != serialNo && !serialNo.equals("")) {
+			serialNo = "%"+serialNo+"%";
+		}
+		List<ServiceOrder> modelList = new ArrayList<ServiceOrder>();
+		try {
+			modelList = soDAO.selectSOForCloseByCriteria(name, startDate, endDate, type, serialNo, rows, page, orderBy, orderType);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return modelList;
+	}
+
 }

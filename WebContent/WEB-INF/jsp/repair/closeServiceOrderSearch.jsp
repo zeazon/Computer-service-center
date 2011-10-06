@@ -54,7 +54,7 @@
 						<table id="list"></table>
 						<div id="pager"></div>
 						
-						<form id="editForm" action="serviceOrder.html?do=preEdit" method="post">
+						<form id="editForm" action="closeServiceOrder.html?do=preCloseServiceOrder" method="post">
 							<input type="hidden" name="serviceOrderID"/>
 						</form>
 						
@@ -77,7 +77,7 @@
 		$("form.jqtransform").jqTransform();
 		
 		jQuery("#list").jqGrid({
-			url:"searchServiceOrder.html",
+			url:"searchCloseServiceOrder.html",
 			datatype: "json",
 			height: "100%",
 			autowidth: true,
@@ -105,7 +105,7 @@
 			pager: '#pager',
 			toppager: true
 		}).navGrid("#pager",{edit:false,add:false,del:false,search:false,refresh:false,cloneToTop:true})
-		.navButtonAdd('#list_toppager',
+/*		.navButtonAdd('#list_toppager',
 		{
 			caption:"",
 			title:"<fmt:message key='button.add' />",
@@ -114,11 +114,11 @@
 				window.location = '<c:url value="/serviceOrder.html?do=preAdd" />';
 			}, 
 			position:"last"
-		})
+		})*/
 		.navButtonAdd('#list_toppager',
 		{
 			caption:"",
-			title:"<fmt:message key='button.edit' />",
+			title:"<fmt:message key='button.closeServiceOrder' />",
 			buttonicon:"ui-icon-pencil", 
 			onClickButton: function(){ 
 				 var gsr = jQuery("#list").getGridParam('selrow');
@@ -139,8 +139,8 @@
 				}         
 			}, 
 			position:"last"
-		})
-		.navButtonAdd('#list_toppager',
+		});
+/*		.navButtonAdd('#list_toppager',
 		{
 			caption:"",
 			title:"<fmt:message key='button.delete' />",
@@ -193,7 +193,7 @@
 				};
 			},
 			position:"last"
-		});
+		});*/
 		// remove unuse button
 		var topPagerDiv = $("#list_toppager")[0];
 		$("#list_toppager_center", topPagerDiv).remove();
@@ -224,6 +224,6 @@
 		var endDate = jQuery("#endDateInput").val();
 		var type = jQuery("#type").val();
 		var serialNo = jQuery("#serialNo").val();
-		jQuery("#list").jqGrid('setGridParam',{url:"searchServiceOrder.html?name="+name+"&startDate="+startDate+"&endDate="+endDate+"&type="+type+"&serialNo="+serialNo,page:1}).trigger("reloadGrid");
+		jQuery("#list").jqGrid('setGridParam',{url:"searchCloseServiceOrder.html?name="+name+"&startDate="+startDate+"&endDate="+endDate+"&type="+type+"&serialNo="+serialNo,page:1}).trigger("reloadGrid");
 	}
 </script>

@@ -70,7 +70,7 @@ public class GetServiceOrderController {
 	}
 	
 	@RequestMapping(value="/searchGetServiceOrder")
-	public @ResponseBody GridResponse getData(@RequestParam(value="name", required=false) String name, @RequestParam(value="surname", required=false) String surname, @RequestParam(value="date", required=false) String date, @RequestParam(value="type", required=false) String type, @RequestParam("rows") Integer rows, @RequestParam("page") Integer page, @RequestParam("sidx") String sidx, @RequestParam("sord") String sord){
+	public @ResponseBody GridResponse getData(@RequestParam(value="name", required=false) String name, @RequestParam(value="date", required=false) String date, @RequestParam(value="type", required=false) String type, @RequestParam("rows") Integer rows, @RequestParam("page") Integer page, @RequestParam("sidx") String sidx, @RequestParam("sord") String sord){
 		// Because default Tomcat URI encoding is iso-8859-1 so it must encode back to tis620
 		String[] datePart;
 		String searchDate = null;
@@ -78,9 +78,9 @@ public class GetServiceOrderController {
 			if(null != name){
 				name = new String(name.getBytes("iso-8859-1"), "tis620");	
 			}
-			if(null != surname){
-				surname = new String(surname.getBytes("iso-8859-1"), "tis620");	
-			}
+//			if(null != surname){
+//				surname = new String(surname.getBytes("iso-8859-1"), "tis620");	
+//			}
 			if(null != date && !date.equals("")){
 				date = new String(date.getBytes("iso-8859-1"), "tis620");
 				datePart = date.split("/");

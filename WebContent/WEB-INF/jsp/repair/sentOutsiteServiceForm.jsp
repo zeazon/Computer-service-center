@@ -150,9 +150,9 @@
 										<td colspan="4"><div class="rowElem"><span id="serviceOrder_desc">${form.serviceOrder.description}&nbsp;</span></div></td>
 									</tr>
 									<tr>
-										<%--td valign="top" style="padding-top:9px;"><label><fmt:message key="problem" />:</label></td--%>
+										<%--td valign="top" style="padding-top:9px;"><label><fmt:message key="serviceOrder_problem" />:</label></td--%>
 										<%--td colspan="5" align="left"><div class="rowElem"><textarea rows="5" col="30" readonly="readonly" class="ignore textareaMockup" style="width:98%" name="problem" ></textarea></div></td--%>
-										<td><label><fmt:message key="problem" />:</label></td>
+										<td><label><fmt:message key="serviceOrder_problem" />:</label></td>
 										<td colspan="7" align="left"><div class="rowElem"><span id="problem" >${form.serviceOrder.problem}&nbsp;</span></div></td>
 									</tr>
 									<tr>

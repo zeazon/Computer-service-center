@@ -139,9 +139,9 @@
 										<td colspan="4"><div class="rowElem"><span id="serviceOrder_desc">${form.serviceOrder.description}&nbsp;</span></div></td>
 									</tr>
 									<tr>
-										<%--td valign="top" style="padding-top:9px;"><label><fmt:message key="problem" />:</label></td--%>
+										<%--td valign="top" style="padding-top:9px;"><label><fmt:message key="serviceOrder_problem" />:</label></td--%>
 										<%--td colspan="5" align="left"><div class="rowElem"><textarea rows="5" col="30" readonly="readonly" class="ignore textareaMockup" style="width:98%" name="problem" ></textarea></div></td--%>
-										<td valign="top"><label><fmt:message key="problem" />:</label></td>
+										<td valign="top"><label><fmt:message key="serviceOrder_problem" />:</label></td>
 										<td colspan="7" align="left" valign="top"><div class="rowElem"><pre id="problem" class="display" >${form.serviceOrder.problem}&nbsp;</pre></div></td>
 									</tr>
 									<tr>
@@ -415,9 +415,9 @@ function gridReload(){
 
 
 
-function doPrint(){
-	document.forms["printForm"].submit();
-}
+//function doPrint(){
+//	document.forms["printForm"].submit();
+//}
 
 
 </script>

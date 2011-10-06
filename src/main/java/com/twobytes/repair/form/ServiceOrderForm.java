@@ -1,5 +1,7 @@
 package com.twobytes.repair.form;
 
+import com.twobytes.model.Employee;
+
 public class ServiceOrderForm {
 	
 	private String serviceOrderID;
@@ -23,8 +25,21 @@ public class ServiceOrderForm {
 	private String desc;
 	private String problem;
 	private String appointmentDate;
-
+	private Employee empOpen;
+	
 	private String productID;
+	
+	private String startFix;
+	private String endFix;
+	private String realProblem;
+	private String cause;
+	private String fixDesc;
+	private String costing;
+	
+	private String[] serviceList;
+	private Double[] servicePrice;
+	private Double netAmount;
+	private String remark;
 	
 	public String getServiceOrderID() {
 		return serviceOrderID;
@@ -201,5 +216,93 @@ public class ServiceOrderForm {
 	public void setGuaranteeNo(Integer guaranteeNo) {
 		this.guaranteeNo = guaranteeNo;
 	}
-	
+
+	public Employee getEmpOpen() {
+		return empOpen;
+	}
+
+	public void setEmpOpen(Employee empOpen) {
+		this.empOpen = empOpen;
+	}
+
+	public String getStartFix() {
+		return startFix;
+	}
+
+	public void setStartFix(String startFix) {
+		this.startFix = startFix;
+	}
+
+	public String getEndFix() {
+		return endFix;
+	}
+
+	public void setEndFix(String endFix) {
+		this.endFix = endFix;
+	}
+
+	public String getRealProblem() {
+		return realProblem;
+	}
+
+	public void setRealProblem(String realProblem) {
+		this.realProblem = realProblem;
+	}
+
+	public String getCause() {
+		return cause;
+	}
+
+	public void setCause(String cause) {
+		this.cause = cause;
+	}
+
+	public String getFixDesc() {
+		return fixDesc;
+	}
+
+	public void setFixDesc(String fixDesc) {
+		this.fixDesc = fixDesc;
+	}
+
+	public String getCosting() {
+		return costing;
+	}
+
+	public void setCosting(String costing) {
+		this.costing = costing;
+	}
+
+	public String[] getServiceList() {
+		return serviceList;
+	}
+
+	public void setServiceList(String[] serviceList) {
+		this.serviceList = serviceList;
+	}
+
+	public Double[] getServicePrice() {
+		return servicePrice;
+	}
+
+	public void setServicePrice(Double[] servicePrice) {
+		this.servicePrice = servicePrice;
+	}
+
+	public Double getNetAmount() {
+		return netAmount;
+	}
+
+	public void setNetAmount(Double netAmount) {
+		this.netAmount = netAmount;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
 }

@@ -12,4 +12,5 @@ public interface ServiceOrderService {
 	public boolean delete(String serviceOrderID, Integer employeeID) throws Exception;
 	
 	public List<ServiceOrder> selectNewSOByCriteria(String name, String date, String type, Integer rows, Integer page, String orderBy, String orderType);
+	public List<ServiceOrder> selectSOForCloseByCriteria(String name, String startDate, String endDate, String type, String serialNo, Integer rows, Integer page, String orderBy, String orderType);
 }

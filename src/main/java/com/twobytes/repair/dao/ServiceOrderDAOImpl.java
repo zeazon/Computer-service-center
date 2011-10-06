@@ -177,4 +177,66 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 
 	}
 
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<ServiceOrder> selectSOForCloseByCriteria(String name,
+			String startDate, String endDate, String type, String serialNo,
+			Integer rows, Integer page, String orderBy, String orderType)
+			throws Exception {
+		StringBuilder sql = new StringBuilder();
+		sql.append("from ServiceOrder as serviceOrder where 1=1 ");
+		if(null != name && !name.equals("")){
+			sql.append("and serviceOrder.customer.name like :name ");
+		}else
+		if((null != startDate && !startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			sql.append("and DATE(serviceOrderDate) between :startDate and :endDate ");
+		}else if((null != startDate && !startDate.equals("")) && (null == endDate || endDate.equals(""))){
+			sql.append("and DATE(serviceOrderDate) >= :startDate ");
+		}else if((null == startDate || startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			sql.append("and DATE(serviceOrderDate) <= :endDate ");
+		}
+		if(null != type && !type.equals("")){
+			sql.append("and serviceOrder.product.type.typeID = :type ");
+		}
+		if(null != serialNo && !serialNo.equals("")){
+			sql.append("and serviceOrder.product.serialNo like :serialNo ");
+		}
+		
+//		sql.append("and serviceOrder.status in ('fixing','received') ");
+		
+		if(!orderBy.equals("")){
+			if(orderBy.equals("name")){
+				orderBy = "serviceOrder.customer.name";
+			}else if(orderBy.equals("surname")){
+				orderBy = "serviceOrder.customer.surname";
+			}else if(orderBy.equals("fullName")){
+				orderBy = "serviceOrder.customer.name "+orderType+", serviceOrder.customer.surname"; 
+			}
+			sql.append("order by "+orderBy+" "+orderType);
+		}else{
+			sql.append("order by serviceOrder.serviceOrderDate desc");
+		}
+		
+		Query q = sessionFactory.getCurrentSession().createQuery(sql.toString());
+		if(null != name && !name.equals("")) {
+			q.setString("name", name);
+		}
+		if((null != startDate && !startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			q.setString("startDate", startDate);
+			q.setString("endDate", endDate);
+		}else if((null != startDate && !startDate.equals("")) && (null == endDate || endDate.equals(""))){
+			q.setString("startDate", startDate);
+		}else if((null == startDate || startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			q.setString("endDate", endDate);
+		}
+		if(null != type && !type.equals("")) {
+			q.setString("type", type);
+		}
+		if(null != serialNo && !serialNo.equals("")) {
+			q.setString("serialNo", serialNo);
+		}
+		List<ServiceOrder> result = q.list();
+		return result;
+	}
+
 }

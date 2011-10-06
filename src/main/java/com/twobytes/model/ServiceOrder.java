@@ -38,6 +38,8 @@ public class ServiceOrder extends BaseColumn implements Serializable {
 	private Employee empFix;
 	private Date startFix;
 	private Date endFix;
+	private String realProblem;
+	private String cause;
 	private String fixDesc;
 	private String costing;
 	private Double serviceCost;
@@ -259,6 +261,24 @@ public class ServiceOrder extends BaseColumn implements Serializable {
 		this.endFix = endFix;
 	}
 	
+	@Column(name="realProblem")
+	public String getRealProblem() {
+		return realProblem;
+	}
+
+	public void setRealProblem(String realProblem) {
+		this.realProblem = realProblem;
+	}
+	
+	@Column(name="cause")
+	public String getCause() {
+		return cause;
+	}
+
+	public void setCause(String cause) {
+		this.cause = cause;
+	}
+
 	@Column(name="fixDesc")
 	public String getFixDesc() {
 		return fixDesc;
