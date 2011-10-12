@@ -7,6 +7,9 @@ public class ProductForm {
 	private Integer brandID;
 	private Integer modelID;
 	private String serialNo;
+	private String warrantyDate;
+	private String warrantyExpire;
+	private String remark;
 	
 	public String getProductID() {
 		return productID;
@@ -43,6 +46,24 @@ public class ProductForm {
 	}
 	public void setSerialNo(String serialNo) {
 		this.serialNo = serialNo;
+	}
+	public String getWarrantyDate() {
+		return warrantyDate;
+	}
+	public void setWarrantyDate(String warrantyDate) {
+		this.warrantyDate = warrantyDate;
+	}
+	public String getWarrantyExpire() {
+		return warrantyExpire;
+	}
+	public void setWarrantyExpire(String warrantyExpire) {
+		this.warrantyExpire = warrantyExpire;
+	}
+	public String getRemark() {
+		return remark;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 	
 }

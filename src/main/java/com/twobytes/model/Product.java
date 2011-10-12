@@ -21,6 +21,9 @@ public class Product implements Serializable{
 	private Brand brand;
 	private Model model;
 	private String serialNo;
+	private Date warrantyDate;
+	private Date warrantyExpire;
+	private String remark;
 	private Integer createdBy;
 	private Date createdDate;
 	private Integer updatedBy;
@@ -84,6 +87,33 @@ public class Product implements Serializable{
 		this.serialNo = serialNo;
 	}
 	
+	@Column(name="warrantyDate")
+	public Date getWarrantyDate() {
+		return warrantyDate;
+	}
+
+	public void setWarrantyDate(Date warrantyDate) {
+		this.warrantyDate = warrantyDate;
+	}
+
+	@Column(name="warrantyExpire")
+	public Date getWarrantyExpire() {
+		return warrantyExpire;
+	}
+
+	public void setWarrantyExpire(Date warrantyExpire) {
+		this.warrantyExpire = warrantyExpire;
+	}
+
+	@Column(name="remark")
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
 	@Column(name="createdBy")
 	public Integer getCreatedBy() {
 		return createdBy;

@@ -128,4 +128,12 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 		}
 	}
 
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Employee> getAll() throws Exception {
+		Query q = sessionFactory.getCurrentSession().createQuery("from Employee order by name ");
+		List<Employee> retList = q.list();
+		return retList;
+	}
+	
 }

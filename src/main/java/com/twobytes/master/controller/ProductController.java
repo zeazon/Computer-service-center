@@ -1,6 +1,8 @@
 package com.twobytes.master.controller;
 
 import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -62,6 +64,8 @@ public class ProductController {
 	
 	private String VIEWNAME_SEARCH = "product.search";
 	private String VIEWNAME_FORM = "product.form";
+	
+	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", new Locale ("US"));
 	
 	@RequestMapping(value = "/product")
 	public String view(ModelMap model, HttpServletRequest request) {
@@ -269,6 +273,18 @@ public class ProductController {
 		}
 		product.setDescription(form.getDescription());
 		product.setSerialNo(form.getSerialNo());
+		try {
+			product.setWarrantyDate(sdf.parse(form.getWarrantyDate()));
+		} catch (ParseException e2) {
+			e2.printStackTrace();
+		}
+		try {
+			product.setWarrantyExpire(sdf.parse(form.getWarrantyExpire()));
+		} catch (ParseException e2) {
+			e2.printStackTrace();
+		}
+		product.setRemark(form.getRemark());
+		
 		Type type = new Type();
 		try {
 			type = typeService.selectByID(form.getTypeID());
@@ -384,6 +400,13 @@ public class ProductController {
 		form.setTypeID(product.getType().getTypeID());
 		form.setBrandID(product.getBrand().getBrandID());
 		form.setModelID(product.getModel().getModelID());
+		if(null != product.getWarrantyDate()){
+			form.setWarrantyDate(sdf.format(product.getWarrantyDate()));
+		}
+		if(null != product.getWarrantyExpire()){
+			form.setWarrantyExpire(sdf.format(product.getWarrantyExpire()));
+		}
+		form.setRemark(product.getRemark());
 		
 		List<Brand> brandList = new ArrayList<Brand>();
 		List<Type> typeList = new ArrayList<Type>();

@@ -64,6 +64,18 @@
 						<td><label><fmt:message key="description" />:</label></td>
 						<td><div class="rowElem"><form:input type="text" path="description" class="textboxMockup" /></div></td>
 					</tr>
+					<tr>
+						<td><label><fmt:message key="warrantyDate"/>:</label></td>
+						<td><div class="rowElem"><form:input path="warrantyDate" id="warrantyDate" class="textboxMockup" readonly="true" size="10" /></div></td>
+					</tr>
+					<tr>
+						<td><label><fmt:message key="warrantyExpire"/>:</label></td>
+						<td><div class="rowElem"><form:input path="warrantyExpire" id="warrantyExpire" class="textboxMockup" readonly="true" size="10" /></div></td>
+					</tr>
+					<tr>
+						<td valign="top" style="padding-top:7px;"><label><fmt:message key="remark"/>:</label></td>
+						<td><div class="rowElem"><form:textarea path="remark" rows="5" col="30" class="textareaMockup" style="width:98%" name="remark" ></form:textarea></div></td>
+					</tr>
 					<tr align="center">
 						<td colspan="2"><div class="rowElem"><input type="submit" value="<fmt:message key='button.ok' />" /></div></td>
 					</tr>
@@ -78,13 +90,19 @@
 
 <script type="text/javascript">
 
+$("#warrantyDate").calendarsPicker($.extend({calendar: $.calendars.instance('gregorian','th')}));
+$("#warrantyExpire").calendarsPicker($.extend({calendar: $.calendars.instance('gregorian','th')}));
+
 $(document).ready(function(){
 	$("#form").validate({
 		rules: {
 			serialNo: "required",
 			productID: "required",
 			brandID: "required",
-			modelID: "required"
+			modelID: "required",
+			remark:{
+				maxlength: 1000
+			}
 		}
 	});
 	

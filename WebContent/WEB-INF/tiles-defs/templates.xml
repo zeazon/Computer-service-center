@@ -178,4 +178,16 @@
 		<put-attribute name="body" value="/WEB-INF/jsp/repair/closeServiceOrderForm.jsp"/>
 	</definition>
 	
+	<!-- Sale -->
+	
+	<definition name="saleOrder.search" extends=".pageTemplate">
+		<put-attribute name="pageName" value="ข้อมูลการขาย" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/sale/saleOrderSearch.jsp"/>
+	</definition>
+	
+	<definition name="saleOrder.form" extends=".pageTemplate">
+		<put-attribute name="pageName" value="ข้อมูลการขาย" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/sale/saleOrderForm.jsp"/>
+	</definition>
+	
 </tiles-definitions>

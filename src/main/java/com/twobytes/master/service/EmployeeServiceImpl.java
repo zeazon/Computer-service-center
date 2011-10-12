@@ -1,5 +1,6 @@
 package com.twobytes.master.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +68,18 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Transactional
 	public boolean checkValidLogin(String login, Integer employeeID) throws Exception{
 		return employeeDAO.checkValidLogin(login, employeeID);
+	}
+
+	@Override
+	@Transactional
+	public List<Employee> getAll() {
+		List<Employee> retList = new ArrayList<Employee>();
+		try{
+			retList = employeeDAO.getAll();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return retList;
 	}
 
 }
