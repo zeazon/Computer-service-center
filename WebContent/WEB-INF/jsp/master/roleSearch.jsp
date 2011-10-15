@@ -8,19 +8,8 @@
 			<form:form commandName="searchForm" id="searchForm" class="jqtransform" method="post" onsubmit="gridReload(); return false;">
 				<table>
 					<tr>
-						<td><label><fmt:message key="date" />:</label></td>
-						<td><div class="rowElem" style="z-index:200"><form:input path="date" type="text" class="textboxMockup" id="dateInput" size="8" readonly="true"/></div></td>
-					</tr>
-					<tr>
-						<td><label><fmt:message key="employee" />:</label></td>
-						<td>
-							<div class="rowElem" style="z-index:100">
-								<form:select path="employeeID" id="employeeID">
-									<form:option value="">&nbsp;</form:option>
-									<form:options items="${employeeList}" itemValue="employeeID" itemLabel="name"/>
-								</form:select>
-							</div>
-						</td>
+						<td><label><fmt:message key="name" />:</label></td>
+						<td><div class="rowElem"><form:input path="name" type="text" id="name" class="textboxMockup" /></div></td>
 					</tr>
 					<tr>
 						<td colspan="2"><div class="rowElem"><input type="submit" id="searchButton" value="<fmt:message key='button.search' />" /></div></td>
@@ -37,9 +26,9 @@
 						<table id="list"></table>
 						<div id="pager"></div>
 						
-						<!-- form id="editForm" action="saleOrder.html?do=preEdit" method="post">
-							<input type="hidden" name="brandID"/>
-						</form-->
+						<form id="editForm" action="role.html?do=preEdit" method="post">
+							<input type="hidden" name="roleID"/>
+						</form>
 						
 						<div id="dialog" title="Feature not supported" style="display:none">
 							<p>That feature is not supported.</p>
@@ -57,22 +46,15 @@
 		//find all form with class jqtransform and apply the plugin
 		$("form.jqtransform").jqTransform();
 		
-		$("#dateInput").calendarsPicker($.extend({calendar: $.calendars.instance('gregorian','th')}));
-		
 		jQuery("#list").jqGrid({
-			url:"searchSaleOrder.html",
+			url:"searchRole.html",
 			datatype: "json",
 			height: "100%",
 			autowidth: true,
-			colNames:['<fmt:message key="saleOrderID" />','<fmt:message key="date" />','<fmt:message key="name" />','<fmt:message key="surname" />','<fmt:message key="type" />','<fmt:message key="brand" />','<fmt:message key="model" />'],
+			colNames:['<fmt:message key="roleID" />','<fmt:message key="name" />'],
 			colModel:[
-				{name:'saleOrderID',index:'saleOrderID', sorttype:"int"},
-				{name:'saleDate', index:'saleDate', align:'center', sorttype:'date',formatter:'date', formatoptions: {srcformat:'d/m/Y',newformat:'d/m/Y'}, width:'100', firstSortOrder:'desc'},
-				{name:'name', index:'name'},
-				{name:'surname', index:'surname', sortable:false},
-				{name:'type',index:'type', sortable:false},
-				{name:'brand',index:'brand', sortable:false},
-				{name:'model',index:'model', sortable:false}],
+				{name:'roleID',index:'roleID', sorttype:"int"},
+				{name:'name', index:'name'}],
 			multiselect: false,
 			rownumbers: true,
 			rowNum:10,
@@ -80,7 +62,7 @@
 			viewrecords: true,
 			jsonReader:{
 				repeatitems: false,
-				id: "saleOrderID"
+				id: "roleID"
 			},
 			pager: '#pager',
 			toppager: true
@@ -91,11 +73,11 @@
 			title:"<fmt:message key='button.add' />",
 			buttonicon:"ui-icon-plus",
 			onClickButton: function(){ 
-				window.location = '<c:url value="/saleOrder.html?do=preAdd" />';
+				window.location = '<c:url value="/role.html?do=preAdd" />';
 			}, 
 			position:"last"
 		})
-/*		.navButtonAdd('#list_toppager',
+		.navButtonAdd('#list_toppager',
 		{
 			caption:"",
 			title:"<fmt:message key='button.edit' />",
@@ -119,7 +101,7 @@
 				}         
 			}, 
 			position:"last"
-		})*/
+		})
 		.navButtonAdd('#list_toppager',
 		{
 			caption:"",
@@ -155,7 +137,7 @@
 			                var new_id = null;
 							return [result.success, errors, new_id];
 						}, 
-						url: 'saleOrder.html?do=delete&saleOrderID='+gr}); 
+						url: 'role.html?do=delete&roleID='+gr}); 
 				} else { 
 					//alert("<fmt:message key='msg.pleaseSelectRow' />");
 					jQuery("#dialog").text('<fmt:message key='msg.pleaseSelectRow' />');
@@ -182,8 +164,7 @@
 	});
 	
 	function gridReload(){
-		var date = jQuery("#dateInput").val();	
-		var employeeID = jQuery("#employeeID").val();
-		jQuery("#list").jqGrid('setGridParam',{url:"searchSaleOrder.html?date="+date+"&employeeID="+employeeID,page:1}).trigger("reloadGrid");
+		var name = jQuery("#name").val();
+		jQuery("#list").jqGrid('setGridParam',{url:"searchRole.html?name="+name,page:1}).trigger("reloadGrid");
 	}
 </script>

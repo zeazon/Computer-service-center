@@ -15,6 +15,7 @@
 <link rel="stylesheet" type="text/css" media="screen" href="<%=request.getContextPath()%>/css/default.css">
 <link rel="stylesheet" type="text/css" media="screen" href="<%=request.getContextPath()%>/css/jQuery-calendar/2bytes.calendars.picker.css">
 <link rel="stylesheet" type="text/css" media="screen" href="<%=request.getContextPath()%>/css/jQuery-datetimeentry/jquery.datetimeentry.css">
+<link rel="stylesheet" type="text/css" media="screen" href="<%=request.getContextPath()%>/css/checkboxtree/jquery.checkboxtree.min.css" />
 
 <script src="<%=request.getContextPath()%>/script/jQuery/jquery-1.6.1.min.js" type="text/javascript"></script>
 <script src="<%=request.getContextPath()%>/script/jQuery/jquery-ui-1.8.13.custom.min.js" type="text/javascript"></script>
@@ -29,6 +30,7 @@
 <script src="<%=request.getContextPath()%>/script/jQuery-calendar/jquery.calendars.lang.min.js" type="text/javascript"></script>
 <script src="<%=request.getContextPath()%>/script/jQuery-calendar/jquery.calendars.thai-th.js" type="text/javascript"></script>
 <script src="<%=request.getContextPath()%>/script/jQuery-datetimeentry/jquery.datetimeentry.js" type="text/javascript"></script>
+<script src="<%=request.getContextPath()%>/script/checkboxtree/jquery.checkboxtree.min.js" type="text/javascript"></script>
 </head>
 <body marginheight="0" marginwidth="0">
 <div style="background: url('./images/header_logo.png'); background-repeat:no-repeat; height: 80px;" align="right">

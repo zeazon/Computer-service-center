@@ -27,7 +27,19 @@ public class SecurityServiceImpl implements SecurityService {
 	}
 
 	@Transactional
+	public List<Menu> selectMainMenu() {
+		return securityDAO.selectMainMenu();
+	}
+	
+	@Transactional
 	public List<Menu> selectSubMenu(Integer roleID, Integer menuID) {
 		return securityDAO.selectSubMenu(roleID, menuID);
 	}
+
+	@Override
+	@Transactional
+	public List<Menu> selectSubMenu(Integer menuID) {
+		return securityDAO.selectSubMenu(menuID);
+	}
+	
 }

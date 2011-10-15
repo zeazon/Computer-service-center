@@ -16,11 +16,13 @@ public class RoleDAOImpl implements RoleDAO {
 	private SessionFactory sessionFactory;
 	
 	@Override
+	public boolean save(Role role) throws Exception {
+		sessionFactory.getCurrentSession().saveOrUpdate(role);
+		return true;
+	}
+
+	@Override
 	public Role getRole(Integer roleID) {
-//		Session session = sessionFactory.openSession();
-//		Role role = (Role)session.get(Role.class, roleID);
-////	session.flush();
-//		session.clear();
 		Role role = (Role)sessionFactory.getCurrentSession().get(Role.class, roleID);
 		return role;
 	}
@@ -33,4 +35,33 @@ public class RoleDAOImpl implements RoleDAO {
 		return retList;
 	}
 
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Role> selectByCriteria(String name, Integer rows, Integer page,
+			String orderBy, String orderType) throws Exception {
+		StringBuilder sql = new StringBuilder();
+		sql.append("from Role where 1=1 ");
+		if(null != name && !name.equals("")){
+			sql.append("and name like :name ");
+		}
+		
+		if(!orderBy.equals("")){
+			sql.append("order by "+orderBy+" "+orderType);
+		}
+		Query q = sessionFactory.getCurrentSession().createQuery(sql.toString());
+		if(null != name && !name.equals("")) {
+			q.setString("name", name);
+		}
+
+		List<Role> result = q.list();
+		return result;
+	}
+	
+	public boolean delete(Role role) throws Exception{
+		Query q = sessionFactory.getCurrentSession().createSQLQuery("delete from role_menu where roleID = "+role.getRoleID().toString());
+		q.executeUpdate();
+		q = sessionFactory.getCurrentSession().createSQLQuery("delete from role where roleID = "+role.getRoleID().toString());
+		q.executeUpdate();
+		return true;
+	}
 }

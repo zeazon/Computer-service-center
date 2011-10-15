@@ -68,7 +68,7 @@
 						<td colspan="7">
 							<div class="rowElem">
 								<c:if test="${mode == 'add'}">
-									<form:input path="productID" class="textboxMockup" style="float:left" id="productID" readonly="true" size="18" maxlength="20"/> <!-- input type="button" id="productLov" value="..." > <label class="error" for="productID" generated="true" style="display: none; float:left; padding-left:10px"></label-->
+									<form:input path="productID" class="textboxMockup" style="float:left" id="productID" size="18" maxlength="20"/> <!-- input type="button" id="productLov" value="..." > <label class="error" for="productID" generated="true" style="display: none; float:left; padding-left:10px"></label-->
 								</c:if>
 								<c:if test="${mode == 'edit'}">
 									<form:input path="productID" class="textboxMockup" style="float:left" id="productID" readonly="true" size="18" maxlength="20"/>

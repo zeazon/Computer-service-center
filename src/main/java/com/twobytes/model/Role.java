@@ -14,6 +14,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 @Entity
 @Table(name="role")
 public class Role implements Serializable {
@@ -47,6 +50,7 @@ public class Role implements Serializable {
 	
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "role_menu", joinColumns = { @JoinColumn(name = "roleID") }, inverseJoinColumns = { @JoinColumn(name = "menuID") })
+	@Fetch(FetchMode.JOIN)
 	public Set<Menu> getMenus() {
 		return this.menus;
 	}

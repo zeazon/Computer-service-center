@@ -44,11 +44,31 @@ public class SecurityDAOImpl implements SecurityDAO {
 
 	@Override
 	@SuppressWarnings("unchecked")
+	public List<Menu> selectMainMenu() {
+		List<Menu> resultList = new ArrayList<Menu>();
+		Query q = sessionFactory.getCurrentSession().createQuery("select distinct menu from Menu menu join menu.roles r where menu.parentMenu = :parentMenu order by menu.menuID ");
+		q.setInteger("parentMenu",0);
+		resultList = q.list();
+		return resultList;
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
 	public List<Menu> selectSubMenu(Integer roleID, Integer menuID) {
 		List<Menu> resultList = null;
 		Query q = sessionFactory.getCurrentSession().createQuery("select menu from Menu menu join menu.roles r where menu.parentMenu = :parentMenu and r.roleID = :roleID order by menu.menuID ");
 		q.setInteger("parentMenu",menuID);
 		q.setInteger("roleID", roleID);
+		resultList = q.list();
+		return resultList;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Menu> selectSubMenu(Integer menuID) {
+		List<Menu> resultList = null;
+		Query q = sessionFactory.getCurrentSession().createQuery("select menu from Menu menu where menu.parentMenu = :parentMenu order by menu.menuID ");
+		q.setInteger("parentMenu",menuID);
 		resultList = q.list();
 		return resultList;
 	}

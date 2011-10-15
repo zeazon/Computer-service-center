@@ -121,6 +121,16 @@
 		<put-attribute name="body" value="/WEB-INF/jsp/master/customerTypeForm.jsp"/>
 	</definition>
 	
+	<definition name="role.search" extends=".pageTemplate">
+		<put-attribute name="pageName" value="บทบาท" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/master/roleSearch.jsp"/>
+	</definition>
+	
+	<definition name="role.form" extends=".pageTemplate">
+		<put-attribute name="pageName" value="บทบาท" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/master/roleForm.jsp"/>
+	</definition>
+	
 	<!-- Repair -->
 	
 	<definition name="serviceOrder.search" extends=".pageTemplate">

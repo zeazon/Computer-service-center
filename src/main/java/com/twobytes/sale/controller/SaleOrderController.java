@@ -1,5 +1,6 @@
 package com.twobytes.sale.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,9 +17,9 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.twobytes.master.form.CustomerForm;
-import com.twobytes.master.form.ModelSearchForm;
 import com.twobytes.master.form.ProductForm;
 import com.twobytes.master.service.BrandService;
 import com.twobytes.master.service.CustomerService;
@@ -30,16 +31,19 @@ import com.twobytes.master.service.ProvinceService;
 import com.twobytes.master.service.SubdistrictService;
 import com.twobytes.master.service.TypeService;
 import com.twobytes.model.Brand;
-import com.twobytes.model.CustomerType;
+import com.twobytes.model.CustomGenericResponse;
+import com.twobytes.model.Customer;
 import com.twobytes.model.District;
 import com.twobytes.model.Employee;
+import com.twobytes.model.GridResponse;
 import com.twobytes.model.Product;
 import com.twobytes.model.Province;
 import com.twobytes.model.SaleOrder;
 import com.twobytes.model.Subdistrict;
 import com.twobytes.model.Type;
-import com.twobytes.repair.form.ServiceOrderForm;
+
 import com.twobytes.sale.form.SaleOrderForm;
+import com.twobytes.sale.form.SaleOrderGridData;
 import com.twobytes.sale.form.SaleOrderSearchForm;
 import com.twobytes.sale.service.SaleOrderService;
 import com.twobytes.security.form.LoginForm;
@@ -97,7 +101,80 @@ public class SaleOrderController {
 			return "loginScreen";
 		}
 		
+		SaleOrderSearchForm searchForm = new SaleOrderSearchForm();
+		model.addAttribute("searchForm", searchForm);
+		
+		List<Employee> empList = employeeService.getAll();
+		model.addAttribute("employeeList", empList);
 		return VIEWNAME_SEARCH;
+	}
+	
+	@RequestMapping(value = "/searchSaleOrder")
+	public @ResponseBody
+	GridResponse getData(
+			@RequestParam(value = "date", required = false) String date,
+			@RequestParam(value = "employeeID", required = false) String employeeID,
+			@RequestParam("rows") Integer rows,
+			@RequestParam("page") Integer page,
+			@RequestParam("sidx") String sidx, @RequestParam("sord") String sord) {
+		String[] datePart;
+		String searchDate = null;
+		// Because default Tomcat URI encoding is iso-8859-1 so it must encode
+		// back to tis620
+		try {
+			if (null != date && !date.equals("")) {
+				date = new String(date.getBytes("iso-8859-1"),
+						"tis620");
+				datePart = date.split("/");
+				searchDate = datePart[2] + "-" + datePart[1] + "-"
+						+ datePart[0];
+			}
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		
+		List<SaleOrder> soList = saleOrderService.selectByCriteria(searchDate, employeeID, rows, page,
+				sidx, sord);
+		GridResponse response = new GridResponse();
+		
+		List<SaleOrderGridData> rowsList = new ArrayList<SaleOrderGridData>();
+		Integer total_pages = 0;
+		if (soList.size() > 0) {
+//			int i=0;
+//			for (ServiceOrder so : soList) {
+//				if(i >= (rows*page - rows) && i <= (rows*page - 1)){
+			int endData = 0;
+			if(soList.size() < (rows*page)){
+				endData = soList.size();
+			}else{
+				endData = (rows*page);
+			}
+			for(int i=(rows*page - rows); i<endData; i++){
+				SaleOrder so = soList.get(i);
+				SaleOrderGridData gridData = new SaleOrderGridData();
+				gridData.setSaleOrderID(so.getSaleOrderID().toString());
+				gridData.setSaleDate(sdf.format(so.getSaleDate()));
+
+				Employee employee = so.getEmployee();
+				gridData.setName(employee.getName());
+				gridData.setSurname(employee.getSurname());
+				gridData.setType(so.getProduct().getType().getName());
+				gridData.setBrand(so.getProduct().getBrand().getName());
+				gridData.setModel(so.getProduct().getModel().getName());
+				rowsList.add(gridData);
+			}
+			total_pages = new Double(
+					Math.ceil(((double) soList.size() / (double) rows)))
+					.intValue();
+		}
+
+		if (page > total_pages)
+			page = total_pages;
+		response.setPage(page.toString());
+		response.setRecords(String.valueOf(soList.size()));
+		response.setTotal(total_pages.toString());
+		response.setRows(rowsList);
+		return response;
 	}
 	
 	@RequestMapping(value = "/saleOrder", params = "do=preAdd")
@@ -250,12 +327,18 @@ public class SaleOrderController {
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
-			Type type = typeList.get(0);
+//			Type type = typeList.get(0);
+			Type type = new Type();
+			try {
+				type = typeService.selectByID(form.getTypeID());
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
 //			form.setTypeID(type.getTypeID());
 			List<Brand> brandList = new ArrayList<Brand>();
 			if (type.getBrands().size() > 0) {
 				brandList = type.getBrands();
-				Brand brand = brandList.get(0);
+//				Brand brand = brandList.get(0);
 //				form.setBrandID(brand.getBrandID());
 			} else {
 				Brand blankBrand = new Brand();
@@ -273,6 +356,29 @@ public class SaleOrderController {
 			custForm.setDistrictID(160);
 			model.addAttribute("customerForm", custForm);
 			
+			Customer customer = new Customer();
+			try {
+				customer = customerService.selectByID(form.getCustomerID());
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+			model.addAttribute("customer", customer);
+			model.addAttribute("fullAddr", customer.getAddress()
+							+ " "
+							+ this.messages.getMessage("subdistrict_abbr", null,
+									new Locale("th", "TH"))
+							+ " "
+							+ customer.getSubdistrict().getName()
+							+ " "
+							+ this.messages.getMessage("district_abbr", null,
+									new Locale("th", "TH"))
+							+ " "
+							+ customer.getDistrict().getName()
+							+ " "
+							+ this.messages.getMessage("province_abbr", null,
+									new Locale("th", "TH")) + " "
+							+ customer.getProvince().getName());
+			
 			List<Province> provinceList = provinceService.getAll();
 			List<District> districtList = districtService.getByProvince(7);
 			// set subdistrict from Muang district
@@ -286,6 +392,7 @@ public class SaleOrderController {
 			model.addAttribute("employeeList", empList);
 						
 			model.addAttribute("productForm", productForm);
+			model.addAttribute("mode", mode);
 			return VIEWNAME_FORM;
 		}
 		
@@ -296,4 +403,18 @@ public class SaleOrderController {
 		return VIEWNAME_SEARCH;
 	}
 	
+	@RequestMapping(value = "/saleOrder", params = "do=delete")
+	public @ResponseBody
+	CustomGenericResponse delete(HttpServletRequest request) {
+		CustomGenericResponse response = new CustomGenericResponse();
+		response.setSuccess(true);
+		try {
+			saleOrderService.delete(Integer.valueOf(request.getParameter("saleOrderID")));
+			response.setMessage(this.messages.getMessage("msg.deleteSuccess", null, new Locale("th", "TH")));
+		} catch (Exception e) {
+			response.setSuccess(false);
+			response.setMessage(this.messages.getMessage("error.cannotDelete", null, new Locale("th", "TH")));
+		}
+		return response;
+	}
 }

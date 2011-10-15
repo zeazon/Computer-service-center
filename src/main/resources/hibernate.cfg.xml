@@ -23,6 +23,7 @@
     	<mapping class="com.twobytes.model.Product" />
     	<mapping class="com.twobytes.model.Model" />
     	<mapping class="com.twobytes.model.CustomerType" />
+    	<mapping class="com.twobytes.model.SaleOrder" />
     </session-factory>
 
 </hibernate-configuration>
