@@ -27,8 +27,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 //			e.printStackTrace();
 //			tx.rollback();
 //		}
-		
-		Session session = sessionFactory.openSession();
+		Session session = sessionFactory.getCurrentSession();
 //		Transaction tx = session.beginTransaction();
 //		try{
 			session.saveOrUpdate(emp);

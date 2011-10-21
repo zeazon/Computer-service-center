@@ -152,6 +152,8 @@ public class CustomerController {
 		// set subdistrict from Muang district
 		List<Subdistrict> subdistrictList = sdService.getByDistrict(160);
 		
+		form.setSubdistrictID(((Subdistrict)subdistrictList.get(0)).getSubdistrictID());
+		
 		List<CustomerType> customerTypeList = customerTypeService.getAll();
 		
 		model.addAttribute("provinceList", provinceList);
@@ -342,9 +344,7 @@ public class CustomerController {
 		Customer customer = new Customer();
 
 		customer.setCustomerID(docRunningUtil.genDoc("customer"));
-		System.out.println("form.getCustomerTypeID() = "+form.getCustomerTypeID());
 		CustomerType customerType = customerTypeService.selectByID(form.getCustomerTypeID());
-		System.out.println("customerType.getCustomerTypeID() = "+customerType.getCustomerTypeID());
 		customer.setCustomerType(customerType);
 		customer.setName(form.getName());
 		customer.setAddress(form.getAddress());
@@ -354,8 +354,6 @@ public class CustomerController {
 		customer.setSubdistrict(sd);
 		customer.setDistrict(district);
 		customer.setProvince(province);
-		System.out.println("form.getTel() = "+form.getTel());
-		System.out.println("form.getMobileTel() = "+form.getMobileTel());
 		customer.setTel(form.getTel());
 		customer.setMobileTel(form.getMobileTel());
 		customer.setEmail(form.getEmail());

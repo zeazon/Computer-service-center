@@ -190,7 +190,7 @@ public class EmployeeController{
 			// check login
 			boolean validLogin = false;
 			try{
-				employeeService.checkValidLogin(form.getLogin());
+				validLogin = employeeService.checkValidLogin(form.getLogin());
 			}catch(Exception e){
 				e.printStackTrace();
 				// error occur go back to employee form screen

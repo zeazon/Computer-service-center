@@ -195,17 +195,32 @@ public class TypeController {
 	
 	@RequestMapping(value = "/type", params = "do=delete")
 	public @ResponseBody CustomGenericResponse delete(HttpServletRequest request){
+		String reqID = String.valueOf(request.getParameter("typeID"));
+		// Because default Tomcat URI encoding is iso-8859-1 so it must encode back to tis620
+		try{
+			if(null != reqID){
+				reqID = new String(reqID.getBytes("iso-8859-1"), "tis620");	
+			}
+		}catch(UnsupportedEncodingException e){
+			e.printStackTrace();
+		}
 		CustomGenericResponse response = new CustomGenericResponse();
 		response.setSuccess(true);
+		boolean success = false;
 		try{
-			typeService.delete(String.valueOf(request.getParameter("typeID")));
+			success = typeService.delete(reqID);
 //			response.setMessage("Action successful!");
-			response.setMessage(this.messages.getMessage("msg.deleteSuccess", null, new Locale("th", "TH")));
 		}catch(Exception e){
 			e.printStackTrace();
 			response.setSuccess(false);
 //			response.setMessage("Action failure!");
+		}
+		
+		if(!success){
+			response.setSuccess(false);
 			response.setMessage(this.messages.getMessage("error.cannotDelete", null, new Locale("th", "TH")));
+		}else{
+			response.setMessage(this.messages.getMessage("msg.deleteSuccess", null, new Locale("th", "TH")));
 		}
 		return response;
 	}

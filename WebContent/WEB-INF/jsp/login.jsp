@@ -40,7 +40,8 @@ div.box-contents {
 
 </style>
 
-<div style="border:1px dashed; height:300px;"></div>
+<!--div style="border:1px dashed; height:300px;"><img src="././images/login_header.png" align="middle" /></div-->
+<div style="height:300px;"><table width="100%" cellpadding="0" cellspacing="0"><tr align="center"><td><img src="././images/login_header.png" align="middle" /></td></tr></table></div>
 <table width="100%" height="80px">
 <tr>
 	<td></td>
@@ -72,7 +73,7 @@ div.box-contents {
 			<tr>
 				<td rowspan="3"><img src="./images/logo_small.png"></td>
 				<td align="right"><label style="width:67px"><fmt:message key="user" />:</label></td>
-				<td><div class="rowElem"><form:input path="login" type="text" class="textboxMockup" style="width: 158px" id="login"/></div></td>
+				<td><div class="rowElem"><form:input path="login" type="text" class="textboxMockup" style="width: 158px;" id="login"/></div></td>
 				<td><label for="login" generated="true" class="error" style="width:150px; margin-left:18px"></label></td>
 			</tr>
 			<tr>

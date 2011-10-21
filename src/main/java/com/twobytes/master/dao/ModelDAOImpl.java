@@ -38,10 +38,10 @@ public class ModelDAOImpl implements ModelDAO{
 			sql.append("and m.name like :name ");
 		}
 		if(null != typeID && !typeID.equals("")){
-			sql.append("and m.typeID = :typeID ");
+			sql.append("and m.type.typeID = :typeID ");
 		}
 		if(null != brandID){
-			sql.append("and m.brandID = :brandID ");
+			sql.append("and m.brand.brandID = :brandID ");
 		}
 		
 		if(!orderBy.equals("")){

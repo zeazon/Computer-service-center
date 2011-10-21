@@ -329,15 +329,15 @@
 						<form:input path="address" id="address" class="textboxMockup" style="width:640px" maxlength="255"/><br><br>
 						
 						<div style="float:left; margin-top:5px;"><fmt:message key="subdistrict" />:</div>
-						<form:select id="subdistrict" path="subdistrictID" items="${subdistrictList}" itemValue="subdistrictID" itemLabel="name">
+						<form:select id="lovForm_subdistrict" path="subdistrictID" items="${subdistrictList}" itemValue="subdistrictID" itemLabel="name">
 						</form:select>
 						
 						<div style="float:left; margin:5px 0 0 15px;"><fmt:message key="district" />:</div>
-						<form:select id="district" path="districtID" items="${districtList}" itemValue="districtID" itemLabel="name">
+						<form:select id="lovForm_district" path="districtID" items="${districtList}" itemValue="districtID" itemLabel="name">
 						</form:select>
 						
 						<div style="float:left; margin:5px 0 0 15px;"><fmt:message key="province" />:</div>
-						<form:select id="province" path="provinceID" items="${provinceList}" itemValue="provinceID" itemLabel="name" />
+						<form:select id="lovForm_province" path="provinceID" items="${provinceList}" itemValue="provinceID" itemLabel="name" />
 						
 						<%--div style="float:left; margin:5px 0 0 15px;">zipcode:</div> <input type="text" size="5" readonly="readonly" value="22000"/--%>
 					</div>
@@ -493,66 +493,6 @@
 		<input type="hidden" id="lov_product_serialNo" name="serialNo"/>
 	</form>
 </div>
-
-<%--div id="add-product-form" title='<fmt:message key="addProduct" />'>
-	<form:form commandName="productForm" id="customerForm" class="jqtransform" action="JavaScript:saveCustomer();">
-		<table width="100%">
-			<tr>
-				<td width="20%"><label><fmt:message key="customerID" />:</label></td>
-				<td><div class="rowElem"><form:input path="customerID" id="customerID" readonly="true" class="textboxMockup" /></div></td>
-			</tr>
-			<tr>
-				<td><label><fmt:message key="customerType" />:</label></td>
-				<td>
-					<div class="rowElem">
-						<form:select path="customerTypeID" id="customerType">
-							<form:options items="${customerTypeList}" itemValue="customerTypeID" itemLabel="name"/>
-						</form:select>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td><label><fmt:message key="name" />:<font style="color:red">*</font></label></td>
-				<td><div class="rowElem"><form:input path="name" id="custName" class="required textboxMockup" maxlength="255" /> <label class="error" for="name" generated="true" style="display: none; padding-left:10px"></label></div></td>
-			</tr>
-			<tr>
-				<td valign="top"><div class="rowElem"><label><fmt:message key="address" />:</label></div></td>
-				<td>
-					<div class="rowElem">
-						<form:input path="address" id="address" class="textboxMockup" style="width:640px" maxlength="255"/><br><br>
-						
-						<div style="float:left; margin-top:5px;"><fmt:message key="subdistrict" />:</div>
-						<form:select id="subdistrict" path="subdistrictID" items="${subdistrictList}" itemValue="subdistrictID" itemLabel="name">
-						</form:select>
-						
-						<div style="float:left; margin:5px 0 0 15px;"><fmt:message key="district" />:</div>
-						<form:select id="district" path="districtID" items="${districtList}" itemValue="districtID" itemLabel="name">
-						</form:select>
-						
-						<div style="float:left; margin:5px 0 0 15px;"><fmt:message key="province" />:</div>
-						<form:select id="province" path="provinceID" items="${provinceList}" itemValue="provinceID" itemLabel="name" />
-						
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td><label><fmt:message key="tel" />:</label></td>
-				<td><div class="rowElem"><form:input path="tel" id="cTel" class="textboxMockup telephone" maxlength="100"/></div></td>
-			</tr>
-			<tr>
-				<td><label><fmt:message key="mobileTel" />:</label></td>
-				<td><div class="rowElem"><form:input path="mobileTel" id="cMobileTel" class="textboxMockup telephone" maxlength="100"/></div></td>
-			</tr>
-			<tr>
-				<td><label><fmt:message key="email" />:</label></td>
-				<td><div class="rowElem"><input type="text" name="email" id="email" class="textboxMockup" maxlength="50" /></div></td>
-			</tr>
-			<tr align="center">
-				<td colspan="2"><div class="rowElem"><input type="submit" value='<fmt:message key="button.ok" />' /></div></td>
-			</tr>
-		</table>
-	</form:form>
-</div--%>
 
 <!-- End product lov -->
 
@@ -826,7 +766,8 @@ $(document).ready(function(){
 		modal: true
 	});
 	
-	$("#province").change(
+	//$("#province").change(
+	$("#lovForm_province").change(
 		function() {
 			$.getJSON('${findDistrictByProvinceURL}', {
 				provinceID : $(this).val(),
@@ -845,26 +786,26 @@ $(document).ready(function(){
 					html += '<option value=""></option>';
 				}
  
-				$('#district').html(html);
+				$('#lovForm_district').html(html);
 				
 				// set change select list dynamic, ref http://www.code-pal.com/the-select-problem-after-using-jqtransform-and-its-solution/ 
 				// bug because ref to color id, it should be td id
 				//var sty = $("#color div.jqTransformSelectWrapper").attr("style");
 				
-				var sels = $("#district").removeClass("jqTransformHidden");
-				var $par = $("#district");
+				var sels = $("#lovForm_district").removeClass("jqTransformHidden");
+				var $par = $("#lovForm_district");
 				$par.parent().replaceWith($par);
 				sels.jqTransSelect();
 				// bug because ref to color id, it should be td id
 				//$("#color div.jqTransformSelectWrapper").attr("style", sty);
 				
 				// trigger event change of district select list
-				$("#district").change();
+				$("#lovForm_district").change();
 			});
 		}
 	);
 	
-	$("#district").change(
+	$("#lovForm_district").change(
 		function(){
 			$.getJSON('${findSubdistrictByDistrictURL}', {
 				districtID : $(this).val(),
@@ -882,15 +823,15 @@ $(document).ready(function(){
 					html += '<option value=""></option>';
 				}
 				
-				$('#subdistrict').html(html);
+				$('#lovForm_subdistrict').html(html);
 				
 				// set change select list dynamic, ref http://www.code-pal.com/the-select-problem-after-using-jqtransform-and-its-solution/ 
 				
 				// bug because ref to color id, it should be td id
 				//var sty = $("#color div.jqTransformSelectWrapper").attr("style");
 				
-				var sels = $("#subdistrict").removeClass("jqTransformHidden");
-				var $par = $("#subdistrict");
+				var sels = $("#lovForm_subdistrict").removeClass("jqTransformHidden");
+				var $par = $("#lovForm_subdistrict");
 				$par.parent().replaceWith($par);
 				sels.jqTransSelect();
 				// bug because ref to color id, it should be td id
@@ -1301,16 +1242,15 @@ function gridProductReload(){
 }
 
 function saveCustomer(){
-		
 	$.getJSON('${saveCustomerPopupURL}', {
 		customerID: '',
 		customerTypeID: $("#customerType").val(), 
 		name: $("#custName").val(),
 		//surname: $("#custSurname").val(),
 		address: $("#address").val(),
-		subdistrictID: $("#subdistrict").val(),
-		districtID: $("#district").val(),
-		provinceID: $("#province").val(),
+		subdistrictID: $("#lovForm_subdistrict").val(),
+		districtID: $("#lovForm_district").val(),
+		provinceID: $("#lovForm_province").val(),
 		tel: $("#cTel").val(),
 		mobileTel: $("#cMobileTel").val(),
 		email: $("#email").val()

@@ -194,8 +194,8 @@ $(document).ready(function(){
 			//includes this one)
 			fields.valid();
 			fields.data('being_validated', false);
-		}
-		return validOrNot;*/
+		}*/
+		return validOrNot;
 		// {0} below is the 0th item in the options field
 	}, jQuery.format("<div style='padding-left:10px'>Please fill out at least {0} of these fields.</div>"));
 	

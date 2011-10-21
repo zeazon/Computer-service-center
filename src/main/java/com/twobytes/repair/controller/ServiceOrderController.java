@@ -377,6 +377,8 @@ public class ServiceOrderController {
 		custForm.setProvinceID(7);
 		// set default district to Muang
 		custForm.setDistrictID(160);
+		// set subdistrict from Muang district
+		custForm.setSubdistrictID(((Subdistrict)subdistrictList.get(0)).getSubdistrictID());
 		model.addAttribute("customerForm", custForm);
 
 		// get form for print document
