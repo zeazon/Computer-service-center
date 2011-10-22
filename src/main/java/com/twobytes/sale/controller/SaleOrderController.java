@@ -23,6 +23,7 @@ import com.twobytes.master.form.CustomerForm;
 import com.twobytes.master.form.ProductForm;
 import com.twobytes.master.service.BrandService;
 import com.twobytes.master.service.CustomerService;
+import com.twobytes.master.service.CustomerTypeService;
 import com.twobytes.master.service.DistrictService;
 import com.twobytes.master.service.EmployeeService;
 import com.twobytes.master.service.ModelService;
@@ -33,6 +34,7 @@ import com.twobytes.master.service.TypeService;
 import com.twobytes.model.Brand;
 import com.twobytes.model.CustomGenericResponse;
 import com.twobytes.model.Customer;
+import com.twobytes.model.CustomerType;
 import com.twobytes.model.District;
 import com.twobytes.model.Employee;
 import com.twobytes.model.GridResponse;
@@ -80,6 +82,9 @@ public class SaleOrderController {
 	
 	@Autowired
 	private SaleOrderService saleOrderService;
+	
+	@Autowired
+	private CustomerTypeService customerTypeService;
 	
 	@Autowired
 	private MessageSource messages;
@@ -221,9 +226,12 @@ public class SaleOrderController {
 		// set subdistrict from Muang district
 		List<Subdistrict> subdistrictList = sdService.getByDistrict(160);
 		
+		List<CustomerType> customerTypeList = customerTypeService.getAll();
+		
 		model.addAttribute("provinceList", provinceList);
 		model.addAttribute("districtList", districtList);
 		model.addAttribute("subdistrictList", subdistrictList);
+		model.addAttribute("customerTypeList", customerTypeList);
 		
 		List<Employee> empList = employeeService.getAll();
 		model.addAttribute("employeeList", empList);
@@ -387,6 +395,9 @@ public class SaleOrderController {
 			model.addAttribute("provinceList", provinceList);
 			model.addAttribute("districtList", districtList);
 			model.addAttribute("subdistrictList", subdistrictList);
+			
+			List<CustomerType> customerTypeList = customerTypeService.getAll();
+			model.addAttribute("customerTypeList", customerTypeList);
 			
 			List<Employee> empList = employeeService.getAll();
 			model.addAttribute("employeeList", empList);

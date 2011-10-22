@@ -183,7 +183,7 @@
 				<td width="20%"><label><fmt:message key="customerID" />:</label></td>
 				<td><div class="rowElem"><form:input path="customerID" id="customerID" readonly="true" class="textboxMockup" /></div></td>
 			</tr>
-			<%--tr>
+			<tr>
 				<td><label><fmt:message key="customerType" />:</label></td>
 				<td>
 					<div class="rowElem">
@@ -192,7 +192,7 @@
 						</form:select>
 					</div>
 				</td>
-			</tr--%>
+			</tr>
 			<tr>
 				<td><label><fmt:message key="name" />:<font style="color:red">*</font></label></td>
 				<td><div class="rowElem"><form:input path="name" id="custName" class="required textboxMockup" maxlength="255" /> <label class="error" for="name" generated="true" style="display: none; padding-left:10px"></label></div></td>
@@ -956,13 +956,6 @@ $(document).ready(function(){
 		initProductLov();
 	}
 	
-	function gridReload(){
-		var name = jQuery("#name").val();
-		//var surname = jQuery("#surname").val();
-		//jQuery("#list").jqGrid('setGridParam',{url:"searchCustomer.html?name="+name+"&surname="+surname,page:1}).trigger("reloadGrid");
-		jQuery("#list").jqGrid('setGridParam',{url:"searchCustomer.html?name="+name,page:1}).trigger("reloadGrid");
-	}
-	
 	function gridProductReload(){
 		var typeID = jQuery("#lovType").val();
 		var brandID = jQuery("#lovBrand").val();
@@ -970,54 +963,60 @@ $(document).ready(function(){
 		jQuery("#productList").jqGrid('setGridParam',{url:"searchProduct.html?&typeID="+typeID+"&brandID="+brandID+"&modelID="+modelID,page:1}).trigger("reloadGrid");
 	}
 	
-	function saveCustomer(){
-		
-		$.getJSON('${saveCustomerPopupURL}', {
-			customerID: '',
-			customerTypeID: $("#customerType").val(), 
-			name: $("#custName").val(),
-			//surname: $("#custSurname").val(),
-			address: $("#address").val(),
-			subdistrictID: $("#subdistrict").val(),
-			districtID: $("#district").val(),
-			provinceID: $("#province").val(),
-			tel: $("#cTel").val(),
-			mobileTel: $("#cMobileTel").val(),
-			email: $("#email").val()
-		}, function(data) {
-			if(data.success == true){
-				//alert('Add complete');
-				jQuery("#dialog").text(data.message.toString());
-				jQuery("#dialog").dialog( 
-					{
-						title: 'Success',
-						modal: true,
-						buttons: {"Ok": function()  {
-							jQuery(this).dialog("close");
-							jQuery("#add-form").dialog("close");
-							gridReload();
-							}
-					    }
-				});
-			}else{
-				jQuery("#dialog").text(data.message.toString());
-				jQuery("#dialog").dialog( 
-					{
-						title: 'Fail',
-						modal: true,
-						buttons: {"Ok": function()  {
-							jQuery(this).dialog("close");} 
-					    }
-				});
-			}
-		});
-		
-	}
-	
 	
 	
 	
 });
+
+function gridReload(){
+	var name = jQuery("#name").val();
+	//var surname = jQuery("#surname").val();
+	//jQuery("#list").jqGrid('setGridParam',{url:"searchCustomer.html?name="+name+"&surname="+surname,page:1}).trigger("reloadGrid");
+	jQuery("#list").jqGrid('setGridParam',{url:"searchCustomer.html?name="+name,page:1}).trigger("reloadGrid");
+}
+
+function saveCustomer(){
+	$.getJSON('${saveCustomerPopupURL}', {
+		customerID: '',
+		customerTypeID: $("#customerType").val(), 
+		name: $("#custName").val(),
+		//surname: $("#custSurname").val(),
+		address: $("#address").val(),
+		subdistrictID: $("#subdistrict").val(),
+		districtID: $("#district").val(),
+		provinceID: $("#province").val(),
+		tel: $("#cTel").val(),
+		mobileTel: $("#cMobileTel").val(),
+		email: $("#email").val()
+	}, function(data) {
+		if(data.success == true){
+			//alert('Add complete');
+			jQuery("#dialog").text(data.message.toString());
+			jQuery("#dialog").dialog( 
+				{
+					title: 'Success',
+					modal: true,
+					buttons: {"Ok": function()  {
+						jQuery(this).dialog("close");
+						jQuery("#add-form").dialog("close");
+						gridReload();
+						}
+				    }
+			});
+		}else{
+			jQuery("#dialog").text(data.message.toString());
+			jQuery("#dialog").dialog( 
+				{
+					title: 'Fail',
+					modal: true,
+					buttons: {"Ok": function()  {
+						jQuery(this).dialog("close");} 
+				    }
+			});
+		}
+	});
+	
+}
 
 
 jQuery.validator.addMethod("require_from_group", function(value, element, options) {
@@ -1053,6 +1052,5 @@ jQuery.validator.addMethod("require_from_group", function(value, element, option
 	return validOrNot;
 	// {0} below is the 0th item in the options field
 }, jQuery.format("<div style='padding-left:10px'>Please fill out at least {0} of these fields.</div>"));
-
 
 </script>
