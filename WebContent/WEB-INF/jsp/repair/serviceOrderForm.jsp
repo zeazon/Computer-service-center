@@ -199,7 +199,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td><label><fmt:message key="productID" />:</label></td>
+						<td><label><fmt:message key="productID" />:<font color="red">*</font></label></td>
 						<td colspan="5">
 							<div class="rowElem">
 								<c:if test="${mode == 'add'}">
@@ -494,6 +494,76 @@
 	</form>
 </div>
 
+<div id="add-product-form" title='<fmt:message key="addProduct" />'>
+	<form:form commandName="productForm" id="productForm" class="jqtransform" action="JavaScript:saveProduct();">
+		<table width="100%">
+			<tr>
+				<td width="40%"><label><fmt:message key="productID" />:<font style="color:red">*</font></label></td>
+				<td>
+					<div class="rowElem">
+						<form:input path="productID" id="lovForm_productID" class="textboxMockup"  />
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td><label><fmt:message key="type" />:</label></td>
+				<td>
+					<div class="rowElem">
+						<form:select path="typeID" id="lovForm_type">
+							<form:options items="${typeList}" itemValue="typeID" itemLabel="name"/>
+						</form:select>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td><label><fmt:message key="brand" />:</label></td>
+				<td id="brandRow">
+					<div class="rowElem">
+						<form:select path="brandID" id="lovForm_brand">
+							<form:options items="${brandList}" itemValue="brandID" itemLabel="name"/>
+						</form:select>
+					</div>
+					<label class="error" for="brand" generated="true" style="display: none; padding-left:10px;"></label>
+				</td>
+			</tr>
+			<tr>
+				<td><label><fmt:message key="model" />:</label></td>
+				<td id="modelRow">
+					<div class="rowElem">
+						<form:select path="modelID" id="lovForm_model">
+							<form:options items="${modelList}" itemValue="modelID" itemLabel="name"/>
+						</form:select>
+					</div>
+					<label class="error" for="model" generated="true" style="display: none; padding-left:10px;"></label>
+				</td>
+			</tr>
+			<tr>
+				<td><label><fmt:message key="serialNo" />:<font style="color:red">*</font></label></td>
+				<td><div class="rowElem"><form:input path="serialNo" id="lovForm_serialNo" class="textboxMockup" /> <label class="error" for="name" generated="true" style="display: none; padding-left:10px"></label></div></td>
+			</tr>
+			<tr>
+				<td><label><fmt:message key="description" />:</label></td>
+				<td><div class="rowElem"><form:input path="description" id="lovForm_description" class="textboxMockup" /></div></td>
+			</tr>
+			<tr>
+				<td><label><fmt:message key="warrantyDate"/>:</label></td>
+				<td><div class="rowElem"><form:input path="warrantyDate" id="warrantyDate" class="textboxMockup" readonly="true" size="10" /></div></td>
+			</tr>
+			<tr>
+				<td><label><fmt:message key="warrantyExpire"/>:</label></td>
+				<td><div class="rowElem"><form:input path="warrantyExpire" id="warrantyExpire" class="textboxMockup" readonly="true" size="10" /></div></td>
+			</tr>
+			<tr>
+				<td valign="top" style="padding-top:7px;"><label><fmt:message key="remark"/>:</label></td>
+				<td><div class="rowElem"><form:textarea path="remark" id="lovForm_remark" rows="5" col="30" class="textareaMockup" style="width:98%" name="remark" ></form:textarea></div></td>
+			</tr>
+			<tr align="center">
+				<td colspan="2"><div class="rowElem"><input type="submit" value='<fmt:message key="button.ok" />' /></div></td>
+			</tr>
+		</table>
+	</form:form>
+</div>
+
 <!-- End product lov -->
 
 
@@ -540,6 +610,7 @@
 <c:url var="findDistrictByProvinceURL" value="/findDistrit.html" />
 <c:url var="findSubdistrictByDistrictURL" value="/findSubdistrict.html" />
 <c:url var="saveCustomerPopupURL" value="/customer.html?do=savePopup" />
+<c:url var="saveProductPopupURL" value="/product.html?do=savePopup" />
 <c:url var="findBrandURL" value="/brand.html?do=getBrandByType" />
 <c:url var="findModelURL" value="/model.html?do=getModel" />
 
@@ -553,6 +624,9 @@ $(document).ready(function(){
 	$("#shopCustomerDetail").hide();
 	$("#walkinCustomerDetail").hide();
 	
+	$("#warrantyDate").calendarsPicker($.extend({calendar: $.calendars.instance('gregorian','th')}));
+	$("#warrantyExpire").calendarsPicker($.extend({calendar: $.calendars.instance('gregorian','th')}));
+	
 	<c:if test="${action == 'print'}">
 		document.forms["printJasperForm"].submit();
 	</c:if>
@@ -560,6 +634,7 @@ $(document).ready(function(){
 	$("#form").validate({
 		rules: {
 			customerID: "required",
+			productID: "required",
 			problem:{
 				required: true,
 				maxlength: 1000
@@ -766,6 +841,15 @@ $(document).ready(function(){
 		modal: true
 	});
 	
+	// add product
+	
+	$( "#add-product-form" ).dialog({
+		autoOpen: false,
+		height: 540,
+		width: 900,
+		modal: true
+	});
+	
 	//$("#province").change(
 	$("#lovForm_province").change(
 		function() {
@@ -840,9 +924,8 @@ $(document).ready(function(){
 		}
 	);
 
-	$("#type").change(
+	$("#lovForm_type").change(
 		function(){
-			//alert($("#type").val());
 			$.getJSON('${findBrandURL}', {
 				typeID: $(this).val()
 			}, function(data){
@@ -857,26 +940,63 @@ $(document).ready(function(){
 				}else{
 					html += '<option value=""></option>';
 				}
-				$('#brand').html(html);
+				$('#lovForm_brand').html(html);
 				
 				// set change select list dynamic, ref http://www.code-pal.com/the-select-problem-after-using-jqtransform-and-its-solution/ 
 				// bug because ref to color id, it should be td id
 				//var sty = $("#color div.jqTransformSelectWrapper").attr("style");
 				
-				var sels = $("#brand").removeClass("jqTransformHidden");
-				var $par = $("#brand");
+				var sels = $("#lovForm_brand").removeClass("jqTransformHidden");
+				var $par = $("#lovForm_brand");
 				$par.parent().replaceWith($par);
 				sels.jqTransSelect();
 				// bug because ref to color id, it should be td id
 				//$("#color div.jqTransformSelectWrapper").attr("style", sty);
 				
 				// trigger event change of district select list
-				$("#brand").change();
-				
+				$("#lovForm_brand").change();
+				$("#brandRow div.jqTransformSelectWrapper").css("z-index", 9);
 			});
 		}
 	);
 	
+	
+	$("#lovForm_brand").change(
+		function() {
+			$.getJSON('${findModelURL}', {
+				typeID : $("#lovForm_type").val(),
+				brandID : $(this).val(),
+				ajax : 'true'
+			}, function(data) {
+				var html = '';
+				var len = data.length;
+				if(len > 0){
+					for ( var i = 0; i < len; i++) {
+						html += '<option value="' + data[i].modelID + '">'
+								+ data[i].name + '</option>';
+					}
+					html += '</option>';
+				}else{
+					html += '<option value=""></option>';
+				}
+				
+				$('#lovForm_model').html(html);
+				
+				// set change select list dynamic, ref http://www.code-pal.com/the-select-problem-after-using-jqtransform-and-its-solution/ 
+				
+				var sty = $("#modelRow div.jqTransformSelectWrapper").attr("style");
+				
+				var sels = $("#lovForm_model").removeClass("jqTransformHidden");
+				var $par = $("#lovForm_model");
+				$par.parent().replaceWith($par);
+				sels.jqTransSelect();
+				//$("#brandRow div.jqTransformSelectWrapper").attr("style", sty);
+				//$("#brandRow div.jqTransformSelectWrapper").attr("style", "z-index:9;");
+				
+				$("#modelRow div.jqTransformSelectWrapper").css("z-index", 8);
+			});
+		}
+	);
 	
 	
 	$("#lovType").change(
@@ -987,7 +1107,7 @@ $(document).ready(function(){
 		onSelectRow: function(id){
 			selectProductRow(id);
 		}
-	}).navGrid("#productPager",{edit:false,add:false,del:false,search:false,refresh:false,cloneToTop:true});
+	}).navGrid("#productPager",{edit:false,add:false,del:false,search:false,refresh:false,cloneToTop:true})//;
 	/*.navButtonAdd('#productList_toppager',
 	{
 		caption:"",
@@ -999,6 +1119,29 @@ $(document).ready(function(){
 		}, 
 		position:"last"
 	});*/
+	.navButtonAdd('#productList_toppager',
+		{
+			//caption:"<fmt:message key='button.add' />", 
+			caption:"", 
+			title:"<fmt:message key='button.add' />",
+			//buttonimg:"row.gif",
+			buttonicon:"ui-icon-plus", 
+			onClickButton: function(){ 
+				// Call example popup form*/
+				//$( "#dialog-form" ).dialog( "open" );
+				
+				$("#add-product-form").dialog({
+					open: function(event, ui){
+						$("#warrantyDate").calendarsPicker($.extend({calendar: $.calendars.instance('gregorian','th')}));
+						$("#warrantyExpire").calendarsPicker($.extend({calendar: $.calendars.instance('gregorian','th')}));
+					}
+				});
+				
+				$( "#add-product-form" ).dialog( "open" );
+				
+			}, 
+			position:"last"
+	});
 
 	// product paging
 	var topPagerDiv = $("#productList_toppager")[0];
@@ -1301,6 +1444,47 @@ function saveCustomer(){
 	
 	
 	//return false;
+}
+
+function saveProduct(){
+	$.getJSON('${saveProductPopupURL}', {
+		productID: $("#lovForm_productID").val(),
+		typeID: $("#lovForm_type").val(),
+		brandID: $("#lovForm_brand").val(),
+		modelID: $("#lovForm_model").val(),
+		serialNo:  $("#lovForm_serialNo").val(),
+		description: $("#lovForm_description").val(),
+		warrantyDate: $("#warrantyDate").val(),
+		warrantyExpire: $("#warrantyExpire").val(),
+		remark: $("#lovForm_remark").val()
+	}, function(data) {
+		if(data.success == true){
+			//alert('Add complete');
+			jQuery("#dialog").text(data.message.toString());
+			jQuery("#dialog").dialog( 
+				{
+					title: 'Success',
+					modal: true,
+					buttons: {"Ok": function()  {
+						jQuery(this).dialog("close");
+						jQuery("#add-product-form").dialog("close");
+						gridProductReload();
+						}
+				    }
+			});
+		}else{
+			jQuery("#dialog").text(data.message.toString());
+			jQuery("#dialog").dialog( 
+				{
+					title: 'Fail',
+					modal: true,
+					buttons: {"Ok": function()  {
+						jQuery(this).dialog("close");} 
+				    }
+			});
+		}
+	});
+	
 }
 
 function doPrint(){

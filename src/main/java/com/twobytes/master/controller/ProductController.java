@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.twobytes.master.form.CustomerForm;
 import com.twobytes.master.form.ProductForm;
 import com.twobytes.master.form.ProductGridData;
 import com.twobytes.master.form.ProductSearchForm;
@@ -455,6 +456,84 @@ public class ProductController {
 			response.setSuccess(false);
 			response.setMessage(this.messages.getMessage("error.cannotDelete", null, new Locale("th", "TH")));
 		}
+		return response;
+	}
+	
+	@RequestMapping(value = "/product", params = "do=savePopup")
+	public @ResponseBody CustomGenericResponse doSavePopup(@ModelAttribute ProductForm form, HttpServletRequest request, ModelMap model){
+		CustomGenericResponse response = new CustomGenericResponse();
+		if(null == request.getSession().getAttribute("UserLogin")){
+			LoginForm loginForm = new LoginForm();
+			model.addAttribute(loginForm);
+			response.setSuccess(false);
+			response.setMessage(this.messages.getMessage("error.cannotSave", null, new Locale("th", "TH")));
+			return response;
+		}
+		
+		// Because default Tomcat URI encoding is iso-8859-1 so it must encode back to tis620
+		try{
+			if(null != form.getDescription()){
+				form.setDescription(new String(form.getDescription().getBytes("iso-8859-1"), "UTF-8"));
+			}
+			if(null != form.getRemark()){
+				form.setRemark(new String(form.getRemark().getBytes("iso-8859-1"), "UTF-8"));
+			}
+		}catch(UnsupportedEncodingException e){
+			e.printStackTrace();
+		}
+		Date now = new Date();
+		Employee user = (Employee)request.getSession().getAttribute("UserLogin");
+		Product product = new Product();
+		product.setProductID(form.getProductID());
+		
+		product.setCreatedBy(user.getEmployeeID());
+		product.setCreatedDate(now);
+		
+		product.setDescription(form.getDescription());
+		product.setSerialNo(form.getSerialNo());
+		try {
+			product.setWarrantyDate(sdf.parse(form.getWarrantyDate()));
+		} catch (ParseException e2) {
+			e2.printStackTrace();
+		}
+		try {
+			product.setWarrantyExpire(sdf.parse(form.getWarrantyExpire()));
+		} catch (ParseException e2) {
+			e2.printStackTrace();
+		}
+		product.setRemark(form.getRemark());
+		
+		Type type = new Type();
+		try {
+			type = typeService.selectByID(form.getTypeID());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		product.setType(type);
+		Brand brand = new Brand();
+		try {
+			brand = brandService.selectByID(form.getBrandID());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		product.setBrand(brand);
+		Model modelObj = modelService.selectByID(form.getModelID());
+		product.setModel(modelObj);
+		
+		product.setUpdatedBy(user.getEmployeeID());
+		product.setUpdatedDate(now);
+		
+		boolean canSave = false;
+		try {
+			canSave = productService.save(product);
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.setSuccess(canSave);
+			response.setMessage(this.messages.getMessage("error.cannotSave", null, new Locale("th", "TH")));
+			return response;
+		}
+		response.setSuccess(canSave);
+		response.setMessage(this.messages.getMessage("msg.addComplete", null, new Locale("th", "TH")));
 		return response;
 	}
 }

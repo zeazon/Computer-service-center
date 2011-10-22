@@ -14,7 +14,7 @@
 	direction: rtl;
 }
 .calendars-popup {
-	z-index: 1000;
+	z-index: 9000;
 }
 .calendars-disable {
 	position: absolute;

@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.twobytes.express.model.Armas;
 import com.twobytes.express.service.ArmasService;
 import com.twobytes.master.form.CustomerForm;
+import com.twobytes.master.form.ProductForm;
 import com.twobytes.master.service.BrandService;
 import com.twobytes.master.service.CustomerService;
 import com.twobytes.master.service.CustomerTypeService;
@@ -325,6 +326,7 @@ public class ServiceOrderController {
 			return "loginScreen";
 		}
 		ServiceOrderForm form = new ServiceOrderForm();
+		ProductForm productForm = new ProductForm();
 		Date now = new Date();
 		// System.out.println("now = "+now);
 		form.setServiceOrderDate(sdfDateTime.format(now));
@@ -384,6 +386,8 @@ public class ServiceOrderController {
 		// get form for print document
 		ServiceOrderDocForm docForm = new ServiceOrderDocForm();
 		model.addAttribute("docForm", docForm);
+		
+		model.addAttribute("productForm", productForm);
 		
 		model.addAttribute("mode", "add");
 		return VIEWNAME_FORM;
