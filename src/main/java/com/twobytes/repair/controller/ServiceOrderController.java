@@ -257,7 +257,11 @@ public class ServiceOrderController {
 							so.getRefServiceOrder();
 				}
 				gridData.setServiceType(serviceType);
-				gridData.setAppointmentDate(sdfDateTime.format(so.getAppointmentDate()));
+				try{
+					gridData.setAppointmentDate(sdfDateTime.format(so.getAppointmentDate()));
+				}catch(NullPointerException npe){
+					gridData.setAppointmentDate("-");
+				}
 //				if(so.getCustomerType().equals(ServiceOrder.CUSTOMERTYPE_WALKIIN)){
 					Customer customer = so.getCustomer();
 					gridData.setName(customer.getName());
@@ -755,7 +759,9 @@ public class ServiceOrderController {
 		form.setServiceOrderID(so.getServiceOrderID());
 		form.setServiceOrderDate(sdfDateTime.format(so.getServiceOrderDate()));
 		form.setServiceType(so.getServiceType());
-		form.setAppointmentDate(sdfDateTime.format(so.getAppointmentDate()));
+		if(so.getAppointmentDate() != null){
+			form.setAppointmentDate(sdfDateTime.format(so.getAppointmentDate()));
+		}
 		form.setRefServiceOrder(so.getRefServiceOrder());
 		form.setCustomerType(so.getCustomerType());
 		form.setCustomerID(so.getCustomer().getCustomerID().toString());
