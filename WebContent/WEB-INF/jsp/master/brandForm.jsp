@@ -15,11 +15,11 @@
 				<table width="100%">
 					<tr>
 						<td width="40%"><label><fmt:message key="brandID" />:</label></td>
-						<td><div class="rowElem"><form:input type="text" path="brandID" readonly="true" class="textboxMockup" /></div></td>
+						<td><div class="rowElem"><form:input path="brandID" readonly="true" class="textboxMockup" /></div></td>
 					</tr>
 					<tr>
 						<td><label><fmt:message key="name" />:<font style="color:red">*</font></label></td>
-						<td><div class="rowElem"><form:input type="text" path="name" class="textboxMockup" /> <label class="error" for="name" generated="true" style="display: none; padding-left:10px"></label></div></td>
+						<td><div class="rowElem"><form:input path="name" class="textboxMockup" maxlength="100"/> <label class="error" for="name" generated="true" style="display: none; padding-left:10px"></label></div></td>
 					</tr>
 					<tr>
 						<td valign="top" style="padding-top:7px;"><label><fmt:message key="type" />:</label></td>

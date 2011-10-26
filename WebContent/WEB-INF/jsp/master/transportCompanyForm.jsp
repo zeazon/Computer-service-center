@@ -14,11 +14,11 @@
 				<table width="100%">
 					<tr>
 						<td width="40%"><label><fmt:message key="transportCompanyID" />:</label></td>
-						<td><div class="rowElem"><form:input type="text" path="tcID" readonly="true" class="textboxMockup" /></div></td>
+						<td><div class="rowElem"><form:input path="tcID" readonly="true" class="textboxMockup" /></div></td>
 					</tr>
 					<tr>
 						<td><label><fmt:message key="name" />:<font style="color:red">*</font></label></td>
-						<td><div class="rowElem"><form:input type="text" path="name" class="textboxMockup" /> <label class="error" for="name" generated="true" style="display: none; padding-left:10px"></label></div></td>
+						<td><div class="rowElem"><form:input path="name" class="textboxMockup" maxlength="100"/> <label class="error" for="name" generated="true" style="display: none; padding-left:10px"></label></div></td>
 					</tr>
 					<tr align="center">
 						<td colspan="2"><div class="rowElem"><input type="submit" value="<fmt:message key='button.ok' />" /></div></td>

@@ -32,7 +32,7 @@
 					</tr--%>
 					<tr>
 						<td><label><fmt:message key="name" />:<font style="color:red">*</font></label></td>
-						<td><div class="rowElem"><form:input path="name" class="textboxMockup" /> <label class="error" for="name" generated="true" style="display: none; padding-left:10px"></label></div></td>
+						<td><div class="rowElem"><form:input path="name" class="textboxMockup" maxlength="255" /> <label class="error" for="name" generated="true" style="display: none; padding-left:10px"></label></div></td>
 					</tr>
 					<%--tr>
 						<td><label><fmt:message key="surname" />:</label></td>
@@ -42,7 +42,7 @@
 						<td valign="top" style="padding-top:11px"><label><fmt:message key="address" />:</label></td>
 						<td>
 							<div class="rowElem">
-								<form:input type="text" path="address" class="textboxMockup" style="width:640px" /><br><br>
+								<form:input type="text" path="address" class="textboxMockup" maxlength="255" style="width:640px" /><br><br>
 								<div style="float:left; margin-top:5px;"><fmt:message key="subdistrict" />:</div>
 								<form:select id="subdistrict" path="subdistrictID" items="${subdistrictList}" itemValue="subdistrictID" itemLabel="name">
 								</form:select>
@@ -58,11 +58,11 @@
 					</tr>
 					<tr>
 						<td><label><fmt:message key="tel" />:</label></td>
-						<td><div class="rowElem"><form:input path="tel" class="textboxMockup telephone" /></div></td>
+						<td><div class="rowElem"><form:input path="tel" class="textboxMockup telephone" maxlength="100" /></div></td>
 					</tr>
 					<tr>
 						<td><label><fmt:message key="mobileTel" />:</label></td>
-						<td><div class="rowElem"><form:input path="mobileTel" class="textboxMockup telephone" /></div></td>
+						<td><div class="rowElem"><form:input path="mobileTel" class="textboxMockup telephone" maxlength="100" /></div></td>
 					</tr>
 					<tr>
 						<td><label><fmt:message key="email" />:</label></td>

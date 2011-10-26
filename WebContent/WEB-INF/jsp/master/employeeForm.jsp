@@ -18,11 +18,11 @@
 					</tr>
 					<tr>
 						<td><label><fmt:message key="name" />:<font style="color:red">*</font></label></td>
-						<td><div class="rowElem"><form:input type="text" path="name" class="textboxMockup" /> <label class="error" for="name" generated="true" style="display: none; padding-left:10px"></label></div></td>
+						<td><div class="rowElem"><form:input type="text" path="name" class="textboxMockup" maxlength="100" /> <label class="error" for="name" generated="true" style="display: none; padding-left:10px"></label></div></td>
 					</tr>
 					<tr>
 						<td><label><fmt:message key="surname" />:</label></td>
-						<td><div class="rowElem"><form:input type="text" path="surname" class="textboxMockup" /></div></td>
+						<td><div class="rowElem"><form:input type="text" path="surname" class="textboxMockup" maxlength="100" /></div></td>
 					</tr>
 					<tr>
 						<td><label><fmt:message key="position" />:</label></td>
@@ -36,15 +36,15 @@
 					</tr>
 					<tr>
 						<td><label><fmt:message key="userName" />:<font style="color:red">*</font></label></td>
-						<td><div class="rowElem"><form:input type="text" path="login" class="textboxMockup"/> <label class="error" for="userName" generated="true" style="display: none; padding-left:10px"></label></div></td>
+						<td><div class="rowElem"><form:input type="text" path="login" class="textboxMockup" maxlength="100"/> <label class="error" for="userName" generated="true" style="display: none; padding-left:10px"></label></div></td>
 					</tr>
 					<tr>
 						<td><label><fmt:message key="password" />:<font style="color:red">*</font></label></td>
-						<td><div class="rowElem"><form:input type="password" path="password" class="textboxMockup"/> <label class="error" for="password" generated="true" style="display: none; padding-left:10px"></label></div></td>
+						<td><div class="rowElem"><form:input type="password" path="password" class="textboxMockup" maxlength="100"/> <label class="error" for="password" generated="true" style="display: none; padding-left:10px"></label></div></td>
 					</tr>
 					<tr>
 						<td><label><fmt:message key="confirmPassword" />:<font style="color:red">*</font></label></td>
-						<td><div class="rowElem"><form:input type="password" path="confirmPwd" class="textboxMockup"/> <label class="error" for="confirmPwd" generated="true" style="display: none; padding-left:10px"></label></div></td>
+						<td><div class="rowElem"><form:input type="password" path="confirmPwd" class="textboxMockup" maxlength="100"/> <label class="error" for="confirmPwd" generated="true" style="display: none; padding-left:10px"></label></div></td>
 					</tr>
 					<tr align="center">
 						<td colspan="2"><div class="rowElem"><input type="submit" value="<fmt:message key='button.ok' />" /></div></td>

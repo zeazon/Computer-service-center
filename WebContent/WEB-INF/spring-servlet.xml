@@ -51,7 +51,7 @@
         class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close"
         p:driverClassName="${jdbc.driverClassName}"
         p:url="${jdbc.databaseurl}" p:username="${jdbc.username}"
-        p:password="${jdbc.password}" />
+        p:password="${jdbc.2bytes.password}" />
  
  	<bean id="expressDataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource"

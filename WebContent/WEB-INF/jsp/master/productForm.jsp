@@ -18,8 +18,8 @@
 						<td>
 							<div class="rowElem">
 								<c:choose>
-									<c:when test="${mode == 'add'}"><form:input type="text" path="productID" class="textboxMockup"  /></c:when>
-									<c:otherwise><form:input type="text" path="productID" class="textboxMockup" readonly="true" /></c:otherwise>
+									<c:when test="${mode == 'add'}"><form:input path="productID" class="textboxMockup" maxlength="20" /></c:when>
+									<c:otherwise><form:input path="productID" class="textboxMockup" readonly="true" maxlength="20"/></c:otherwise>
 								</c:choose>
 							</div>
 						</td>
@@ -58,11 +58,11 @@
 					</tr>
 					<tr>
 						<td><label><fmt:message key="serialNo" />:<font style="color:red">*</font></label></td>
-						<td><div class="rowElem"><form:input type="text" path="serialNo" class="textboxMockup" /> <label class="error" for="name" generated="true" style="display: none; padding-left:10px"></label></div></td>
+						<td><div class="rowElem"><form:input path="serialNo" class="textboxMockup" maxlength="100"/> <label class="error" for="name" generated="true" style="display: none; padding-left:10px"></label></div></td>
 					</tr>
 					<tr>
 						<td><label><fmt:message key="description" />:</label></td>
-						<td><div class="rowElem"><form:input type="text" path="description" class="textboxMockup" /></div></td>
+						<td><div class="rowElem"><form:input path="description" class="textboxMockup" maxlength="255"/></div></td>
 					</tr>
 					<tr>
 						<td><label><fmt:message key="warrantyDate"/>:</label></td>
