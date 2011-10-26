@@ -215,18 +215,12 @@
 						<td><label><fmt:message key="type" />:</label></td>
 						<td colspan="2">
 							<div class="rowElem">
-								<%-->form:select path="typeID" id="type">
-									<form:options items="${typeList}" itemValue="typeID" itemLabel="name"/>
-								</form:select--%>
 								<span id="typeTxt">${product.type.name}&nbsp;</span>
 							</div>
 						</td>
 						<td><label><fmt:message key="brand" />:</label></td>
 						<td colspan="2">
 							<div class="rowElem">
-								<%--form:select path="brandID" id="brand">
-									<form:options items="${brandList}" itemValue="brandID" itemLabel="name"/>
-								</form:select--%>
 								<span id="brandTxt">${product.brand.name}&nbsp;</span>
 							</div>
 						</td>
@@ -422,7 +416,7 @@
 							<td>
 								<div class="rowElem">
 									<select id="lovType">
-										<option value="">-</option>
+										<option value="">All</option>
 										<c:forEach var="type" items="${typeList}">
 											<option value="${type.typeID}">${type.name}</option>
 										</c:forEach>
@@ -435,7 +429,7 @@
 							<td id="brandRow" style="z-index:9">
 								<div class="rowElem">
 									<select id="lovBrand">
-										<option value="">-</option>
+										<option value="">All</option>
 											<c:forEach var="brand" items="${brandList}">
 												<c:if test="${brand.brandID != null }">
 													<option value="${brand.brandID}">${brand.name}</option>
@@ -450,9 +444,9 @@
 							<td id="modelRow" style="z-index:8">
 								<div class="rowElem">
 									<select id="lovModel">
-										<option value="">-</option>
+										<option value="">All</option>
 											<c:forEach var="model" items="${modelList}">
-												<c:if test="${fn:length(model.modelID) > 0}">
+												<c:if test="${model.modelID != null}">
 													<option value="${model.modelID}">${model.name}</option>
 												</c:if>
 											</c:forEach>

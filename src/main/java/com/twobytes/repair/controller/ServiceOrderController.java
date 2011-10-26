@@ -362,9 +362,24 @@ public class ServiceOrderController {
 			brandList.add(blankBrand);
 		}
 
+		List<Model> modelList = new ArrayList<Model>();
+		if (type.getBrands().size() > 0) {
+			brandList = type.getBrands();
+			form.setBrandID(form.getBrandID());
+			
+			Brand brand = brandList.get(0);
+			modelList = modelService.getModelByTypeAndBrand(type.getTypeID(), brand.getBrandID());
+		} else {
+			Brand blankBrand = new Brand();
+			blankBrand.setBrandID(null);
+			blankBrand.setName("");
+			brandList.add(blankBrand);
+		}
+				
 		model.addAttribute("form", form);
 		model.addAttribute("typeList", typeList);
 		model.addAttribute("brandList", brandList);
+		model.addAttribute("modelList", modelList);
 
 		// get data for customer form
 		List<Province> provinceList = provinceService.getAll();
@@ -421,7 +436,7 @@ public class ServiceOrderController {
 			// String serviceOrderID =
 			// docRunning.getPref ix()+"-"+docRunning.getYear()+docRunning.getMonth()+"-"+docRunning.getRunningNumber();
 			// String serviceOrderID = genDocNo();
-			String serviceOrderID = docRunningUtil.genDoc("SO");
+//			String serviceOrderID = docRunningUtil.genDoc("SO");
 			so.setServiceType(form.getServiceType());
 			if(form.getServiceType() == 1){
 				so.setGuaranteeNo(form.getGuaranteeNo());
@@ -447,7 +462,7 @@ public class ServiceOrderController {
 				so.setServiceOrderDate(new Date());
 			}
 
-			so.setServiceOrderID(serviceOrderID);
+//			so.setServiceOrderID(serviceOrderID);
 			so.setEmpOpen(user);
 			so.setCreatedBy(user.getEmployeeID());
 			so.setCreatedDate(now);
@@ -537,9 +552,9 @@ public class ServiceOrderController {
 		// }
 		// brand.setTypes(typeList);
 		// }
-		boolean canSave;
+		String result;
 		try {
-			canSave = soService.save(so);
+			result = soService.save(so);
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("errMsg", e.getMessage());
@@ -606,13 +621,18 @@ public class ServiceOrderController {
 			custForm.setDistrictID(160);
 			model.addAttribute("customerForm", custForm);
 
+			ProductForm productForm = new ProductForm();
+			model.addAttribute("productForm", productForm);
+			
+			model.addAttribute("product", so.getProduct());
+			
 			// get form for print document
 			ServiceOrderDocForm docForm = new ServiceOrderDocForm();
 			model.addAttribute("docForm", docForm);
 			model.addAttribute("mode", mode);
 			return VIEWNAME_FORM;
 		}
-		if (!canSave) {
+		if (result.equals("false")) {
 			model.addAttribute("errMsg", this.messages.getMessage(
 					"error.cannotSave", null, new Locale("th", "TH")));
 			
@@ -678,12 +698,19 @@ public class ServiceOrderController {
 			custForm.setDistrictID(160);
 			model.addAttribute("customerForm", custForm);
 
+			ProductForm productForm = new ProductForm();
+			model.addAttribute("productForm", productForm);
+			
+			model.addAttribute("product", so.getProduct());
+			
 			// get form for print document
 			ServiceOrderDocForm docForm = new ServiceOrderDocForm();
 			model.addAttribute("docForm", docForm);
 			model.addAttribute("mode", mode);
 			return VIEWNAME_FORM;
 		}
+		so.setServiceOrderID(result);
+		form.setServiceOrderID(result);
 		model.addAttribute("msg", msg);
 		// ServiceOrderSearchForm searchForm = new ServiceOrderSearchForm();
 		// model.addAttribute("searchForm", searchForm);
@@ -736,6 +763,11 @@ public class ServiceOrderController {
 		custForm.setDistrictID(160);
 		model.addAttribute("customerForm", custForm);
 
+		ProductForm productForm = new ProductForm();
+		model.addAttribute("productForm", productForm);
+		
+		model.addAttribute("product", so.getProduct());
+		
 		// get data for print document
 		ServiceOrderDocForm docForm = setDocPrintForm(so);
 
@@ -832,6 +864,9 @@ public class ServiceOrderController {
 		model.addAttribute("brandList", brandList);
 		model.addAttribute("modelList", modelList);
 
+		List<CustomerType> customerTypeList = customerTypeService.getAll();
+		model.addAttribute("customerTypeList", customerTypeList);
+		
 		CustomerForm custForm = new CustomerForm();
 		custForm.setProvinceID(7);
 		// set default district to Muang
@@ -842,6 +877,9 @@ public class ServiceOrderController {
 		
 		model.addAttribute("docForm", docForm);
 
+		ProductForm productForm = new ProductForm();
+		model.addAttribute("productForm", productForm);
+		
 		model.addAttribute("mode", "edit");
 		return VIEWNAME_FORM;
 	}

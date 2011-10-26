@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.twobytes.model.ServiceOrder;
 import com.twobytes.repair.dao.ServiceOrderDAO;
+import com.twobytes.util.DocRunningUtil;
 
 @Service
 public class ServiceOrderServiceImpl implements ServiceOrderService {
@@ -16,10 +17,21 @@ public class ServiceOrderServiceImpl implements ServiceOrderService {
 	@Autowired
 	private ServiceOrderDAO soDAO;
 	
+	@Autowired
+	private DocRunningUtil docRunningUtil;
+	
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public boolean save(ServiceOrder serviceOrder) throws Exception{
-		return soDAO.save(serviceOrder);
+	public String save(ServiceOrder serviceOrder) throws Exception{
+		if (serviceOrder.getServiceOrderID() == null) {
+			String serviceOrderID = docRunningUtil.genDoc("SO");
+			serviceOrder.setServiceOrderID(serviceOrderID);
+		}
+		if(soDAO.save(serviceOrder)){
+			return serviceOrder.getServiceOrderID();
+		}else{
+			return "false";
+		}
 	}
 
 	@Override
