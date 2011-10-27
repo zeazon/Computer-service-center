@@ -107,7 +107,7 @@
 		}).navGrid("#pager",{edit:false,add:false,del:false,search:false,refresh:false,cloneToTop:true})
 		.navButtonAdd('#list_toppager',
 		{
-			caption:"",
+			caption:"<fmt:message key='button.getServiceOrder' />",
 			title:"<fmt:message key='button.getServiceOrder' />",
 			buttonicon:"ui-icon-wrench",
 			onClickButton: function(){
@@ -116,14 +116,12 @@
 					jQuery("#confirmDialog").text('<fmt:message key='msg.getServiceOrder' /> '+gsr+' ?');
 					jQuery("#confirmDialog").dialog('option', 'buttons', {
 						"Confirm" : function() {
-							//alert('confirm');
 							//window.location.href = theHREF;
 							
 							//url: 'serviceOrderID.html?do=delete&serviceOrderID='+gr});
 							$.getJSON('getServiceOrder.html?do=getServiceOrder', {
 								serviceOrderID: gsr
 							}, function(data) {
-								//alert(data.success+' : '+data.message);
 								if(data.success == true){
 									jQuery("#confirmDialog").dialog("close");		
 									//jQuery("#dialog").text('<fmt:message key="msg.deleteSuccess" />');
@@ -167,7 +165,6 @@
 					//jQuery("#list").GridToForm(gsr,"#editForm");
 					//$("#editForm").submit();
 				} else {
-					//alert("<fmt:message key='msg.pleaseSelectRow' />");
 					jQuery("#dialog").text('<fmt:message key='msg.pleaseSelectRow' />');
 					jQuery("#dialog").dialog( 
 						{

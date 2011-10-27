@@ -41,7 +41,7 @@ div.box-contents {
 </style>
 
 <!--div style="border:1px dashed; height:300px;"><img src="././images/login_header.png" align="middle" /></div-->
-<div style="height:300px;"><table width="100%" cellpadding="0" cellspacing="0"><tr align="center"><td><img src="././images/login_header.png" align="middle" /></td></tr></table></div>
+<div style="margin:10px 10px 0px 10px ;border:1px dashed; height:300px;"><table width="100%" cellpadding="0" cellspacing="0"><tr align="center"><td><img src="././images/login_header.png" align="middle" /></td></tr></table></div>
 <table width="100%" height="80px">
 <tr>
 	<td></td>

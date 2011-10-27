@@ -117,7 +117,7 @@
 		})*/
 		.navButtonAdd('#list_toppager',
 		{
-			caption:"",
+			caption:"<fmt:message key='button.closeServiceOrder' />",
 			title:"<fmt:message key='button.closeServiceOrder' />",
 			buttonicon:"ui-icon-pencil", 
 			onClickButton: function(){ 
@@ -126,7 +126,6 @@
 					jQuery("#list").GridToForm(gsr,"#editForm");
 					$("#editForm").submit();
 				} else {
-					//alert("<fmt:message key='msg.pleaseSelectRow' />");
 					jQuery("#dialog").text('<fmt:message key='msg.pleaseSelectRow' />');
 					jQuery("#dialog").dialog( 
 						{

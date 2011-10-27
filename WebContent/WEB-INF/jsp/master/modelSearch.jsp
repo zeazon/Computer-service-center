@@ -91,7 +91,7 @@
 		}).navGrid("#pager",{edit:false,add:false,del:false,search:false,refresh:false,cloneToTop:true})
 		.navButtonAdd('#list_toppager',
 		{
-			caption:"",
+			caption:"<fmt:message key='button.add' />",
 			title:"<fmt:message key='button.add' />",
 			buttonicon:"ui-icon-plus",
 			onClickButton: function(){ 
@@ -101,7 +101,7 @@
 		})
 		.navButtonAdd('#list_toppager',
 		{
-			caption:"",
+			caption:"<fmt:message key='button.edit' />",
 			title:"<fmt:message key='button.edit' />",
 			buttonicon:"ui-icon-pencil", 
 			onClickButton: function(){ 
@@ -110,7 +110,6 @@
 					jQuery("#list").GridToForm(gsr,"#editForm");
 					$("#editForm").submit();
 				} else {
-					//alert("<fmt:message key='msg.pleaseSelectRow' />");
 					jQuery("#dialog").text('<fmt:message key='msg.pleaseSelectRow' />');
 					jQuery("#dialog").dialog( 
 						{
@@ -120,13 +119,13 @@
 					     		jQuery(this).dialog("close");} 
 					      	}
 				    });
-				}         
+				}
 			}, 
 			position:"last"
 		})
 		.navButtonAdd('#list_toppager',
 		{
-			caption:"",
+			caption:"<fmt:message key='button.delete' />",
 			title:"<fmt:message key='button.delete' />",
 			buttonicon:"ui-icon-trash",
 			onClickButton: function(){
@@ -161,7 +160,6 @@
 						}, 
 						url: 'model.html?do=delete&modelID='+gr}); 
 				} else { 
-					//alert("<fmt:message key='msg.pleaseSelectRow' />");
 					jQuery("#dialog").text('<fmt:message key='msg.pleaseSelectRow' />');
 					jQuery("#dialog").dialog( 
 						{

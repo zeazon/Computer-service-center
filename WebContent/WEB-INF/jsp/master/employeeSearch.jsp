@@ -90,21 +90,18 @@
 				}).navGrid("#pager",{edit:false,add:false,del:false,search:false,refresh:false,cloneToTop:true})
 				.navButtonAdd('#list_toppager',
 					{
-						caption:"", 
+						caption:"<fmt:message key='button.add' />", 
 						title:"<fmt:message key='button.add' />",
 						//buttonimg:"row.gif",
 						buttonicon:"ui-icon-plus", 
 						onClickButton: function(){ 
-							//alert("Add Row");
-							//alert('<c:url value="/resources/blueprint/screen.css" />');
 							window.location = '<c:url value="/employee.html?do=preAdd" />';
-							//window.location = "../javascriptredirect.php";
 						}, 
 						position:"last"
 				})
 				.navButtonAdd('#list_toppager',
 					{
-						caption:"",
+						caption:"<fmt:message key='button.edit' />",
 						title:"<fmt:message key='button.edit' />",
 						//buttonimg:"row.gif",
 						buttonicon:"ui-icon-pencil", 
@@ -115,7 +112,6 @@
 								jQuery("#list").GridToForm(gsr,"#editForm");
 								$("#editForm").submit();
 							} else {
-								//alert("<fmt:message key='msg.pleaseSelectRow' />");
 								jQuery("#dialog").text('<fmt:message key='msg.pleaseSelectRow' />');
 								jQuery("#dialog").dialog( 
 									{
@@ -125,13 +121,13 @@
 								     		jQuery(this).dialog("close");} 
 								      	}
 							    });
-							}         
+							}
 						}, 
 						position:"last"
 				})
 				.navButtonAdd('#list_toppager',
 					{ 
-						caption:"", 
+						caption:"<fmt:message key='button.delete' />", 
 						title:"<fmt:message key='button.delete' />",
 						//buttonimg:"row.gif",
 						buttonicon:"ui-icon-trash",
