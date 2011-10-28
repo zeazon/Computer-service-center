@@ -114,7 +114,7 @@ public class CustomerController {
 				gridData.setName(customer.getName());
 				gridData.setTel(customer.getTel());
 				gridData.setMobileTel(customer.getMobileTel());
-				gridData.setAddress(customer.getAddress()+" "+this.messages.getMessage("subdistrict_abbr", null, new Locale("th", "TH"))+" "+customer.getSubdistrict().getName()+" "+this.messages.getMessage("district_abbr", null, new Locale("th", "TH"))+" "+customer.getDistrict().getName()+" "+this.messages.getMessage("province_abbr", null, new Locale("th", "TH"))+" "+customer.getProvince().getName());
+				gridData.setAddress(customer.getAddress()+" "+this.messages.getMessage("subdistrict_abbr", null, new Locale("th", "TH"))+" "+customer.getSubdistrict().getName()+" "+this.messages.getMessage("district_abbr", null, new Locale("th", "TH"))+" "+customer.getDistrict().getName()+" "+this.messages.getMessage("province_abbr", null, new Locale("th", "TH"))+" "+customer.getProvince().getName()+" "+customer.getSubdistrict().getZipcode());
 				gridData.setEmail(customer.getEmail());
 				
 				rowsList.add(gridData);

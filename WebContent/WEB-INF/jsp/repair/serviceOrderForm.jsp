@@ -28,8 +28,8 @@
 									<form:radiobutton path="serviceType" value="1" cssStyle="margin-top:4px" id="serviceType_guarantee" onclick="checkServiceType()" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_guarantee" /></label><form:select path="guaranteeNo" id="guaranteeNo" ><c:forEach var="i" begin="1" end="7" step="1"><form:option value="${i}" /></c:forEach></form:select>
 									<form:radiobutton path="serviceType" value="2" cssStyle="margin-top:4px;" id="serviceType_repair" onclick="checkServiceType()" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_repair" /></label>
 									<form:radiobutton path="serviceType" value="3" cssStyle="margin-top:4px" id="serviceType_claim" onclick="checkServiceType()" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_claim" /></label>
-									<form:radiobutton path="serviceType" value="4" cssStyle="margin-top:4px" id="serviceType_outsiteService" onclick="checkServiceType()" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_outsiteService" /></label><form:input path="refJobID" class="textboxMockup" id="refJobID" maxlength="30" />
-									<form:radiobutton path="serviceType" value="5" cssStyle="margin-top:4px" id="serviceType_refix" onclick="checkServiceType()" /><label style="float:left; margin-top:4px;"><fmt:message key="serviceOrderType_refix" /></label><form:input path="refServiceOrder" class="textboxMockup" id="refServiceOrder" maxlength="20" />
+									<form:radiobutton path="serviceType" value="4" cssStyle="margin-top:4px" id="serviceType_outsiteService" onclick="checkServiceType()" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_outsiteService" /></label><form:input path="refJobID" class="textboxMockup" id="refJobID" maxlength="30" size="16" />
+									<form:radiobutton path="serviceType" value="5" cssStyle="margin-top:4px" id="serviceType_refix" onclick="checkServiceType()" /><label style="float:left; margin-top:4px;"><fmt:message key="serviceOrderType_refix" /></label><form:input path="refServiceOrder" class="textboxMockup" id="refServiceOrder" maxlength="20" size="16" />
 								</c:if>
 								<c:if test="${mode=='edit'}">
 									<form:radiobutton path="serviceType" value="1" cssStyle="margin-top:4px" id="serviceType_guarantee" disabled="true" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_guarantee" /></label><form:select path="guaranteeNo" id="guaranteeNo" disabled="true" ><c:forEach var="i" begin="1" end="7" step="1"><form:option value="${i}" /></c:forEach></form:select>
@@ -193,49 +193,62 @@
 						</td>
 					</tr--%>
 					
-					<tr align="left">
+					<tr>
 						<td colspan="6">
-							<div class="rowElem"><br>&nbsp;&nbsp;&nbsp;<b><u><fmt:message key="productDetail" /></u></b></div>
+							<table width="100%" cellpadding="0" cellspacing="0">
+								<col width="13%">
+								<col width="18%">
+								<col width="6%">
+								<col width="14%">
+								<col width="10%">
+								<col width="13%">
+								<col width="13%">
+								<col width="13%">
+								<tr align="left">
+								<tr>
+									<td colspan="8">
+										<div class="rowElem"><br>&nbsp;&nbsp;&nbsp;<b><u><fmt:message key="productDetail" /></u></b></div>
+									</td>
+								</tr>
+								<tr>
+									<td><label><fmt:message key="productID" />:<font color="red">*</font></label></td>
+									<td colspan="7">
+										<div class="rowElem">
+											<c:if test="${mode == 'add'}">
+												<form:input path="productID" class="textboxMockup" style="float:left" id="productID" readonly="true" size="18" maxlength="20"/> <input type="button" id="productLov" value="..." > <label class="error" for="productID" generated="true" style="display: none; float:left; padding-left:10px"></label>
+											</c:if>
+											<c:if test="${mode == 'edit'}">
+												<form:input path="productID" class="textboxMockup" style="float:left" id="productID" readonly="true" size="18" maxlength="20"/>
+											</c:if>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td><label><fmt:message key="type" />:</label></td>
+									<td>
+										<div class="rowElem">
+											<span id="typeTxt">${product.type.name}&nbsp;</span>
+										</div>
+									</td>
+									<td><label><fmt:message key="brand" />:</label></td>
+									<td>
+										<div class="rowElem">
+											<span id="brandTxt">${product.brand.name}&nbsp;</span>
+										</div>
+									</td>
+									<td><label><fmt:message key="model" />:</label></td>
+									<td><div class="rowElem"><%--form:input path="model" class="textboxMockup" maxlength="100"/--%><span id="modelTxt">${product.model.name}&nbsp;</span></span></div></td>
+									<td><label><fmt:message key="serialNo" />:</label></td>
+									<td><div class="rowElem"><%-->form:input path="serialNo" class="textboxMockup" maxlength="100"/--%><span id="serialNoTxt">${product.serialNo}&nbsp;</span></div></td>
+								</tr>
+								<tr>
+									<td><label><fmt:message key="accessories" />:</label></td>
+									<td colspan="2"><div class="rowElem"><form:input path="accessories" class="textboxMockup" style="width:98%" maxlength="5000"/></div></td>
+									<td><label><fmt:message key="serviceOrder_desc" />:</label></td>
+									<td colspan="4"><div class="rowElem"><form:input path="desc" class="textboxMockup" style="width:98%" maxlength="255"/></div></td>
+								</tr>		
+							</table>
 						</td>
-					</tr>
-					<tr>
-						<td><label><fmt:message key="productID" />:<font color="red">*</font></label></td>
-						<td colspan="5">
-							<div class="rowElem">
-								<c:if test="${mode == 'add'}">
-									<form:input path="productID" class="textboxMockup" style="float:left" id="productID" readonly="true" size="18" maxlength="20"/> <input type="button" id="productLov" value="..." > <label class="error" for="productID" generated="true" style="display: none; float:left; padding-left:10px"></label>
-								</c:if>
-								<c:if test="${mode == 'edit'}">
-									<form:input path="productID" class="textboxMockup" style="float:left" id="productID" readonly="true" size="18" maxlength="20"/>
-								</c:if>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td><label><fmt:message key="type" />:</label></td>
-						<td colspan="2">
-							<div class="rowElem">
-								<span id="typeTxt">${product.type.name}&nbsp;</span>
-							</div>
-						</td>
-						<td><label><fmt:message key="brand" />:</label></td>
-						<td colspan="2">
-							<div class="rowElem">
-								<span id="brandTxt">${product.brand.name}&nbsp;</span>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td><label><fmt:message key="model" />:</label></td>
-						<td colspan="2"><div class="rowElem"><%--form:input path="model" class="textboxMockup" maxlength="100"/--%><span id="modelTxt">${product.model.name}&nbsp;</span></span></div></td>
-						<td><label><fmt:message key="serialNo" />:</label></td>
-						<td colspan="2"><div class="rowElem"><%-->form:input path="serialNo" class="textboxMockup" maxlength="100"/--%><span id="serialNoTxt">${product.serialNo}&nbsp;</span></div></td>
-					</tr>
-					<tr>
-						<td><label><fmt:message key="accessories" />:</label></td>
-						<td colspan="2"><div class="rowElem"><form:input path="accessories" class="textboxMockup" style="width:98%" maxlength="5000"/></div></td>
-						<td><label><fmt:message key="serviceOrder_desc" />:</label></td>
-						<td colspan="2"><div class="rowElem"><form:input path="desc" class="textboxMockup" maxlength="255"/></div></td>
 					</tr>
 					<tr>
 						<td valign="top" style="padding-top:7px;"><label><fmt:message key="serviceOrder_problem" />:<font color="red">*</font></label></td>
