@@ -346,6 +346,9 @@
 						<div style="float:left; margin:5px 0 0 15px;"><fmt:message key="province" />:</div>
 						<form:select id="lovForm_province" path="provinceID" items="${provinceList}" itemValue="provinceID" itemLabel="name" />
 						
+						<br><br>
+						<div style="float:left; margin:5px 0 0 0px;"><fmt:message key="zipcode" />:</div>
+						<div id="lovForm_zipcode" style="float:left; padding:5px; 0 0 5px">${zipcode}</div>
 						<%--div style="float:left; margin:5px 0 0 15px;">zipcode:</div> <input type="text" size="5" readonly="readonly" value="22000"/--%>
 					</div>
 				</td>
@@ -616,6 +619,7 @@
 
 <c:url var="findDistrictByProvinceURL" value="/findDistrit.html" />
 <c:url var="findSubdistrictByDistrictURL" value="/findSubdistrict.html" />
+<c:url var="findZipcodeBySubdistrictURL" value="/findZipcode.html" />
 <c:url var="saveCustomerPopupURL" value="/customer.html?do=savePopup" />
 <c:url var="saveProductPopupURL" value="/product.html?do=savePopup" />
 <c:url var="findBrandURL" value="/brand.html?do=getBrandByType" />
@@ -927,10 +931,24 @@ $(document).ready(function(){
 				sels.jqTransSelect();
 				// bug because ref to color id, it should be td id
 				//$("#color div.jqTransformSelectWrapper").attr("style", sty);
+				
+				// trigger event change of subdistrict select list
+				$("#lovForm_subdistrict").change();
 			});
 		}
 	);
 
+	$("#lovForm_subdistrict").change(
+		function(){
+			$.getJSON('${findZipcodeBySubdistrictURL}', {
+				subdistrictID : $(this).val(),
+				ajax : 'true'
+			}, function(data) {
+				$("#lovForm_zipcode").html(data);
+			});
+		}
+	);
+	
 	$("#lovForm_type").change(
 		function(){
 			$.getJSON('${findBrandURL}', {

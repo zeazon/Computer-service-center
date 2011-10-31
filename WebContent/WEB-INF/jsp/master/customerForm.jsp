@@ -32,7 +32,7 @@
 					</tr--%>
 					<tr>
 						<td><label><fmt:message key="name" />:<font style="color:red">*</font></label></td>
-						<td><div class="rowElem"><form:input path="name" class="textboxMockup" maxlength="255" /> <label class="error" for="name" generated="true" style="display: none; padding-left:10px"></label></div></td>
+						<td><div class="rowElem"><form:input path="name" class="textboxMockup" maxlength="255" size="40"/> <label class="error" for="name" generated="true" style="display: none; padding-left:10px"></label></div></td>
 					</tr>
 					<%--tr>
 						<td><label><fmt:message key="surname" />:</label></td>
@@ -53,6 +53,10 @@
 								
 								<div style="float:left; margin:5px 0 0 15px;"><fmt:message key="province" />:</div>
 								<form:select id="province" path="provinceID" items="${provinceList}" itemValue="provinceID" itemLabel="name" />
+								
+								<br><br>
+								<div style="float:left; margin:5px 0 0 0px;"><fmt:message key="zipcode" />:</div>
+								<div id="zipcode" style="float:left; padding:5px; 0 0 5px">${zipcode}</div>
 							</div>
 						</td>
 					</tr>
@@ -79,6 +83,7 @@
 
 <c:url var="findDistrictByProvinceURL" value="/findDistrit.html" />
 <c:url var="findSubdistrictByDistrictURL" value="/findSubdistrict.html" />
+<c:url var="findZipcodeBySubdistrictURL" value="/findZipcode.html" />
 
 <script type="text/javascript">
 
@@ -155,10 +160,23 @@ $(document).ready(function(){
 				$par.parent().replaceWith($par);
 				sels.jqTransSelect();
 				$("#color div.jqTransformSelectWrapper").attr("style", sty);
+				
+				// trigger event change of subdistrict select list
+				$("#subdistrict").change();
 			});
 		}
 	);
 	
+	$("#subdistrict").change(
+		function(){
+			$.getJSON('${findZipcodeBySubdistrictURL}', {
+				subdistrictID : $(this).val(),
+				ajax : 'true'
+			}, function(data) {
+				$("#zipcode").html(data);
+			});
+		}
+	);
 	
 	jQuery.validator.addMethod("require_from_group", function(value, element, options) {
 		var numberRequired = options[0];

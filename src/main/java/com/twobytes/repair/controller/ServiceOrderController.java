@@ -386,11 +386,14 @@ public class ServiceOrderController {
 		// set subdistrict from Muang district
 		List<Subdistrict> subdistrictList = sdService.getByDistrict(160);
 
+		Subdistrict sd = subdistrictList.get(0);
+		
 		List<CustomerType> customerTypeList = customerTypeService.getAll();
 		
 		model.addAttribute("provinceList", provinceList);
 		model.addAttribute("districtList", districtList);
 		model.addAttribute("subdistrictList", subdistrictList);
+		model.addAttribute("zipcode", sd.getZipcode());
 		model.addAttribute("customerTypeList", customerTypeList);
 
 		CustomerForm custForm = new CustomerForm();
@@ -607,11 +610,14 @@ public class ServiceOrderController {
 			// set subdistrict from Muang district
 			List<Subdistrict> subdistrictList = sdService.getByDistrict(160);
 
+			Subdistrict sd = subdistrictList.get(0);
+			
 			List<CustomerType> customerTypeList = customerTypeService.getAll();
 			
 			model.addAttribute("provinceList", provinceList);
 			model.addAttribute("districtList", districtList);
 			model.addAttribute("subdistrictList", subdistrictList);
+			model.addAttribute("zipcode", sd.getZipcode());
 			model.addAttribute("customerTypeList", customerTypeList);
 			
 			CustomerForm custForm = new CustomerForm();
@@ -684,11 +690,14 @@ public class ServiceOrderController {
 			// set subdistrict from Muang district
 			List<Subdistrict> subdistrictList = sdService.getByDistrict(160);
 			
+			Subdistrict sd = subdistrictList.get(0);
+			
 			List<CustomerType> customerTypeList = customerTypeService.getAll();
 			
 			model.addAttribute("provinceList", provinceList);
 			model.addAttribute("districtList", districtList);
 			model.addAttribute("subdistrictList", subdistrictList);
+			model.addAttribute("zipcode", sd.getZipcode());
 			model.addAttribute("customerTypeList", customerTypeList);
 
 			CustomerForm custForm = new CustomerForm();
@@ -749,11 +758,14 @@ public class ServiceOrderController {
 		// set subdistrict from Muang district
 		List<Subdistrict> subdistrictList = sdService.getByDistrict(160);
 		
+		Subdistrict sd = subdistrictList.get(0);
+		
 		List<CustomerType> customerTypeList = customerTypeService.getAll();
 		
 		model.addAttribute("provinceList", provinceList);
 		model.addAttribute("districtList", districtList);
 		model.addAttribute("subdistrictList", subdistrictList);
+		model.addAttribute("zipcode", sd.getZipcode());
 		model.addAttribute("customerTypeList", customerTypeList);
 
 		CustomerForm custForm = new CustomerForm();

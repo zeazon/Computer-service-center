@@ -33,7 +33,6 @@
 								</form:select>
 								<%--form:checkboxes path="type" items="${typeList}" itemValue="typeID" itemLabel="name" element="div style='float:left'" /--%>
 							</div>
-							<br>
 						</td>
 					</tr>
 					<tr>
@@ -68,6 +67,7 @@
 		</td>
 	</tr>
 </table>
+
 <script type="text/javascript">
 	//$("#dateInput").calendarsPicker($.extend({calendar: $.calendars.instance('thai','th')}));
 	//$("#endDateInput").calendarsPicker($.extend({calendar: $.calendars.instance('thai','th')}));

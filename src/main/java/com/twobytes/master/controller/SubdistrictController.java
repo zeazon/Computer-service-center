@@ -30,4 +30,10 @@ public class SubdistrictController {
 		logger.debug("finding subdistrict for districtID " + districtID);
 		return this.sdService.getByDistrict(districtID);
 	}
+	
+	@RequestMapping(value = "/findZipcode", method = RequestMethod.GET)
+	public @ResponseBody Integer findZipcode(@RequestParam(required = true) Integer subdistrictID){
+		Subdistrict sd = sdService.selectByID(subdistrictID);
+		return sd.getZipcode();
+	}
 }

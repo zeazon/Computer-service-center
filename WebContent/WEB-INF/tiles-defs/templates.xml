@@ -131,6 +131,11 @@
 		<put-attribute name="body" value="/WEB-INF/jsp/master/roleForm.jsp"/>
 	</definition>
 	
+	<definition name="changePassword.form" extends=".pageTemplate">
+		<put-attribute name="pageName" value="เปลี่ยนรหัสผ่าน" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/master/chanagePasswordForm.jsp"/>
+	</definition>
+	
 	<!-- Repair -->
 	
 	<definition name="serviceOrder.search" extends=".pageTemplate">

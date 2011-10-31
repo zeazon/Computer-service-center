@@ -151,14 +151,15 @@ public class CustomerController {
 		
 		// set subdistrict from Muang district
 		List<Subdistrict> subdistrictList = sdService.getByDistrict(160);
-		
-		form.setSubdistrictID(((Subdistrict)subdistrictList.get(0)).getSubdistrictID());
+		Subdistrict sd = (Subdistrict)subdistrictList.get(0);
+		form.setSubdistrictID(sd.getSubdistrictID());
 		
 		List<CustomerType> customerTypeList = customerTypeService.getAll();
 		
 		model.addAttribute("provinceList", provinceList);
 		model.addAttribute("districtList", districtList);
 		model.addAttribute("subdistrictList", subdistrictList);
+		model.addAttribute("zipcode", sd.getZipcode());
 		model.addAttribute("customerTypeList", customerTypeList);
 		return VIEWNAME_FORM;
 	}
@@ -187,10 +188,13 @@ public class CustomerController {
 				List<Subdistrict> subdistrictList = sdService.getByDistrict(form.getDistrictID());
 				List<CustomerType> customerTypeList = customerTypeService.getAll();
 				
+				Subdistrict sd = (Subdistrict) sdService.selectByID(form.getSubdistrictID());
+				
 				model.addAttribute("provinceList", provinceList);
 				model.addAttribute("districtList", districtList);
 				model.addAttribute("subdistrictList", subdistrictList);
 				model.addAttribute("customerTypeList", customerTypeList);
+				model.addAttribute("zipcode", sd.getZipcode());
 				return VIEWNAME_FORM;
 			}
 			msg = this.messages.getMessage("msg.updateComplete", null, new Locale("th", "TH"));
@@ -228,10 +232,13 @@ public class CustomerController {
 			List<Subdistrict> subdistrictList = sdService.getByDistrict(form.getDistrictID());
 			List<CustomerType> customerTypeList = customerTypeService.getAll();
 			
+			Subdistrict sd1 = (Subdistrict) sdService.selectByID(form.getSubdistrictID());
+			
 			model.addAttribute("provinceList", provinceList);
 			model.addAttribute("districtList", districtList);
 			model.addAttribute("subdistrictList", subdistrictList);
 			model.addAttribute("customerTypeList", customerTypeList);
+			model.addAttribute("zipcode", sd1.getZipcode());
 			return VIEWNAME_FORM;
 		}
 		if(!canSave){
@@ -240,9 +247,12 @@ public class CustomerController {
 			List<District> districtList = districtService.getByProvince(form.getProvinceID());
 			List<Subdistrict> subdistrictList = sdService.getByDistrict(form.getDistrictID());
 
+			Subdistrict sd1 = (Subdistrict) sdService.selectByID(form.getSubdistrictID());
+			
 			model.addAttribute("provinceList", provinceList);
 			model.addAttribute("districtList", districtList);
 			model.addAttribute("subdistrictList", subdistrictList);
+			model.addAttribute("zipcode", sd1.getZipcode());
 			return VIEWNAME_FORM;
 		}
 		model.addAttribute("msg", msg);
@@ -290,6 +300,7 @@ public class CustomerController {
 		model.addAttribute("districtList", districtList);
 		model.addAttribute("subdistrictList", subdistrictList);
 		model.addAttribute("customerTypeList", customerTypeList);
+		model.addAttribute("zipcode", customer.getSubdistrict().getZipcode());
 		return VIEWNAME_FORM;
 	}
 	
