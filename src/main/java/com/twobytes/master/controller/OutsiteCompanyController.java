@@ -136,9 +136,12 @@ public class OutsiteCompanyController {
 		// set subdistrict from Muang district
 		List<Subdistrict> subdistrictList = sdService.getByDistrict(160);
 				
+		Subdistrict sd = subdistrictList.get(0);
+		
 		model.addAttribute("provinceList", provinceList);
 		model.addAttribute("districtList", districtList);
 		model.addAttribute("subdistrictList", subdistrictList);
+		model.addAttribute("zipcode", sd.getZipcode());
 		return VIEWNAME_FORM;
 	}
 	
@@ -188,10 +191,11 @@ public class OutsiteCompanyController {
 			List<Province> provinceList = provinceService.getAll();
 			List<District> districtList = districtService.getByProvince(form.getProvinceID());
 			List<Subdistrict> subdistrictList = sdService.getByDistrict(form.getDistrictID());
-
+			
 			model.addAttribute("provinceList", provinceList);
 			model.addAttribute("districtList", districtList);
 			model.addAttribute("subdistrictList", subdistrictList);
+			model.addAttribute("zipcode", sd.getZipcode());
 			return VIEWNAME_FORM;
 		}
 		if(!canSave){
@@ -203,6 +207,7 @@ public class OutsiteCompanyController {
 			model.addAttribute("provinceList", provinceList);
 			model.addAttribute("districtList", districtList);
 			model.addAttribute("subdistrictList", subdistrictList);
+			model.addAttribute("zipcode", sd.getZipcode());
 		}
 		model.addAttribute("msg", msg);
 		OutsiteCompanySearchForm searchForm = new OutsiteCompanySearchForm();
@@ -242,6 +247,7 @@ public class OutsiteCompanyController {
 		model.addAttribute("provinceList", provinceList);
 		model.addAttribute("districtList", districtList);
 		model.addAttribute("subdistrictList", subdistrictList);
+		model.addAttribute("zipcode", oc.getSubdistrict().getZipcode());
 		return VIEWNAME_FORM;
 	}
 	

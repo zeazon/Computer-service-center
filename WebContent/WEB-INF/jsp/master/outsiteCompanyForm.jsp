@@ -35,6 +35,10 @@
 								
 								<div style="float:left; margin:5px 0 0 15px;"><fmt:message key="province" />:</div>
 								<form:select id="province" path="provinceID" items="${provinceList}" itemValue="provinceID" itemLabel="name" />
+								
+								<br><br>
+								<div style="float:left; margin:5px 0 0 0px;"><fmt:message key="zipcode" />:</div>
+								<div id="zipcode" style="float:left; padding:5px; 0 0 5px">${zipcode}</div>
 							</div>
 						</td>
 					</tr>
@@ -49,6 +53,7 @@
 
 <c:url var="findDistrictByProvinceURL" value="/findDistrit.html" />
 <c:url var="findSubdistrictByDistrictURL" value="/findSubdistrict.html" />
+<c:url var="findZipcodeBySubdistrictURL" value="/findZipcode.html" />
 
 <script type="text/javascript">
 
@@ -122,6 +127,17 @@ $(document).ready(function(){
 				$par.parent().replaceWith($par);
 				sels.jqTransSelect();
 				$("#color div.jqTransformSelectWrapper").attr("style", sty);
+			});
+		}
+	);
+	
+	$("#subdistrict").change(
+		function(){
+			$.getJSON('${findZipcodeBySubdistrictURL}', {
+				subdistrictID : $(this).val(),
+				ajax : 'true'
+			}, function(data) {
+				$("#zipcode").html(data);
 			});
 		}
 	);
