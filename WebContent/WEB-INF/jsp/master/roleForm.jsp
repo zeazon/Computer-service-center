@@ -14,12 +14,12 @@
 				<input type="hidden" name="mode" value="${mode}"/>
 				<table width="100%">
 					<tr>
-						<td width="40%" align="right"><label><fmt:message key="roleID" />:</label></td>
+						<td width="40%" align="right"><label style="float:right; margin-top:5px;"><fmt:message key="roleID" />:</label></td>
 						<td><div class="rowElem" style="margin: 5px"><form:input path="roleID" id="roleID" readonly="true" class="textboxMockup" /></div></td>
 					</tr>
 					<tr>
-						<td align="right"><label><fmt:message key="name" />:<font style="color:red">*</font></label></td>
-						<td><div class="rowElem" style="margin: 5px"><form:input path="name" id="name" class="textboxMockup" /> <label class="error" for="name" generated="true" style="display: none; padding-left:10px"></label></div></td>
+						<td align="right"><label style="float:right; margin-top:5px;"><fmt:message key="name" />:<font style="color:red">*</font></label></td>
+						<td><div class="rowElem" style="margin: 5px"><form:input path="name" id="name" class="textboxMockup" /> <label class="error" for="name" generated="true" style="display: none; float:left; padding-left:10px; margin-top:5px; color: red;"></label></div></td>
 					</tr>
 					<tr>
 						<td colspan="2">

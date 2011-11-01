@@ -12,9 +12,11 @@
 			</c:if>
 			<form:form commandName="form" id="form" class="jqtransform" action="changePassword.html?do=save">
 				<table width="100%">
+					<col width="40%">
+					<col>
 					<tr>
 						<td><label><fmt:message key="password" />:<font style="color:red">*</font></label></td>
-						<td><div class="rowElem"><form:input type="password" path="oldPassword" class="textboxMockup" maxlength="100"/> <label class="error" for="password" generated="true" style="display: none; padding-left:10px"></label></div></td>
+						<td><div class="rowElem"><form:input type="password" path="oldPassword" class="textboxMockup" maxlength="100"/> <label class="error" for="oldPassword" generated="true" style="display: none; padding-left:10px"></label></div></td>
 					</tr>
 					<tr>
 						<td><label><fmt:message key="newPassword" />:<font style="color:red">*</font></label></td>

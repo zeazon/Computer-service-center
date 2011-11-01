@@ -63,7 +63,7 @@
 				//autoheight: true,
 				//width: "100%",
 				autowidth: true,
-				colNames:['<fmt:message key="employeeID" />','<fmt:message key="name" />','<fmt:message key="surname" />'],
+				colNames:['<fmt:message key="employeeID" />','<fmt:message key="employeeCode" />','<fmt:message key="name" />','<fmt:message key="surname" />'],
 				/*colModel:[
 				{name:'id',index:'id', sorttype:"int"},
 				{name:'invdate',index:'invdate', sorttype:"date", width:100, align:"center"},
@@ -71,7 +71,8 @@
 				{name:'amount',index:'amount', align:"right",sorttype:"float"},
 				{name:'tax',index:'tax', align:"right",sorttype:"float"}, {name:'total',index:'total', align:"right",sorttype:"float"}, {name:'note',index:'note', sortable:false} ],*/
 				colModel:[
-				{name:'employeeID',index:'employeeID', sorttype:"int"},
+				{name:'employeeID',index:'employeeID', sorttype:"int", hidden:true},
+				{name:'employeeCode', index:'employeeCode'},
 				{name:'name',index:'name'},
 				{name:'surname',index:'surname'}],
 				multiselect: false,

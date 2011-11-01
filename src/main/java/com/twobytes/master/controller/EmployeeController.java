@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 import com.twobytes.master.form.EmployeeForm;
 import com.twobytes.master.form.EmployeeGridData;
 import com.twobytes.master.form.EmployeeSearchForm;
@@ -112,6 +113,7 @@ public class EmployeeController{
 				Employee emp = empList.get(i);
 				EmployeeGridData gridForm = new EmployeeGridData();
 				gridForm.setEmployeeID(emp.getEmployeeID().toString());
+				gridForm.setEmployeeCode(emp.getEmployeeCode());
 				gridForm.setName(emp.getName());
 				gridForm.setSurname(emp.getSurname());
 				gridForm.setLogin(emp.getLogin());
@@ -159,7 +161,15 @@ public class EmployeeController{
 			boolean validLogin = false;
 			try{
 				validLogin = employeeService.checkValidLogin(form.getLogin(), Integer.valueOf(form.getEmployeeID()));
-			}catch(Exception e){
+			}catch(MySQLIntegrityConstraintViolationException e){
+				e.printStackTrace();
+				// error occur go back to employee form screen
+				model.addAttribute("errMsg", e.getMessage());
+				List<Role> roleList = roleService.getAll();
+				model.addAttribute("roleList", roleList);
+				return VIEWNAME_FORM;
+			}
+			catch(Exception e){
 				e.printStackTrace();
 				// error occur go back to employee form screen
 				model.addAttribute("errMsg", e.getMessage());
@@ -210,6 +220,7 @@ public class EmployeeController{
 			emp.setCreatedDate(now);
 			msg = this.messages.getMessage("msg.addComplete", null, new Locale("th", "TH"));
 		}
+		emp.setEmployeeCode(form.getEmployeeCode());
 		emp.setName(form.getName());
 		emp.setSurname(form.getSurname());
 		emp.setLogin(form.getLogin());
@@ -260,6 +271,7 @@ public class EmployeeController{
 		}
 		EmployeeForm form = new EmployeeForm();
 		form.setEmployeeID(emp.getEmployeeID().toString());
+		form.setEmployeeCode(emp.getEmployeeCode());
 		form.setName(emp.getName());
 		form.setSurname(emp.getSurname());
 		form.setRoleID(emp.getRoleID().getRoleID().toString());

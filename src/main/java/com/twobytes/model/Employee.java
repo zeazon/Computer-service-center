@@ -20,6 +20,7 @@ public class Employee implements Serializable {
 	private static final long serialVersionUID = 563784062007216626L;
 	
 	private Integer employeeID;
+	private String employeeCode;
 	private String name;
 	private String surname;
 	private Role roleID;
@@ -39,6 +40,15 @@ public class Employee implements Serializable {
 
 	public void setEmployeeID(Integer employeeID) {
 		this.employeeID = employeeID;
+	}
+	
+	@Column(name="employeeCode")
+	public String getEmployeeCode() {
+		return employeeCode;
+	}
+
+	public void setEmployeeCode(String employeeCode) {
+		this.employeeCode = employeeCode;
 	}
 
 	@Column(name="name")

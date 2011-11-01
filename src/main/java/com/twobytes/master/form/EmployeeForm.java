@@ -2,6 +2,7 @@ package com.twobytes.master.form;
 
 public class EmployeeForm {
 	private String employeeID;
+	private String employeeCode;
 	private String name;
 	private String surname;
 	private String roleID;
@@ -14,6 +15,12 @@ public class EmployeeForm {
 	}
 	public void setEmployeeID(String employeeID) {
 		this.employeeID = employeeID;
+	}
+	public String getEmployeeCode() {
+		return employeeCode;
+	}
+	public void setEmployeeCode(String employeeCode) {
+		this.employeeCode = employeeCode;
 	}
 	public String getName() {
 		return name;

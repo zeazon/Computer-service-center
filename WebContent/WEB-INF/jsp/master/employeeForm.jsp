@@ -11,10 +11,17 @@
 				</div>
 			</c:if>
 			<form:form commandName="form" id="form" class="jqtransform" action="employee.html?do=save">
+				<form:hidden path="employeeID" />
 				<table width="100%">
-					<tr>
+					<col width="40%">
+					<col>
+					<%--tr>
 						<td width="40%"><label><fmt:message key="employeeID" />:</label></td>
-						<td><div class="rowElem"><form:input type="text" path="employeeID" readonly="true" class="textboxMockup" /></div></td>
+						<td><div class="rowElem"><form:input path="employeeID" readonly="true" class="textboxMockup" /></div></td>
+					</tr--%>
+					<tr>
+						<td><label><fmt:message key="employeeCode" />:<font style="color:red">*</font></label></td>
+						<td><div class="rowElem"><form:input path="employeeCode" class="textboxMockup" maxlength="5" /> <label class="error" for="employeeCode" generated="true" style="display: none; padding-left:10px"></label></div></td>
 					</tr>
 					<tr>
 						<td><label><fmt:message key="name" />:<font style="color:red">*</font></label></td>
@@ -61,6 +68,7 @@
 $(document).ready(function(){
 	$("#form").validate({
 		rules: {
+			employeeCode: "required",
 			name: "required",
 			userName: "required",
 			password: {

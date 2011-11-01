@@ -213,7 +213,10 @@
 						
 						<div style="float:left; margin:5px 0 0 15px;"><fmt:message key="province" />:</div>
 						<form:select id="province" path="provinceID" items="${provinceList}" itemValue="provinceID" itemLabel="name" />
-						
+					
+						<br><br>
+						<div style="float:left; margin:5px 0 0 0px;"><fmt:message key="zipcode" />:</div>
+						<div id="lovForm_zipcode" style="float:left; padding:5px; 0 0 5px">${zipcode}</div>	
 						<%--div style="float:left; margin:5px 0 0 15px;">zipcode:</div> <input type="text" size="5" readonly="readonly" value="22000"/--%>
 					</div>
 				</td>
@@ -395,6 +398,7 @@
 
 <c:url var="findDistrictByProvinceURL" value="/findDistrit.html" />
 <c:url var="findSubdistrictByDistrictURL" value="/findSubdistrict.html" />
+<c:url var="findZipcodeBySubdistrictURL" value="/findZipcode.html" />
 <c:url var="saveCustomerPopupURL" value="/customer.html?do=savePopup" />
 <c:url var="findBrandURL" value="/brand.html?do=getBrandByType" />
 <c:url var="findModelURL" value="/model.html?do=getModel" />
@@ -597,7 +601,7 @@ $(document).ready(function(){
 	
 	$( "#add-form" ).dialog({
 		autoOpen: false,
-		height: 420,
+		height: 470,
 		width: 900,
 		modal: true
 	});
@@ -684,6 +688,17 @@ $(document).ready(function(){
 		}
 	);
 
+	$("#subdistrict").change(
+		function(){
+			$.getJSON('${findZipcodeBySubdistrictURL}', {
+				subdistrictID : $(this).val(),
+				ajax : 'true'
+			}, function(data) {
+				$("#lovForm_zipcode").html(data);
+			});
+		}
+	);
+	
 	$("#type").change(
 		function(){
 			//alert($("#type").val());
