@@ -538,8 +538,7 @@ $(document).ready(function(){
 	//}).navGrid("#pager",{edit:false,add:false,del:false,search:false,refresh:false})
 	.navButtonAdd('#list_toppager',
 		{
-			//caption:"<fmt:message key='button.add' />", 
-			caption:"", 
+			caption:"<fmt:message key='button.add' />", 
 			title:"<fmt:message key='button.add' />",
 			//buttonimg:"row.gif",
 			buttonicon:"ui-icon-plus", 
@@ -978,7 +977,11 @@ $(document).ready(function(){
 		jQuery("#productList").jqGrid('setGridParam',{url:"searchProduct.html?&typeID="+typeID+"&brandID="+brandID+"&modelID="+modelID,page:1}).trigger("reloadGrid");
 	}
 	
-	
+	// check for enter key
+	$('#name').bind('keypress', function(event){
+		if(event.keyCode == '13') {gridReload(); return false;}
+		else return true;
+	});
 	
 	
 });

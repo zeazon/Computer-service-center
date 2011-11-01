@@ -274,7 +274,7 @@
 					<table>
 						<tr>
 							<td><label><fmt:message key="name" />:</label></td>
-							<td><div class="rowElem"><input type="text" id="name" class="textboxMockup"></div></td>
+							<td><div class="rowElem"><input type="text" id="lovCustomer_name" class="textboxMockup"></div></td>
 						</tr>
 						<%--tr>
 							<td><label><fmt:message key="surname" />:</label></td>
@@ -784,8 +784,7 @@ $(document).ready(function(){
 	//}).navGrid("#pager",{edit:false,add:false,del:false,search:false,refresh:false})
 	.navButtonAdd('#list_toppager',
 		{
-			//caption:"<fmt:message key='button.add' />", 
-			caption:"", 
+			caption:"<fmt:message key='button.add' />", 
 			title:"<fmt:message key='button.add' />",
 			//buttonimg:"row.gif",
 			buttonicon:"ui-icon-plus", 
@@ -1146,8 +1145,7 @@ $(document).ready(function(){
 	});*/
 	.navButtonAdd('#productList_toppager',
 		{
-			//caption:"<fmt:message key='button.add' />", 
-			caption:"", 
+			caption:"<fmt:message key='button.add' />", 
 			title:"<fmt:message key='button.add' />",
 			//buttonimg:"row.gif",
 			buttonicon:"ui-icon-plus", 
@@ -1391,7 +1389,7 @@ function setCustID(){
 }
 
 function gridReload(){
-	var name = jQuery("#name").val();
+	var name = jQuery("#lovCustomer_name").val();
 	//var surname = jQuery("#surname").val();
 	//jQuery("#list").jqGrid('setGridParam',{url:"searchCustomer.html?name="+name+"&surname="+surname,page:1}).trigger("reloadGrid");
 	jQuery("#list").jqGrid('setGridParam',{url:"searchCustomer.html?name="+name,page:1}).trigger("reloadGrid");
@@ -1516,10 +1514,18 @@ function doPrint(){
 	document.forms["printForm"].submit();
 }
 
+// check for enter key
+$('#lovCustomer_name').bind('keypress', function(event){
+	if(event.keyCode == '13') {gridReload(); return false;}
+	else return true;
+});
+
+//check for enter key
 $('#shopCustomerName').bind('keypress', function(event){
 	if(event.keyCode == '13') {gridShopCustomerReload(); return false;}
 	else return true;
 });
+
 
 function showShopCustomerDetail(){
 	$("#shopCustomerDetail").show();
