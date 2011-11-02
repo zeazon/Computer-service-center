@@ -1065,6 +1065,8 @@ public class ServiceOrderController {
 		docForm.setBrand(so.getProduct().getBrand().getName());
 		docForm.setModel(so.getProduct().getModel().getName());
 		docForm.setSerialNo(so.getProduct().getSerialNo());
+		docForm.setWarrantyDate(sdf.format(so.getProduct().getWarrantyDate()));
+		docForm.setWarrantyExpire(sdf.format(so.getProduct().getWarrantyExpire()));
 		docForm.setAccessories(so.getAccessories());
 		docForm.setDesc(so.getDescription());
 		docForm.setProblem(so.getProblem());

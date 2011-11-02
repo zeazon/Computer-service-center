@@ -170,6 +170,8 @@ public class ServiceOrderExcelView extends AbstractJExcelView {
         sheet1.addCell(new Label(4, 22, form.getDesc(), border_bottom_dotted));
         
         sheet1.addCell(new Label(15, 18, form.getSerialNo(), border_bottom_dotted));
+        sheet1.addCell(new Label(15, 19, form.getWarrantyDate(), border_bottom_dotted));
+        sheet1.addCell(new Label(15, 20, form.getWarrantyExpire(), border_bottom_dotted));
         
         sheet1.mergeCells(2, 32, 9, 39);
         sheet1.addCell(new Label(2, 32, form.getProblem(), wrap));

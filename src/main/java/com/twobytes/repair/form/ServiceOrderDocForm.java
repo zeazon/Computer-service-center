@@ -34,6 +34,8 @@ public class ServiceOrderDocForm implements Serializable {
 	private String brand;
 	private String model;
 	private String serialNo;
+	private String warrantyDate;
+	private String warrantyExpire;
 	private String accessories;
 	private String desc;
 	private String problem;
@@ -237,6 +239,18 @@ public class ServiceOrderDocForm implements Serializable {
 	}
 	public void setDesc(String desc) {
 		this.desc = desc;
+	}
+	public String getWarrantyDate() {
+		return warrantyDate;
+	}
+	public void setWarrantyDate(String warrantyDate) {
+		this.warrantyDate = warrantyDate;
+	}
+	public String getWarrantyExpire() {
+		return warrantyExpire;
+	}
+	public void setWarrantyExpire(String warrantyExpire) {
+		this.warrantyExpire = warrantyExpire;
 	}
 	
 }

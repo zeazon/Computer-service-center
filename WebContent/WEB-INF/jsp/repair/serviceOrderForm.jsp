@@ -16,7 +16,7 @@
 				<table width="100%">
 					<tr>
 						<td width="13%"><label><fmt:message key="serviceOrderDate" />:</label></td>
-						<td align="left" colspan="3"><div class="rowElem"><form:input path="serviceOrderDate" class="textboxMockup" readonly="true" /></div></td>
+						<td align="left" colspan="3"><div class="rowElem"><form:input path="serviceOrderDate" class="textboxMockup" /></div></td>
 						<td width="40%"><label><fmt:message key="serviceOrderID" />:</label></td>
 						<td><div class="rowElem"><form:input path="serviceOrderID" readonly="true" class="textboxMockup" /></div></td>
 					</tr>
@@ -612,6 +612,8 @@
 	<form:hidden path="brand" />
 	<form:hidden path="model" />
 	<form:hidden path="serialNo" />
+	<form:hidden path="warrantyDate" />
+	<form:hidden path="warrantyExpire" />
 	<form:hidden path="accessories" />
 	<form:hidden path="desc" />
 	<form:hidden path="problem" />
@@ -637,6 +639,7 @@ $(document).ready(function(){
 	
 	//$("#appointmentDate").calendarsPicker($.extend({calendar: $.calendars.instance('thai','th')}));
 	$('#appointmentDate').datetimeEntry({datetimeFormat: 'D/O/Y H:M'});
+	$('#serviceOrderDate').datetimeEntry({datetimeFormat: 'D/O/Y H:M'});
 	
 	$("#shopCustomerDetail").hide();
 	$("#walkinCustomerDetail").hide();
@@ -687,8 +690,6 @@ $(document).ready(function(){
 	$("form.jqtransform").jqTransform();
 	$("form.lov").jqTransform();
 	$("form.customerForm").jqTransform();
-	
-	checkServiceType();
 	
 	// check type of customer for display detail
 //	checkCustomerType();
@@ -1356,6 +1357,8 @@ $(document).ready(function(){
 		gridShopCustomerReload();
 	});
 	
+	// check service type for disable radio button
+	checkServiceType();
 });
 
 function checkServiceType(){
