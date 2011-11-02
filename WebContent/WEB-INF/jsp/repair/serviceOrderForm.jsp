@@ -348,7 +348,12 @@
 						
 						<br><br>
 						<div style="float:left; margin:5px 0 0 0px;"><fmt:message key="zipcode" />:</div>
-						<div id="lovForm_zipcode" style="float:left; padding:5px; 0 0 5px">${zipcode}</div>
+						<div id="lovForm_zipcode" style="float:left; padding:5px; 0 0 5px">
+							<c:choose>
+								<c:when test="${zipcode == '0'}">-</c:when>
+								<c:otherwise>${zipcode}</c:otherwise>
+							</c:choose>
+						</div>
 						<%--div style="float:left; margin:5px 0 0 15px;">zipcode:</div> <input type="text" size="5" readonly="readonly" value="22000"/--%>
 					</div>
 				</td>
@@ -508,10 +513,10 @@
 	<form:form commandName="productForm" id="productForm" class="jqtransform" action="JavaScript:saveProduct();">
 		<table width="100%">
 			<tr>
-				<td width="40%"><label><fmt:message key="productID" />:<font style="color:red">*</font></label></td>
+				<td width="40%"><label><fmt:message key="productID" />:</label></td>
 				<td>
 					<div class="rowElem">
-						<form:input path="productID" id="lovForm_productID" class="textboxMockup"  />
+						<form:input path="productID" id="lovForm_productID" class="textboxMockup" readonly="true" maxlength="20" />
 					</div>
 				</td>
 			</tr>
@@ -549,11 +554,11 @@
 			</tr>
 			<tr>
 				<td><label><fmt:message key="serialNo" />:<font style="color:red">*</font></label></td>
-				<td><div class="rowElem"><form:input path="serialNo" id="lovForm_serialNo" class="textboxMockup" /> <label class="error" for="name" generated="true" style="display: none; padding-left:10px"></label></div></td>
+				<td><div class="rowElem"><form:input path="serialNo" id="lovForm_serialNo" class="textboxMockup" maxlength="100"/> <label class="error" for="serialNo" generated="true" style="display: none; padding-left:10px"></label></div></td>
 			</tr>
 			<tr>
 				<td><label><fmt:message key="description" />:</label></td>
-				<td><div class="rowElem"><form:input path="description" id="lovForm_description" class="textboxMockup" /></div></td>
+				<td><div class="rowElem"><form:input path="description" id="lovForm_description" class="textboxMockup" maxlength="255" /></div></td>
 			</tr>
 			<tr>
 				<td><label><fmt:message key="warrantyDate"/>:</label></td>
@@ -624,6 +629,7 @@
 <c:url var="saveProductPopupURL" value="/product.html?do=savePopup" />
 <c:url var="findBrandURL" value="/brand.html?do=getBrandByType" />
 <c:url var="findModelURL" value="/model.html?do=getModel" />
+<c:url var="getCustomerByProductURL" value="/saleOrder.html?do=getCustomerByProduct" />
 
 <script type="text/javascript">
 
@@ -659,6 +665,17 @@ $(document).ready(function(){
 			email: "email",
 			tel: {require_from_group: [1,".telephone"]},
 			mobileTel: {require_from_group: [1,".telephone"]}
+		}
+	});
+	
+	$("#productForm").validate({
+		rules: {
+			serialNo: "required",
+			brandID: "required",
+			modelID: "required",
+			remark:{
+				maxlength: 1000
+			}
 		}
 	});
 	
@@ -943,7 +960,11 @@ $(document).ready(function(){
 				subdistrictID : $(this).val(),
 				ajax : 'true'
 			}, function(data) {
-				$("#lovForm_zipcode").html(data);
+				if(data == '0'){
+					$("#lovForm_zipcode").html("-");
+				}else{
+					$("#lovForm_zipcode").html(data);
+				}
 			});
 		}
 	);
@@ -1030,7 +1051,7 @@ $(document).ready(function(){
 			}, function(data){
 				var html = '';
 				var len = data.length;
-				html += '<option value="">-</option>';
+				html += '<option value="">All</option>';
 				if(len > 0){
 					for ( var i = 0; i < len; i++) {
 						html += '<option value="' + data[i].brandID + '">'
@@ -1071,7 +1092,7 @@ $(document).ready(function(){
 			}, function(data){
 				var html = '';
 				var len = data.length;
-				html += '<option value="">-</option>';
+				html += '<option value="">All</option>';
 				if(len > 0){
 					for ( var i = 0; i < len; i++) {
 						html += '<option value="' + data[i].modelID + '">'
@@ -1213,7 +1234,28 @@ $(document).ready(function(){
 		$("#div_shopCus_tel").html($("#lov_shopCustomer_tel").val());
 		$("#div_shopCus_contact").html($("#lov_shopCustomer_contact").val());
 		$("#div_shopCus_remark").html($("#lov_shopCustomer_remark").val());*/
-				
+		
+		// get customer who buy this product from sale order
+		$.getJSON('${getCustomerByProductURL}', {
+			productID : id,
+			ajax : 'true'
+		}, function(data) {
+			if(data != null){
+				var fullAddress = "";
+				if(data.address != ''){
+					fullAddress += data.address+' '+'<fmt:message key="subdistrict" />'+' '+data.subdistrict.name+' '+'<fmt:message key="district" />'+' '+data.district.name+' '+'<fmt:message key="province" />'+' '+data.province.name+' '+data.subdistrict.zipcode;;
+				}
+				// set data to customer
+				$("#custID").val(data.customerID);
+				$("#contactName").html(data.name);
+				$("#address").html(fullAddress);
+				$("#tel").html(data.tel);
+				$("#mobileTel").html(data.mobileTel);
+				$("#email").html(data.email);
+			}
+		});
+		
+		
 		productDialog.dialog( "destroy" );
 		// init lov for call again
 		initProductLov();

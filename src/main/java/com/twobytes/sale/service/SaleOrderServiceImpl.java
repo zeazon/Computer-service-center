@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.twobytes.master.dao.ProductDAO;
+import com.twobytes.master.service.ProductService;
+import com.twobytes.model.Customer;
 import com.twobytes.model.Product;
 import com.twobytes.model.SaleOrder;
 import com.twobytes.sale.dao.SaleOrderDAO;
@@ -21,10 +23,14 @@ public class SaleOrderServiceImpl implements SaleOrderService {
 	@Autowired
 	private ProductDAO productDAO;
 	
+	@Autowired
+	private ProductService productService;
+	
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public boolean save(SaleOrder saleOrder, Product product) throws Exception {
-		productDAO.save(product);
+//		productDAO.save(product);
+		productService.save(product);
 		saleOrder.setProduct(product);
 		return saleOrderDAO.save(saleOrder);
 	}
@@ -51,6 +57,18 @@ public class SaleOrderServiceImpl implements SaleOrderService {
 		}else{
 			return false;
 		}
+	}
+
+	@Override
+	@Transactional
+	public Customer getCustomerByProduct(String productID) {
+		Customer customer = null;
+		try{
+			customer = saleOrderDAO.getCustomerByProduct(productID);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return customer;
 	}
 
 }

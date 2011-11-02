@@ -14,13 +14,14 @@
 				<input type="hidden" name="mode" value="${mode}" />
 				<table width="100%">
 					<tr>
-						<td width="40%"><label><fmt:message key="productID" />:<font style="color:red">*</font></label></td>
+						<td width="40%"><label><fmt:message key="productID" />:</label></td>
 						<td>
 							<div class="rowElem">
-								<c:choose>
+								<form:input path="productID" class="textboxMockup" readonly="true" maxlength="20"/>
+								<%--c:choose>
 									<c:when test="${mode == 'add'}"><form:input path="productID" class="textboxMockup" maxlength="20" /></c:when>
 									<c:otherwise><form:input path="productID" class="textboxMockup" readonly="true" maxlength="20"/></c:otherwise>
-								</c:choose>
+								</c:choose--%>
 							</div>
 						</td>
 					</tr>
@@ -97,7 +98,6 @@ $(document).ready(function(){
 	$("#form").validate({
 		rules: {
 			serialNo: "required",
-			productID: "required",
 			brandID: "required",
 			modelID: "required",
 			remark:{

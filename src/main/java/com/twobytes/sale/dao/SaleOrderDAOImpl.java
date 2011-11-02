@@ -8,6 +8,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.twobytes.model.Customer;
 import com.twobytes.model.SaleOrder;
 
 @Repository
@@ -70,6 +71,21 @@ public class SaleOrderDAOImpl implements SaleOrderDAO{
 	public boolean delete(SaleOrder saleOrder) throws Exception {
 		sessionFactory.getCurrentSession().delete(saleOrder);
 		return true;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public Customer getCustomerByProduct(String productID) throws Exception {
+		StringBuilder sql = new StringBuilder();
+		sql.append("from SaleOrder as saleOrder where saleOrder.product.productID = :productID ");
+		
+		Query q = sessionFactory.getCurrentSession().createQuery(sql.toString());
+		q.setString("productID", productID);
+		
+		List<SaleOrder> result = q.list();
+		SaleOrder so = result.get(0);
+		Customer customer = so.getCustomer();
+		return customer;
 	}
 	
 }

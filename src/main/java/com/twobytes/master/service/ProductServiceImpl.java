@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.twobytes.master.dao.ProductDAO;
 import com.twobytes.model.Product;
+import com.twobytes.util.DocRunningUtil;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -16,10 +17,21 @@ public class ProductServiceImpl implements ProductService {
 	@Autowired
 	private ProductDAO productDAO;
 	
+	@Autowired
+	private DocRunningUtil docRunningUtil;
+	
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public boolean save(Product product) throws Exception {
-		return productDAO.save(product);
+	public String save(Product product) throws Exception {
+		if (product.getProductID() == null) {
+			String productID = docRunningUtil.genDoc("computer");
+			product.setProductID(productID);
+		}
+		if(productDAO.save(product)){
+			return product.getProductID();
+		}else{
+			return "false";
+		}
 	}
 
 	@Override

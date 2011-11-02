@@ -266,7 +266,7 @@ public class ProductController {
 			msg = this.messages.getMessage("msg.updateComplete", null, new Locale("th", "TH"));
 		}else{
 			// add
-			product.setProductID(form.getProductID());
+//			product.setProductID(form.getProductID());
 			
 			product.setCreatedBy(user.getEmployeeID());
 			product.setCreatedDate(now);
@@ -484,7 +484,7 @@ public class ProductController {
 		Date now = new Date();
 		Employee user = (Employee)request.getSession().getAttribute("UserLogin");
 		Product product = new Product();
-		product.setProductID(form.getProductID());
+//		product.setProductID(form.getProductID());
 		
 		product.setCreatedBy(user.getEmployeeID());
 		product.setCreatedDate(now);
@@ -523,16 +523,22 @@ public class ProductController {
 		product.setUpdatedBy(user.getEmployeeID());
 		product.setUpdatedDate(now);
 		
-		boolean canSave = false;
+//		boolean canSave = false;
+		String result = "";
 		try {
-			canSave = productService.save(product);
+			result = productService.save(product);
 		} catch (Exception e) {
 			e.printStackTrace();
-			response.setSuccess(canSave);
+			response.setSuccess(false);
 			response.setMessage(this.messages.getMessage("error.cannotSave", null, new Locale("th", "TH")));
 			return response;
 		}
-		response.setSuccess(canSave);
+		if(result.equals("false")){
+			response.setSuccess(false);
+			response.setMessage(this.messages.getMessage("error.cannotSave", null, new Locale("th", "TH")));
+			return response;
+		}
+		response.setSuccess(true);
 		response.setMessage(this.messages.getMessage("msg.addComplete", null, new Locale("th", "TH")));
 		return response;
 	}

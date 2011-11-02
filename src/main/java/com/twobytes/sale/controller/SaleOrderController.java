@@ -38,6 +38,7 @@ import com.twobytes.model.CustomerType;
 import com.twobytes.model.District;
 import com.twobytes.model.Employee;
 import com.twobytes.model.GridResponse;
+import com.twobytes.model.Model;
 import com.twobytes.model.Product;
 import com.twobytes.model.Province;
 import com.twobytes.model.SaleOrder;
@@ -204,7 +205,7 @@ public class SaleOrderController {
 		if (type.getBrands().size() > 0) {
 			brandList = type.getBrands();
 			Brand brand = brandList.get(0);
-//			form.setBrandID(brand.getBrandID());
+			form.setBrandID(brand.getBrandID());
 		} else {
 			Brand blankBrand = new Brand();
 			blankBrand.setBrandID(null);
@@ -212,8 +213,23 @@ public class SaleOrderController {
 			brandList.add(blankBrand);
 		}
 
+		List<Model> modelList = new ArrayList<Model>();
+		if (type.getBrands().size() > 0) {
+			brandList = type.getBrands();
+			form.setBrandID(form.getBrandID());
+			
+			Brand brand = brandList.get(0);
+			modelList = modelService.getModelByTypeAndBrand(type.getTypeID(), brand.getBrandID());
+		} else {
+			Brand blankBrand = new Brand();
+			blankBrand.setBrandID(null);
+			blankBrand.setName("");
+			brandList.add(blankBrand);
+		}
+		
 		model.addAttribute("typeList", typeList);
 		model.addAttribute("brandList", brandList);
+		model.addAttribute("modelList", modelList);
 		
 		CustomerForm custForm = new CustomerForm();
 		custForm.setProvinceID(7);
@@ -294,7 +310,7 @@ public class SaleOrderController {
 		so.setUpdatedDate(now);
 		
 		Product product = new Product();
-		product.setProductID(form.getProductID());
+//		product.setProductID(form.getProductID());
 		try {
 			product.setType(typeService.selectByID(form.getTypeID()));
 		} catch (Exception e1) {
@@ -414,6 +430,9 @@ public class SaleOrderController {
 		SaleOrderSearchForm searchForm = new SaleOrderSearchForm();
 		model.addAttribute("searchForm", searchForm);
 
+		List<Employee> empList = employeeService.getAll();
+		model.addAttribute("employeeList", empList);
+		
 		return VIEWNAME_SEARCH;
 	}
 	
@@ -430,5 +449,12 @@ public class SaleOrderController {
 			response.setMessage(this.messages.getMessage("error.cannotDelete", null, new Locale("th", "TH")));
 		}
 		return response;
+	}
+	
+	@RequestMapping(value="/saleOrder", params="do=getCustomerByProduct")
+	public @ResponseBody Customer getCustomerByProduct(HttpServletRequest request){
+		Customer customer = null;
+		customer = saleOrderService.getCustomerByProduct(request.getParameter("productID"));
+		return customer;
 	}
 }

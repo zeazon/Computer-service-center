@@ -56,7 +56,12 @@
 								
 								<br><br>
 								<div style="float:left; margin:5px 0 0 0px;"><fmt:message key="zipcode" />:</div>
-								<div id="zipcode" style="float:left; padding:5px; 0 0 5px">${zipcode}</div>
+								<div id="zipcode" style="float:left; padding:5px; 0 0 5px">
+									<c:choose>
+										<c:when test='${zipcode == "0"}'>-</c:when>
+										<c:otherwise>${zipcode}</c:otherwise>
+									</c:choose>
+								</div>
 							</div>
 						</td>
 					</tr>
@@ -173,7 +178,11 @@ $(document).ready(function(){
 				subdistrictID : $(this).val(),
 				ajax : 'true'
 			}, function(data) {
-				$("#zipcode").html(data);
+				if(data == '0'){
+					$("#zipcode").html("-");
+				}else{
+					$("#zipcode").html(data);
+				}
 			});
 		}
 	);

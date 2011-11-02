@@ -64,15 +64,16 @@
 						<td colspan="7"><div class="rowElem"><span id="address">${fullAddr}&nbsp;</span></div></td>
 					</tr>
 					<tr>
-						<td><label><fmt:message key="productID" />:<font color="red">*</font></label></td>
+						<td><label><fmt:message key="productID" />:</label></td>
 						<td colspan="7">
 							<div class="rowElem">
-								<c:if test="${mode == 'add'}">
+								<form:input path="productID" class="textboxMockup" style="float:left" id="productID" readonly="true" size="18" maxlength="20"/>
+								<%--c:if test="${mode == 'add'}">
 									<form:input path="productID" class="textboxMockup" style="float:left" id="productID" size="18" maxlength="20"/> <!-- input type="button" id="productLov" value="..." > <label class="error" for="productID" generated="true" style="display: none; float:left; padding-left:10px"></label-->
 								</c:if>
 								<c:if test="${mode == 'edit'}">
 									<form:input path="productID" class="textboxMockup" style="float:left" id="productID" readonly="true" size="18" maxlength="20"/>
-								</c:if>
+								</c:if--%>
 							</div>
 						</td>
 					</tr>
@@ -216,7 +217,12 @@
 					
 						<br><br>
 						<div style="float:left; margin:5px 0 0 0px;"><fmt:message key="zipcode" />:</div>
-						<div id="lovForm_zipcode" style="float:left; padding:5px; 0 0 5px">${zipcode}</div>	
+						<div id="lovForm_zipcode" style="float:left; padding:5px; 0 0 5px">
+							<c:choose>
+								<c:when test="${zipcode == '0'}">-</c:when>
+								<c:otherwise>${zipcode}</c:otherwise>
+							</c:choose>
+						</div>	
 						<%--div style="float:left; margin:5px 0 0 15px;">zipcode:</div> <input type="text" size="5" readonly="readonly" value="22000"/--%>
 					</div>
 				</td>
@@ -288,7 +294,7 @@
 									<select id="lovModel">
 										<option value="">-</option>
 											<c:forEach var="model" items="${modelList}">
-												<c:if test="${fn:length(model.modelID) > 0}">
+												<c:if test="${model.modelID != null}">
 													<option value="${model.modelID}">${model.name}</option>
 												</c:if>
 											</c:forEach>
@@ -417,8 +423,7 @@ $(document).ready(function(){
 	
 	$("#form").validate({
 		rules: {
-			customerID: "required",
-			productID: "required"
+			customerID: "required"
 		}
 	});
 	
@@ -433,7 +438,6 @@ $(document).ready(function(){
 	$("#productForm").validate({
 		rules: {
 			serialNo: "required",
-			productID: "required",
 			brandID: "required",
 			modelID: "required",
 			remark:{
@@ -693,7 +697,11 @@ $(document).ready(function(){
 				subdistrictID : $(this).val(),
 				ajax : 'true'
 			}, function(data) {
-				$("#lovForm_zipcode").html(data);
+				if(data == '0'){
+					$("#lovForm_zipcode").html("-");
+				}else{
+					$("#lovForm_zipcode").html(data);	
+				}
 			});
 		}
 	);
@@ -713,7 +721,7 @@ $(document).ready(function(){
 					}
 					html += '</option>';
 				}else{
-					html += '<option value=""></option>';
+					html += '<option value="1">-</option>';
 				}
 				$('#brand').html(html);
 				
@@ -752,7 +760,7 @@ $(document).ready(function(){
 					}
 					html += '</option>';
 				}else{
-					html += '<option value=""></option>';
+					html += '<option value="">-</option>';
 				}
 				
 				$('#model').html(html);

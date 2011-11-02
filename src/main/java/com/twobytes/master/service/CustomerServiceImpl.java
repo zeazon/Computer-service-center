@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.twobytes.master.dao.CustomerDAO;
 import com.twobytes.model.Customer;
+import com.twobytes.util.DocRunningUtil;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -15,10 +16,21 @@ public class CustomerServiceImpl implements CustomerService {
 	@Autowired
 	private CustomerDAO customerDAO;
 	
+	@Autowired
+	private DocRunningUtil docRunningUtil;
+	
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public boolean save(Customer customer) throws Exception{
-		return customerDAO.save(customer);
+	public String save(Customer customer) throws Exception{
+		if (customer.getCustomerID() == null) {
+			String customerID = docRunningUtil.genDoc("customer");
+			customer.setCustomerID(customerID);
+		}
+		if(customerDAO.save(customer)){
+			return customer.getCustomerID();
+		}else{
+			return "false";
+		}
 	}
 
 	@Override

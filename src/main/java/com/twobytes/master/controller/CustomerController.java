@@ -200,7 +200,7 @@ public class CustomerController {
 			msg = this.messages.getMessage("msg.updateComplete", null, new Locale("th", "TH"));
 		}else{
 			// add
-			customer.setCustomerID(docRunningUtil.genDoc("customer"));
+//			customer.setCustomerID(docRunningUtil.genDoc("customer"));
 			customer.setCreatedBy(user.getEmployeeID());
 			customer.setCreatedDate(now);
 			msg = this.messages.getMessage("msg.addComplete", null, new Locale("th", "TH"));
@@ -221,9 +221,10 @@ public class CustomerController {
 		
 		customer.setUpdatedBy(user.getEmployeeID());
 		customer.setUpdatedDate(now);
-		boolean canSave;
+//		boolean canSave;
+		String result;
 		try{
-			canSave = customerService.save(customer);
+			result = customerService.save(customer);
 		}catch(Exception e){
 			e.printStackTrace();
 			model.addAttribute("errMsg", e.getMessage());
@@ -241,7 +242,7 @@ public class CustomerController {
 			model.addAttribute("zipcode", sd1.getZipcode());
 			return VIEWNAME_FORM;
 		}
-		if(!canSave){
+		if (result.equals("false")) {
 			model.addAttribute("errMsg", this.messages.getMessage("error.cannotSave", null, new Locale("th", "TH")));
 			List<Province> provinceList = provinceService.getAll();
 			List<District> districtList = districtService.getByProvince(form.getProvinceID());
@@ -347,6 +348,9 @@ public class CustomerController {
 //				form.setAddress(new String(form.getAddress().getBytes("iso-8859-1"), "tis620"));
 				form.setAddress(new String(form.getAddress().getBytes("iso-8859-1"), "UTF-8"));
 			}
+			if(null != form.getTel()){
+				form.setTel(new String(form.getTel().getBytes("iso-8859-1"), "UTF-8"));
+			}
 		}catch(UnsupportedEncodingException e){
 			e.printStackTrace();
 		}
@@ -354,7 +358,7 @@ public class CustomerController {
 		Employee user = (Employee)request.getSession().getAttribute("UserLogin");
 		Customer customer = new Customer();
 
-		customer.setCustomerID(docRunningUtil.genDoc("customer"));
+//		customer.setCustomerID(docRunningUtil.genDoc("customer"));
 		CustomerType customerType = customerTypeService.selectByID(form.getCustomerTypeID());
 		customer.setCustomerType(customerType);
 		customer.setName(form.getName());
@@ -373,9 +377,10 @@ public class CustomerController {
 		customer.setCreatedDate(now);
 		customer.setUpdatedBy(user.getEmployeeID());
 		customer.setUpdatedDate(now);
-		boolean canSave = false;
+//		boolean canSave = false;
+		String result = "";
 		try{
-			canSave = customerService.save(customer);
+			result = customerService.save(customer);
 		}catch(Exception e){
 			e.printStackTrace();
 //			model.addAttribute("errMsg", e.getMessage());
@@ -388,11 +393,14 @@ public class CustomerController {
 //			model.addAttribute("subdistrictList", subdistrictList);
 //			return VIEWNAME_FORM;
 //			return canSave;
-			response.setSuccess(canSave);
+			response.setSuccess(false);
 			response.setMessage(this.messages.getMessage("error.cannotSave", null, new Locale("th", "TH")));
 			return response;
 		}
-		//if(!canSave){
+		if (result.equals("false")) {
+			response.setSuccess(false);
+			response.setMessage(this.messages.getMessage("error.cannotSave", null, new Locale("th", "TH")));
+			return response;
 //			model.addAttribute("errMsg", this.messages.getMessage("error.cannotSave", null, new Locale("th", "TH")));
 //			List<Province> provinceList = provinceService.getAll();
 //			List<District> districtList = districtService.getByProvince(form.getProvinceID());
@@ -403,13 +411,13 @@ public class CustomerController {
 //			model.addAttribute("subdistrictList", subdistrictList);
 //			return VIEWNAME_FORM;
 		//	return false;
-		//}
+		}
 //		model.addAttribute("msg", msg);
 //		CustomerSearchForm searchForm = new CustomerSearchForm();
 //		model.addAttribute("searchForm", searchForm);
 //		return VIEWNAME_SEARCH;
 //		return canSave;
-		response.setSuccess(canSave);
+		response.setSuccess(true);
 		response.setMessage(this.messages.getMessage("msg.addComplete", null, new Locale("th", "TH")));
 		return response;
 	}
