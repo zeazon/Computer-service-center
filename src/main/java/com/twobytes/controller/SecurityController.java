@@ -86,6 +86,7 @@ public class SecurityController {
 		}else{
 			// Can login
 			request.getSession().setAttribute("UserLogin", emp);
+			request.getSession().setAttribute("UserName", emp.getLogin());
 			StringBuffer menuStr = new StringBuffer();
 			Role role = emp.getRoleID();
 			try{
