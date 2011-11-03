@@ -118,11 +118,15 @@ $(document).ready(function(){
 				//var html = '<option value="">District</option>';
 				var html = '';
 				var len = data.length;
-				for ( var i = 0; i < len; i++) {
-					html += '<option value="' + data[i].districtID + '">'
-							+ data[i].name + '</option>';
+				if(len > 0){
+					for ( var i = 0; i < len; i++) {
+						html += '<option value="' + data[i].districtID + '">'
+								+ data[i].name + '</option>';
+					}
+					html += '</option>';
+				}else{
+					html += '<option value=""></option>';
 				}
-				html += '</option>';
  
 				$('#district').html(html);
 				
@@ -150,11 +154,15 @@ $(document).ready(function(){
 			}, function(data) {
 				var html = '';
 				var len = data.length;
-				for ( var i = 0; i < len; i++){
-					html += '<option value="' + data[i].subdistrictID + '">'
-							+ data[i].name + '</option>';
+				if(len > 0){
+					for ( var i = 0; i < len; i++){
+						html += '<option value="' + data[i].subdistrictID + '">'
+								+ data[i].name + '</option>';
+					}
+					html += '</option>';
+				}else{
+					html += '<option value=""></option>';
 				}
-				html += '</option>';
 				
 				$('#subdistrict').html(html);
 				
