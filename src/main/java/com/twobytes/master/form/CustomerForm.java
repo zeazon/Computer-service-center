@@ -8,6 +8,7 @@ public class CustomerForm {
 	private Integer subdistrictID;
 	private Integer districtID;
 	private Integer provinceID;
+	private String zipcode;
 	private String tel;
 	private String mobileTel;
 	private String email;
@@ -71,6 +72,12 @@ public class CustomerForm {
 	}
 	public void setCustomerTypeID(String customerTypeID) {
 		this.customerTypeID = customerTypeID;
+	}
+	public String getZipcode() {
+		return zipcode;
+	}
+	public void setZipcode(String zipcode) {
+		this.zipcode = zipcode;
 	}
 	
 }

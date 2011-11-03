@@ -217,13 +217,13 @@
 					
 						<br><br>
 						<div style="float:left; margin:5px 0 0 0px;"><fmt:message key="zipcode" />:</div>
-						<div id="lovForm_zipcode" style="float:left; padding:5px; 0 0 5px">
+						<%--div id="lovForm_zipcode" style="float:left; padding:5px; 0 0 5px">
 							<c:choose>
 								<c:when test="${zipcode == '0'}">-</c:when>
 								<c:otherwise>${zipcode}</c:otherwise>
 							</c:choose>
-						</div>	
-						<%--div style="float:left; margin:5px 0 0 15px;">zipcode:</div> <input type="text" size="5" readonly="readonly" value="22000"/--%>
+						</div--%>
+						<form:input path="zipcode" id="lovForm_zipcode" class="textboxMockup" size="5" maxlength="5"/>
 					</div>
 				</td>
 			</tr>
@@ -431,7 +431,8 @@ $(document).ready(function(){
 		rules: {
 			email: "email",
 			tel: {require_from_group: [1,".telephone"]},
-			mobileTel: {require_from_group: [1,".telephone"]}
+			mobileTel: {require_from_group: [1,".telephone"]},
+			zipcode: {checkZipcode:true}
 		}
 	});
 	
@@ -687,22 +688,31 @@ $(document).ready(function(){
 				sels.jqTransSelect();
 				// bug because ref to color id, it should be td id
 				//$("#color div.jqTransformSelectWrapper").attr("style", sty);
+				
+				// trigger event change of subdistrict select list
+				$("#subdistrict").change();
 			});
 		}
 	);
 
 	$("#subdistrict").change(
 		function(){
-			$.getJSON('${findZipcodeBySubdistrictURL}', {
-				subdistrictID : $(this).val(),
-				ajax : 'true'
-			}, function(data) {
-				if(data == '0'){
-					$("#lovForm_zipcode").html("-");
-				}else{
-					$("#lovForm_zipcode").html(data);	
-				}
-			});
+			if($(this).val() != null){
+				$.getJSON('${findZipcodeBySubdistrictURL}', {
+					subdistrictID : $(this).val(),
+					ajax : 'true'
+				}, function(data) {
+					if(data == '0'){
+						//$("#lovForm_zipcode").html("-");
+						$("#lovForm_zipcode").val("-");
+					}else{
+						//$("#lovForm_zipcode").html(data);
+						$("#lovForm_zipcode").val(data);
+					}
+				});
+			}else{
+				$("#lovForm_zipcode").val("-");
+			}
 		}
 	);
 	
@@ -1078,5 +1088,9 @@ jQuery.validator.addMethod("require_from_group", function(value, element, option
 	return validOrNot;
 	// {0} below is the 0th item in the options field
 }, jQuery.format("<div style='padding-left:10px'>Please fill out at least {0} of these fields.</div>"));
+
+jQuery.validator.addMethod("checkZipcode", function(value, element, param) {
+	return value.match(new RegExp("^[0-9\-]+$"));
+},"<fmt:message key='error.checkZipcode' />");
 
 </script>

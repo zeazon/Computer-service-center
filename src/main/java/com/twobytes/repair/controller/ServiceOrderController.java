@@ -386,14 +386,14 @@ public class ServiceOrderController {
 		// set subdistrict from Muang district
 		List<Subdistrict> subdistrictList = sdService.getByDistrict(160);
 
-		Subdistrict sd = subdistrictList.get(0);
+		//Subdistrict sd = subdistrictList.get(0);
 		
 		List<CustomerType> customerTypeList = customerTypeService.getAll();
 		
 		model.addAttribute("provinceList", provinceList);
 		model.addAttribute("districtList", districtList);
 		model.addAttribute("subdistrictList", subdistrictList);
-		model.addAttribute("zipcode", sd.getZipcode());
+		//model.addAttribute("zipcode", sd.getZipcode());
 		model.addAttribute("customerTypeList", customerTypeList);
 
 		CustomerForm custForm = new CustomerForm();
@@ -402,6 +402,7 @@ public class ServiceOrderController {
 		custForm.setDistrictID(160);
 		// set subdistrict from Muang district
 		custForm.setSubdistrictID(((Subdistrict)subdistrictList.get(0)).getSubdistrictID());
+		custForm.setZipcode(((Subdistrict)subdistrictList.get(0)).getZipcode().toString());
 		model.addAttribute("customerForm", custForm);
 
 		// get form for print document
@@ -882,6 +883,12 @@ public class ServiceOrderController {
 		custForm.setProvinceID(7);
 		// set default district to Muang
 		custForm.setDistrictID(160);
+		
+		List<Subdistrict> subdistrictList = sdService.getByDistrict(160);
+		// set subdistrict from Muang district
+		custForm.setSubdistrictID(((Subdistrict)subdistrictList.get(0)).getSubdistrictID());
+		custForm.setZipcode(((Subdistrict)subdistrictList.get(0)).getZipcode().toString());
+		custForm.setZipcode(((Subdistrict)subdistrictList.get(0)).getZipcode().toString());
 		model.addAttribute("customerForm", custForm);
 
 		ServiceOrderDocForm docForm = setDocPrintForm(so);
@@ -1054,7 +1061,11 @@ public class ServiceOrderController {
 		docForm.setSubdistrict(so.getCustomer().getSubdistrict().getName());
 		docForm.setDistrict(so.getCustomer().getDistrict().getName());
 		docForm.setProvince(so.getCustomer().getProvince().getName());
-		docForm.setZipcode(so.getCustomer().getSubdistrict().getZipcode().toString());
+		try{
+			docForm.setZipcode(so.getCustomer().getZipcode().toString());
+		}catch(Exception e){
+			docForm.setZipcode("");
+		}
 		docForm.setDeliveryCustomer(so.getDeliveryCustomer());
 		docForm.setDeliveryEmail(so.getDeliveryEmail());
 		docForm.setDeliveryMobileTel(so.getDeliveryMobileTel());

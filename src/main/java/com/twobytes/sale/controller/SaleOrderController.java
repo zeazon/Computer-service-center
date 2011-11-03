@@ -244,12 +244,15 @@ public class SaleOrderController {
 		
 		Subdistrict sd = subdistrictList.get(0);
 		
+		custForm.setSubdistrictID(sd.getSubdistrictID());
+		custForm.setZipcode(sd.getZipcode().toString());
+		
 		List<CustomerType> customerTypeList = customerTypeService.getAll();
 		
 		model.addAttribute("provinceList", provinceList);
 		model.addAttribute("districtList", districtList);
 		model.addAttribute("subdistrictList", subdistrictList);
-		model.addAttribute("zipcode", sd.getZipcode());
+//		model.addAttribute("zipcode", sd.getZipcode());
 		model.addAttribute("customerTypeList", customerTypeList);
 		
 		List<Employee> empList = employeeService.getAll();

@@ -56,12 +56,13 @@
 								
 								<br><br>
 								<div style="float:left; margin:5px 0 0 0px;"><fmt:message key="zipcode" />:</div>
-								<div id="zipcode" style="float:left; padding:5px; 0 0 5px">
+								<%--div id="zipcode" style="float:left; padding:5px; 0 0 5px">
 									<c:choose>
-										<c:when test='${zipcode == "0"}'>-</c:when>
+										<c:when test='${zipcode == "0"}'>- </c:when>
 										<c:otherwise>${zipcode}</c:otherwise>
 									</c:choose>
-								</div>
+								</div--%>
+								<form:input path="zipcode" id="zipcode" class="textboxMockup" size="5" maxlength="5"/>
 							</div>
 						</td>
 					</tr>
@@ -98,7 +99,8 @@ $(document).ready(function(){
 			name: "required",
 			email: "email",
 			tel: {require_from_group: [1,".telephone"]},
-			mobileTel: {require_from_group: [1,".telephone"]}
+			mobileTel: {require_from_group: [1,".telephone"]},
+			zipcode: {checkZipcode:true}
 		}
 	});
 	
@@ -174,16 +176,23 @@ $(document).ready(function(){
 	
 	$("#subdistrict").change(
 		function(){
-			$.getJSON('${findZipcodeBySubdistrictURL}', {
-				subdistrictID : $(this).val(),
-				ajax : 'true'
-			}, function(data) {
-				if(data == '0'){
-					$("#zipcode").html("-");
-				}else{
-					$("#zipcode").html(data);
-				}
-			});
+			if($(this).val() != null){
+				$.getJSON('${findZipcodeBySubdistrictURL}', {
+					subdistrictID : $(this).val(),
+					ajax : 'true'
+				}, function(data) {
+					if(data == '0'){
+						//$("#zipcode").html("-");
+						$("#zipcode").val("-");
+					}else{
+						//$("#zipcode").html(data);
+						$("#zipcode").val(data);
+					}
+				});
+			}else{
+				//$("#zipcode").html("-");
+				$("#zipcode").val("-");
+			}
 		}
 	);
 	
@@ -226,6 +235,9 @@ $(document).ready(function(){
 		// {0} below is the 0th item in the options field
 	}, jQuery.format("<div style='padding-left:10px'>Please fill out at least {0} of these fields.</div>"));
 	
+	jQuery.validator.addMethod("checkZipcode", function(value, element, param) {
+		return value.match(new RegExp("^[0-9\-]+$"));
+	},"<fmt:message key='error.checkZipcode' />");
 });
 
 </script>

@@ -114,7 +114,11 @@ public class CustomerController {
 				gridData.setName(customer.getName());
 				gridData.setTel(customer.getTel());
 				gridData.setMobileTel(customer.getMobileTel());
-				gridData.setAddress(customer.getAddress()+" "+this.messages.getMessage("subdistrict_abbr", null, new Locale("th", "TH"))+" "+customer.getSubdistrict().getName()+" "+this.messages.getMessage("district_abbr", null, new Locale("th", "TH"))+" "+customer.getDistrict().getName()+" "+this.messages.getMessage("province_abbr", null, new Locale("th", "TH"))+" "+customer.getProvince().getName()+" "+customer.getSubdistrict().getZipcode());
+				if(customer.getZipcode() != null){
+					gridData.setAddress(customer.getAddress()+" "+this.messages.getMessage("subdistrict_abbr", null, new Locale("th", "TH"))+" "+customer.getSubdistrict().getName()+" "+this.messages.getMessage("district_abbr", null, new Locale("th", "TH"))+" "+customer.getDistrict().getName()+" "+this.messages.getMessage("province_abbr", null, new Locale("th", "TH"))+" "+customer.getProvince().getName()+" "+customer.getZipcode());
+				}else{
+					gridData.setAddress(customer.getAddress()+" "+this.messages.getMessage("subdistrict_abbr", null, new Locale("th", "TH"))+" "+customer.getSubdistrict().getName()+" "+this.messages.getMessage("district_abbr", null, new Locale("th", "TH"))+" "+customer.getDistrict().getName()+" "+this.messages.getMessage("province_abbr", null, new Locale("th", "TH"))+" "+customer.getProvince().getName());
+				}
 				gridData.setEmail(customer.getEmail());
 				
 				rowsList.add(gridData);
@@ -153,13 +157,14 @@ public class CustomerController {
 		List<Subdistrict> subdistrictList = sdService.getByDistrict(160);
 		Subdistrict sd = (Subdistrict)subdistrictList.get(0);
 		form.setSubdistrictID(sd.getSubdistrictID());
+		form.setZipcode(sd.getZipcode().toString());
 		
 		List<CustomerType> customerTypeList = customerTypeService.getAll();
 		
 		model.addAttribute("provinceList", provinceList);
 		model.addAttribute("districtList", districtList);
 		model.addAttribute("subdistrictList", subdistrictList);
-		model.addAttribute("zipcode", sd.getZipcode());
+		//model.addAttribute("zipcode", sd.getZipcode());
 		model.addAttribute("customerTypeList", customerTypeList);
 		return VIEWNAME_FORM;
 	}
@@ -215,6 +220,17 @@ public class CustomerController {
 		customer.setSubdistrict(sd);
 		customer.setDistrict(district);
 		customer.setProvince(province);
+		try{
+			if(form.getZipcode() != null && form.getZipcode() != ""){
+				if(form.getZipcode() == "-"){
+					customer.setZipcode(0);
+				}else{
+					customer.setZipcode(Integer.parseInt(form.getZipcode()));
+				}
+			}
+		}catch(Exception e){
+			customer.setZipcode(0);
+		}
 		customer.setTel(form.getTel());
 		customer.setMobileTel(form.getMobileTel());
 		customer.setEmail(form.getEmail());
@@ -233,13 +249,13 @@ public class CustomerController {
 			List<Subdistrict> subdistrictList = sdService.getByDistrict(form.getDistrictID());
 			List<CustomerType> customerTypeList = customerTypeService.getAll();
 			
-			Subdistrict sd1 = (Subdistrict) sdService.selectByID(form.getSubdistrictID());
+			//Subdistrict sd1 = (Subdistrict) sdService.selectByID(form.getSubdistrictID());
 			
 			model.addAttribute("provinceList", provinceList);
 			model.addAttribute("districtList", districtList);
 			model.addAttribute("subdistrictList", subdistrictList);
 			model.addAttribute("customerTypeList", customerTypeList);
-			model.addAttribute("zipcode", sd1.getZipcode());
+			//model.addAttribute("zipcode", sd1.getZipcode());
 			return VIEWNAME_FORM;
 		}
 		if (result.equals("false")) {
@@ -248,12 +264,12 @@ public class CustomerController {
 			List<District> districtList = districtService.getByProvince(form.getProvinceID());
 			List<Subdistrict> subdistrictList = sdService.getByDistrict(form.getDistrictID());
 
-			Subdistrict sd1 = (Subdistrict) sdService.selectByID(form.getSubdistrictID());
+			//Subdistrict sd1 = (Subdistrict) sdService.selectByID(form.getSubdistrictID());
 			
 			model.addAttribute("provinceList", provinceList);
 			model.addAttribute("districtList", districtList);
 			model.addAttribute("subdistrictList", subdistrictList);
-			model.addAttribute("zipcode", sd1.getZipcode());
+			//model.addAttribute("zipcode", sd1.getZipcode());
 			return VIEWNAME_FORM;
 		}
 		model.addAttribute("msg", msg);
@@ -289,6 +305,13 @@ public class CustomerController {
 		form.setSubdistrictID(customer.getSubdistrict().getSubdistrictID());
 		form.setDistrictID(customer.getDistrict().getDistrictID());
 		form.setProvinceID(customer.getProvince().getProvinceID());
+		if(customer.getZipcode() != null){
+			if(customer.getZipcode() == 0){
+				form.setZipcode("-");
+			}else{
+				form.setZipcode(customer.getZipcode().toString());
+			}
+		}
 		form.setEmail(customer.getEmail());
 		
 		List<Province> provinceList = provinceService.getAll();
@@ -369,6 +392,17 @@ public class CustomerController {
 		customer.setSubdistrict(sd);
 		customer.setDistrict(district);
 		customer.setProvince(province);
+		try{
+			if(form.getZipcode() != null && form.getZipcode() != ""){
+				if(form.getZipcode() == "-"){
+					customer.setZipcode(0);
+				}else{
+					customer.setZipcode(Integer.parseInt(form.getZipcode()));
+				}
+			}
+		}catch(Exception e){
+			customer.setZipcode(0);
+		}
 		customer.setTel(form.getTel());
 		customer.setMobileTel(form.getMobileTel());
 		customer.setEmail(form.getEmail());

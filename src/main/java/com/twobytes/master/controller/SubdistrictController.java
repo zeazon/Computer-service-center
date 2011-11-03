@@ -32,8 +32,10 @@ public class SubdistrictController {
 	}
 	
 	@RequestMapping(value = "/findZipcode", method = RequestMethod.GET)
-	public @ResponseBody Integer findZipcode(@RequestParam(required = true) Integer subdistrictID){
-		Subdistrict sd = sdService.selectByID(subdistrictID);
-		return sd.getZipcode();
+	public @ResponseBody Integer findZipcode(@RequestParam Integer subdistrictID){
+		if(subdistrictID != null){
+			Subdistrict sd = sdService.selectByID(subdistrictID);
+			return sd.getZipcode();
+		}else return new Integer(0);
 	}
 }

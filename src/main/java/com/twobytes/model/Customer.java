@@ -22,6 +22,7 @@ public class Customer extends BaseColumn implements Serializable {
 	private Subdistrict subdistrict;
 	private District district;
 	private Province province;
+	private Integer zipcode;
 	private String tel;
 	private String mobileTel;
 	private String email;
@@ -94,6 +95,15 @@ public class Customer extends BaseColumn implements Serializable {
 		this.province = province;
 	}
 	
+	@Column(name="zipcode")
+	public Integer getZipcode() {
+		return zipcode;
+	}
+
+	public void setZipcode(Integer zipcode) {
+		this.zipcode = zipcode;
+	}
+
 	@Column(name="tel")
 	public String getTel() {
 		return tel;
