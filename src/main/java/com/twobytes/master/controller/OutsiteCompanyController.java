@@ -137,11 +137,13 @@ public class OutsiteCompanyController {
 		List<Subdistrict> subdistrictList = sdService.getByDistrict(160);
 				
 		Subdistrict sd = subdistrictList.get(0);
+		form.setSubdistrictID(sd.getSubdistrictID());
+		form.setZipcode(sd.getZipcode().toString());
 		
 		model.addAttribute("provinceList", provinceList);
 		model.addAttribute("districtList", districtList);
 		model.addAttribute("subdistrictList", subdistrictList);
-		model.addAttribute("zipcode", sd.getZipcode());
+//		model.addAttribute("zipcode", sd.getZipcode());
 		return VIEWNAME_FORM;
 	}
 	
@@ -178,6 +180,17 @@ public class OutsiteCompanyController {
 		oc.setSubdistrict(sd);
 		oc.setDistrict(district);
 		oc.setProvince(province);
+		try{
+			if(form.getZipcode() != null && form.getZipcode() != ""){
+				if(form.getZipcode() == "-"){
+					oc.setZipcode(0);
+				}else{
+					oc.setZipcode(Integer.parseInt(form.getZipcode()));
+				}
+			}
+		}catch(Exception e){
+			oc.setZipcode(0);
+		}
 		
 		oc.setUpdatedBy(user.getEmployeeID());
 		oc.setUpdatedDate(now);
@@ -238,6 +251,13 @@ public class OutsiteCompanyController {
 		form.setSubdistrictID(oc.getSubdistrict().getSubdistrictID());
 		form.setDistrictID(oc.getDistrict().getDistrictID());
 		form.setProvinceID(oc.getProvince().getProvinceID());
+		if(oc.getZipcode() != null){
+			if(oc.getZipcode() == 0){
+				form.setZipcode("-");
+			}else{
+				form.setZipcode(oc.getZipcode().toString());
+			}
+		}
 		
 		List<Province> provinceList = provinceService.getAll();
 		List<District> districtList = districtService.getByProvince(form.getProvinceID());

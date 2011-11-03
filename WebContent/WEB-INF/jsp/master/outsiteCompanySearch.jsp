@@ -132,7 +132,7 @@
 			                var new_id = null;
 							return [result.success, errors, new_id];
 						}, 
-						url: 'brand.html?do=delete&brandID='+gr}); 
+						url: 'outsiteCompany.html?do=delete&ocID='+gr}); 
 				} else { 
 					jQuery("#dialog").text('<fmt:message key='msg.pleaseSelectRow' />');
 					jQuery("#dialog").dialog( 

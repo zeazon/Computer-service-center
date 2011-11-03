@@ -38,7 +38,8 @@
 								
 								<br><br>
 								<div style="float:left; margin:5px 0 0 0px;"><fmt:message key="zipcode" />:</div>
-								<div id="zipcode" style="float:left; padding:5px; 0 0 5px">${zipcode}</div>
+								<%--div id="zipcode" style="float:left; padding:5px; 0 0 5px">${zipcode}</div--%>
+								<form:input path="zipcode" id="zipcode" class="textboxMockup" size="5" maxlength="5"/>
 							</div>
 						</td>
 					</tr>
@@ -60,7 +61,8 @@
 $(document).ready(function(){
 	$("#form").validate({
 		rules: {
-			name: "required"
+			name: "required",
+			zipcode: {checkZipcode:true}
 		}
 	});
 	
@@ -127,21 +129,35 @@ $(document).ready(function(){
 				$par.parent().replaceWith($par);
 				sels.jqTransSelect();
 				$("#color div.jqTransformSelectWrapper").attr("style", sty);
+				
+				// trigger event change of subdistrict select list
+				$("#subdistrict").change();
 			});
 		}
 	);
 	
 	$("#subdistrict").change(
 		function(){
-			$.getJSON('${findZipcodeBySubdistrictURL}', {
-				subdistrictID : $(this).val(),
-				ajax : 'true'
-			}, function(data) {
-				$("#zipcode").html(data);
-			});
+			if($(this).val() != null){
+				$.getJSON('${findZipcodeBySubdistrictURL}', {
+					subdistrictID : $(this).val(),
+					ajax : 'true'
+				}, function(data) {
+					if(data == '0'){
+						$("#zipcode").val("-");
+					}else{
+						$("#zipcode").val(data);
+					}
+				});
+			}else{
+				$("#zipcode").val("-");
+			}
 		}
 	);
 	
+	jQuery.validator.addMethod("checkZipcode", function(value, element, param) {
+		return value.match(new RegExp("^[0-9\-]+$"));
+	},"<fmt:message key='error.checkZipcode' />");
 });
 
 </script>

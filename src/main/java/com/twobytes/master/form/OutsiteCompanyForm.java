@@ -7,6 +7,7 @@ public class OutsiteCompanyForm {
 	private Integer subdistrictID;
 	private Integer districtID;
 	private Integer provinceID;
+	private String zipcode;
 	
 	public Integer getOcID() {
 		return ocID;
@@ -43,6 +44,12 @@ public class OutsiteCompanyForm {
 	}
 	public void setProvinceID(Integer provinceID) {
 		this.provinceID = provinceID;
+	}
+	public String getZipcode() {
+		return zipcode;
+	}
+	public void setZipcode(String zipcode) {
+		this.zipcode = zipcode;
 	}
 	
 }
