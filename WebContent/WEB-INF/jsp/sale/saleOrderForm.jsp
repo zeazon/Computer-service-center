@@ -111,7 +111,7 @@
 					</tr>
 					<tr>
 						<td><label><fmt:message key="serialNo" />:<font style="color:red">*</font></label></td>
-						<td colspan="7"><div class="rowElem"><form:input type="text" path="serialNo" class="textboxMockup" /> <label class="error" for="name" generated="true" style="display: none; padding-left:10px"></label></div></td>
+						<td colspan="7"><div class="rowElem"><form:input path="serialNo" id="serialNo" class="textboxMockup" /> <label class="error" for="name" generated="true" style="display: none; padding-left:10px"></label></div></td>
 					</tr>
 					<tr>
 						<td><label><fmt:message key="description" />:</label></td>
@@ -1001,6 +1001,11 @@ $(document).ready(function(){
 		else return true;
 	});
 	
+	// check for enter key
+	$('#serialNo').bind('keypress', function(event){
+		if(event.keyCode == '13') {gridReload(); return false;}
+		else return true;
+	});
 	
 });
 
