@@ -81,7 +81,7 @@ public class DocRunningUtil {
 			Integer nYear = now.get(Calendar.YEAR);
 			Integer nMonth = now.get(Calendar.MONTH) + 1;
 			String docNo = "";
-			DocRunning docRunning = docRunningService.getDocByYearMonth("SO", nYear, nMonth);
+			DocRunning docRunning = docRunningService.getDocByYearMonth("computer", nYear, nMonth);
 			if(null == docRunning){
 				// save new docrunning
 				docRunning = new DocRunning();
