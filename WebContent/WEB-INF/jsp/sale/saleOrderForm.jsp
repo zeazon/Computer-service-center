@@ -1003,7 +1003,7 @@ $(document).ready(function(){
 	
 	// check for enter key
 	$('#serialNo').bind('keypress', function(event){
-		if(event.keyCode == '13') {gridReload(); return false;}
+		if(event.keyCode == '13') {return false;}
 		else return true;
 	});
 	
