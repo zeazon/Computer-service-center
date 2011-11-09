@@ -59,7 +59,7 @@
 					</tr>
 					<tr>
 						<td><label><fmt:message key="serialNo" />:<font style="color:red">*</font></label></td>
-						<td><div class="rowElem"><form:input path="serialNo" class="textboxMockup" maxlength="100"/> <label class="error" for="name" generated="true" style="display: none; padding-left:10px"></label></div></td>
+						<td><div class="rowElem"><form:input path="serialNo" id="serialNo" class="textboxMockup" maxlength="100"/> <label class="error" for="name" generated="true" style="display: none; padding-left:10px"></label></div></td>
 					</tr>
 					<tr>
 						<td><label><fmt:message key="description" />:</label></td>
@@ -184,6 +184,12 @@ $(document).ready(function(){
 			});
 		}
 	);
+	
+	// check for enter key
+	$('#serialNo').bind('keypress', function(event){
+		if(event.keyCode == '13') {return false;}
+		else return true;
+	});
 });
 
 </script>
