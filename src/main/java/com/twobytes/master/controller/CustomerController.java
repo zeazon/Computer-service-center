@@ -374,6 +374,9 @@ public class CustomerController {
 			if(null != form.getTel()){
 				form.setTel(new String(form.getTel().getBytes("iso-8859-1"), "UTF-8"));
 			}
+			if(null != form.getMobileTel()){
+				form.setMobileTel(new String(form.getMobileTel().getBytes("iso-8859-1"), "UTF-8"));
+			}
 		}catch(UnsupportedEncodingException e){
 			e.printStackTrace();
 		}
