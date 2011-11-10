@@ -52,7 +52,7 @@ public class SaleOrderDAOImpl implements SaleOrderDAO{
 				sql.append("order by "+orderBy+" "+orderType);
 			}
 		}else{
-			sql.append("order by saleOrder.saleDate desc");
+			sql.append("order by saleOrder.saleOrderID desc");
 		}
 		
 		Query q = sessionFactory.getCurrentSession().createQuery(sql.toString());

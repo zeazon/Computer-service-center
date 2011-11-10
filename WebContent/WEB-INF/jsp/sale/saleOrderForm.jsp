@@ -13,6 +13,7 @@
 			</c:if>
 			<form:form commandName="form" id="form" class="jqtransform" action="saleOrder.html?do=save">
 				<input type="hidden" name="mode" value="${mode}"/>
+				<form:hidden path="saleOrderID"/>
 				<table width="100%">
 					<col width="13%">
 					<col width="18%">

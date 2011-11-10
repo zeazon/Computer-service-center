@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.twobytes.master.dao.ProductDAO;
 import com.twobytes.master.service.ProductService;
 import com.twobytes.model.Customer;
 import com.twobytes.model.Product;
@@ -21,9 +20,6 @@ public class SaleOrderServiceImpl implements SaleOrderService {
 	private SaleOrderDAO saleOrderDAO;
 	
 	@Autowired
-	private ProductDAO productDAO;
-	
-	@Autowired
 	private ProductService productService;
 	
 	@Override
@@ -33,6 +29,18 @@ public class SaleOrderServiceImpl implements SaleOrderService {
 		productService.save(product);
 		saleOrder.setProduct(product);
 		return saleOrderDAO.save(saleOrder);
+	}
+
+	@Override
+	@Transactional
+	public SaleOrder selectByID(Integer saleOrderID) {
+		SaleOrder model = new SaleOrder();
+		try {
+			model = saleOrderDAO.selectByID(saleOrderID);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return model;
 	}
 
 	@Override

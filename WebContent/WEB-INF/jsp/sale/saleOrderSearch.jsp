@@ -37,9 +37,9 @@
 						<table id="list"></table>
 						<div id="pager"></div>
 						
-						<!-- form id="editForm" action="saleOrder.html?do=preEdit" method="post">
-							<input type="hidden" name="brandID"/>
-						</form-->
+						<form id="editForm" action="saleOrder.html?do=preEdit" method="post">
+							<input type="hidden" name="saleOrderID"/>
+						</form>
 						
 						<div id="dialog" title="Feature not supported" style="display:none">
 							<p>That feature is not supported.</p>
@@ -95,9 +95,9 @@
 			}, 
 			position:"last"
 		})
-/*		.navButtonAdd('#list_toppager',
+		.navButtonAdd('#list_toppager',
 		{
-			caption:"",
+			caption:"<fmt:message key='button.edit' />",
 			title:"<fmt:message key='button.edit' />",
 			buttonicon:"ui-icon-pencil", 
 			onClickButton: function(){ 
@@ -106,7 +106,6 @@
 					jQuery("#list").GridToForm(gsr,"#editForm");
 					$("#editForm").submit();
 				} else {
-					//alert("<fmt:message key='msg.pleaseSelectRow' />");
 					jQuery("#dialog").text('<fmt:message key='msg.pleaseSelectRow' />');
 					jQuery("#dialog").dialog( 
 						{
@@ -119,7 +118,7 @@
 				}         
 			}, 
 			position:"last"
-		})*/
+		})
 		.navButtonAdd('#list_toppager',
 		{
 			caption:"<fmt:message key='button.delete' />",

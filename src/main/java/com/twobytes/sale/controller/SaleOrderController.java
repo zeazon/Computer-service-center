@@ -276,12 +276,22 @@ public class SaleOrderController {
 		Employee user = (Employee) request.getSession().getAttribute("UserLogin");
 		SaleOrder so = new SaleOrder();
 		String msg = "";
+		Product product = new Product();
 		
 		if(null != form.getSaleOrderID()){
 			// update
+			so = saleOrderService.selectByID(form.getSaleOrderID());
+			product = productService.selectByID(form.getProductID());
+			
 			msg = this.messages.getMessage("msg.updateComplete", null, new Locale("th", "TH"));
 		}else{
 			// add
+			
+//			product.setProductID(form.getProductID());
+			
+			product.setCreatedBy(user.getEmployeeID());
+			product.setCreatedDate(now);
+			
 			so.setCreatedBy(user.getEmployeeID());
 			so.setCreatedDate(now);
 			msg = this.messages.getMessage("msg.addComplete", null, new Locale("th", "TH"));
@@ -309,11 +319,7 @@ public class SaleOrderController {
 			e.printStackTrace();
 		}
 
-		so.setUpdatedBy(user.getEmployeeID());
-		so.setUpdatedDate(now);
-		
-		Product product = new Product();
-//		product.setProductID(form.getProductID());
+		// set product data
 		try {
 			product.setType(typeService.selectByID(form.getTypeID()));
 		} catch (Exception e1) {
@@ -340,11 +346,12 @@ public class SaleOrderController {
 		product.setRemark(form.getRemark());
 		product.setUpdatedBy(user.getEmployeeID());
 		product.setUpdatedDate(now);
-		product.setCreatedBy(user.getEmployeeID());
-		product.setCreatedDate(now);
+		
+		so.setUpdatedBy(user.getEmployeeID());
+		so.setUpdatedDate(now);
 		
 		try{
-			saleOrderService.save(so, product);
+			saleOrderService.save(so, product);		
 		}catch(Exception e){
 			e.printStackTrace();
 			model.addAttribute("errMsg", e.getMessage());
@@ -437,6 +444,125 @@ public class SaleOrderController {
 		model.addAttribute("employeeList", empList);
 		
 		return VIEWNAME_SEARCH;
+	}
+	
+	@RequestMapping(value = "/saleOrder", params = "do=preEdit")
+	public String preEdit(@RequestParam Integer saleOrderID, ModelMap model, HttpServletRequest request){
+		if(null == request.getSession().getAttribute("UserLogin")){
+			LoginForm loginForm = new LoginForm();
+			model.addAttribute(loginForm);
+			return "loginScreen";
+		}
+		SaleOrder so = saleOrderService.selectByID(saleOrderID);
+		SaleOrderForm form = new SaleOrderForm();
+		form.setSaleOrderID(so.getSaleOrderID());
+		form.setEmployeeID(so.getEmployee().getEmployeeID().toString());
+		form.setSaleDate(sdf.format(so.getSaleDate()));
+		form.setCustomerID(so.getCustomer().getCustomerID());
+		form.setProductID(so.getProduct().getProductID());
+		form.setTypeID(so.getProduct().getType().getTypeID());
+		form.setBrandID(so.getProduct().getBrand().getBrandID());
+		form.setModelID(so.getProduct().getModel().getModelID());
+		form.setSerialNo(so.getProduct().getSerialNo());
+		form.setDescription(so.getProduct().getDescription());
+		if(so.getProduct().getWarrantyDate() != null){
+			form.setWarrantyDate(sdf.format(so.getProduct().getWarrantyDate()));
+		}
+		if(so.getProduct().getWarrantyExpire() != null){
+			form.setWarrantyExpire(sdf.format(so.getProduct().getWarrantyExpire()));
+		}
+		form.setRemark(so.getProduct().getRemark());
+		
+		ProductForm productForm = new ProductForm();
+		
+		List<Type> typeList = new ArrayList<Type>();
+		try {
+			typeList = typeService.getAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		Type type = typeList.get(0);
+//		form.setTypeID(type.getTypeID());
+		List<Brand> brandList = new ArrayList<Brand>();
+		if (type.getBrands().size() > 0) {
+			brandList = type.getBrands();
+			Brand brand = brandList.get(0);
+			form.setBrandID(brand.getBrandID());
+		} else {
+			Brand blankBrand = new Brand();
+			blankBrand.setBrandID(null);
+			blankBrand.setName("");
+			brandList.add(blankBrand);
+		}
+
+		List<Model> modelList = new ArrayList<Model>();
+		if (type.getBrands().size() > 0) {
+			brandList = type.getBrands();
+			form.setBrandID(form.getBrandID());
+			
+			Brand brand = brandList.get(0);
+			modelList = modelService.getModelByTypeAndBrand(type.getTypeID(), brand.getBrandID());
+		} else {
+			Brand blankBrand = new Brand();
+			blankBrand.setBrandID(null);
+			blankBrand.setName("");
+			brandList.add(blankBrand);
+		}
+		
+		model.addAttribute("typeList", typeList);
+		model.addAttribute("brandList", brandList);
+		model.addAttribute("modelList", modelList);
+		
+		CustomerForm custForm = new CustomerForm();
+		custForm.setProvinceID(7);
+		// set default district to Muang
+		custForm.setDistrictID(160);
+		model.addAttribute("customerForm", custForm);
+		
+		List<Province> provinceList = provinceService.getAll();
+		List<District> districtList = districtService.getByProvince(7);
+		// set subdistrict from Muang district
+		List<Subdistrict> subdistrictList = sdService.getByDistrict(160);
+		
+		Subdistrict sd = subdistrictList.get(0);
+		
+		custForm.setSubdistrictID(sd.getSubdistrictID());
+		custForm.setZipcode(sd.getZipcode().toString());
+		
+		List<CustomerType> customerTypeList = customerTypeService.getAll();
+		
+		model.addAttribute("provinceList", provinceList);
+		model.addAttribute("districtList", districtList);
+		model.addAttribute("subdistrictList", subdistrictList);
+//		model.addAttribute("zipcode", sd.getZipcode());
+		model.addAttribute("customerTypeList", customerTypeList);
+		
+		List<Employee> empList = employeeService.getAll();
+		model.addAttribute("employeeList", empList);
+		
+		model.addAttribute("customer", so.getCustomer());
+		model.addAttribute(
+				"fullAddr",
+				so.getCustomer().getAddress()
+						+ " "
+						+ this.messages.getMessage("subdistrict_abbr", null,
+								new Locale("th", "TH"))
+						+ " "
+						+ so.getCustomer().getSubdistrict().getName()
+						+ " "
+						+ this.messages.getMessage("district_abbr", null,
+								new Locale("th", "TH"))
+						+ " "
+						+ so.getCustomer().getDistrict().getName()
+						+ " "
+						+ this.messages.getMessage("province_abbr", null,
+								new Locale("th", "TH")) + " "
+						+ so.getCustomer().getProvince().getName());
+		
+		model.addAttribute("form", form);
+		model.addAttribute("productForm", productForm);
+		model.addAttribute("mode", "edit");
+		return VIEWNAME_FORM;
 	}
 	
 	@RequestMapping(value = "/saleOrder", params = "do=delete")
