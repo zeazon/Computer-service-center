@@ -527,6 +527,7 @@ public class ProductController {
 		String result = "";
 		try {
 			result = productService.save(product);
+			response.setData(result);
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.setSuccess(false);

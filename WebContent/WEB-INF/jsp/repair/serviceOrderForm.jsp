@@ -50,6 +50,67 @@
 							</div>
 						</td>
 					</tr>
+					<tr>
+						<td colspan="6">
+							<table width="100%" cellpadding="0" cellspacing="0">
+								<col width="13%">
+								<col width="14%">
+								<col width="6%">
+								<col width="10%">
+								<col width="11%">
+								<col width="16%">
+								<col width="14%">
+								<col width="16%">
+								<tr align="left">
+								<tr>
+									<td colspan="8">
+										<div class="rowElem"><br>&nbsp;&nbsp;&nbsp;<b><u><fmt:message key="productDetail" /></u></b></div>
+									</td>
+								</tr>
+								<tr>
+									<td><label><fmt:message key="productID" />:<font color="red">*</font></label></td>
+									<td colspan="7">
+										<div class="rowElem">
+											<c:if test="${mode == 'add'}">
+												<form:input path="productID" class="textboxMockup" style="float:left" id="productID" readonly="true" size="18" maxlength="20"/> <input type="button" id="productLov" value="..." > <label class="error" for="productID" generated="true" style="display: none; float:left; padding-left:10px"></label>
+											</c:if>
+											<c:if test="${mode == 'edit'}">
+												<form:input path="productID" class="textboxMockup" style="float:left" id="productID" readonly="true" size="18" maxlength="20"/>
+											</c:if>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td><label><fmt:message key="type" />:</label></td>
+									<td>
+										<div class="rowElem">
+											<span id="typeTxt">${product.type.name}&nbsp;</span>
+										</div>
+									</td>
+									<td><label><fmt:message key="brand" />:</label></td>
+									<td>
+										<div class="rowElem">
+											<span id="brandTxt">${product.brand.name}&nbsp;</span>
+										</div>
+									</td>
+									<td><label><fmt:message key="model" />:</label></td>
+									<td><div class="rowElem"><%--form:input path="model" class="textboxMockup" maxlength="100"/--%><span id="modelTxt">${product.model.name}&nbsp;</span></span></div></td>
+									<td><label><fmt:message key="serialNo" />:</label></td>
+									<td><div class="rowElem"><%-->form:input path="serialNo" class="textboxMockup" maxlength="100"/--%><span id="serialNoTxt">${product.serialNo}&nbsp;</span></div></td>
+								</tr>
+								<tr>
+									<td><label><fmt:message key="accessories" />:</label></td>
+									<td colspan="2"><div class="rowElem"><form:input path="accessories" class="textboxMockup" style="width:98%" maxlength="5000"/></div></td>
+									<td><label><fmt:message key="serviceOrder_desc" />:</label></td>
+									<td colspan="4"><div class="rowElem"><form:input path="desc" class="textboxMockup" style="width:98%" maxlength="255"/></div></td>
+								</tr>		
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" style="padding-top:7px;"><label><fmt:message key="serviceOrder_problem" />:<font color="red">*</font></label></td>
+						<td colspan="5" align="left"><div class="rowElem"><form:textarea path="problem" rows="5" col="30" class="textareaMockup" style="width:98%" name="problem" ></form:textarea><label class="error" for="problem" generated="true" style="display: none; float:left; padding-left:10px"></label></div></td>
+					</tr>
 					<tr align="left">
 						<td colspan="6">
 							<div class="rowElem"><br>&nbsp;&nbsp;&nbsp;<b><u><fmt:message key="customerDetail" /></u></b></div>
@@ -193,67 +254,6 @@
 						</td>
 					</tr--%>
 					
-					<tr>
-						<td colspan="6">
-							<table width="100%" cellpadding="0" cellspacing="0">
-								<col width="13%">
-								<col width="18%">
-								<col width="6%">
-								<col width="14%">
-								<col width="10%">
-								<col width="13%">
-								<col width="13%">
-								<col width="13%">
-								<tr align="left">
-								<tr>
-									<td colspan="8">
-										<div class="rowElem"><br>&nbsp;&nbsp;&nbsp;<b><u><fmt:message key="productDetail" /></u></b></div>
-									</td>
-								</tr>
-								<tr>
-									<td><label><fmt:message key="productID" />:<font color="red">*</font></label></td>
-									<td colspan="7">
-										<div class="rowElem">
-											<c:if test="${mode == 'add'}">
-												<form:input path="productID" class="textboxMockup" style="float:left" id="productID" readonly="true" size="18" maxlength="20"/> <input type="button" id="productLov" value="..." > <label class="error" for="productID" generated="true" style="display: none; float:left; padding-left:10px"></label>
-											</c:if>
-											<c:if test="${mode == 'edit'}">
-												<form:input path="productID" class="textboxMockup" style="float:left" id="productID" readonly="true" size="18" maxlength="20"/>
-											</c:if>
-										</div>
-									</td>
-								</tr>
-								<tr>
-									<td><label><fmt:message key="type" />:</label></td>
-									<td>
-										<div class="rowElem">
-											<span id="typeTxt">${product.type.name}&nbsp;</span>
-										</div>
-									</td>
-									<td><label><fmt:message key="brand" />:</label></td>
-									<td>
-										<div class="rowElem">
-											<span id="brandTxt">${product.brand.name}&nbsp;</span>
-										</div>
-									</td>
-									<td><label><fmt:message key="model" />:</label></td>
-									<td><div class="rowElem"><%--form:input path="model" class="textboxMockup" maxlength="100"/--%><span id="modelTxt">${product.model.name}&nbsp;</span></span></div></td>
-									<td><label><fmt:message key="serialNo" />:</label></td>
-									<td><div class="rowElem"><%-->form:input path="serialNo" class="textboxMockup" maxlength="100"/--%><span id="serialNoTxt">${product.serialNo}&nbsp;</span></div></td>
-								</tr>
-								<tr>
-									<td><label><fmt:message key="accessories" />:</label></td>
-									<td colspan="2"><div class="rowElem"><form:input path="accessories" class="textboxMockup" style="width:98%" maxlength="5000"/></div></td>
-									<td><label><fmt:message key="serviceOrder_desc" />:</label></td>
-									<td colspan="4"><div class="rowElem"><form:input path="desc" class="textboxMockup" style="width:98%" maxlength="255"/></div></td>
-								</tr>		
-							</table>
-						</td>
-					</tr>
-					<tr>
-						<td valign="top" style="padding-top:7px;"><label><fmt:message key="serviceOrder_problem" />:<font color="red">*</font></label></td>
-						<td colspan="5" align="left"><div class="rowElem"><form:textarea path="problem" rows="5" col="30" class="textareaMockup" style="width:98%" name="problem" ></form:textarea><label class="error" for="problem" generated="true" style="display: none; float:left; padding-left:10px"></label></div></td>
-					</tr>
 					<tr align="center">
 						<td colspan="6"><div class="rowElem"><input type="submit" value="<fmt:message key='button.ok' />" /></div></td>
 					</tr>
@@ -333,7 +333,7 @@
 				<td valign="top"><div class="rowElem"><label><fmt:message key="address" />:</label></div></td>
 				<td>
 					<div class="rowElem">
-						<form:input path="address" id="address" class="textboxMockup" style="width:640px" maxlength="255"/><br><br>
+						<form:input path="address" id="lovForm_address" class="textboxMockup" style="width:640px" maxlength="255"/><br><br>
 						
 						<div style="float:left; margin-top:5px;"><fmt:message key="subdistrict" />:</div>
 						<form:select id="lovForm_subdistrict" path="subdistrictID" items="${subdistrictList}" itemValue="subdistrictID" itemLabel="name">
@@ -368,7 +368,7 @@
 			</tr>
 			<tr>
 				<td><label><fmt:message key="email" />:</label></td>
-				<td><div class="rowElem"><input type="text" name="email" id="email" class="textboxMockup" maxlength="50" /></div></td>
+				<td><div class="rowElem"><input type="text" name="email" id="cEmail" class="textboxMockup" maxlength="50" /></div></td>
 			</tr>
 			<tr align="center">
 				<td colspan="2"><div class="rowElem"><input type="submit" value='<fmt:message key="button.ok" />' /></div></td>
@@ -513,7 +513,7 @@
 	<form:form commandName="productForm" id="productForm" class="jqtransform" action="JavaScript:saveProduct();">
 		<table width="100%">
 			<tr>
-				<td width="40%"><label><fmt:message key="productID" />:</label></td>
+				<td width="20%"><label><fmt:message key="productID" />:</label></td>
 				<td>
 					<div class="rowElem">
 						<form:input path="productID" id="lovForm_productID" class="textboxMockup" readonly="true" maxlength="20" />
@@ -562,11 +562,11 @@
 			</tr>
 			<tr>
 				<td><label><fmt:message key="warrantyDate"/>:</label></td>
-				<td><div class="rowElem"><form:input path="warrantyDate" id="warrantyDate" class="textboxMockup" readonly="true" size="10" /></div></td>
+				<td><div class="rowElem"><form:input path="warrantyDate" id="lovForm_warrantyDate" class="textboxMockup" readonly="true" size="10" /></div></td>
 			</tr>
 			<tr>
 				<td><label><fmt:message key="warrantyExpire"/>:</label></td>
-				<td><div class="rowElem"><form:input path="warrantyExpire" id="warrantyExpire" class="textboxMockup" readonly="true" size="10" /></div></td>
+				<td><div class="rowElem"><form:input path="warrantyExpire" id="lovForm_warrantyExpire" class="textboxMockup" readonly="true" size="10" /></div></td>
 			</tr>
 			<tr>
 				<td valign="top" style="padding-top:7px;"><label><fmt:message key="remark"/>:</label></td>
@@ -635,6 +635,43 @@
 
 <script type="text/javascript">
 
+// init walk in customer lov dialog
+var tDialog = $( "#dialog-modal" ).dialog({
+	autoOpen: false,
+	height: 540,
+	width: 530,
+	modal: true
+});
+
+function initLov(){
+	tDialog = $( "#dialog-modal" ).dialog({
+		autoOpen: false,
+		height: 540,
+		width: 530,
+		modal: true
+	});
+}
+
+// init shop customer lov dialog
+var shopDialog = $( "#shop-customer-dialog-modal" ).dialog({
+	autoOpen: false,
+	height: 540,
+	width: 700,
+	modal: true
+});
+
+function initShopLov(){
+	shopDialog = $( "#shop-customer-dialog-modal" ).dialog({
+		autoOpen: false,
+		height: 540,
+		width: 700,
+		modal: true
+	});
+}
+
+
+
+
 $(document).ready(function(){
 	
 	//$("#appointmentDate").calendarsPicker($.extend({calendar: $.calendars.instance('thai','th')}));
@@ -644,8 +681,8 @@ $(document).ready(function(){
 	$("#shopCustomerDetail").hide();
 	$("#walkinCustomerDetail").hide();
 	
-	$("#warrantyDate").calendarsPicker($.extend({calendar: $.calendars.instance('gregorian','th')}));
-	$("#warrantyExpire").calendarsPicker($.extend({calendar: $.calendars.instance('gregorian','th')}));
+	$("#lovForm_warrantyDate").calendarsPicker($.extend({calendar: $.calendars.instance('gregorian','th')}));
+	$("#lovForm_warrantyExpire").calendarsPicker($.extend({calendar: $.calendars.instance('gregorian','th')}));
 	
 	<c:if test="${action == 'print'}">
 		document.forms["printJasperForm"].submit();
@@ -693,41 +730,7 @@ $(document).ready(function(){
 	$("form.customerForm").jqTransform();
 	
 	// check type of customer for display detail
-//	checkCustomerType();
-	
-	// init walk in customer lov dialog
-	var tDialog = $( "#dialog-modal" ).dialog({
-		autoOpen: false,
-		height: 540,
-		width: 530,
-		modal: true
-	});
-	
-	function initLov(){
-		tDialog = $( "#dialog-modal" ).dialog({
-			autoOpen: false,
-			height: 540,
-			width: 530,
-			modal: true
-		});
-	}
-	
-	// init shop customer lov dialog
-	var shopDialog = $( "#shop-customer-dialog-modal" ).dialog({
-		autoOpen: false,
-		height: 540,
-		width: 700,
-		modal: true
-	});
-	
-	function initShopLov(){
-		shopDialog = $( "#shop-customer-dialog-modal" ).dialog({
-			autoOpen: false,
-			height: 540,
-			width: 700,
-			modal: true
-		});
-	}
+//	checkCustomerType();	
 
 	// init product lov dialog
 	var productDialog = $("#product-dialog-modal").dialog({
@@ -736,7 +739,7 @@ $(document).ready(function(){
 		width: 700,
 		modal: true
 	});
-	
+
 	function initProductLov(){
 		productDialog = $("#product-dialog-modal").dialog({
 			autoOpen: false,
@@ -812,6 +815,7 @@ $(document).ready(function(){
 				//$( "#dialog-form" ).dialog( "open" );
 				
 				$( "#add-form" ).dialog( "open" );
+				$("#custName").focus();
 			}, 
 			position:"last"
 	});
@@ -1182,12 +1186,13 @@ $(document).ready(function(){
 				
 				$("#add-product-form").dialog({
 					open: function(event, ui){
-						$("#warrantyDate").calendarsPicker($.extend({calendar: $.calendars.instance('gregorian','th')}));
-						$("#warrantyExpire").calendarsPicker($.extend({calendar: $.calendars.instance('gregorian','th')}));
+						$("#lovForm_warrantyDate").calendarsPicker($.extend({calendar: $.calendars.instance('gregorian','th')}));
+						$("#lovForm_warrantyExpire").calendarsPicker($.extend({calendar: $.calendars.instance('gregorian','th')}));
 					}
 				});
 				
 				$( "#add-product-form" ).dialog( "open" );
+				$("#lovForm_serialNo").focus();
 				
 			}, 
 			position:"last"
@@ -1463,13 +1468,13 @@ function saveCustomer(){
 		customerTypeID: $("#customerType").val(), 
 		name: $("#custName").val(),
 		//surname: $("#custSurname").val(),
-		address: $("#address").val(),
+		address: $("#lovForm_address").val(),
 		subdistrictID: $("#lovForm_subdistrict").val(),
 		districtID: $("#lovForm_district").val(),
 		provinceID: $("#lovForm_province").val(),
 		tel: $("#cTel").val(),
 		mobileTel: $("#cMobileTel").val(),
-		email: $("#email").val()
+		email: $("#cEmail").val()
 	}, function(data) {
 		if(data.success == true){
 			//alert('Add complete');
@@ -1481,7 +1486,12 @@ function saveCustomer(){
 					buttons: {"Ok": function()  {
 						jQuery(this).dialog("close");
 						jQuery("#add-form").dialog("close");
-						gridReload();
+						//gridReload();
+						
+						tDialog.dialog( "destroy" );
+						// init lov for call again
+						initLov();
+						setCustomerToForm(data.data);
 						}
 				    }
 			});
@@ -1519,6 +1529,26 @@ function saveCustomer(){
 	//return false;
 }
 
+function setCustomerToForm(dataID){
+	var customerID = dataID;
+	var name = $("#custName").val();
+	var address = $("#lovForm_address").val();
+	var subdistrict = $('#lovForm_subdistrict :selected').text();
+	var district = $('#lovForm_district :selected').text();
+	var province = $('#lovForm_province :selected').text();
+	var zipcode = $("#lovForm_zipcode").val();
+	var tel = $("#cTel").val();
+	var mobileTel = $("#cMobileTel").val();
+	var email = $("#cEmail").val();
+	
+	$("#custID").val(customerID);
+	$("#contactName").html(name);
+	$("#address").html(address+' <fmt:message key="subdistrict_abbr"/> '+subdistrict+' <fmt:message key="district_abbr"/> '+district+' <fmt:message key="province_abbr"/> '+province+' '+zipcode);
+	$("#tel").html(tel);
+	$("#mobileTel").html(mobileTel);
+	$("#email").html(email);
+}
+
 function saveProduct(){
 	$.getJSON('${saveProductPopupURL}', {
 		productID: $("#lovForm_productID").val(),
@@ -1527,8 +1557,8 @@ function saveProduct(){
 		modelID: $("#lovForm_model").val(),
 		serialNo:  $("#lovForm_serialNo").val(),
 		description: $("#lovForm_description").val(),
-		warrantyDate: $("#warrantyDate").val(),
-		warrantyExpire: $("#warrantyExpire").val(),
+		warrantyDate: $("#lovForm_warrantyDate").val(),
+		warrantyExpire: $("#lovForm_warrantyExpire").val(),
 		remark: $("#lovForm_remark").val()
 	}, function(data) {
 		if(data.success == true){
@@ -1541,7 +1571,10 @@ function saveProduct(){
 					buttons: {"Ok": function()  {
 						jQuery(this).dialog("close");
 						jQuery("#add-product-form").dialog("close");
-						gridProductReload();
+						//gridProductReload();
+						
+						setProductToForm(data.data);
+						$("#product-dialog-modal").dialog("close");
 						}
 				    }
 			});
@@ -1558,6 +1591,20 @@ function saveProduct(){
 		}
 	});
 	
+}
+
+function setProductToForm(dataID){
+	// set value to form
+	var type = $("#lovForm_type :selected").text();
+	var brand = $("#lovForm_brand :selected").text();
+	var model = $("#lovForm_model :selected").text();
+	var serialNo = $("#lovForm_serialNo").val();
+	
+	$("#productID").val(dataID);
+	$("#typeTxt").html(type);
+	$("#brandTxt").html(brand);
+	$("#modelTxt").html(model);
+	$("#serialNoTxt").html(serialNo);
 }
 
 function doPrint(){
