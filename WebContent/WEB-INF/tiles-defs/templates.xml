@@ -92,12 +92,12 @@
 	</definition>
 	
 	<definition name="model.search" extends=".pageTemplate">
-		<put-attribute name="pageName" value="โมเดล" type="string"/>
+		<put-attribute name="pageName" value="รุ่น" type="string"/>
 		<put-attribute name="body" value="/WEB-INF/jsp/master/modelSearch.jsp"/>
 	</definition>
 	
 	<definition name="model.form" extends=".pageTemplate">
-		<put-attribute name="pageName" value="โมเดล" type="string"/>
+		<put-attribute name="pageName" value="รุ่น" type="string"/>
 		<put-attribute name="body" value="/WEB-INF/jsp/master/modelForm.jsp"/>
 	</definition>
 	
