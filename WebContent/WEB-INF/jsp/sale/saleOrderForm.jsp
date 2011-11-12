@@ -135,6 +135,11 @@
 					</tr>
 				</table>
 			</form:form>
+			<%-->select id="test" style="height: 31px;border-radius: 4px 4px 4px 4px;">
+				<option value="a">Aspire asdf</option>
+				<option value="b">Aspire 3dsg</option>
+				<option value="b">Aspire 43seg</option>
+			</select--%>
 		</td>
 	</tr>
 </table>
@@ -238,7 +243,7 @@
 			</tr>
 			<tr>
 				<td><label><fmt:message key="email" />:</label></td>
-				<td><div class="rowElem"><input type="text" name="email" id="email" class="textboxMockup" maxlength="50" /></div></td>
+				<td><div class="rowElem"><input type="text" name="email" id="cEmail" class="textboxMockup" maxlength="50" /></div></td>
 			</tr>
 			<tr align="center">
 				<td colspan="2"><div class="rowElem"><input type="submit" value='<fmt:message key="button.ok" />' /></div></td>
@@ -253,7 +258,7 @@
 
 <!-- Start product lov -->
 
-<div id="product-dialog-modal" title='<fmt:message key="searchProduct" />'>
+<%--div id="product-dialog-modal" title='<fmt:message key="searchProduct" />'>
 	<table>
 		<tr>
 			<td>
@@ -395,7 +400,7 @@
 			</tr>
 		</table>
 	</form:form>
-</div>
+</div--%>
 
 <!-- End product lov -->
 
@@ -411,6 +416,40 @@
 <c:url var="findModelURL" value="/model.html?do=getModel" />
 
 <script type="text/javascript">
+
+//init walk in customer lov dialog
+var tDialog = $( "#dialog-modal" ).dialog({
+	autoOpen: false,
+	height: 540,
+	width: 530,
+	modal: true
+});
+
+function initLov(){
+	tDialog = $( "#dialog-modal" ).dialog({
+		autoOpen: false,
+		height: 540,
+		width: 530,
+		modal: true
+	});
+}
+
+// init product lov dialog
+var productDialog = $("#product-dialog-modal").dialog({
+	autoOpen: false,
+	height: 540,
+	width: 700,
+	modal: true
+});
+
+function initProductLov(){
+	productDialog = $("#product-dialog-modal").dialog({
+		autoOpen: false,
+		height: 540,
+		width: 700,
+		modal: true
+	});
+}
 
 $(document).ready(function(){
 	
@@ -457,40 +496,6 @@ $(document).ready(function(){
 	$("form.lov").jqTransform();
 	$("form.customerForm").jqTransform();
 	$("form.productForm").jqTransform();
-	
-	// init walk in customer lov dialog
-	var tDialog = $( "#dialog-modal" ).dialog({
-		autoOpen: false,
-		height: 540,
-		width: 530,
-		modal: true
-	});
-	
-	function initLov(){
-		tDialog = $( "#dialog-modal" ).dialog({
-			autoOpen: false,
-			height: 540,
-			width: 530,
-			modal: true
-		});
-	}
-	
-	// init product lov dialog
-	var productDialog = $("#product-dialog-modal").dialog({
-		autoOpen: false,
-		height: 540,
-		width: 700,
-		modal: true
-	});
-	
-	function initProductLov(){
-		productDialog = $("#product-dialog-modal").dialog({
-			autoOpen: false,
-			height: 540,
-			width: 700,
-			modal: true
-		});
-	}
 	
 	// Add event click to lov button
 	$("#lov").click( function(e) {
@@ -613,12 +618,12 @@ $(document).ready(function(){
 	
 	// add product
 	
-	$( "#add-product-form" ).dialog({
+	/*$( "#add-product-form" ).dialog({
 		autoOpen: false,
 		height: 540,
 		width: 900,
 		modal: true
-	});
+	});*/
 	
 	$("#province").change(
 		function() {
@@ -749,7 +754,7 @@ $(document).ready(function(){
 				
 				// trigger event change of district select list
 				$("#brand").change();
-				$("#brandRow div.jqTransformSelectWrapper").css("z-index", 9);
+				$("#brandRow div.jqTransformSelectWrapper").css("z-index", 8);
 				
 			});
 		}
@@ -787,7 +792,7 @@ $(document).ready(function(){
 				//$("#brandRow div.jqTransformSelectWrapper").attr("style", sty);
 				//$("#brandRow div.jqTransformSelectWrapper").attr("style", "z-index:9;");
 				
-				$("#modelRow div.jqTransformSelectWrapper").css("z-index", 8);
+				$("#modelRow div.jqTransformSelectWrapper").css("z-index", 7);
 			});
 		}
 	);
@@ -1029,10 +1034,9 @@ function saveCustomer(){
 		provinceID: $("#province").val(),
 		tel: $("#cTel").val(),
 		mobileTel: $("#cMobileTel").val(),
-		email: $("#email").val()
+		email: $("#cEmail").val()
 	}, function(data) {
 		if(data.success == true){
-			//alert('Add complete');
 			jQuery("#dialog").text(data.message.toString());
 			jQuery("#dialog").dialog( 
 				{
@@ -1041,7 +1045,12 @@ function saveCustomer(){
 					buttons: {"Ok": function()  {
 						jQuery(this).dialog("close");
 						jQuery("#add-form").dialog("close");
-						gridReload();
+						//gridReload();
+						
+						tDialog.dialog( "destroy" );
+						// init lov for call again
+						initLov();
+						setCustomerToForm(data.data);
 						}
 				    }
 			});
@@ -1060,6 +1069,25 @@ function saveCustomer(){
 	
 }
 
+function setCustomerToForm(dataID){
+	var customerID = dataID;
+	var name = $("#custName").val();
+	var address = $("#address").val();
+	var subdistrict = $('#subdistrict :selected').text();
+	var district = $('#district :selected').text();
+	var province = $('#province :selected').text();
+	var zipcode = $("#lovForm_zipcode").val();
+	var tel = $("#cTel").val();
+	var mobileTel = $("#cMobileTel").val();
+	var email = $("#cEmail").val();
+	
+	$("#custID").val(customerID);
+	$("#contactName").html(name);
+	$("#address").html(address+' <fmt:message key="subdistrict_abbr"/> '+subdistrict+' <fmt:message key="district_abbr"/> '+district+' <fmt:message key="province_abbr"/> '+province+' '+zipcode);
+	$("#tel").html(tel);
+	$("#mobileTel").html(mobileTel);
+	$("#email").html(email);
+}
 
 jQuery.validator.addMethod("require_from_group", function(value, element, options) {
 	var numberRequired = options[0];

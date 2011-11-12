@@ -21,7 +21,12 @@ public class CustomGenericResponse {
 	* Any custom message, i.e, 'Your request has been processed successfully!'
 	*/
 	private List<String> message;
-	 
+	
+	/**
+	 * Data returned.
+	 */
+	private String data;
+	
 	public CustomGenericResponse() {
 		message = new ArrayList<String>();
 	}
@@ -41,4 +46,13 @@ public class CustomGenericResponse {
 	public void setMessage(String message) {
 		this.message.add(message);
 	}
+
+	public String getData() {
+		return data;
+	}
+
+	public void setData(String data) {
+		this.data = data;
+	}
+	
 }
