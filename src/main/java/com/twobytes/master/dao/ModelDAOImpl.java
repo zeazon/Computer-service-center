@@ -84,7 +84,7 @@ public class ModelDAOImpl implements ModelDAO{
 	@SuppressWarnings("unchecked")
 	public List<Model> getModelByTypeAndBrand(String typeID, Integer brandID) {
 		StringBuilder sql = new StringBuilder();
-		sql.append("from Model as m where m.type.typeID = :typeID and m.brand.brandID = :brandID ");
+		sql.append("from Model as m where m.type.typeID = :typeID and m.brand.brandID = :brandID order by name ");
 		
 		Query q = sessionFactory.getCurrentSession().createQuery(sql.toString());
 		q.setString("typeID", typeID);
