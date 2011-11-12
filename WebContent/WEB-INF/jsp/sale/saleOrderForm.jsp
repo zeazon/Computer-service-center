@@ -208,7 +208,7 @@
 				<td valign="top"><div class="rowElem"><label><fmt:message key="address" />:</label></div></td>
 				<td>
 					<div class="rowElem">
-						<form:input path="address" id="address" class="textboxMockup" style="width:640px" maxlength="255"/><br><br>
+						<form:input path="address" id="lovForm_address" class="textboxMockup" style="width:640px" maxlength="255"/><br><br>
 						
 						<div style="float:left; margin-top:5px;"><fmt:message key="subdistrict" />:</div>
 						<form:select id="subdistrict" path="subdistrictID" items="${subdistrictList}" itemValue="subdistrictID" itemLabel="name">
@@ -1028,7 +1028,7 @@ function saveCustomer(){
 		customerTypeID: $("#customerType").val(), 
 		name: $("#custName").val(),
 		//surname: $("#custSurname").val(),
-		address: $("#address").val(),
+		address: $("#lovForm_address").val(),
 		subdistrictID: $("#subdistrict").val(),
 		districtID: $("#district").val(),
 		provinceID: $("#province").val(),
@@ -1072,7 +1072,7 @@ function saveCustomer(){
 function setCustomerToForm(dataID){
 	var customerID = dataID;
 	var name = $("#custName").val();
-	var address = $("#address").val();
+	var address = $("#lovForm_address").val();
 	var subdistrict = $('#subdistrict :selected').text();
 	var district = $('#district :selected').text();
 	var province = $('#province :selected').text();
