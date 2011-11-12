@@ -473,10 +473,10 @@ public class ProductController {
 		// Because default Tomcat URI encoding is iso-8859-1 so it must encode back to tis620
 		try{
 			if(null != form.getDescription()){
-				form.setDescription(new String(form.getDescription().getBytes("iso-8859-1"), "UTF-8"));
+				form.setDescription(new String(form.getDescription().getBytes("iso-8859-1"), "tis620"));
 			}
 			if(null != form.getRemark()){
-				form.setRemark(new String(form.getRemark().getBytes("iso-8859-1"), "UTF-8"));
+				form.setRemark(new String(form.getRemark().getBytes("iso-8859-1"), "tis620"));
 			}
 		}catch(UnsupportedEncodingException e){
 			e.printStackTrace();
