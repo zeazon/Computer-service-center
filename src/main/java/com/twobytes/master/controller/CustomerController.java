@@ -360,22 +360,22 @@ public class CustomerController {
 		// Because default Tomcat URI encoding is iso-8859-1 so it must encode back to tis620
 		try{
 			if(null != form.getName()){
-//				form.setName(new String(form.getName().getBytes("iso-8859-1"), "tis620"));
-				form.setName(new String(form.getName().getBytes("iso-8859-1"), "UTF-8"));
+				form.setName(new String(form.getName().getBytes("iso-8859-1"), "tis620"));
+				//form.setName(new String(form.getName().getBytes("iso-8859-1"), "UTF-8"));
 			}
 /*			if(null != form.getSurname()){
 //				form.setSurname(new String(form.getSurname().getBytes("iso-8859-1"), "tis620"));	
 				form.setSurname(new String(form.getSurname().getBytes("iso-8859-1"), "UTF-8"));
 			}*/
 			if(null != form.getAddress()){
-//				form.setAddress(new String(form.getAddress().getBytes("iso-8859-1"), "tis620"));
-				form.setAddress(new String(form.getAddress().getBytes("iso-8859-1"), "UTF-8"));
+				form.setAddress(new String(form.getAddress().getBytes("iso-8859-1"), "tis620"));
+				//form.setAddress(new String(form.getAddress().getBytes("iso-8859-1"), "UTF-8"));
 			}
 			if(null != form.getTel()){
-				form.setTel(new String(form.getTel().getBytes("iso-8859-1"), "UTF-8"));
+				form.setTel(new String(form.getTel().getBytes("iso-8859-1"), "tis620"));
 			}
 			if(null != form.getMobileTel()){
-				form.setMobileTel(new String(form.getMobileTel().getBytes("iso-8859-1"), "UTF-8"));
+				form.setMobileTel(new String(form.getMobileTel().getBytes("iso-8859-1"), "tis620"));
 			}
 		}catch(UnsupportedEncodingException e){
 			e.printStackTrace();
@@ -418,6 +418,7 @@ public class CustomerController {
 		String result = "";
 		try{
 			result = customerService.save(customer);
+			response.setData(result);
 		}catch(Exception e){
 			e.printStackTrace();
 //			model.addAttribute("errMsg", e.getMessage());
