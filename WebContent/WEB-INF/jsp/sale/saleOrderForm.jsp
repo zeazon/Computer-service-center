@@ -35,7 +35,7 @@
 					</tr>
 					<tr>
 						<td><label><fmt:message key="date"/></label></td>
-						<td colspan="7"><div class="rowElem"><form:input path="saleDate" id="saleDate" class="textboxMockup" readonly="true"/></div></td>
+						<td colspan="7"><div class="rowElem"><form:input path="saleDate" id="saleDate" class="textboxMockup" size="8" readonly="true"/></div></td>
 					</tr>
 					<tr>
 						<td><label><fmt:message key="customerID" />:<font color="red">*</font></label></td>					
@@ -558,6 +558,7 @@ $(document).ready(function(){
 				//$( "#dialog-form" ).dialog( "open" );
 				
 				$( "#add-form" ).dialog( "open" );
+				$("#custName").focus();
 			}, 
 			position:"last"
 	});

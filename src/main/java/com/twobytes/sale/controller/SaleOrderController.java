@@ -191,6 +191,7 @@ public class SaleOrderController {
 			return "loginScreen";
 		}
 		SaleOrderForm form = new SaleOrderForm();
+		form.setSaleDate(sdf.format(new Date()));
 		ProductForm productForm = new ProductForm();
 		
 		List<Type> typeList = new ArrayList<Type>();
