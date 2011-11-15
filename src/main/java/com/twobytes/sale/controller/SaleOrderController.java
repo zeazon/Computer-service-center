@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -192,6 +193,10 @@ public class SaleOrderController {
 		}
 		SaleOrderForm form = new SaleOrderForm();
 		form.setSaleDate(sdf.format(new Date()));
+		form.setWarrantyDate(sdf.format(new Date()));
+		Calendar warrantyExpireCal = Calendar.getInstance();
+		warrantyExpireCal.add(Calendar.YEAR, 1);
+		form.setWarrantyExpire(sdf.format(warrantyExpireCal.getTime()));
 		ProductForm productForm = new ProductForm();
 		
 		List<Type> typeList = new ArrayList<Type>();
