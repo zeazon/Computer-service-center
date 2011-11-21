@@ -140,7 +140,7 @@ public class ServiceOrderExcelView extends AbstractJExcelView {
 	        sheet1.addImage(new WritableImage(3, 30, 1, 1, new File(this.getWebApplicationContext().getServletContext().getRealPath("images/choice_small.png"))));
         }
         
-        if(form.getServiceType() == 1){
+        if(form.getServiceType() == 1 || form.getServiceType() == 5){
         	sheet1.addImage(new WritableImage(11, 48, 1.90, 2, new File(this.getWebApplicationContext().getServletContext().getRealPath("images/choice_free_check.png"))));
         }else{
         	sheet1.addImage(new WritableImage(11, 48, 1.90, 2, new File(this.getWebApplicationContext().getServletContext().getRealPath("images/choice_free.png"))));
