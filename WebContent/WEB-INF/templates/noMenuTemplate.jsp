@@ -27,6 +27,7 @@
 <script src="<%=request.getContextPath()%>/script/jQuery-calendar/jquery.calendars.lang.min.js" type="text/javascript"></script>
 <script src="<%=request.getContextPath()%>/script/jQuery-calendar/jquery.calendars.thai-th.js" type="text/javascript"></script>
 <script src="<%=request.getContextPath()%>/script/jQuery-datetimeentry/jquery.datetimeentry.js" type="text/javascript"></script>
+<script src="<%=request.getContextPath()%>/script/autoComplete.js" type="text/javascript"></script>
 </head>
 <body>
 <tiles:insertAttribute name="body" />

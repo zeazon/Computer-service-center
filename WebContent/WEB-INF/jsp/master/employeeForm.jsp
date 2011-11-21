@@ -36,8 +36,10 @@
 						<td>
 							<div class="rowElem">
 								<form:select path="roleID">
+									<form:option value=""/>
 									<form:options items="${roleList}" itemValue="roleID" itemLabel="name" />
 								</form:select>
+								<label class="error" for="roleID" generated="true" style="display: none; padding-left:10px"></label>
 							</div>
 						</td>
 					</tr>
@@ -77,7 +79,8 @@ $(document).ready(function(){
 			confirmPwd: {
 				required: true,
 				equalTo: "#password"
-			}
+			},
+			roleID: "required"
 		}
 	});
 	

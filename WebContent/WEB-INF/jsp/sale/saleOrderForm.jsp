@@ -135,11 +135,6 @@
 					</tr>
 				</table>
 			</form:form>
-			<%-->select id="test" style="height: 31px;border-radius: 4px 4px 4px 4px;">
-				<option value="a">Aspire asdf</option>
-				<option value="b">Aspire 3dsg</option>
-				<option value="b">Aspire 43seg</option>
-			</select--%>
 		</td>
 	</tr>
 </table>
@@ -187,7 +182,7 @@
 	<form:form commandName="customerForm" id="customerForm" class="jqtransform" action="JavaScript:saveCustomer();">
 		<table width="100%">
 			<tr>
-				<td width="20%"><label><fmt:message key="customerID" />:</label></td>
+				<td width="145px"><label><fmt:message key="customerID" />:</label></td>
 				<td><div class="rowElem"><form:input path="customerID" id="customerID" readonly="true" class="textboxMockup" /></div></td>
 			</tr>
 			<tr>
@@ -612,8 +607,8 @@ $(document).ready(function(){
 	
 	$( "#add-form" ).dialog({
 		autoOpen: false,
-		height: 470,
-		width: 900,
+		height: 450,
+		width: 950,
 		modal: true
 	});
 	
@@ -626,7 +621,196 @@ $(document).ready(function(){
 		modal: true
 	});*/
 	
-	$("#province").change(
+	$( "#province_autoComplete" ).autocomplete({
+		change: function(event, ui) {
+			var select = $("#province");
+			var selected = select.children( ":selected" );
+			if ( !ui.item ) {
+				var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+					valid = false;
+				select.children( "option" ).each(function() {
+					if ( $( this ).text().match( matcher ) ) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+			 	if ( !valid ){
+			 		// Call original valud if it didn't match anything
+					
+					//$( "#lovForm_province_autoComplete" ).data( "autocomplete" ).term = "";
+					$( this ).val(select.children( ":selected" ).text());
+					return false;
+				}
+			 }else{
+				 $.getJSON('${findDistrictByProvinceURL}', {
+					provinceID : select.val(),
+					ajax : 'true'
+				}, function(data) {
+					var html = '';
+					var len = data.length;
+					if(len > 0){
+						for ( var i = 0; i < len; i++) {
+							html += '<option value="' + data[i].districtID + '">'
+									+ data[i].name + '</option>';
+						}
+						html += '</option>';
+					}else{
+						html += '<option value=""></option>';
+					}
+					
+					$('#district').html(html);
+					
+					$('#district_autoComplete').width($('#district').width());
+					$('#district_autoComplete').val($("#district :selected").text());
+					
+					//$("#brandRow").css("z-index", 9);
+					
+					$("#district_autoComplete").trigger('change');
+					getSubdistrictSelectList();
+				});
+			 }
+		}
+	});
+	
+	$( "#district_autoComplete" ).autocomplete({
+		change: function(event, ui) {
+			var select = $("#district");
+			var selected = select.children( ":selected" );
+			if ( !ui.item ) {
+				var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+					valid = false;
+				select.children( "option" ).each(function() {
+					if ( $( this ).text().match( matcher ) ) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+			 	if ( !valid ){
+			 		// Call original valud if it didn't match anything
+					
+					//$( "#lovForm_district_autoComplete" ).data( "autocomplete" ).term = "";
+					$( this ).val(select.children( ":selected" ).text());
+					return false;
+				}
+			 }else{
+				$.getJSON('${findSubdistrictByDistrictURL}', {
+					districtID : select.val(),
+					ajax : 'true'
+				}, function(data) {
+					var html = '';
+					var len = data.length;
+					if(len > 0){
+						for ( var i = 0; i < len; i++) {
+							html += '<option value="' + data[i].subdistrictID + '">'
+									+ data[i].name + '</option>';
+						}
+						html += '</option>';
+					}else{
+						html += '<option value=""></option>';
+					}
+					
+					$('#subdistrict').html(html);
+					
+					$('#subdistrict_autoComplete').width($('#subdistrict').width());
+					$('#subdistrict_autoComplete').val($("#subdistrict :selected").text());
+					
+					//$("#brandRow").css("z-index", 9);
+					
+					$("#subdistrict_autoComplete").trigger('change');
+					getZipcode();
+				});
+			 }
+		}
+	});
+	
+	$( "#subdistrict_autoComplete" ).autocomplete({
+		change: function(event, ui) {
+			var select = $("#subdistrict");
+			var selected = select.children( ":selected" );
+			if ( !ui.item ) {
+				var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+					valid = false;
+				select.children( "option" ).each(function() {
+					if ( $( this ).text().match( matcher ) ) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+			 	if ( !valid ){
+			 		// Call original valud if it didn't match anything
+
+					$( "#subdistrict_autoComplete" ).data( "autocomplete" ).term = "";					
+					$( this ).val(select.children( ":selected" ).text());
+					return false;
+				}
+			 }else{
+				if(select.val() != null){
+					$.getJSON('${findZipcodeBySubdistrictURL}', {
+						subdistrictID : select.val(),
+						ajax : 'true'
+					}, function(data) {
+						if(data == '0'){
+							$("#lovForm_zipcode").val("-");
+						}else{
+							$("#lovForm_zipcode").val(data);
+						}
+					});
+				}else{
+					$("#lovForm_zipcode").val("-");
+				}
+			 }
+		}
+	});
+	
+	function getSubdistrictSelectList(){
+		var select = $("#district");
+		$.getJSON('${findSubdistrictByDistrictURL}', {
+			districtID : select.val(),
+			ajax : 'true'
+		}, function(data) {
+			var html = '';
+			var len = data.length;
+			if(len > 0){
+				for ( var i = 0; i < len; i++) {
+					html += '<option value="' + data[i].subdistrictID + '">'
+							+ data[i].name + '</option>';
+				}
+				html += '</option>';
+			}else{
+				html += '<option value=""></option>';
+			}
+			
+			$('#subdistrict').html(html);
+			
+			$('#subdistrict_autoComplete').width($('#subdistrict').width());
+			$('#subdistrict_autoComplete').val($("#subdistrict :selected").text());
+			
+			//$("#brandRow").css("z-index", 9);
+			
+			$("#subdistrict_autoComplete").trigger('change');
+			getZipcode();
+		});	 
+	}
+	
+	function getZipcode(){	
+		var select = $("#subdistrict");
+		if(select.val() != null){
+			$.getJSON('${findZipcodeBySubdistrictURL}', {
+				subdistrictID : select.val(),
+				ajax : 'true'
+			}, function(data) {
+				if(data == '0'){
+					$("#lovForm_zipcode").val("-");
+				}else{
+					$("#lovForm_zipcode").val(data);
+				}
+			});
+		}else{
+			$("#lovForm_zipcode").val("-");
+		}
+	}
+	
+	/*$("#province").change(
 		function() {
 			$.getJSON('${findDistrictByProvinceURL}', {
 				provinceID : $(this).val(),
@@ -662,9 +846,9 @@ $(document).ready(function(){
 				$("#district").change();
 			});
 		}
-	);
+	);*/
 	
-	$("#district").change(
+	/*$("#district").change(
 		function(){
 			$.getJSON('${findSubdistrictByDistrictURL}', {
 				districtID : $(this).val(),
@@ -700,9 +884,9 @@ $(document).ready(function(){
 				$("#subdistrict").change();
 			});
 		}
-	);
+	);*/
 
-	$("#subdistrict").change(
+	/*$("#subdistrict").change(
 		function(){
 			if($(this).val() != null){
 				$.getJSON('${findZipcodeBySubdistrictURL}', {
@@ -721,9 +905,160 @@ $(document).ready(function(){
 				$("#lovForm_zipcode").val("-");
 			}
 		}
-	);
+	);*/
 	
-	$("#type").change(
+	
+	$( "#type_autoComplete" ).autocomplete({
+		change: function(event, ui) {
+			var select = $("#type");
+			var selected = select.children( ":selected" );
+			if ( !ui.item ) {
+				var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+					valid = false;
+				select.children( "option" ).each(function() {
+					if ( $( this ).text().match( matcher ) ) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+			 	if ( !valid ){
+					// remove invalid value, as it didn't match anything
+					//$(this).val( "" );
+					//select.val( "" );
+					//this.data( "autocomplete" ).term = "";
+					$( "#type_autoComplete" ).data( "autocomplete" ).term = "";
+					// get text from blank value option
+					$( this ).val(select.children( ":selected" ).text());
+					
+					//$("#brand_autoComplete").trigger('change');
+					//getModelSelectList();
+					return false;
+				}
+			 }else{
+				 $.getJSON('${findBrandURL}', {
+					typeID : select.val()
+				}, function(data) {
+					var html = '';
+					var len = data.length;
+					if(len > 0){
+						for ( var i = 0; i < len; i++) {
+							html += '<option value="' + data[i].brandID + '">'
+									+ data[i].name + '</option>';
+						}
+						html += '</option>';
+					}else{
+						html += '<option value=""></option>';
+					}
+					
+					$('#brand').html(html);
+					
+					$('#brand_autoComplete').width($('#brand').width());
+					$('#brand_autoComplete').val($("#brand :selected").text());
+					
+					$("#brandRow").css("z-index", 9);
+					
+					$("#brand_autoComplete").trigger('change');
+					getModelSelectList();
+				});
+			 }
+		}
+	});
+	
+	$( "#brand_autoComplete" ).autocomplete({
+		change: function(event, ui) {
+			var select = $("#brand");
+			var selected = select.children( ":selected" );
+			if ( !ui.item ) {
+				var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+					valid = false;
+				select.children( "option" ).each(function() {
+					if ( $( this ).text().match( matcher ) ) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+			 	if ( !valid ){
+					// remove invalid value, as it didn't match anything
+				//	$(this).val( "" );
+				//	select.val( "" );
+				//	$( "#lovForm_brand_autoComplete" ).data( "autocomplete" ).term = "";
+					// get text from blank value option
+					$( this ).val(select.children( ":selected" ).text());
+					
+					// set model to empty
+				//	html += '<option value=""></option>';
+				//	$('#model').html(html);
+				//	$('#model_autoComplete').width($('#model').width());
+				//	$('#model_autoComplete').val($("#model :selected").text());
+					
+				//	$("#modelRow").css("z-index", 8);
+					return false;
+				}
+			 }else{
+				 getModelSelectList();
+			 }
+		}
+	});
+	
+	$( "#model_autoComplete" ).autocomplete({
+		change: function(event, ui) {
+			var select = $("#model");
+			var selected = select.children( ":selected" );
+			if ( !ui.item ) {
+				var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+					valid = false;
+				select.children( "option" ).each(function() {
+					if ( $( this ).text().match( matcher ) ) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+			 	if ( !valid ){
+					// remove invalid value, as it didn't match anything
+					//$(this).val( "" );
+					//select.val( "" );
+					//this.data( "autocomplete" ).term = "";
+				//	$( "#lovForm_model_autoComplete" ).data( "autocomplete" ).term = "";
+					// get text from blank value option
+					$( this ).val(select.children( ":selected" ).text());
+					
+					//$("#brand_autoComplete").trigger('change');
+					//getModelSelectList();
+					return false;
+				}
+			 }
+		}
+	});
+	
+	function getModelSelectList(){
+		var select = $("#brand");
+		$.getJSON('${findModelURL}', {
+			typeID : $("#type").val(),
+			brandID :select.val(),
+			ajax : 'true'
+		}, function(data) {
+			var html = '';
+			var len = data.length;
+			if(len > 0){
+				for ( var i = 0; i < len; i++) {
+					html += '<option value="' + data[i].modelID + '">'
+							+ data[i].name + '</option>';
+				}
+				html += '</option>';
+			}else{
+				html += '<option value=""></option>';
+			}
+			
+			$('#model').html(html);
+			
+			$('#model_autoComplete').width($('#model').width());
+			$('#model_autoComplete').val($("#model :selected").text());
+			
+			$("#modelRow").css("z-index", 8);
+		});
+	}
+	
+	/*$("#type").change(
 		function(){
 			//alert($("#type").val());
 			$.getJSON('${findBrandURL}', {
@@ -759,7 +1094,7 @@ $(document).ready(function(){
 				
 			});
 		}
-	);
+	);*/
 	
 	$("#brand").change(
 		function() {
@@ -1035,7 +1370,8 @@ function saveCustomer(){
 		provinceID: $("#province").val(),
 		tel: $("#cTel").val(),
 		mobileTel: $("#cMobileTel").val(),
-		email: $("#cEmail").val()
+		email: $("#cEmail").val(),
+		zipcode: $("#lovForm_zipcode").val()
 	}, function(data) {
 		if(data.success == true){
 			jQuery("#dialog").text(data.message.toString());

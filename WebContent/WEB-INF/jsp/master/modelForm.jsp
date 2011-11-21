@@ -21,8 +21,10 @@
 						<td>
 							<div class="rowElem">
 								<form:select path="typeID" id="type">
+									<form:option value=""/>
 									<form:options items="${typeList}" itemValue="typeID" itemLabel="name"/>
 								</form:select>
+								<label class="error" for="type" generated="true" style="display: none; padding-left:10px;"></label>
 							</div>
 						</td>
 					</tr>
@@ -31,10 +33,11 @@
 						<td id="brandRow">
 							<div class="rowElem">
 								<form:select path="brandID" id="brand">
+									<form:option value=""/>
 									<form:options items="${brandList}" itemValue="brandID" itemLabel="name"/>
 								</form:select>
+								<label class="error" for="brand" generated="true" style="display: none; padding-left:10px;"></label>
 							</div>
-							<label class="error" for="brand" generated="true" style="display: none; padding-left:10px;"></label>
 						</td>
 					</tr>
 					<tr>
@@ -58,6 +61,7 @@ $(document).ready(function(){
 	$("#form").validate({
 		rules: {
 			name: "required",
+			typeID: "required",
 			brandID: "required"
 		}
 	});
@@ -65,29 +69,93 @@ $(document).ready(function(){
 	//find all form with class jqtransform and apply the plugin
 	$("form.jqtransform").jqTransform();
 	
-	$("#type").change(
+	
+	
+	$( "#type_autoComplete" ).autocomplete({
+		change: function(event, ui) {
+			var select = $("#type");
+			var selected = select.children( ":selected" );
+			if ( !ui.item ) {
+				var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+					valid = false;
+				select.children( "option" ).each(function() {
+					if ( $( this ).text().match( matcher ) ) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+			 	if ( !valid ){
+					// remove invalid value, as it didn't match anything
+					$(this).val( "" );
+					select.val( "" );
+					//this.data( "autocomplete" ).term = "";
+					$( "#type_autoComplete" ).data( "autocomplete" ).term = "";
+					
+					// set brand to empty
+					$( "#brand_autoComplete" ).val("");
+					$( "#brand").val("");
+					$( "#brand_autoComplete" ).data( "autocomplete" ).term = "";
+					return false;
+				}
+			 }else{
+				 $.getJSON('${findBrandURL}', {
+					typeID : select.val(),
+					ajax : 'true'
+				}, function(data) {
+					var html = '';
+					var len = data.length;
+					html += '<option value=""></option>'
+					if(len > 0){
+						for ( var i = 0; i < len; i++) {
+							html += '<option value="' + data[i].brandID + '">'
+									+ data[i].name + '</option>';
+						}
+						html += '</option>';
+					}/*else{
+						html += '<option value=""></option>';
+					}*/
+					
+					$('#brand').html(html);
+					
+					$('#brand_autoComplete').width($('#brand').width());
+					$('#brand_autoComplete').val($("#brand :selected").text());
+					
+					$("#brandRow").css("z-index", 9);
+				});
+			 }
+		}
+	});
+	
+	
+	
+	/*$("#type_autoComplete").change(
 		function() {
+			alert('change');
 			$.getJSON('${findBrandURL}', {
 				typeID : $(this).val(),
 				ajax : 'true'
 			}, function(data) {
 				var html = '';
 				var len = data.length;
+				html += '<option value=""></option>';
 				if(len > 0){
 					for ( var i = 0; i < len; i++) {
 						html += '<option value="' + data[i].brandID + '">'
 								+ data[i].name + '</option>';
 					}
 					html += '</option>';
-				}else{
+				}/*else{
 					html += '<option value=""></option>';
-				}
+				}*/
 				
-				$('#brand').html(html);
+				/*$('#brand').html(html);
+				
+				$('#brand_autoComplete').width($('#brand').width());
+				$('#brand_autoComplete').val($("#brand :selected").text());*/
 				
 				// set change select list dynamic, ref http://www.code-pal.com/the-select-problem-after-using-jqtransform-and-its-solution/ 
 				
-				var sty = $("#brandRow div.jqTransformSelectWrapper").attr("style");
+				/*var sty = $("#brandRow div.jqTransformSelectWrapper").attr("style");
 				//alert($("#brandRow div.jqTransformSelectWrapper").attr("style"));
 				
 				var sels = $("#brand").removeClass("jqTransformHidden");
@@ -100,10 +168,10 @@ $(document).ready(function(){
 				
 				//// trigger event change of model select list
 				//$("#brand").change();
-				$("#brandRow div.jqTransformSelectWrapper").css("z-index", 9);
-			});
+				$("#brandRow div.jqTransformSelectWrapper").css("z-index", 9);*/
+			/*});
 		}
-	);
+	);*/
 });
 
 </script>

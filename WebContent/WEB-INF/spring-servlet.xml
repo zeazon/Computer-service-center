@@ -51,7 +51,7 @@
         class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close"
         p:driverClassName="${jdbc.driverClassName}"
         p:url="${jdbc.databaseurl}" p:username="${jdbc.username}"
-        p:password="${jdbc.password}" />
+        p:password="${jdbc.2bytes.password}" />
  
  	<bean id="expressDataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
@@ -87,7 +87,7 @@
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">${jdbc.dialect}</prop>
-                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.show_sql">false</prop>
             </props>
         </property>
     </bean>

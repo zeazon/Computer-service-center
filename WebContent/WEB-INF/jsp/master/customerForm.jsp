@@ -21,8 +21,10 @@
 						<td>
 							<div class="rowElem">
 								<form:select path="customerTypeID" id="customerType">
+									<form:option value="" />									
 									<form:options items="${customerTypeList}" itemValue="customerTypeID" itemLabel="name"/>
 								</form:select>
+								<label class="error" for="customerType" generated="true" style="display: none; padding-left:10px;"></label>
 							</div>
 						</td>
 					</tr>
@@ -100,16 +102,204 @@ $(document).ready(function(){
 			email: "email",
 			tel: {require_from_group: [1,".telephone"]},
 			mobileTel: {require_from_group: [1,".telephone"]},
-			zipcode: {checkZipcode:true}
+			zipcode: {checkZipcode:true},
+			customerTypeID: "required"
 		}
 	});
 	
 	//find all form with class jqtransform and apply the plugin
 	$("form.jqtransform").jqTransform();
 	
-	//$("#district").change(alert('district change'));
+	$( "#province_autoComplete" ).autocomplete({
+		change: function(event, ui) {
+			var select = $("#province");
+			var selected = select.children( ":selected" );
+			if ( !ui.item ) {
+				var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+					valid = false;
+				select.children( "option" ).each(function() {
+					if ( $( this ).text().match( matcher ) ) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+			 	if ( !valid ){
+			 		// Call original valud if it didn't match anything
+					
+					//$( "#province_autoComplete" ).data( "autocomplete" ).term = "";
+					$( this ).val(select.children( ":selected" ).text());
+					return false;
+				}
+			 }else{
+				 $.getJSON('${findDistrictByProvinceURL}', {
+					provinceID : select.val(),
+					ajax : 'true'
+				}, function(data) {
+					var html = '';
+					var len = data.length;
+					if(len > 0){
+						for ( var i = 0; i < len; i++) {
+							html += '<option value="' + data[i].districtID + '">'
+									+ data[i].name + '</option>';
+						}
+						html += '</option>';
+					}else{
+						html += '<option value=""></option>';
+					}
+					
+					$('#district').html(html);
+					
+					$('#district_autoComplete').width($('#district').width());
+					$('#district_autoComplete').val($("#district :selected").text());
+					
+					//$("#brandRow").css("z-index", 9);
+					
+					$("#district_autoComplete").trigger('change');
+					getSubdistrictSelectList();
+				});
+			 }
+		}
+	});
 	
-	$("#province").change(
+	$( "#district_autoComplete" ).autocomplete({
+		change: function(event, ui) {
+			var select = $("#district");
+			var selected = select.children( ":selected" );
+			if ( !ui.item ) {
+				var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+					valid = false;
+				select.children( "option" ).each(function() {
+					if ( $( this ).text().match( matcher ) ) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+			 	if ( !valid ){
+			 		// Call original valud if it didn't match anything
+					
+					$( "#district_autoComplete" ).data( "autocomplete" ).term = "";
+					$( this ).val(select.children( ":selected" ).text());
+					return false;
+				}
+			 }else{
+				$.getJSON('${findSubdistrictByDistrictURL}', {
+					districtID : select.val(),
+					ajax : 'true'
+				}, function(data) {
+					var html = '';
+					var len = data.length;
+					if(len > 0){
+						for ( var i = 0; i < len; i++) {
+							html += '<option value="' + data[i].subdistrictID + '">'
+									+ data[i].name + '</option>';
+						}
+						html += '</option>';
+					}else{
+						html += '<option value=""></option>';
+					}
+					
+					$('#subdistrict').html(html);
+					
+					$('#subdistrict_autoComplete').width($('#subdistrict').width());
+					$('#subdistrict_autoComplete').val($("#subdistrict :selected").text());
+					
+					//$("#brandRow").css("z-index", 9);
+					
+					$("#subdistrict_autoComplete").trigger('change');
+					getZipcode();
+				});
+			 }
+		}
+	});
+	
+	$( "#subdistrict_autoComplete" ).autocomplete({
+		change: function(event, ui) {
+			var select = $("#subdistrict");
+			var selected = select.children( ":selected" );
+			if ( !ui.item ) {
+				var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+					valid = false;
+				select.children( "option" ).each(function() {
+					if ( $( this ).text().match( matcher ) ) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+			 	if ( !valid ){
+			 		// Call original valud if it didn't match anything
+
+					$( "#subdistrict_autoComplete" ).data( "autocomplete" ).term = "";					
+					$( this ).val(select.children( ":selected" ).text());
+					return false;
+				}
+			 }else{
+				if(select.val() != null){
+					$.getJSON('${findZipcodeBySubdistrictURL}', {
+						subdistrictID : select.val(),
+						ajax : 'true'
+					}, function(data) {
+						if(data == '0'){
+							$("#zipcode").val("-");
+						}else{
+							$("#zipcode").val(data);
+						}
+					});
+				}else{
+					$("#zipcode").val("-");
+				}
+			 }
+		}
+	});
+	
+	function getSubdistrictSelectList(){
+		var select = $("#district");
+		$.getJSON('${findSubdistrictByDistrictURL}', {
+			districtID : select.val(),
+			ajax : 'true'
+		}, function(data) {
+			var html = '';
+			var len = data.length;
+			if(len > 0){
+				for ( var i = 0; i < len; i++) {
+					html += '<option value="' + data[i].subdistrictID + '">'
+							+ data[i].name + '</option>';
+				}
+				html += '</option>';
+			}else{
+				html += '<option value=""></option>';
+			}
+			
+			$('#subdistrict').html(html);
+			
+			$('#subdistrict_autoComplete').width($('#subdistrict').width());
+			$('#subdistrict_autoComplete').val($("#subdistrict :selected").text());
+			
+			//$("#brandRow").css("z-index", 9);
+			
+			$("#subdistrict_autoComplete").trigger('change');
+			getZipcode();
+		});	 
+	}
+	
+	function getZipcode(){	
+		var select = $("#subdistrict");
+		if(select.val() != null){
+			$.getJSON('${findZipcodeBySubdistrictURL}', {
+				subdistrictID : select.val(),
+				ajax : 'true'
+			}, function(data) {
+				if(data == '0'){
+					$("#zipcode").val("-");
+				}else{
+					$("#zipcode").val(data);
+				}
+			});
+		}else{
+			$("#zipcode").val("-");
+		}
+	}
+	
+	/*$("#province").change(
 		function() {
 			$.getJSON('${findDistrictByProvinceURL}', {
 				provinceID : $(this).val(),
@@ -144,9 +334,9 @@ $(document).ready(function(){
 				$("#district").change();
 			});
 		}
-	);
+	);*/
 	
-	$("#district").change(
+	/*$("#district").change(
 		function(){
 			$.getJSON('${findSubdistrictByDistrictURL}', {
 				districtID : $(this).val(),
@@ -180,9 +370,9 @@ $(document).ready(function(){
 				$("#subdistrict").change();
 			});
 		}
-	);
+	);*/
 	
-	$("#subdistrict").change(
+	/*$("#subdistrict").change(
 		function(){
 			if($(this).val() != null){
 				$.getJSON('${findZipcodeBySubdistrictURL}', {
@@ -202,7 +392,7 @@ $(document).ready(function(){
 				$("#zipcode").val("-");
 			}
 		}
-	);
+	);*/
 	
 	jQuery.validator.addMethod("require_from_group", function(value, element, options) {
 		var numberRequired = options[0];

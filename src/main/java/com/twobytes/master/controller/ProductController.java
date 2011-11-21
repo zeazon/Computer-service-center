@@ -93,11 +93,11 @@ public class ProductController {
 	}
 	
 	@RequestMapping(value="/searchProduct")
-	public @ResponseBody GridResponse getData(@RequestParam(value="description", required=false) String description, @RequestParam(value="typeID", required=false) String typeID, @RequestParam(value="brandID", required=false) String brandID, @RequestParam(value="modelID", required=false) String modelID, @RequestParam("rows") Integer rows, @RequestParam("page") Integer page, @RequestParam("sidx") String sidx, @RequestParam("sord") String sord){
+	public @ResponseBody GridResponse getData(@RequestParam(value="serialNo", required=false) String serialNo, @RequestParam(value="typeID", required=false) String typeID, @RequestParam(value="brandID", required=false) String brandID, @RequestParam(value="modelID", required=false) String modelID, @RequestParam("rows") Integer rows, @RequestParam("page") Integer page, @RequestParam("sidx") String sidx, @RequestParam("sord") String sord){
 		// Because default Tomcat URI encoding is iso-8859-1 so it must encode back to tis620
 		try{
-			if(null != description){
-				description = new String(description.getBytes("iso-8859-1"), "tis620");	
+			if(null != serialNo){
+				serialNo = new String(serialNo.getBytes("iso-8859-1"), "tis620");	
 			}
 			if(null != typeID){
 				typeID = new String(typeID.getBytes("iso-8859-1"), "tis620");	
@@ -113,7 +113,7 @@ public class ProductController {
 		}
 		List<Product> productList = new ArrayList<Product>();
 
-		productList = productService.selectByCriteria(typeID, brandID, modelID, description, rows, page, sidx, sord);
+		productList = productService.selectByCriteria(typeID, brandID, modelID, serialNo, rows, page, sidx, sord);
 		
 		GridResponse response = new GridResponse();
 		List<ProductGridData> rowsList = new ArrayList<ProductGridData>();
@@ -173,12 +173,15 @@ public class ProductController {
 		if(typeList.size() > 0){
 			Type type = typeList.get(0);
 			brandList = type.getBrands();
+			form.setTypeID(type.getTypeID());
 		}
 		
 		if(brandList.size() > 0){
 			Type type = typeList.get(0);
 			Brand brand = brandList.get(0);
 			modelList = modelService.getModelByTypeAndBrand(type.getTypeID(), brand.getBrandID());
+			form.setBrandID(brand.getBrandID());
+			form.setModelID(modelList.get(0).getModelID());
 		}
 		
 		if(brandList.size() == 0){
@@ -439,6 +442,7 @@ public class ProductController {
 		model.addAttribute("typeList", typeList);
 		model.addAttribute("brandList", brandList);
 		model.addAttribute("modelList", modelList);
+		model.addAttribute("mode", "edit");
 		model.addAttribute("form", form);
 		return VIEWNAME_FORM;
 	}
@@ -473,14 +477,17 @@ public class ProductController {
 		// Because default Tomcat URI encoding is iso-8859-1 so it must encode back to tis620
 		try{
 			if(null != form.getDescription()){
-				form.setDescription(new String(form.getDescription().getBytes("iso-8859-1"), "tis620"));
+//				form.setDescription(new String(form.getDescription().getBytes("iso-8859-1"), "tis620"));
+				form.setDescription(new String(form.getDescription().getBytes("iso-8859-1"), "UTF-8"));
 			}
 			if(null != form.getRemark()){
-				form.setRemark(new String(form.getRemark().getBytes("iso-8859-1"), "tis620"));
+//				form.setRemark(new String(form.getRemark().getBytes("iso-8859-1"), "tis620"));
+				form.setRemark(new String(form.getRemark().getBytes("iso-8859-1"), "UTF-8"));
 			}
 		}catch(UnsupportedEncodingException e){
 			e.printStackTrace();
 		}
+		
 		Date now = new Date();
 		Employee user = (Employee)request.getSession().getAttribute("UserLogin");
 		Product product = new Product();

@@ -162,12 +162,16 @@ public class SaleOrderController {
 				gridData.setSaleOrderID(so.getSaleOrderID().toString());
 				gridData.setSaleDate(sdf.format(so.getSaleDate()));
 
+				gridData.setCustomerName(so.getCustomer().getName());
+				
 				Employee employee = so.getEmployee();
 				gridData.setName(employee.getName());
 				gridData.setSurname(employee.getSurname());
+				gridData.setProductID(so.getProduct().getProductID());
 				gridData.setType(so.getProduct().getType().getName());
 				gridData.setBrand(so.getProduct().getBrand().getName());
 				gridData.setModel(so.getProduct().getModel().getName());
+				gridData.setSerialNo(so.getProduct().getSerialNo());
 				rowsList.add(gridData);
 			}
 			total_pages = new Double(

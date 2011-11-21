@@ -11,8 +11,8 @@
 						<td><label><fmt:message key="type" />:</label></td>
 						<td>
 							<div class="rowElem">
-								<form:select path="typeID" id="type">
-									<form:option value="" label="-"/>
+								<form:select path="typeID" id="type" cssClass="selectSearch">
+									<form:option value="" label="All"/>
 									<form:options items="${typeList}" itemValue="typeID" itemLabel="name"/>
 								</form:select>
 							</div>
@@ -22,8 +22,8 @@
 						<td><label><fmt:message key="brand" />:</label></td>
 						<td id="brandRow">
 							<div class="rowElem" style="z-index:100">
-								<form:select path="brandID" id="brand">
-									<form:option value="" label="-"/>
+								<form:select path="brandID" id="brand" cssClass="selectSearch">
+									<form:option value="" label="All"/>
 									<form:options items="${brandList}" itemValue="brandID" itemLabel="name"/>
 								</form:select>
 							</div>
@@ -64,8 +64,14 @@
 
 <c:url var="findBrandURL" value="/brand.html?do=getBrandByType" />
 
-<script type="text/javascript">
+<script type="text/javascript">	
 	jQuery().ready(function (){
+		//$('#type').combobox({showBlankValue:true});
+		//$('#brand').combobox({showBlankValue:true});
+		
+		//$('#type_autoComplete').val($("#type :selected").text());
+		//$('#brand_autoComplete').val($("#brand :selected").text());
+		
 		jQuery("#list").jqGrid({
 			url:"searchModel.html",
 			datatype: "json",
@@ -192,7 +198,136 @@
 		});
 		
 		
-		$("#type").change(
+		/*$( "#type_autoComplete" ).bind( "autocompletechange", function(event, ui) {
+		//	  $( "#type_autoComplete" ).checkVal(ui);
+			 // console.info(this.checkVal(ui));
+			 
+			 //alert($(this).val());
+			 
+			var select = $("#type");
+			var selected = select.children( ":selected" );
+			if ( !ui.item ) {
+				var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+					valid = false;
+				select.children( "option" ).each(function() {
+					if ( $( this ).text().match( matcher ) ) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+			 	if ( !valid ){
+					// remove invalid value, as it didn't match anything
+					$(this).val( "" );
+					select.val( "" );
+					//this.data( "autocomplete" ).term = "";
+					$( "#type_autoComplete" ).data( "autocomplete" ).term = "";
+					return false;
+				}
+			 }else{
+				 $.getJSON('${findBrandURL}', {
+					typeID : select.val(),
+					ajax : 'true'
+				}, function(data) {
+					var html = '';
+					var len = data.length;
+					if(len > 0){
+						html += '<option value="">-</option>';
+						for ( var i = 0; i < len; i++) {
+							html += '<option value="' + data[i].brandID + '">'
+									+ data[i].name + '</option>';
+						}
+						html += '</option>';
+					}else{
+						html += '<option value="">-</option>';
+					}
+					
+					$('#brand').html(html);
+					
+					$('#brand_autoComplete').width($('#brand').width());
+					$('#brand_autoComplete').val($("#brand :selected").text());
+					
+					// set change select list dynamic, ref http://www.code-pal.com/the-select-problem-after-using-jqtransform-and-its-solution/ 
+					
+					/*var sty = $("#brandRow div.jqTransformSelectWrapper").attr("style");
+					//alert($("#brandRow div.jqTransformSelectWrapper").attr("style"));
+					
+					var sels = $("#brand").removeClass("jqTransformHidden");
+					var $par = $("#brand");
+					$par.parent().replaceWith($par);
+					sels.jqTransSelect();
+					//alert(sty);
+					//$("#brandRow div.jqTransformSelectWrapper").attr("style", sty);
+					//$("#brandRow div.jqTransformSelectWrapper").attr("style", "z-index:9;");
+					
+					// trigger event change of district select list
+					$("#brand").change();
+					$("#brandRow div.jqTransformSelectWrapper").css("z-index", 9);*/
+					
+/*					$("#brandRow").css("z-index", 9);
+				});
+			 }
+			 
+		});*/
+		
+		$( "#type_autoComplete" ).autocomplete({
+			change: function(event, ui) {
+				var select = $("#type");
+				var selected = select.children( ":selected" );
+				if ( !ui.item ) {
+					var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+						valid = false;
+					select.children( "option" ).each(function() {
+						if ( $( this ).text().match( matcher ) ) {
+							this.selected = valid = true;
+							return false;
+						}
+					});
+				 	if ( !valid ){
+						// remove invalid value, as it didn't match anything
+						$(this).val( "" );
+						select.val( "" );
+						//this.data( "autocomplete" ).term = "";
+						$( "#type_autoComplete" ).data( "autocomplete" ).term = "";
+						// get text from blank value option
+						$( this ).val(select.children( ":selected" ).text());
+						
+						// set brand to empty
+						html += '<option value="">All</option>';
+						$('#brand').html(html);
+						$('#brand_autoComplete').width($('#brand').width());
+						$('#brand_autoComplete').val($("#brand :selected").text());
+						
+						$("#brandRow").css("z-index", 9);
+						return false;
+					}
+				 }else{
+					 $.getJSON('${findBrandURL}', {
+						typeID : select.val(),
+						ajax : 'true'
+					}, function(data) {
+						var html = '';
+						var len = data.length;
+						html += '<option value="">All</option>';
+						if(len > 0){
+							for ( var i = 0; i < len; i++) {
+								html += '<option value="' + data[i].brandID + '">'
+										+ data[i].name + '</option>';
+							}
+							html += '</option>';
+						}
+						
+						$('#brand').html(html);
+						
+						$('#brand_autoComplete').width($('#brand').width());
+						$('#brand_autoComplete').val($("#brand :selected").text());
+						
+						$("#brandRow").css("z-index", 9);
+					});
+				 }
+			}
+		});
+		
+		/*$("#type").change(
 			function() {
 				$.getJSON('${findBrandURL}', {
 					typeID : $(this).val(),
@@ -213,6 +348,9 @@
 					
 					$('#brand').html(html);
 					
+					$('#brand_autoComplete').width($('#brand').width());
+					$('#brand_autoComplete').val($("#brand :selected").text());
+					
 					// set change select list dynamic, ref http://www.code-pal.com/the-select-problem-after-using-jqtransform-and-its-solution/ 
 					
 					var sty = $("#brandRow div.jqTransformSelectWrapper").attr("style");
@@ -231,7 +369,7 @@
 					$("#brandRow div.jqTransformSelectWrapper").css("z-index", 9);
 				});
 			}
-		);
+		);*/
 		
 		
 	});

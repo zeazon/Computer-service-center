@@ -202,7 +202,7 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 			sql.append("and serviceOrder.product.serialNo like :serialNo ");
 		}
 		
-//		sql.append("and serviceOrder.status in ('fixing','received') ");
+		sql.append("and serviceOrder.status in ('fixing','received') ");
 		
 		if(!orderBy.equals("")){
 			if(orderBy.equals("name")){

@@ -73,12 +73,12 @@ div.box-contents {
 			<tr>
 				<td rowspan="3"><img src="./images/logo_small.png"></td>
 				<td align="right"><label style="width:67px"><fmt:message key="user" />:</label></td>
-				<td><div class="rowElem"><form:input path="login" class="textboxMockup" style="width: 158px;" id="login"/></div></td>
+				<td><div class="rowElem"><form:input path="login" style="width: 158px;" id="login"/></div></td>
 				<td><label for="login" generated="true" class="error" style="width:150px; margin-left:18px"></label></td>
 			</tr>
 			<tr>
 				<td align="right"><label><fmt:message key="password" />:</label></td>
-				<td><div class="rowElem"><form:input path="password" type="password" class="textboxMockup" style="width: 158px" /></div></td>
+				<td><div class="rowElem"><form:input path="password" type="password" style="width: 158px" /></div></td>
 				<td><label for="password" generated="true" class="error" style="width:150px; margin-left:18px"></label></td>
 			</tr>
 			<tr>

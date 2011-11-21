@@ -38,6 +38,7 @@ public class ServiceOrderForm {
 	
 	private String[] serviceList;
 	private Double[] servicePrice;
+	private String issuePart;
 	private Double netAmount;
 	private String remark;
 	
@@ -287,6 +288,14 @@ public class ServiceOrderForm {
 
 	public void setServicePrice(Double[] servicePrice) {
 		this.servicePrice = servicePrice;
+	}
+	
+	public String getIssuePart() {
+		return issuePart;
+	}
+
+	public void setIssuePart(String issuePart) {
+		this.issuePart = issuePart;
 	}
 
 	public Double getNetAmount() {

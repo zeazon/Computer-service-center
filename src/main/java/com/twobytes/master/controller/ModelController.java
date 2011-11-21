@@ -157,12 +157,16 @@ public class ModelController {
 		if(typeList.size() > 0){
 			Type type = typeList.get(0);
 			brandList = type.getBrands();
+			form.setTypeID(type.getTypeID());
 		}
 		if(brandList.size() == 0){
 			Brand brand = new Brand();
 			brand.setBrandID(null);
 			brand.setName(" ");
 			brandList.add(brand);
+		}else{
+			Brand brand = brandList.get(0);
+			form.setBrandID(brand.getBrandID());
 		}
 		
 		model.addAttribute("form", form);

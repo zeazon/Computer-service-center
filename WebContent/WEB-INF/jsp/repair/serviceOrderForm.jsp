@@ -32,7 +32,7 @@
 									<form:radiobutton path="serviceType" value="5" cssStyle="margin-top:4px" id="serviceType_refix" onclick="checkServiceType()" /><label style="float:left; margin-top:4px;"><fmt:message key="serviceOrderType_refix" /></label><form:input path="refServiceOrder" class="textboxMockup" id="refServiceOrder" maxlength="20" size="16" />
 								</c:if>
 								<c:if test="${mode=='edit'}">
-									<form:radiobutton path="serviceType" value="1" cssStyle="margin-top:4px" id="serviceType_guarantee" disabled="true" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_guarantee" /></label><form:select path="guaranteeNo" id="guaranteeNo" disabled="true" ><c:forEach var="i" begin="1" end="7" step="1"><form:option value="${i}" /></c:forEach></form:select>
+									<form:radiobutton path="serviceType" value="1" cssStyle="margin-top:4px" id="serviceType_guarantee" disabled="true" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_guarantee" /></label><form:select path="guaranteeNo" id="guaranteeNo" disabled="true"><c:forEach var="i" begin="1" end="7" step="1"><form:option value="${i}" /></c:forEach></form:select>
 									<form:radiobutton path="serviceType" value="2" cssStyle="margin-top:4px;" id="serviceType_repair" disabled="true" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_repair" /></label>
 									<form:radiobutton path="serviceType" value="3" cssStyle="margin-top:4px" id="serviceType_claim" disabled="true" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_claim" /></label>
 									<form:radiobutton path="serviceType" value="4" cssStyle="margin-top:4px" id="serviceType_outsiteService" disabled="true" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_outsiteService" /></label> <form:input path="refJobID" class="textboxMockup" id="refJobID" maxlength="30" readonly="true" />
@@ -312,7 +312,7 @@
 	<form:form commandName="customerForm" id="customerForm" class="jqtransform" action="JavaScript:saveCustomer();">
 		<table width="100%">
 			<tr>
-				<td width="20%"><label><fmt:message key="customerID" />:</label></td>
+				<td width="145px"><label><fmt:message key="customerID" />:</label></td>
 				<td><div class="rowElem"><form:input path="customerID" id="customerID" readonly="true" class="textboxMockup" /></div></td>
 			</tr>
 			<tr>
@@ -436,7 +436,7 @@
 							<td><label><fmt:message key="type" />:</label></td>
 							<td>
 								<div class="rowElem">
-									<select id="lovType">
+									<select id="lovType" class="selectSearch">
 										<option value="">All</option>
 										<c:forEach var="type" items="${typeList}">
 											<option value="${type.typeID}">${type.name}</option>
@@ -449,7 +449,7 @@
 							<td><label><fmt:message key="brand" />:</label></td>
 							<td id="brandRow" style="z-index:9">
 								<div class="rowElem">
-									<select id="lovBrand">
+									<select id="lovBrand" class="selectSearch">
 										<option value="">All</option>
 											<c:forEach var="brand" items="${brandList}">
 												<c:if test="${brand.brandID != null }">
@@ -464,7 +464,7 @@
 							<td><label><fmt:message key="model" />:</label></td>
 							<td id="modelRow" style="z-index:8">
 								<div class="rowElem">
-									<select id="lovModel">
+									<select id="lovModel" class="selectSearch">
 										<option value="">All</option>
 											<c:forEach var="model" items="${modelList}">
 												<c:if test="${model.modelID != null}">
@@ -674,6 +674,8 @@ function initShopLov(){
 
 $(document).ready(function(){
 	
+	$("#guaranteeNo_autoComplete").css('width','20px');
+	
 	//$("#appointmentDate").calendarsPicker($.extend({calendar: $.calendars.instance('thai','th')}));
 	$('#appointmentDate').datetimeEntry({datetimeFormat: 'D/O/Y H:M'});
 	$('#serviceOrderDate').datetimeEntry({datetimeFormat: 'D/O/Y H:M'});
@@ -869,8 +871,8 @@ $(document).ready(function(){
 	
 	$( "#add-form" ).dialog({
 		autoOpen: false,
-		height: 420,
-		width: 900,
+		height: 450,
+		width: 950,
 		modal: true
 	});
 	
@@ -883,8 +885,199 @@ $(document).ready(function(){
 		modal: true
 	});
 	
+	
+	$( "#lovForm_province_autoComplete" ).autocomplete({
+		change: function(event, ui) {
+			var select = $("#lovForm_province");
+			var selected = select.children( ":selected" );
+			if ( !ui.item ) {
+				var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+					valid = false;
+				select.children( "option" ).each(function() {
+					if ( $( this ).text().match( matcher ) ) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+			 	if ( !valid ){
+			 		// Call original valud if it didn't match anything
+					
+					//$( "#lovForm_province_autoComplete" ).data( "autocomplete" ).term = "";
+					$( this ).val(select.children( ":selected" ).text());
+					return false;
+				}
+			 }else{
+				 $.getJSON('${findDistrictByProvinceURL}', {
+					provinceID : select.val(),
+					ajax : 'true'
+				}, function(data) {
+					var html = '';
+					var len = data.length;
+					if(len > 0){
+						for ( var i = 0; i < len; i++) {
+							html += '<option value="' + data[i].districtID + '">'
+									+ data[i].name + '</option>';
+						}
+						html += '</option>';
+					}else{
+						html += '<option value=""></option>';
+					}
+					
+					$('#lovForm_district').html(html);
+					
+					$('#lovForm_district_autoComplete').width($('#lovForm_district').width());
+					$('#lovForm_district_autoComplete').val($("#lovForm_district :selected").text());
+					
+					//$("#brandRow").css("z-index", 9);
+					
+					$("#lovForm_district_autoComplete").trigger('change');
+					getSubdistrictSelectList();
+				});
+			 }
+		}
+	});
+	
+	$( "#lovForm_district_autoComplete" ).autocomplete({
+		change: function(event, ui) {
+			var select = $("#lovForm_district");
+			var selected = select.children( ":selected" );
+			if ( !ui.item ) {
+				var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+					valid = false;
+				select.children( "option" ).each(function() {
+					if ( $( this ).text().match( matcher ) ) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+			 	if ( !valid ){
+			 		// Call original valud if it didn't match anything
+					
+					//$( "#lovForm_district_autoComplete" ).data( "autocomplete" ).term = "";
+					$( this ).val(select.children( ":selected" ).text());
+					return false;
+				}
+			 }else{
+				$.getJSON('${findSubdistrictByDistrictURL}', {
+					districtID : select.val(),
+					ajax : 'true'
+				}, function(data) {
+					var html = '';
+					var len = data.length;
+					if(len > 0){
+						for ( var i = 0; i < len; i++) {
+							html += '<option value="' + data[i].subdistrictID + '">'
+									+ data[i].name + '</option>';
+						}
+						html += '</option>';
+					}else{
+						html += '<option value=""></option>';
+					}
+					
+					$('#lovForm_subdistrict').html(html);
+					
+					$('#lovForm_subdistrict_autoComplete').width($('#lovForm_subdistrict').width());
+					$('#lovForm_subdistrict_autoComplete').val($("#lovForm_subdistrict :selected").text());
+					
+					//$("#brandRow").css("z-index", 9);
+					
+					$("#lovForm_subdistrict_autoComplete").trigger('change');
+					getZipcode();
+				});
+			 }
+		}
+	});
+	
+	$( "#lovForm_subdistrict_autoComplete" ).autocomplete({
+		change: function(event, ui) {
+			var select = $("#lovForm_subdistrict");
+			var selected = select.children( ":selected" );
+			if ( !ui.item ) {
+				var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+					valid = false;
+				select.children( "option" ).each(function() {
+					if ( $( this ).text().match( matcher ) ) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+			 	if ( !valid ){
+			 		// Call original valud if it didn't match anything
+
+					$( "#lovForm_subdistrict_autoComplete" ).data( "autocomplete" ).term = "";					
+					$( this ).val(select.children( ":selected" ).text());
+					return false;
+				}
+			 }else{
+				if(select.val() != null){
+					$.getJSON('${findZipcodeBySubdistrictURL}', {
+						subdistrictID : select.val(),
+						ajax : 'true'
+					}, function(data) {
+						if(data == '0'){
+							$("#lovForm_zipcode").val("-");
+						}else{
+							$("#lovForm_zipcode").val(data);
+						}
+					});
+				}else{
+					$("#lovForm_zipcode").val("-");
+				}
+			 }
+		}
+	});
+	
+	function getSubdistrictSelectList(){
+		var select = $("#lovForm_district");
+		$.getJSON('${findSubdistrictByDistrictURL}', {
+			districtID : select.val(),
+			ajax : 'true'
+		}, function(data) {
+			var html = '';
+			var len = data.length;
+			if(len > 0){
+				for ( var i = 0; i < len; i++) {
+					html += '<option value="' + data[i].subdistrictID + '">'
+							+ data[i].name + '</option>';
+				}
+				html += '</option>';
+			}else{
+				html += '<option value=""></option>';
+			}
+			
+			$('#lovForm_subdistrict').html(html);
+			
+			$('#lovForm_subdistrict_autoComplete').width($('#lovForm_subdistrict').width());
+			$('#lovForm_subdistrict_autoComplete').val($("#lovForm_subdistrict :selected").text());
+			
+			//$("#brandRow").css("z-index", 9);
+			
+			$("#lovForm_subdistrict_autoComplete").trigger('change');
+			getZipcode();
+		});	 
+	}
+	
+	function getZipcode(){	
+		var select = $("#lovForm_subdistrict");
+		if(select.val() != null){
+			$.getJSON('${findZipcodeBySubdistrictURL}', {
+				subdistrictID : select.val(),
+				ajax : 'true'
+			}, function(data) {
+				if(data == '0'){
+					$("#lovForm_zipcode").val("-");
+				}else{
+					$("#lovForm_zipcode").val(data);
+				}
+			});
+		}else{
+			$("#lovForm_zipcode").val("-");
+		}
+	}
+	
+	
 	//$("#province").change(
-	$("#lovForm_province").change(
+	/*$("#lovForm_province").change(
 		function() {
 			$.getJSON('${findDistrictByProvinceURL}', {
 				provinceID : $(this).val(),
@@ -920,9 +1113,9 @@ $(document).ready(function(){
 				$("#lovForm_district").change();
 			});
 		}
-	);
+	);*/
 	
-	$("#lovForm_district").change(
+	/*$("#lovForm_district").change(
 		function(){
 			$.getJSON('${findSubdistrictByDistrictURL}', {
 				districtID : $(this).val(),
@@ -977,9 +1170,162 @@ $(document).ready(function(){
 				$("#lovForm_zipcode").val("-");
 			}
 		}
-	);
+	);*/
 	
-	$("#lovForm_type").change(
+	
+	$( "#lovForm_type_autoComplete" ).autocomplete({
+		change: function(event, ui) {
+			var select = $("#lovForm_type");
+			var selected = select.children( ":selected" );
+			if ( !ui.item ) {
+				var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+					valid = false;
+				select.children( "option" ).each(function() {
+					if ( $( this ).text().match( matcher ) ) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+			 	if ( !valid ){
+					// remove invalid value, as it didn't match anything
+					//$(this).val( "" );
+					//select.val( "" );
+					//this.data( "autocomplete" ).term = "";
+					$( "#lovForm_type_autoComplete" ).data( "autocomplete" ).term = "";
+					// get text from blank value option
+					$( this ).val(select.children( ":selected" ).text());
+					
+					//$("#brand_autoComplete").trigger('change');
+					//getModelSelectList();
+					return false;
+				}
+			 }else{
+				 $.getJSON('${findBrandURL}', {
+					typeID : select.val()
+				}, function(data) {
+					var html = '';
+					var len = data.length;
+					if(len > 0){
+						for ( var i = 0; i < len; i++) {
+							html += '<option value="' + data[i].brandID + '">'
+									+ data[i].name + '</option>';
+						}
+						html += '</option>';
+					}else{
+						html += '<option value=""></option>';
+					}
+					
+					$('#lovForm_brand').html(html);
+					
+					$('#lovForm_brand_autoComplete').width($('#lovForm_brand').width());
+					$('#lovForm_brand_autoComplete').val($("#lovForm_brand :selected").text());
+					
+					$("#lovForm_brandRow").css("z-index", 9);
+					
+					$("#lovForm_brand_autoComplete").trigger('change');
+					getModelSelectList();
+				});
+			 }
+		}
+	});
+	
+	$( "#lovForm_brand_autoComplete" ).autocomplete({
+		change: function(event, ui) {
+			var select = $("#lovForm_brand");
+			var selected = select.children( ":selected" );
+			if ( !ui.item ) {
+				var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+					valid = false;
+				select.children( "option" ).each(function() {
+					if ( $( this ).text().match( matcher ) ) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+			 	if ( !valid ){
+					// remove invalid value, as it didn't match anything
+				//	$(this).val( "" );
+				//	select.val( "" );
+				//	$( "#lovForm_brand_autoComplete" ).data( "autocomplete" ).term = "";
+					// get text from blank value option
+					$( this ).val(select.children( ":selected" ).text());
+					
+					// set model to empty
+				//	html += '<option value=""></option>';
+				//	$('#model').html(html);
+				//	$('#model_autoComplete').width($('#model').width());
+				//	$('#model_autoComplete').val($("#model :selected").text());
+					
+				//	$("#modelRow").css("z-index", 8);
+					return false;
+				}
+			 }else{
+				 getModelSelectList();
+			 }
+		}
+	});
+	
+	$( "#lovForm_model_autoComplete" ).autocomplete({
+		change: function(event, ui) {
+			var select = $("#lovForm_model");
+			var selected = select.children( ":selected" );
+			if ( !ui.item ) {
+				var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+					valid = false;
+				select.children( "option" ).each(function() {
+					if ( $( this ).text().match( matcher ) ) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+			 	if ( !valid ){
+					// remove invalid value, as it didn't match anything
+					//$(this).val( "" );
+					//select.val( "" );
+					//this.data( "autocomplete" ).term = "";
+				//	$( "#lovForm_model_autoComplete" ).data( "autocomplete" ).term = "";
+					// get text from blank value option
+					$( this ).val(select.children( ":selected" ).text());
+					
+					//$("#brand_autoComplete").trigger('change');
+					//getModelSelectList();
+					return false;
+				}
+			 }
+		}
+	});
+	
+	function getModelSelectList(){
+		var select = $("#lovForm_brand");
+		$.getJSON('${findModelURL}', {
+			typeID : $("#lovForm_type").val(),
+			brandID :select.val(),
+			ajax : 'true'
+		}, function(data) {
+			var html = '';
+			var len = data.length;
+			if(len > 0){
+				for ( var i = 0; i < len; i++) {
+					html += '<option value="' + data[i].modelID + '">'
+							+ data[i].name + '</option>';
+				}
+				html += '</option>';
+			}else{
+				html += '<option value=""></option>';
+			}
+			
+			$('#lovForm_model').html(html);
+			
+			$('#lovForm_model_autoComplete').width($('#lovForm_model').width());
+			$('#lovForm_model_autoComplete').val($("#lovForm_model :selected").text());
+			
+			$("#modelRow").css("z-index", 8);
+		});
+	}
+	
+	
+	
+	/*$("#lovForm_type").change(
 		function(){
 			$.getJSON('${findBrandURL}', {
 				typeID: $(this).val()
@@ -1013,10 +1359,10 @@ $(document).ready(function(){
 				$("#brandRow div.jqTransformSelectWrapper").css("z-index", 9);
 			});
 		}
-	);
+	);*/
 	
 	
-	$("#lovForm_brand").change(
+	/*$("#lovForm_brand").change(
 		function() {
 			$.getJSON('${findModelURL}', {
 				typeID : $("#lovForm_type").val(),
@@ -1051,10 +1397,158 @@ $(document).ready(function(){
 				$("#modelRow div.jqTransformSelectWrapper").css("z-index", 8);
 			});
 		}
-	);
+	);*/
 	
 	
-	$("#lovType").change(
+	$( "#lovType_autoComplete" ).autocomplete({
+		change: function(event, ui) {
+			var select = $("#lovType");
+			var selected = select.children( ":selected" );
+			if ( !ui.item ) {
+				var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+					valid = false;
+				select.children( "option" ).each(function() {
+					if ( $( this ).text().match( matcher ) ) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+			 	if ( !valid ){
+					// remove invalid value, as it didn't match anything
+					//$(this).val( "" );
+					//select.val( "" );
+					//this.data( "autocomplete" ).term = "";
+					$( "#lovType_autoComplete" ).data( "autocomplete" ).term = "";
+					// get text from blank value option
+					$( this ).val(select.children( ":selected" ).text());
+					
+					//$("#brand_autoComplete").trigger('change');
+					//getModelSelectList();
+					return false;
+				}
+			 }else{
+				 $.getJSON('${findBrandURL}', {
+					typeID : select.val()
+				}, function(data) {
+					var html = '';
+					var len = data.length;
+					html += '<option value="">All</option>';
+					if(len > 0){
+						for ( var i = 0; i < len; i++) {
+							html += '<option value="' + data[i].brandID + '">'
+									+ data[i].name + '</option>';
+						}
+						html += '</option>';
+					}
+					
+					$('#lovBrand').html(html);
+					
+					$('#lovBrand_autoComplete').width($('#lovBrand').width());
+					$('#lovBrand_autoComplete').val($("#lovBrand :selected").text());
+					
+					$("#lovBrandRow").css("z-index", 9);
+					
+					$("#lovBrand_autoComplete").trigger('change');
+					getModelSelectList_lovSearch();
+				});
+			 }
+		}
+	});
+	
+	$( "#lovBrand_autoComplete" ).autocomplete({
+		change: function(event, ui) {
+			var select = $("#lovBrand");
+			var selected = select.children( ":selected" );
+			if ( !ui.item ) {
+				var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+					valid = false;
+				select.children( "option" ).each(function() {
+					if ( $( this ).text().match( matcher ) ) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+			 	if ( !valid ){
+					// remove invalid value, as it didn't match anything
+				//	$(this).val( "" );
+				//	select.val( "" );
+				//	$( "#lovForm_brand_autoComplete" ).data( "autocomplete" ).term = "";
+					// get text from blank value option
+					$( this ).val(select.children( ":selected" ).text());
+					
+					// set model to empty
+				//	html += '<option value=""></option>';
+				//	$('#model').html(html);
+				//	$('#model_autoComplete').width($('#model').width());
+				//	$('#model_autoComplete').val($("#model :selected").text());
+					
+				//	$("#modelRow").css("z-index", 8);
+					return false;
+				}
+			 }else{
+				 getModelSelectList_lovSearch();
+			 }
+		}
+	});
+	
+	$( "#lovModel_autoComplete" ).autocomplete({
+		change: function(event, ui) {
+			var select = $("#lovModel");
+			var selected = select.children( ":selected" );
+			if ( !ui.item ) {
+				var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+					valid = false;
+				select.children( "option" ).each(function() {
+					if ( $( this ).text().match( matcher ) ) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+			 	if ( !valid ){
+					// remove invalid value, as it didn't match anything
+					//$(this).val( "" );
+					//select.val( "" );
+					//this.data( "autocomplete" ).term = "";
+				//	$( "#lovForm_model_autoComplete" ).data( "autocomplete" ).term = "";
+					// get text from blank value option
+					$( this ).val(select.children( ":selected" ).text());
+					
+					//$("#brand_autoComplete").trigger('change');
+					getModelSelectList_lovSearch();
+					return false;
+				}
+			 }
+		}
+	});
+	
+	function getModelSelectList_lovSearch(){
+		var select = $("#lovBrand");
+		$.getJSON('${findModelURL}', {
+			typeID : $("#lovType").val(),
+			brandID :select.val(),
+			ajax : 'true'
+		}, function(data) {
+			var html = '';
+			var len = data.length;
+			html += '<option value="">All</option>';
+			if(len > 0){
+				for ( var i = 0; i < len; i++) {
+					html += '<option value="' + data[i].modelID + '">'
+							+ data[i].name + '</option>';
+				}
+				html += '</option>';
+			}
+			
+			$('#lovModel').html(html);
+			
+			$('#lovModel_autoComplete').width($('#lovModel').width());
+			$('#lovModel_autoComplete').val($("#lovModel :selected").text());
+			
+			$("#modelRow").css("z-index", 8);
+		});
+	}
+	
+	/*$("#lovType").change(
 		function(){
 			$.getJSON('${findBrandURL}', {
 				typeID: $(this).val()
@@ -1090,10 +1584,10 @@ $(document).ready(function(){
 				
 			});
 		}
-	);
+	);*/
 	
 	
-	$("#lovBrand").change(
+	/*$("#lovBrand").change(
 		function(){
 			$.getJSON('${findModelURL}', {
 				typeID : $("#lovType").val(),
@@ -1127,7 +1621,7 @@ $(document).ready(function(){
 								
 			});
 		}
-	);
+	);*/
 	
 	
 	$("#searchProductButton").click(function() {
@@ -1474,7 +1968,8 @@ function saveCustomer(){
 		provinceID: $("#lovForm_province").val(),
 		tel: $("#cTel").val(),
 		mobileTel: $("#cMobileTel").val(),
-		email: $("#cEmail").val()
+		email: $("#cEmail").val(),
+		zipcode: $("#lovForm_zipcode").val()
 	}, function(data) {
 		if(data.success == true){
 			//alert('Add complete');

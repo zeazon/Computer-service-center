@@ -139,9 +139,11 @@ public class EmployeeController{
 			return "loginScreen";
 		}
 		EmployeeForm form = new EmployeeForm();
-		model.addAttribute("form", form);
 		List<Role> roleList = roleService.getAll();
+		form.setRoleID(roleList.get(0).getRoleID().toString());
+		
 		model.addAttribute("roleList", roleList);
+		model.addAttribute("form", form);
 		return VIEWNAME_FORM;
 	}
 	

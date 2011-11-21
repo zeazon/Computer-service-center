@@ -8,6 +8,9 @@ public class SaleOrderGridData {
 	private String type;
 	private String brand;
 	private String model;
+	private String customerName;
+	private String productID;
+	private String serialNo;
 	
 	public String getSaleOrderID() {
 		return saleOrderID;
@@ -50,6 +53,24 @@ public class SaleOrderGridData {
 	}
 	public void setModel(String model) {
 		this.model = model;
+	}
+	public String getCustomerName() {
+		return customerName;
+	}
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
+	}
+	public String getProductID() {
+		return productID;
+	}
+	public void setProductID(String productID) {
+		this.productID = productID;
+	}
+	public String getSerialNo() {
+		return serialNo;
+	}
+	public void setSerialNo(String serialNo) {
+		this.serialNo = serialNo;
 	}
 	
 }

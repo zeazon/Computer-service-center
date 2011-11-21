@@ -15,8 +15,8 @@
 						<td><label><fmt:message key="employee" />:</label></td>
 						<td>
 							<div class="rowElem" style="z-index:100">
-								<form:select path="employeeID" id="employeeID">
-									<form:option value="">&nbsp;</form:option>
+								<form:select path="employeeID" id="employeeID" cssClass="selectSearch">
+									<form:option value="">All</form:option>
 									<form:options items="${employeeList}" itemValue="employeeID" itemLabel="name"/>
 								</form:select>
 							</div>
@@ -64,15 +64,18 @@
 			datatype: "json",
 			height: "100%",
 			autowidth: true,
-			colNames:['<fmt:message key="saleOrderID" />','<fmt:message key="date" />','<fmt:message key="name" />','<fmt:message key="surname" />','<fmt:message key="type" />','<fmt:message key="brand" />','<fmt:message key="model" />'],
+			colNames:['<fmt:message key="saleOrderID" />','<fmt:message key="date" />','<fmt:message key="name" />','<fmt:message key="surname" />','<fmt:message key="customer_name" />','<fmt:message key="productID" />','<fmt:message key="type" />','<fmt:message key="brand" />','<fmt:message key="model" />','<fmt:message key="serialNo" />'],
 			colModel:[
-				{name:'saleOrderID',index:'saleOrderID', sorttype:"int"},
+				{name:'saleOrderID',index:'saleOrderID', sorttype:"int", width:'70'},
 				{name:'saleDate', index:'saleDate', align:'center', sorttype:'date',formatter:'date', formatoptions: {srcformat:'d/m/Y',newformat:'d/m/Y'}, width:'100', firstSortOrder:'desc'},
 				{name:'name', index:'name'},
 				{name:'surname', index:'surname', sortable:false},
+				{name:'customerName', index:'customerName'},
+				{name:'productID',index:'productID', sortable:false},
 				{name:'type',index:'type', sortable:false},
 				{name:'brand',index:'brand', sortable:false},
-				{name:'model',index:'model', sortable:false}],
+				{name:'model',index:'model', sortable:false},
+				{name:'serialNo',index:'serialNo', sortable:false}],
 			multiselect: false,
 			rownumbers: true,
 			rowNum:10,

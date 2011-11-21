@@ -147,8 +147,6 @@ public class CustomerController {
 		// set default district to Muang
 		form.setDistrictID(160);
 		
-		model.addAttribute("form", form);
-		
 		List<Province> provinceList = provinceService.getAll();
 		
 		List<District> districtList = districtService.getByProvince(7);
@@ -161,11 +159,14 @@ public class CustomerController {
 		
 		List<CustomerType> customerTypeList = customerTypeService.getAll();
 		
+		form.setCustomerTypeID(customerTypeList.get(0).getCustomerTypeID());
+		
 		model.addAttribute("provinceList", provinceList);
 		model.addAttribute("districtList", districtList);
 		model.addAttribute("subdistrictList", subdistrictList);
 		//model.addAttribute("zipcode", sd.getZipcode());
 		model.addAttribute("customerTypeList", customerTypeList);
+		model.addAttribute("form", form);
 		return VIEWNAME_FORM;
 	}
 	
@@ -238,7 +239,7 @@ public class CustomerController {
 		customer.setUpdatedBy(user.getEmployeeID());
 		customer.setUpdatedDate(now);
 //		boolean canSave;
-		String result;
+		String result = "false";
 		try{
 			result = customerService.save(customer);
 		}catch(Exception e){
@@ -266,9 +267,12 @@ public class CustomerController {
 
 			//Subdistrict sd1 = (Subdistrict) sdService.selectByID(form.getSubdistrictID());
 			
+			List<CustomerType> customerTypeList = customerTypeService.getAll();
+			
 			model.addAttribute("provinceList", provinceList);
 			model.addAttribute("districtList", districtList);
 			model.addAttribute("subdistrictList", subdistrictList);
+			model.addAttribute("customerTypeList", customerTypeList);
 			//model.addAttribute("zipcode", sd1.getZipcode());
 			return VIEWNAME_FORM;
 		}
@@ -360,22 +364,20 @@ public class CustomerController {
 		// Because default Tomcat URI encoding is iso-8859-1 so it must encode back to tis620
 		try{
 			if(null != form.getName()){
-				form.setName(new String(form.getName().getBytes("iso-8859-1"), "tis620"));
-				//form.setName(new String(form.getName().getBytes("iso-8859-1"), "UTF-8"));
+//				form.setName(new String(form.getName().getBytes("iso-8859-1"), "tis620"));
+				form.setName(new String(form.getName().getBytes("iso-8859-1"), "UTF-8"));
 			}
-/*			if(null != form.getSurname()){
-//				form.setSurname(new String(form.getSurname().getBytes("iso-8859-1"), "tis620"));	
-				form.setSurname(new String(form.getSurname().getBytes("iso-8859-1"), "UTF-8"));
-			}*/
 			if(null != form.getAddress()){
-				form.setAddress(new String(form.getAddress().getBytes("iso-8859-1"), "tis620"));
-				//form.setAddress(new String(form.getAddress().getBytes("iso-8859-1"), "UTF-8"));
+//				form.setAddress(new String(form.getAddress().getBytes("iso-8859-1"), "tis620"));
+				form.setAddress(new String(form.getAddress().getBytes("iso-8859-1"), "UTF-8"));
 			}
 			if(null != form.getTel()){
-				form.setTel(new String(form.getTel().getBytes("iso-8859-1"), "tis620"));
+//				form.setTel(new String(form.getTel().getBytes("iso-8859-1"), "tis620"));
+				form.setTel(new String(form.getTel().getBytes("iso-8859-1"), "UTF-8"));
 			}
 			if(null != form.getMobileTel()){
-				form.setMobileTel(new String(form.getMobileTel().getBytes("iso-8859-1"), "tis620"));
+//				form.setMobileTel(new String(form.getMobileTel().getBytes("iso-8859-1"), "tis620"));
+				form.setMobileTel(new String(form.getMobileTel().getBytes("iso-8859-1"), "UTF-8"));
 			}
 		}catch(UnsupportedEncodingException e){
 			e.printStackTrace();
@@ -385,6 +387,22 @@ public class CustomerController {
 		Customer customer = new Customer();
 
 //		customer.setCustomerID(docRunningUtil.genDoc("customer"));
+//		System.out.println("form.getName() = "+form.getName());
+//		try {
+//			String name1 = new String(form.getName().getBytes("iso-8859-1"), "tis-620");
+//			String name2 = new String(form.getName().getBytes("iso-8859-1"), "UTF8");
+//			String name3 = new String(name2.getBytes("UTF8"), "tis620");
+//			String name4 = new String(form.getName().getBytes("UTF8"), "tis620");
+//			System.out.println("name 1 = "+name1);
+//			System.out.println("name 2 = "+name2);
+//			System.out.println("name 3 = "+name3);
+//			System.out.println("name 4 = "+name4);
+//		} catch (UnsupportedEncodingException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+//		System.out.println("After form.getName() = "+form.getName());
+//		System.out.println("form.getAddress() = "+form.getAddress());
 		CustomerType customerType = customerTypeService.selectByID(form.getCustomerTypeID());
 		customer.setCustomerType(customerType);
 		customer.setName(form.getName());
@@ -417,7 +435,7 @@ public class CustomerController {
 //		boolean canSave = false;
 		String result = "";
 		try{
-			result = customerService.save(customer);
+		//	result = customerService.save(customer);
 			response.setData(result);
 		}catch(Exception e){
 			e.printStackTrace();
@@ -432,7 +450,7 @@ public class CustomerController {
 //			return VIEWNAME_FORM;
 //			return canSave;
 			response.setSuccess(false);
-			response.setMessage(this.messages.getMessage("error.cannotSave", null, new Locale("th", "TH")));
+			response.setMessage(this.messages.getMessage("error.cannotSave", null, new Locale("th", "TH"))+"\n"+e.getMessage());
 			return response;
 		}
 		if (result.equals("false")) {

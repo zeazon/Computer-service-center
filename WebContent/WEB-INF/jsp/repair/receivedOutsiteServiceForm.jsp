@@ -85,6 +85,53 @@
 									</tr>
 									<tr align="left">
 										<td colspan="8">
+											<div class="rowElem"><br>&nbsp;&nbsp;&nbsp;<b><u><fmt:message key="productDetail" /></u></b></div>
+										</td>
+									</tr>
+									<tr>
+										<td><label><fmt:message key="productID" />:</label></td>
+										<td colspan="7"><div class="rowElem"><span id="productID">${form.serviceOrder.product.productID}&nbsp;</span></div></td>
+									</tr>
+									<!-- tr>
+										<td><label><fmt:message key="type" />:</label></td>
+										<td colspan="2">
+											<div class="rowElem"><span id="type">${form.serviceOrder.product.type.name}&nbsp;</span></div>
+										</td>
+										<td><label><fmt:message key="brand" />:</label></td>
+										<td colspan="4">
+											<div class="rowElem"><span id="brand">${form.serviceOrder.product.brand.name}&nbsp;</span></div>
+										</td>
+									</tr>
+									<tr>
+										<td><label><fmt:message key="model" />:</label></td>
+										<td colspan="2"><div class="rowElem"><span id="model">${form.serviceOrder.product.model.name}&nbsp;</span></div></td>
+										<td><label><fmt:message key="serialNo" />:</label></td>
+										<td colspan="4"><div class="rowElem"><span id="serialNo">${form.serviceOrder.product.serialNo}&nbsp;</span></div></td>
+									</tr-->
+									<tr>
+										<td><label><fmt:message key="type" />:</label></td>
+										<td><div class="rowElem"><span id="type">${form.serviceOrder.product.type.name}&nbsp;</span></div></td>
+										<td><label><fmt:message key="brand" />:</label></td>
+										<td><div class="rowElem"><span id="brand">${form.serviceOrder.product.brand.name}&nbsp;</span></div></td>
+										<td><label><fmt:message key="model" />:</label></td>
+										<td><div class="rowElem"><span id="model">${form.serviceOrder.product.model.name}&nbsp;</span></span></div></td>
+										<td><label><fmt:message key="serialNo" />:</label></td>
+										<td><div class="rowElem"><span id="serialNo">${form.serviceOrder.product.serialNo}&nbsp;</span></div></td>
+									</tr>
+									<tr>
+										<td><label><fmt:message key="accessories" />:</label></td>
+										<td colspan="2"><div class="rowElem"><span id="accessories">${form.serviceOrder.accessories}</span></div></td>
+										<td><label><fmt:message key="serviceOrder_desc" />:</label></td>
+										<td colspan="4"><div class="rowElem"><span id="serviceOrder_desc">${form.serviceOrder.description}&nbsp;</span></div></td>
+									</tr>
+									<tr>
+										<%--td valign="top" style="padding-top:9px;"><label><fmt:message key="serviceOrder_problem" />:</label></td--%>
+										<%--td colspan="5" align="left"><div class="rowElem"><textarea rows="5" col="30" readonly="readonly" class="ignore textareaMockup" style="width:98%" name="problem" ></textarea></div></td--%>
+										<td><label><fmt:message key="serviceOrder_problem" />:</label></td>
+										<td colspan="7" align="left"><div class="rowElem"><span id="problem" >${form.serviceOrder.problem}&nbsp;</span></div></td>
+									</tr>
+									<tr align="left">
+										<td colspan="8">
 											<div class="rowElem"><br>&nbsp;&nbsp;&nbsp;<b><u><fmt:message key="customerDetail" /></u></b></div>
 										</td>
 									</tr>
@@ -117,43 +164,6 @@
 										<td><div class="rowElem"><span id="deliveryTel">${form.serviceOrder.deliveryTel}&nbsp;</span></div></td>
 										<td><label><fmt:message key="mobileTel"/>:</label></td>
 										<td><div class="rowElem"><span id="deliveryMobileTel">${form.serviceOrder.deliveryMobileTel}&nbsp;</span></div></td>
-									</tr>
-									<tr align="left">
-										<td colspan="8">
-											<div class="rowElem"><br>&nbsp;&nbsp;&nbsp;<b><u><fmt:message key="productDetail" /></u></b></div>
-										</td>
-									</tr>
-									<tr>
-										<td><label><fmt:message key="productID" />:</label></td>
-										<td colspan="7"><div class="rowElem"><span id="productID">${form.serviceOrder.product.productID}&nbsp;</span></div></td>
-									</tr>
-									<tr>
-										<td><label><fmt:message key="type" />:</label></td>
-										<td colspan="2">
-											<div class="rowElem"><span id="type">${form.serviceOrder.product.type.name}&nbsp;</span></div>
-										</td>
-										<td><label><fmt:message key="brand" />:</label></td>
-										<td colspan="4">
-											<div class="rowElem"><span id="brand">${form.serviceOrder.product.brand.name}&nbsp;</span></div>
-										</td>
-									</tr>
-									<tr>
-										<td><label><fmt:message key="model" />:</label></td>
-										<td colspan="2"><div class="rowElem"><span id="model">${form.serviceOrder.product.model.name}&nbsp;</span></div></td>
-										<td><label><fmt:message key="serialNo" />:</label></td>
-										<td colspan="4"><div class="rowElem"><span id="serialNo">${form.serviceOrder.product.serialNo}&nbsp;</span></div></td>
-									</tr>
-									<tr>
-										<td><label><fmt:message key="accessories" />:</label></td>
-										<td colspan="2"><div class="rowElem"><span id="accessories">${form.serviceOrder.accessories}</span></div></td>
-										<td><label><fmt:message key="serviceOrder_desc" />:</label></td>
-										<td colspan="4"><div class="rowElem"><span id="serviceOrder_desc">${form.serviceOrder.description}&nbsp;</span></div></td>
-									</tr>
-									<tr>
-										<%--td valign="top" style="padding-top:9px;"><label><fmt:message key="serviceOrder_problem" />:</label></td--%>
-										<%--td colspan="5" align="left"><div class="rowElem"><textarea rows="5" col="30" readonly="readonly" class="ignore textareaMockup" style="width:98%" name="problem" ></textarea></div></td--%>
-										<td><label><fmt:message key="serviceOrder_problem" />:</label></td>
-										<td colspan="7" align="left"><div class="rowElem"><span id="problem" >${form.serviceOrder.problem}&nbsp;</span></div></td>
 									</tr>
 									<tr>
 										<td><label><fmt:message key="serviceOrder_empCreate" />:</label></td>
@@ -219,7 +229,7 @@
 									<%--td><form:input path="serviceDesc" class="textboxMockup" value='<fmt:message key="serviceCost" />' /></td--%>
 									<td><div class="rowElem"><form:input path="serviceDesc" cssClass="textboxMockup serviceDesc" id="serviceDesc_1" /> <label class="error" for="serviceDesc_1" generated="true" style="display: none; padding-left:10px"></label></div></td>
 									<%--td><input type="text" class="textboxMockup" style="text-align:right" size="6"/>&nbsp;<label style="margin-top:3px; margin-left:3px; float:left"><fmt:message key="baht" /></label></td--%>
-									<td width="500px"><div class="rowElem"><form:input path="servicePrice" cssClass="number textboxMockup servicePrice" style="text-align:right" size="6" id="servicePrice_1" />&nbsp;<label style="margin-top:3px; margin-left:3px; float:left"><fmt:message key="baht" /></label> <label class="error" for="servicePrice_1" generated="true" style="display: none; padding-left:10px"></label></div></td>
+									<td width="500px"><div class="rowElem"><form:input path="servicePrice" cssClass="number textboxMockup servicePrice" style="text-align:right" size="6" id="servicePrice_1" />&nbsp;<label style="margin-top:6px; margin-left:3px; float:left"><fmt:message key="baht" /></label> <label class="error" for="servicePrice_1" generated="true" style="display: none; padding-left:10px"></label></div></td>
 								</tr>
 							</table>
 							<br/>
@@ -234,14 +244,14 @@
 									<%--td><input type="text" class="textboxMockup"/></td>
 									<td><input type="text" class="textboxMockup" style="text-align:right;" size="6"/>&nbsp;<label style="margin-top:3px; margin-left:3px; float:left"><fmt:message key="baht" /></label></td--%>
 									<td><div class="rowElem"><form:input path="repairDesc" cssClass="textboxMockup repairDesc" id="repairDesc_1" /></div></td>
-									<td width="500px"><div class="rowElem"><form:input path="repairPrice" cssClass="number textboxMockup repairPrice" style="text-align:right" size="6" id="repairPrice_1" />&nbsp;<label style="margin-top:3px; margin-left:3px; float:left"><fmt:message key="baht" /></label> <label class="error" for="repairPrice_1" generated="true" style="display: none; padding-left:10px"></label></div></td>
+									<td width="500px"><div class="rowElem"><form:input path="repairPrice" cssClass="number textboxMockup repairPrice" style="text-align:right" size="6" id="repairPrice_1" />&nbsp;<label style="margin-top:6px; margin-left:3px; float:left"><fmt:message key="baht" /></label> <label class="error" for="repairPrice_1" generated="true" style="display: none; padding-left:10px"></label></div></td>
 								</tr>
 							</table>
 						</td>
 					</tr>
 					<tr>
 						<td><label><fmt:message key="outsiteService_netAmount" />:</label></td>
-						<td colspan="5"><div class="rowElem"><form:input path="netAmount" id="netAmount" class="number textboxMockup" style="text-align:right" readonly="true" />&nbsp;<label style="margin-top:3px; margin-left:3px; float:left"><fmt:message key="baht" /></label></div></td>
+						<td colspan="5"><div class="rowElem"><form:input path="netAmount" id="netAmount" class="number textboxMockup" style="text-align:right" readonly="true" />&nbsp;<label style="margin-top:6px; margin-left:3px; float:left"><fmt:message key="baht" /></label></div></td>
 					</tr>
 					<tr>
 						<td colspan="6" align="center"><div class="rowElem"><input type="submit" value="<fmt:message key='button.ok' />" /></div></td>

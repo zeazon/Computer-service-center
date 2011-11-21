@@ -23,8 +23,8 @@
 						<td><label><fmt:message key="type" />:</label></td>
 						<td>
 							<div class="rowElem" style="z-index:100">
-								<form:select path="type" id="type">
-									<form:option value="">&nbsp;</form:option>
+								<form:select path="type" id="type" cssClass="selectSearch">
+									<form:option value="">All</form:option>
 									<form:options items="${typeList}" itemValue="typeID" itemLabel="name"/>
 								</form:select>
 							</div>
@@ -130,7 +130,7 @@
 		})
 		.navButtonAdd('#list_toppager',
 		{
-			caption:"",
+			caption:"<fmt:message key='button.delete' />",
 			title:"<fmt:message key='button.delete' />",
 			buttonicon:"ui-icon-trash",
 			onClickButton: function(){

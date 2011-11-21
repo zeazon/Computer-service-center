@@ -33,7 +33,7 @@ public class ProductDAOImpl implements ProductDAO {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Product> selectByCriteria(String typeID, String brandID,
-			String modelID, String description, Integer rows, Integer page, String orderBy,
+			String modelID, String serialNo, Integer rows, Integer page, String orderBy,
 			String orderType) throws Exception {
 		StringBuilder sql = new StringBuilder();
 		sql.append("from Product product where 1=1 ");
@@ -46,8 +46,8 @@ public class ProductDAOImpl implements ProductDAO {
 		if(null != modelID && !modelID.equals("")){
 			sql.append("and product.model.modelID = :model ");
 		}
-		if(null != description && !description.equals("")){
-			sql.append("and description like :description ");
+		if(null != serialNo && !serialNo.equals("")){
+			sql.append("and serialNo like :serialNo ");
 		}
 		
 		if(!orderBy.equals("")){
@@ -72,8 +72,8 @@ public class ProductDAOImpl implements ProductDAO {
 		if(null != modelID && !modelID.equals("")){
 			q.setInteger("model", Integer.valueOf(modelID));
 		}
-		if(null != description && !description.equals("")){
-			q.setString("description", description);
+		if(null != serialNo && !serialNo.equals("")){
+			q.setString("serialNo", serialNo);
 		}
 		
 		List<Product> result = q.list();

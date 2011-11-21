@@ -163,6 +163,11 @@ public class CloseServiceOrderController {
 		form.setServiceOrderID(so.getServiceOrderID());
 		form.setServiceOrderDate(sdfDateTime.format(so.getServiceOrderDate()));
 		form.setServiceType(so.getServiceType());
+		if(so.getServiceType() == 1){
+			form.setGuaranteeNo(so.getGuaranteeNo());
+		}else if(so.getServiceType() == 4){
+			form.setRefJobID(so.getRefJobID());
+		}
 		form.setAppointmentDate(sdfDateTime.format(so.getAppointmentDate()));
 		form.setRefServiceOrder(so.getRefServiceOrder());
 		form.setCustomerType(so.getCustomerType());
@@ -193,6 +198,18 @@ public class CloseServiceOrderController {
 		}else{
 			form.setEndFix("-");
 		}
+		
+		if(form.getServiceType() == 1){
+			form.setCosting("warranty");
+		}else if(form.getServiceType() == 2 || form.getServiceType() == 3 || form.getServiceType() == 4){
+			form.setCosting("cost");
+		}else if(form.getServiceType() == 5){
+			form.setCosting("free");
+		}
+		
+		form.setIssuePart("noIssuedPart");
+		
+		form.setNetAmount(0.00);
 		
 		model.addAttribute("form", form);
 

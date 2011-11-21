@@ -13,10 +13,10 @@
 			<form:form commandName="form" id="form" class="jqtransform" action="outsiteService.html?do=save">
 				<table width="100%">
 					<tr>
-						<td width="13%"><label><fmt:message key="outsiteServiceID" />:</label></td>
+						<td width="161px"><label><fmt:message key="outsiteServiceID" />:</label></td>
 						<td colspan="2"><div class="rowElem"><form:input path="outsiteServiceID" readonly="true" class="textboxMockup" /></div></td>
 						<td><label><fmt:message key="date" />:</label></td>
-						<td colspan="2"><div class="rowElem"><form:input path="outsiteServiceDate" readonly="true" class="textboxMockup" /></div></td>
+						<td colspan="2"><div class="rowElem"><form:input path="outsiteServiceDate" id="outsiteServiceDate" class="textboxMockup" size="15" /></div></td>
 					</tr>
 					<tr>
 						<td><div class="rowElem"><label><fmt:message key="outsiteServiceServiceType" />:</label></div></td>
@@ -72,6 +72,97 @@
 										<td><label><fmt:message key="appointmentDate"/>:</label></td>
 										<td colspan="7"><div class="rowElem"><span id="appointmentDate">${form.serviceOrder.appointmentDate}&nbsp;</span></div></td>
 									</tr>
+									
+									
+									
+									
+									<!-- tr>
+										<td colspan="6">
+											<table width="100%" cellpadding="0" cellspacing="0">												
+												<col width="161px">
+												<col width="300px">
+												<col>
+												<col>
+												<col>
+												<col>
+												<col>
+												<col>
+												<tr align="left">
+												<tr>
+													<td colspan="8">
+														<div class="rowElem"><br>&nbsp;&nbsp;&nbsp;<b><u><fmt:message key="productDetail" /></u></b></div>
+													</td>
+												</tr>
+												<tr>
+													<td><label><fmt:message key="productID" />:</label></td>
+													<td colspan="7"><div class="rowElem"><span id="productID">${form.serviceOrder.product.productID}&nbsp;</span></div></td>
+												</tr>
+												<tr>
+													<td><label><fmt:message key="type" />:</label></td>
+													<td>
+														<div class="rowElem">
+															<span id="typeTxt">${form.serviceOrder.product.type.name}&nbsp;</span>
+														</div>
+													</td>
+													<td><label><fmt:message key="brand" />:</label></td>
+													<td>
+														<div class="rowElem">
+															<span id="brandTxt">${form.serviceOrder.product.brand.name}&nbsp;</span>
+														</div>
+													</td>
+													<td><label><fmt:message key="model" />:</label></td>
+													<td><div class="rowElem"><span id="modelTxt">${form.serviceOrder.product.model.name}&nbsp;</span></span></div></td>
+													<td><label><fmt:message key="serialNo" />:</label></td>
+													<td><div class="rowElem"><span id="serialNoTxt">${form.serviceOrder.product.serialNo}&nbsp;</span></div></td>
+												</tr>
+												<tr>
+													<td><label><fmt:message key="accessories" />:</label></td>
+													<td colspan="2"><div class="rowElem"><span id="accessories">${form.serviceOrder.accessories}</span></div></td>
+													<td><label><fmt:message key="serviceOrder_desc" />:</label></td>
+													<td colspan="4"><div class="rowElem"><span id="serviceOrder_desc">${form.serviceOrder.description}&nbsp;</span></div></td>
+												</tr>
+												<tr>
+													<td valign="top" style="padding-top:2px;"><label><fmt:message key="serviceOrder_problem" />:</label></td>
+													<td colspan="7" align="left" valign="top"><div class="rowElem"><pre id="problem" class="display" >${form.serviceOrder.problem}&nbsp;</pre></div></td>
+												</tr>	
+											</table>
+										</td>
+									</tr-->
+									
+									
+									
+									<tr align="left">
+										<td colspan="8">
+											<div class="rowElem"><br>&nbsp;&nbsp;&nbsp;<b><u><fmt:message key="productDetail" /></u></b></div>
+										</td>
+									</tr>
+									<tr>
+										<td><label><fmt:message key="productID" />:</label></td>
+										<td colspan="7"><div class="rowElem"><span id="productID">${form.serviceOrder.product.productID}&nbsp;</span></div></td>
+									</tr>
+									<tr>
+										<td><label><fmt:message key="type" />:</label></td>
+										<td><div class="rowElem"><span id="type">${form.serviceOrder.product.type.name}&nbsp;</span></div></td>
+										<td><label><fmt:message key="brand" />:</label></td>
+										<td><div class="rowElem"><span id="brand">${form.serviceOrder.product.brand.name}&nbsp;</span></div></td>
+										<td><label><fmt:message key="model" />:</label></td>
+										<td><div class="rowElem"><span id="model">${form.serviceOrder.product.model.name}&nbsp;</span></span></div></td>
+										<td><label><fmt:message key="serialNo" />:</label></td>
+										<td><div class="rowElem"><span id="serialNo">${form.serviceOrder.product.serialNo}&nbsp;</span></div></td>
+									</tr>
+									<tr>
+										<td><label><fmt:message key="accessories" />:</label></td>
+										<td colspan="2"><div class="rowElem"><span id="accessories">${form.serviceOrder.accessories}</span></div></td>
+										<td><label><fmt:message key="serviceOrder_desc" />:</label></td>
+										<td colspan="4"><div class="rowElem"><span id="serviceOrder_desc">${form.serviceOrder.description}&nbsp;</span></div></td>
+									</tr>
+									<tr>
+										<td valign="top"><label><fmt:message key="serviceOrder_problem" />:</label></td>
+										<td colspan="7" align="left" valign="top"><div class="rowElem"><pre id="problem" class="display" >${form.serviceOrder.problem}&nbsp;</pre></div></td>
+									</tr>
+									
+									
+									
 									<tr align="left">
 										<td colspan="8">
 											<div class="rowElem"><br>&nbsp;&nbsp;&nbsp;<b><u><fmt:message key="customerDetail" /></u></b></div>
@@ -107,43 +198,6 @@
 										<td><label><fmt:message key="mobileTel"/>:</label></td>
 										<td><div class="rowElem"><span id="deliveryMobileTel">${form.serviceOrder.deliveryMobileTel}&nbsp;</span></div></td>
 									</tr>
-									<tr align="left">
-										<td colspan="8">
-											<div class="rowElem"><br>&nbsp;&nbsp;&nbsp;<b><u><fmt:message key="productDetail" /></u></b></div>
-										</td>
-									</tr>
-									<tr>
-										<td><label><fmt:message key="productID" />:</label></td>
-										<td colspan="7"><div class="rowElem"><span id="productID">${form.serviceOrder.product.productID}&nbsp;</span></div></td>
-									</tr>
-									<tr>
-										<td><label><fmt:message key="type" />:</label></td>
-										<td colspan="2">
-											<div class="rowElem"><span id="type">${form.serviceOrder.product.type.name}&nbsp;</span></div>
-										</td>
-										<td><label><fmt:message key="brand" />:</label></td>
-										<td colspan="4">
-											<div class="rowElem"><span id="brand">${form.serviceOrder.product.brand.name}&nbsp;</span></div>
-										</td>
-									</tr>
-									<tr>
-										<td><label><fmt:message key="model" />:</label></td>
-										<td colspan="2"><div class="rowElem"><span id="model">${form.serviceOrder.product.model.name}&nbsp;</span></div></td>
-										<td><label><fmt:message key="serialNo" />:</label></td>
-										<td colspan="4"><div class="rowElem"><span id="serialNo">${form.serviceOrder.product.serialNo}&nbsp;</span></div></td>
-									</tr>
-									<tr>
-										<td><label><fmt:message key="accessories" />:</label></td>
-										<td colspan="2"><div class="rowElem"><span id="accessories">${form.serviceOrder.accessories}</span></div></td>
-										<td><label><fmt:message key="serviceOrder_desc" />:</label></td>
-										<td colspan="4"><div class="rowElem"><span id="serviceOrder_desc">${form.serviceOrder.description}&nbsp;</span></div></td>
-									</tr>
-									<tr>
-										<%--td valign="top" style="padding-top:9px;"><label><fmt:message key="serviceOrder_problem" />:</label></td--%>
-										<%--td colspan="5" align="left"><div class="rowElem"><textarea rows="5" col="30" readonly="readonly" class="ignore textareaMockup" style="width:98%" name="problem" ></textarea></div></td--%>
-										<td valign="top"><label><fmt:message key="serviceOrder_problem" />:</label></td>
-										<td colspan="7" align="left" valign="top"><div class="rowElem"><pre id="problem" class="display" >${form.serviceOrder.problem}&nbsp;</pre></div></td>
-									</tr>
 									<tr>
 										<td><label><fmt:message key="serviceOrder_empCreate" />:</label></td>
 										<td colspan="7"><div class="rowElem"><span id="empOpen">${form.serviceOrder.empOpen.name}&nbsp;${form.serviceOrder.empOpen.surname}</span></div></td>
@@ -160,15 +214,21 @@
 						<td><div class="rowElem"><label><fmt:message key="outsiteService_outsiteCompany" />:</label></div></td>
 						<td colspan="2">
 							<div class="rowElem">
-								<form:select path="outsiteCompanyID" id="outsiteCompany" items="${outsiteCompanyList}" itemValue="outsiteCompanyID" itemLabel="name">
+								<form:select path="outsiteCompanyID" id="outsiteCompany">
+									<form:option value="">All</form:option>
+									<form:options items="${outsiteCompanyList}" itemValue="outsiteCompanyID" itemLabel="name"/>
 								</form:select>
+								<label class="error" id="ui-state-error" for="outsiteCompany" generated="true" style="display: none; float:left; padding-left:10px"></label>
 							</div>
 						</td>
 						<td><div class="rowElem"><label><fmt:message key="transportCompany" />:</label></div></td>
 						<td colspan="2">
 							<div class="rowElem">
-								<form:select path="transportCompanyID" id="transportCompany" items="${transportCompanyList}" itemValue="transportCompanyID" itemLabel="name">
+								<form:select path="transportCompanyID" id="transportCompany">
+									<form:option value="">All</form:option>
+									<form:options items="${transportCompanyList}" itemValue="transportCompanyID" itemLabel="name"/>
 								</form:select>
+								<label class="error" id="ui-state-error" for="transportCompany" generated="true" style="display: none; float:left; padding-left:10px"></label>
 							</div>
 						</td>
 					</tr>
@@ -267,17 +327,19 @@ $(document).ready(function(){
 		document.forms["printJasperForm"].submit();
 	</c:if>
 	
+	$('#outsiteServiceDate').datetimeEntry({datetimeFormat: 'D/O/Y H:M'});
+	
 	$("#form").validate({
 		rules: {
-			serviceOrderID: "required"
+			serviceOrderID: "required",
+			outsiteCompanyID: "required",
+			transportCompanyID: "required"
 		}
 	});
 	
 	//find all form with class jqtransform and apply the plugin
 	$("form.jqtransform").jqTransform();
 	$("form.lov").jqTransform();
-	
-	
 	
 	var tDialog = $( "#dialog-modal" ).dialog({
 		autoOpen: false,

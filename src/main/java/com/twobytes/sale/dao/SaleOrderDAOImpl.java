@@ -48,6 +48,8 @@ public class SaleOrderDAOImpl implements SaleOrderDAO{
 		if(!orderBy.equals("")){
 			if(orderBy.equals("name")){
 				sql.append("order by saleOrder.employee.name "+orderType);
+			}else if(orderBy.equals("customerName")){
+				sql.append("order by saleOrder.customer.name "+orderType);
 			}else{
 				sql.append("order by "+orderBy+" "+orderType);
 			}

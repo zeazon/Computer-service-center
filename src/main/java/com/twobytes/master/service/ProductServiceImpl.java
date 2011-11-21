@@ -49,14 +49,14 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	@Transactional
 	public List<Product> selectByCriteria(String typeID, String brandID,
-			String modelID, String description, Integer rows, Integer page, String orderBy,
+			String modelID, String serialNo, Integer rows, Integer page, String orderBy,
 			String orderType){
-		if(null != description && !description.equals("")) {
-			description = "%"+description+"%";
+		if(null != serialNo && !serialNo.equals("")) {
+			serialNo = "%"+serialNo+"%";
 		}
 		List<Product> modelList = new ArrayList<Product>();
 		try {
-			modelList = productDAO.selectByCriteria(typeID, brandID, modelID, description, rows, page, orderBy, orderType);
+			modelList = productDAO.selectByCriteria(typeID, brandID, modelID, serialNo, rows, page, orderBy, orderType);
 		}catch(Exception e){
 			e.printStackTrace();
 		}

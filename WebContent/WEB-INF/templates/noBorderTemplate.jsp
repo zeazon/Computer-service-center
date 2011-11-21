@@ -28,6 +28,7 @@
 <script src="<%=request.getContextPath()%>/script/jQuery-calendar/jquery.calendars.lang.min.js" type="text/javascript"></script>
 <script src="<%=request.getContextPath()%>/script/jQuery-calendar/jquery.calendars.thai-th.js" type="text/javascript"></script>
 <script src="<%=request.getContextPath()%>/script/jQuery-datetimeentry/jquery.datetimeentry.js" type="text/javascript"></script>
+<script src="<%=request.getContextPath()%>/script/autoComplete.js" type="text/javascript"></script>
 </head>
 <body marginheight="0" marginwidth="0">
 <div style="background: url('./images/header_logo.png'); background-repeat:no-repeat; height: 80px;" align="right">

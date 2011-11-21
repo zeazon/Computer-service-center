@@ -361,7 +361,7 @@
 			$('input:radio', this).jqTransRadio();
 			//$('textarea', this).jqTransTextarea();
 			
-			if( $('select', this).jqTransSelect().length > 0 ){jqTransformAddDocumentListener();}
+			//if( $('select', this).jqTransSelect().length > 0 ){jqTransformAddDocumentListener();}
 			selfForm.bind('reset',function(){var action = function(){jqTransformReset(this);}; window.setTimeout(action, 10);});
 			
 			//preloading dont needed anymore since normal, focus and hover image are the same one

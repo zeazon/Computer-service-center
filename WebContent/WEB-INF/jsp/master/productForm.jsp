@@ -30,8 +30,10 @@
 						<td>
 							<div class="rowElem">
 								<form:select path="typeID" id="type">
+									<form:option value="" />
 									<form:options items="${typeList}" itemValue="typeID" itemLabel="name"/>
 								</form:select>
+								<label class="error" for="type" generated="true" style="display: none; padding-left:10px;"></label>
 							</div>
 						</td>
 					</tr>
@@ -40,10 +42,11 @@
 						<td id="brandRow">
 							<div class="rowElem">
 								<form:select path="brandID" id="brand">
+									<form:option value="" />
 									<form:options items="${brandList}" itemValue="brandID" itemLabel="name"/>
 								</form:select>
+								<label class="error" for="brand" generated="true" style="display: none; padding-left:10px;"></label>
 							</div>
-							<label class="error" for="brand" generated="true" style="display: none; padding-left:10px;"></label>
 						</td>
 					</tr>
 					<tr>
@@ -51,10 +54,11 @@
 						<td id="modelRow">
 							<div class="rowElem">
 								<form:select path="modelID" id="model">
+									<form:option value="" />
 									<form:options items="${modelList}" itemValue="modelID" itemLabel="name"/>
 								</form:select>
+								<label class="error" for="model" generated="true" style="display: none; padding-left:10px;"></label>
 							</div>
-							<label class="error" for="model" generated="true" style="display: none; padding-left:10px;"></label>
 						</td>
 					</tr>
 					<tr>
@@ -98,6 +102,7 @@ $(document).ready(function(){
 	$("#form").validate({
 		rules: {
 			serialNo: "required",
+			typeID: "required",
 			brandID: "required",
 			modelID: "required",
 			remark:{
@@ -109,7 +114,159 @@ $(document).ready(function(){
 	//find all form with class jqtransform and apply the plugin
 	$("form.jqtransform").jqTransform();
 	
-	$("#type").change(
+	$( "#type_autoComplete" ).autocomplete({
+		change: function(event, ui) {
+			var select = $("#type");
+			var selected = select.children( ":selected" );
+			if ( !ui.item ) {
+				var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+					valid = false;
+				select.children( "option" ).each(function() {
+					if ( $( this ).text().match( matcher ) ) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+			 	if ( !valid ){
+					// remove invalid value, as it didn't match anything
+					//$(this).val( "" );
+					//select.val( "" );
+					//this.data( "autocomplete" ).term = "";
+					$( "#type_autoComplete" ).data( "autocomplete" ).term = "";
+					// get text from blank value option
+					$( this ).val(select.children( ":selected" ).text());
+					
+					//$("#brand_autoComplete").trigger('change');
+					//getModelSelectList();
+					return false;
+				}
+			 }else{
+				 $.getJSON('${findBrandURL}', {
+					typeID : select.val(),
+					ajax : 'true'
+				}, function(data) {
+					var html = '';
+					var len = data.length;
+					if(len > 0){
+						for ( var i = 0; i < len; i++) {
+							html += '<option value="' + data[i].brandID + '">'
+									+ data[i].name + '</option>';
+						}
+						html += '</option>';
+					}else{
+						html += '<option value=""></option>';
+					}
+					
+					$('#brand').html(html);
+					
+					$('#brand_autoComplete').width($('#brand').width());
+					$('#brand_autoComplete').val($("#brand :selected").text());
+					
+					$("#brandRow").css("z-index", 9);
+					
+					$("#brand_autoComplete").trigger('change');
+					getModelSelectList();
+				});
+			 }
+		}
+	});
+	
+	$( "#brand_autoComplete" ).autocomplete({
+		change: function(event, ui) {
+	//$( "#brand_autoComplete" ).bind( "autocompletechange", function(event, ui) {
+			var select = $("#brand");
+			var selected = select.children( ":selected" );
+			if ( !ui.item ) {
+				var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+					valid = false;
+				select.children( "option" ).each(function() {
+					if ( $( this ).text().match( matcher ) ) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+			 	if ( !valid ){
+					// remove invalid value, as it didn't match anything
+				//	$(this).val( "" );
+				//	select.val( "" );
+					$( "#brand_autoComplete" ).data( "autocomplete" ).term = "";
+					// get text from blank value option
+					$( this ).val(select.children( ":selected" ).text());
+					
+					// set model to empty
+				//	html += '<option value=""></option>';
+				//	$('#model').html(html);
+				//	$('#model_autoComplete').width($('#model').width());
+				//	$('#model_autoComplete').val($("#model :selected").text());
+					
+				//	$("#modelRow").css("z-index", 8);
+					return false;
+				}
+			 }else{
+				 getModelSelectList();
+			 }
+		}
+	});
+	
+	$( "#model_autoComplete" ).autocomplete({
+		change: function(event, ui) {
+			var select = $("#model");
+			var selected = select.children( ":selected" );
+			if ( !ui.item ) {
+				var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+					valid = false;
+				select.children( "option" ).each(function() {
+					if ( $( this ).text().match( matcher ) ) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+			 	if ( !valid ){
+					// remove invalid value, as it didn't match anything
+					//$(this).val( "" );
+					//select.val( "" );
+					//this.data( "autocomplete" ).term = "";
+					$( "#model_autoComplete" ).data( "autocomplete" ).term = "";
+					// get text from blank value option
+					$( this ).val(select.children( ":selected" ).text());
+					
+					//$("#brand_autoComplete").trigger('change');
+					//getModelSelectList();
+					return false;
+				}
+			 }
+		}
+	});
+	
+	function getModelSelectList(){
+		var select = $("#brand");
+		$.getJSON('${findModelURL}', {
+			typeID : $("#type").val(),
+			brandID :select.val(),
+			ajax : 'true'
+		}, function(data) {
+			var html = '';
+			var len = data.length;
+			if(len > 0){
+				for ( var i = 0; i < len; i++) {
+					html += '<option value="' + data[i].modelID + '">'
+							+ data[i].name + '</option>';
+				}
+				html += '</option>';
+			}else{
+				html += '<option value=""></option>';
+			}
+			
+			$('#model').html(html);
+			
+			$('#model_autoComplete').width($('#model').width());
+			$('#model_autoComplete').val($("#model :selected").text());
+			
+			$("#modelRow").css("z-index", 8);
+		});
+	}
+	
+	/*$("#type").change(
 		function() {
 			$.getJSON('${findBrandURL}', {
 				typeID : $(this).val(),
@@ -183,7 +340,7 @@ $(document).ready(function(){
 				$("#modelRow div.jqTransformSelectWrapper").css("z-index", 8);
 			});
 		}
-	);
+	);*/
 	
 	// check for enter key
 	$('#serialNo').bind('keypress', function(event){
