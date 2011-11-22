@@ -435,7 +435,7 @@ public class CustomerController {
 //		boolean canSave = false;
 		String result = "";
 		try{
-		//	result = customerService.save(customer);
+			result = customerService.save(customer);
 			response.setData(result);
 		}catch(Exception e){
 			e.printStackTrace();

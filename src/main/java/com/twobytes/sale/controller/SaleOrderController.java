@@ -210,7 +210,7 @@ public class SaleOrderController {
 			e.printStackTrace();
 		}
 		Type type = typeList.get(0);
-//		form.setTypeID(type.getTypeID());
+		form.setTypeID(type.getTypeID());
 		List<Brand> brandList = new ArrayList<Brand>();
 		if (type.getBrands().size() > 0) {
 			brandList = type.getBrands();
@@ -225,11 +225,12 @@ public class SaleOrderController {
 
 		List<Model> modelList = new ArrayList<Model>();
 		if (type.getBrands().size() > 0) {
-			brandList = type.getBrands();
-			form.setBrandID(form.getBrandID());
+//			brandList = type.getBrands();
+//			form.setBrandID(form.getBrandID());
 			
 			Brand brand = brandList.get(0);
 			modelList = modelService.getModelByTypeAndBrand(type.getTypeID(), brand.getBrandID());
+			form.setModelID(modelList.get(0).getModelID());
 		} else {
 			Brand blankBrand = new Brand();
 			blankBrand.setBrandID(null);
