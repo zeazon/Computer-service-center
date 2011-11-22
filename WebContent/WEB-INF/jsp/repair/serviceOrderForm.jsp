@@ -789,7 +789,7 @@ $(document).ready(function(){
 		//caption: "Manipulating Array Data",
 		rownumbers: true,
 		rowNum:10,
-		rowList:[10,20,30],
+		rowList:[10,20,30,40,50],
 		viewrecords: true,
 		jsonReader:{
 			repeatitems: false,
@@ -1645,7 +1645,7 @@ $(document).ready(function(){
 		multiselect: false,
 		rownumbers: true,
 		rowNum:10,
-		rowList:[10,20,30],
+		rowList:[10,20,30,40,50],
 		viewrecords: true,
 		jsonReader:{
 			repeatitems: false,
@@ -1793,7 +1793,7 @@ $(document).ready(function(){
 		//caption: "Manipulating Array Data",
 		rownumbers: true,
 		rowNum:10,
-		rowList:[10,20,30],
+		rowList:[10,20,30,40,50],
 		viewrecords: true,
 		jsonReader:{
 			repeatitems: false,
