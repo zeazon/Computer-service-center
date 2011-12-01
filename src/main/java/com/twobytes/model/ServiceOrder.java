@@ -42,7 +42,6 @@ public class ServiceOrder extends BaseColumn implements Serializable {
 	private String cause;
 	private String fixDesc;
 	private String costing;
-	private Double serviceCost;
 	private Date returnDate;
 	private Double totalPrice;
 	private String remark;
@@ -295,15 +294,6 @@ public class ServiceOrder extends BaseColumn implements Serializable {
 	
 	public void setCosting(String costing) {
 		this.costing = costing;
-	}
-	
-	@Column(name="serviceCost")
-	public Double getServiceCost() {
-		return serviceCost;
-	}
-	
-	public void setServiceCost(Double serviceCost) {
-		this.serviceCost = serviceCost;
 	}
 	
 	@Column(name="returnDate")

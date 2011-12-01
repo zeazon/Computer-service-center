@@ -42,9 +42,11 @@ import com.twobytes.model.CustomerType;
 import com.twobytes.model.District;
 import com.twobytes.model.Employee;
 import com.twobytes.model.GridResponse;
+import com.twobytes.model.IssuePart;
 import com.twobytes.model.Model;
 import com.twobytes.model.Product;
 import com.twobytes.model.Province;
+import com.twobytes.model.ServiceList;
 import com.twobytes.model.ServiceOrder;
 import com.twobytes.model.Subdistrict;
 import com.twobytes.model.Type;
@@ -52,6 +54,8 @@ import com.twobytes.repair.form.ServiceOrderDocForm;
 import com.twobytes.repair.form.ServiceOrderForm;
 import com.twobytes.repair.form.ServiceOrderGridData;
 import com.twobytes.repair.form.ServiceOrderSearchForm;
+import com.twobytes.repair.service.IssuePartService;
+import com.twobytes.repair.service.ServiceListService;
 import com.twobytes.repair.service.ServiceOrderService;
 import com.twobytes.security.form.LoginForm;
 import com.twobytes.util.DocRunningUtil;
@@ -101,6 +105,12 @@ public class ServiceOrderController {
 	@Autowired
 	private DocRunningUtil docRunningUtil;
 
+	@Autowired
+	private IssuePartService issuePartService;
+	
+	@Autowired
+	private ServiceListService serviceListService;
+	
 	@Autowired
 	private MessageSource messages;
 
@@ -1011,14 +1021,38 @@ public class ServiceOrderController {
 	public String doPrintExcel(@ModelAttribute ServiceOrderDocForm docForm,
 			HttpServletRequest request, ModelMap model) {
 		
-        List wordList = new ArrayList();
-        wordList.add("hello");
-        wordList.add("world");
-		
-        model.addAttribute("wordList", wordList);
+//        List wordList = new ArrayList();
+//        wordList.add("hello");
+//        wordList.add("world");
+//		
+//        model.addAttribute("wordList", wordList);
         model.addAttribute("form", docForm);
         
 		return "serviceOrderDocExcel";
+	}
+	
+	@RequestMapping(value = "/serviceOrder", params = "do=printCloseExcel")
+	public String doPrintCloseExcel(@ModelAttribute ServiceOrderDocForm docForm,
+			HttpServletRequest request, ModelMap model) {
+		ServiceOrder so = soService.selectByID(docForm.getServiceOrderID());
+		
+		docForm.setCosting(so.getCosting());
+		docForm.setRealProblem(so.getRealProblem());
+		docForm.setCause(so.getCause());
+		docForm.setFixDesc(so.getFixDesc());
+		docForm.setTotalPrice(so.getTotalPrice());
+		
+		List<IssuePart> issuePartList = new ArrayList<IssuePart>();
+		issuePartList = issuePartService.getByServiceOrder(so.getServiceOrderID());
+		
+		List<ServiceList> serviceList = new ArrayList<ServiceList>();
+		serviceList = serviceListService.getByServiceOrder(so.getServiceOrderID());
+		
+		docForm.setIssuePartList(issuePartList);
+		docForm.setServiceList(serviceList);
+		
+        model.addAttribute("form", docForm);
+		return "closeServiceOrderDocExcel";
 	}
 	
 	private ServiceOrderDocForm setDocPrintForm(ServiceOrder so){

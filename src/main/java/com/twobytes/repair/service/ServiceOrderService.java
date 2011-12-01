@@ -2,6 +2,8 @@ package com.twobytes.repair.service;
 
 import java.util.List;
 
+import com.twobytes.model.IssuePart;
+import com.twobytes.model.ServiceList;
 import com.twobytes.model.ServiceOrder;
 
 public interface ServiceOrderService {
@@ -13,4 +15,5 @@ public interface ServiceOrderService {
 	
 	public List<ServiceOrder> selectNewSOByCriteria(String name, String date, String type, Integer rows, Integer page, String orderBy, String orderType);
 	public List<ServiceOrder> selectSOForCloseByCriteria(String name, String startDate, String endDate, String type, String serialNo, Integer rows, Integer page, String orderBy, String orderType);
+	public boolean close(ServiceOrder so, List<IssuePart> issuePartList, List<ServiceList> serviceList) throws Exception;
 }

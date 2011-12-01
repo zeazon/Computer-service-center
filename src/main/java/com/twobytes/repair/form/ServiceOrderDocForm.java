@@ -1,6 +1,10 @@
 package com.twobytes.repair.form;
 
 import java.io.Serializable;
+import java.util.List;
+
+import com.twobytes.model.IssuePart;
+import com.twobytes.model.ServiceList;
 
 public class ServiceOrderDocForm implements Serializable {
 
@@ -41,6 +45,16 @@ public class ServiceOrderDocForm implements Serializable {
 	private String problem;
 	private String empOpenID;
 	private String empOpen;
+	
+	private String costing;
+	private String realProblem;
+	private String cause;
+	private String fixDesc;
+	private Double totalPrice;
+	private String remark;
+	
+	private List<IssuePart> issuePartList;
+	private List<ServiceList> serviceList;
 	
 	public String getServiceOrderID() {
 		return serviceOrderID;
@@ -251,6 +265,54 @@ public class ServiceOrderDocForm implements Serializable {
 	}
 	public void setWarrantyExpire(String warrantyExpire) {
 		this.warrantyExpire = warrantyExpire;
+	}
+	public String getRealProblem() {
+		return realProblem;
+	}
+	public void setRealProblem(String realProblem) {
+		this.realProblem = realProblem;
+	}
+	public String getCause() {
+		return cause;
+	}
+	public void setCause(String cause) {
+		this.cause = cause;
+	}
+	public String getFixDesc() {
+		return fixDesc;
+	}
+	public void setFixDesc(String fixDesc) {
+		this.fixDesc = fixDesc;
+	}
+	public Double getTotalPrice() {
+		return totalPrice;
+	}
+	public void setTotalPrice(Double totalPrice) {
+		this.totalPrice = totalPrice;
+	}
+	public String getRemark() {
+		return remark;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+	public String getCosting() {
+		return costing;
+	}
+	public void setCosting(String costing) {
+		this.costing = costing;
+	}
+	public List<IssuePart> getIssuePartList() {
+		return issuePartList;
+	}
+	public void setIssuePartList(List<IssuePart> issuePartList) {
+		this.issuePartList = issuePartList;
+	}
+	public List<ServiceList> getServiceList() {
+		return serviceList;
+	}
+	public void setServiceList(List<ServiceList> serviceList) {
+		this.serviceList = serviceList;
 	}
 	
 }

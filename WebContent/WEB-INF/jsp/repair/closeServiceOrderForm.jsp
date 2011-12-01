@@ -10,7 +10,8 @@
 					<c:out value='${errMsg}' escapeXml="false" />
 				</div>
 			</c:if>
-			<form:form commandName="form" id="form" class="jqtransform" action="outsiteService.html?do=save">
+			<form:form commandName="form" id="form" class="jqtransform" action="closeServiceOrder.html?do=save">
+				<input type="hidden" name="serviceOrderID" value="${form.serviceOrderID}"/>
 				<table width="100%">
 					<tr>
 						<td width="161px"><label><fmt:message key="serviceOrderDate" />:</label></td>
@@ -216,7 +217,7 @@
 					<tr>
 						<td><label><fmt:message key="serviceOrder_startFix" />:</label></td>
 						<td colspan="2"><div class="rowElem">${form.startFix}</div></td>
-						<td><label><fmt:message key="serviceOrder_endFix" /></label></td>
+						<td><label><fmt:message key="serviceOrder_endFix" />:</label></td>
 						<td colspan="2"><div class="rowElem">${form.endFix}</div></td>
 					</tr>
 					<tr>
@@ -235,35 +236,66 @@
 						<td></td>
 						<td colspan="5">
 							<div class="rowElem">
-								<form:radiobutton path="costing" value="cost" cssStyle="margin-top:4px" id="costing_cost" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrder_costing_cost" /></label>
-								<form:radiobutton path="costing" value="free" cssStyle="margin-top:4px" id="costing_free" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrder_costing_free" /></label>
-								<form:radiobutton path="costing" value="warranty" cssStyle="margin-top:4px" id="costing_warranty" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrder_costing_warranty" /></label>
+								<form:radiobutton path="costing" value="cost" cssClass="costing" cssStyle="margin-top:4px" id="costing_cost" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrder_costing_cost" /></label>
+								<form:radiobutton path="costing" value="free" cssClass="costing" cssStyle="margin-top:4px" id="costing_free" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrder_costing_free" /></label>
+								<form:radiobutton path="costing" value="warranty" cssClass="costing" cssStyle="margin-top:4px" id="costing_warranty" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrder_costing_warranty" /></label>
 								<label class="error" for="costing" generated="true" style="display: none; padding-left:10px"></label>
 							</div>
 						</td>
 					</tr>
 					<tr id="serviceCostRow" style="display:none">
 					<!--tr id="serviceCostRow"-->
-						<td></td>
+						<!-- td></td>
 						<td colspan="5">
 							<div class="rowElem">
-								<span style="float:left; margin-top:3px"><fmt:message key="fixList" />&nbsp;</span><form:input path="serviceList" class="textboxMockup" style="margin-right:5px" /><form:input path="servicePrice" class="textboxMockup" style="text-align:right" id="serviceCost" size="4" value="0"/><span style="float:left; margin-top:6px">&nbsp;<fmt:message key="baht" /></span>
+								<span style="float:left; margin-top:6px"><fmt:message key="fixList" />&nbsp;</span><form:input path="serviceList" class="textboxMockup" style="margin-right:5px" /><form:input path="servicePrice" class="textboxMockup" style="text-align:right" id="serviceCost" size="4" value="0"/><span style="float:left; margin-top:6px">&nbsp;<fmt:message key="baht" /></span>
 							</div>
+						</td-->
+						<td></td>
+						<td colspan="5">
+							<table border="0">
+								<tr>
+									<th class="ui-widget-header ui-corner-all"><fmt:message key="serviceOrder_partList" /></th>
+									<th class="ui-widget-header ui-corner-all"><fmt:message key="price" /></th>
+								</tr>
+								<c:forEach var="i" begin="1" end="4" step="1" varStatus ="status">
+								<tr class="serviceList">
+									<td><form:input path="serviceList_${i}" class="serviceList textboxMockup" onBlur="calculateNetAmount();"/></td>
+									<td><form:input path="servicePrice_${i}" class="number servicePrice textboxMockup" style="text-align:right" size="4" onBlur="calculateNetAmount();"/></td>
+								</tr>
+								</c:forEach>
+								<!-- tr>
+									<td><form:input path="serviceList_1" class="serviceList textboxMockup" /></td>
+									<td><form:input path="servicePrice_1" class="servicePrice textboxMockup" style="text-align:right" id="serviceCost" size="4" value="0"/></td>
+								</tr>
+								<tr>
+									<td><form:input path="serviceList_2" class="serviceList textboxMockup" /></td>
+									<td><form:input path="servicePrice_2" class="servicePrice textboxMockup" style="text-align:right" id="serviceCost" size="4" value="0"/><!-- span style="float:left; margin-top:6px">&nbsp;<fmt:message key="baht" /></span--></td>
+								<!-- /tr>
+								<tr>
+									<td><form:input path="serviceList_3" class="serviceList textboxMockup" /></td>
+									<td><form:input path="servicePrice_3" class="servicePrice textboxMockup" style="text-align:right" id="serviceCost" size="4" value="0"/></td>
+								</tr>
+								<tr>
+									<td><form:input path="serviceList_4" class="serviceList textboxMockup" /></td>
+									<td><form:input path="servicePrice_4" class="servicePrice textboxMockup" style="text-align:right" id="serviceCost" size="4" value="0"/></td>
+								</tr-->
+							</table>
 						</td>
 					</tr>
 					<tr>
 						<td></td>
 						<td colspan="5">
 							<div class="rowElem">
-								<form:radiobutton path="issuePart" value="noIssuedPart" cssStyle="margin-top:4px" id="noPart" /><label style="float:left; margin-top:4px"><fmt:message key="noIssuedPart" /></label>
-								<form:radiobutton path="issuePart" value="haveIssuedPart" cssStyle="margin-top:4px" id="hasPart" /><label style="float:left; margin-top:4px"><fmt:message key="haveIssuedPart" /></label>
+								<form:radiobutton path="issuePart" value="noIssuedPart" cssClass="issuePart" cssStyle="margin-top:4px" id="noPart" /><label style="float:left; margin-top:4px"><fmt:message key="noIssuedPart" /></label>
+								<form:radiobutton path="issuePart" value="haveIssuedPart" cssClass="issuePart" cssStyle="margin-top:4px" id="hasPart" /><label style="float:left; margin-top:4px"><fmt:message key="haveIssuedPart" /></label>
 								<label class="error" for="issuePart" generated="true" style="display: none; padding-left:10px"></label>
 							</div>
 						</td>
 					</tr>
 					<tr id="partCostRow" style="display:none;">
 					<!-- tr id="partCostRow"-->
-						<td></td>
+						<!-- td></td>
 						<td colspan="5">
 							<input type="button" id="part_add" value="<fmt:message key='button.add'/>"/>
 							<table id="partTable">
@@ -298,6 +330,26 @@
 									<td><input type="text" class="textboxMockup" size="5" style="text-align:right"/></td>
 								</tr>
 							</table>
+						</td-->
+						
+						<td></td>
+						<td colspan="5">
+							<table id="partTable">
+								<tr>
+									<th class="ui-widget-header ui-corner-all"><fmt:message key="productID" /></th>
+									<th class="ui-widget-header ui-corner-all"><fmt:message key="serviceOrder_partList" /></th>
+									<th class="ui-widget-header ui-corner-all"><fmt:message key="amount" /></th>
+									<th class="ui-widget-header ui-corner-all"><fmt:message key="price" /></th>
+								</tr>
+								<c:forEach var="i" begin="1" end="11" step="1" varStatus ="status">
+								<tr class="issuePartList">
+									<td><form:input path="issuePartCode_${i}" class="issuePartCode textboxMockup" onBlur="calculateNetAmount();"/></td>
+									<td><form:input path="issuePartName_${i}" class="issuePartName textboxMockup" onBlur="calculateNetAmount();"/></td>
+									<td><form:input path="issuePartQty_${i}" class="number issuePartQty textboxMockup" size="2" style="text-align:right" onBlur="calculateNetAmount();"/></td>
+									<td><form:input path="issuePartPrice_${i}" class="number issuePartPrice textboxMockup" size="5" style="text-align:right" onBlur="calculateNetAmount();"/></td>
+								</tr>
+								</c:forEach>
+							</table>
 						</td>
 					</tr>
 					<tr>
@@ -317,7 +369,9 @@
 	</tr>
 </table>
 
-
+<form:form commandName="docForm" id="printJasperForm" method="post" action="serviceOrder.xls?do=printCloseExcel">
+	<form:hidden path="serviceOrderID" />
+</form:form>
 
 <script type="text/javascript">
 
@@ -325,14 +379,21 @@ $(document).ready(function(){
 	
 	$("#form").validate({
 		rules: {
-			serviceOrderID: "required",
 			costing: "required",
 			issuePart: "required"
 		}
 	});
 	
+	<c:if test="${action == 'print'}">
+		document.forms["printJasperForm"].submit();
+	</c:if>
+	
 	//find all form with class jqtransform and apply the plugin
 	$("form.jqtransform").jqTransform();
+	
+	checkCosting();
+	
+	checkIssuePart();
 	
 	$('#costing_cost').click(function() {
 		$('#serviceCostRow').css("display", "table-row");
@@ -360,6 +421,65 @@ $(document).ready(function(){
 		$('#partTable tbody>tr:last').clone(true).insertAfter('#partTable tbody>tr:last');
 	});
 	
+	$('.costing').change(function() {
+		calculateNetAmount();
+	});
+	
+	$('.issuePart').change(function() {
+		calculateNetAmount();
+	});
+	
 });
+
+function calculateNetAmount(){	
+	var netAmount = 0.00;
+	
+	if($('[name="costing"]:checked').val() == 'cost'){
+		$('.serviceList').each(function() {
+			var serviceList = $(this).find(".serviceList").val();
+	        var servicePrice = $(this).find(".servicePrice").val();
+	        
+	       // alert('serviceList = '+serviceList+' servicePrice = '+servicePrice);
+	        
+			if (serviceList !== "" && !isNaN(servicePrice)){
+				netAmount = netAmount + parseFloat(servicePrice)
+			}
+	
+		});
+	}
+
+	if($('[name="issuePart"]:checked').val() == 'haveIssuedPart'){
+		$('.issuePartList').each(function() {
+			var issuePartCode = $(this).find(".issuePartCode").val();
+			var issuePartName = $(this).find(".issuePartName").val();
+			var issuePartQty = $(this).find(".issuePartQty").val();
+			var issuePartPrice = $(this).find(".issuePartPrice").val();
+	        
+	        //alert('issuePartCode = '+issuePartCode+' issuePartName = '+issuePartName+' issuePartQty = '+issuePartQty+' issuePartPrice = '+issuePartPrice);
+	        
+			if (issuePartCode !== "" && issuePartName !== "" && issuePartQty !== "" && !isNaN(issuePartQty) && issuePartPrice !== "" && !isNaN(issuePartPrice)){
+				//alert('!isNaN(issuePartQty) = '+!isNaN(issuePartQty)+' !isNaN(issuePartPrice) = '+!isNaN(issuePartPrice));
+				//alert('issuePartQty = '+issuePartQty+' issuePartPrice = '+issuePartPrice);
+				netAmount = netAmount + (parseInt(issuePartQty) * parseFloat(issuePartPrice));
+			}
+	
+		});
+	}
+
+	
+	$("#netAmount").val(netAmount);
+}
+
+function checkCosting(){	
+	if($('[name="costing"]:checked').val() == 'cost'){
+		$('#serviceCostRow').css("display", "table-row");
+	}
+}
+
+function checkIssuePart(){
+	if($('[name="issuePart"]:checked').val() == 'haveIssuedPart'){
+		$('#partCostRow').css("display", "table-row");
+	}
+}
 
 </script>

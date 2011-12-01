@@ -24,6 +24,8 @@
     	<mapping class="com.twobytes.model.Model" />
     	<mapping class="com.twobytes.model.CustomerType" />
     	<mapping class="com.twobytes.model.SaleOrder" />
+    	<mapping class="com.twobytes.model.IssuePart" />
+    	<mapping class="com.twobytes.model.ServiceList" />
     </session-factory>
 
 </hibernate-configuration>

@@ -7,7 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.twobytes.model.IssuePart;
+import com.twobytes.model.ServiceList;
 import com.twobytes.model.ServiceOrder;
+import com.twobytes.repair.dao.IssuePartDAO;
+import com.twobytes.repair.dao.ServiceListDAO;
 import com.twobytes.repair.dao.ServiceOrderDAO;
 import com.twobytes.util.DocRunningUtil;
 
@@ -16,6 +20,12 @@ public class ServiceOrderServiceImpl implements ServiceOrderService {
 
 	@Autowired
 	private ServiceOrderDAO soDAO;
+	
+	@Autowired
+	private IssuePartDAO ipDAO;
+	
+	@Autowired
+	private ServiceListDAO slDAO;
 	
 	@Autowired
 	private DocRunningUtil docRunningUtil;
@@ -118,6 +128,22 @@ public class ServiceOrderServiceImpl implements ServiceOrderService {
 			e.printStackTrace();
 		}
 		return modelList;
+	}
+
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public boolean close(ServiceOrder so, List<IssuePart> issuePartList,
+			List<ServiceList> serviceList) throws Exception {
+		soDAO.save(so);
+		for(int i=0; i<issuePartList.size(); i++){
+			IssuePart ip = issuePartList.get(i);
+			ipDAO.save(ip);
+		}
+		for(int j=0; j<serviceList.size(); j++){
+			ServiceList sl = serviceList.get(j);
+			slDAO.save(sl);
+		}
+		return true;
 	}
 
 }
