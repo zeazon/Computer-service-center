@@ -125,13 +125,11 @@ public class ServiceOrderController {
 	/*private SimpleDateFormat sdfDateTime = new SimpleDateFormat(
 			"dd/MM/yyyy HH:mm", new Locale("th", "TH"));*/
 	private SimpleDateFormat sdfDateTime = new SimpleDateFormat(
-			"dd/MM/yyyy HH:mm", new Locale ( "US" ));
-	private SimpleDateFormat sdfDateTime2 = new SimpleDateFormat(
+			"dd/MM/yyyy HH:mm", new Locale("US"));
+	private SimpleDateFormat sdfDateTime_TH = new SimpleDateFormat(
 			"dd/MM/yyyy HH:mm", new Locale("th", "th"));
 	private SimpleDateFormat sdfDateTimeNoLocale = new SimpleDateFormat(
 			"dd/MM/yyyy HH:mm");
-	private SimpleDateFormat sdfDateTimeUSLocale = new SimpleDateFormat(
-			"dd/MM/yyyy HH:mm", new Locale("US"));
 	private SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm", new Locale("US"));
 
 	@RequestMapping(value = "/serviceOrder")
@@ -1036,6 +1034,11 @@ public class ServiceOrderController {
 			HttpServletRequest request, ModelMap model) {
 		ServiceOrder so = soService.selectByID(docForm.getServiceOrderID());
 		
+		docForm.setStartFix(sdf.format(so.getStartFix()));
+		docForm.setStartFixTime(sdfTime.format(so.getStartFix()));
+		docForm.setEndFix(sdfDateTime.format(so.getEndFix()));
+		docForm.setEmpFix(so.getEmpFix().getName());
+		
 		docForm.setCosting(so.getCosting());
 		docForm.setRealProblem(so.getRealProblem());
 		docForm.setCause(so.getCause());
@@ -1053,6 +1056,38 @@ public class ServiceOrderController {
 		
         model.addAttribute("form", docForm);
 		return "closeServiceOrderDocExcel";
+	}
+	
+	@RequestMapping(value = "/serviceOrder", params = "do=printReturnExcel")
+	public String doPrintReturnExcel(@ModelAttribute ServiceOrderDocForm docForm,
+			HttpServletRequest request, ModelMap model) {
+		ServiceOrder so = soService.selectByID(docForm.getServiceOrderID());
+		
+		docForm = setDocPrintForm(so);
+		
+		docForm.setStartFix(sdf.format(so.getStartFix()));
+		docForm.setStartFixTime(sdfTime.format(so.getStartFix()));
+		docForm.setEndFix(sdfDateTime.format(so.getEndFix()));
+		docForm.setEmpFix(so.getEmpFix().getName());
+		
+		docForm.setCosting(so.getCosting());
+		docForm.setRealProblem(so.getRealProblem());
+		docForm.setCause(so.getCause());
+		docForm.setFixDesc(so.getFixDesc());
+		docForm.setTotalPrice(so.getTotalPrice());
+		docForm.setReturnDate(sdfDateTime.format(so.getReturnDate()));
+		
+		List<IssuePart> issuePartList = new ArrayList<IssuePart>();
+		issuePartList = issuePartService.getByServiceOrder(so.getServiceOrderID());
+		
+		List<ServiceList> serviceList = new ArrayList<ServiceList>();
+		serviceList = serviceListService.getByServiceOrder(so.getServiceOrderID());
+		
+		docForm.setIssuePartList(issuePartList);
+		docForm.setServiceList(serviceList);
+		
+        model.addAttribute("form", docForm);
+		return "returnServiceOrderDocExcel";
 	}
 	
 	private ServiceOrderDocForm setDocPrintForm(ServiceOrder so){

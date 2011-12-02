@@ -46,12 +46,18 @@ public class ServiceOrderDocForm implements Serializable {
 	private String empOpenID;
 	private String empOpen;
 	
+	private String startFix;
+	private String startFixTime;
+	private String endFix;
+	private String empFix;
 	private String costing;
 	private String realProblem;
 	private String cause;
 	private String fixDesc;
 	private Double totalPrice;
 	private String remark;
+	
+	private String returnDate;
 	
 	private List<IssuePart> issuePartList;
 	private List<ServiceList> serviceList;
@@ -313,6 +319,36 @@ public class ServiceOrderDocForm implements Serializable {
 	}
 	public void setServiceList(List<ServiceList> serviceList) {
 		this.serviceList = serviceList;
+	}
+	public String getStartFix() {
+		return startFix;
+	}
+	public void setStartFix(String startFix) {
+		this.startFix = startFix;
+	}
+	public String getStartFixTime() {
+		return startFixTime;
+	}
+	public void setStartFixTime(String startFixTime) {
+		this.startFixTime = startFixTime;
+	}
+	public String getEndFix() {
+		return endFix;
+	}
+	public void setEndFix(String endFix) {
+		this.endFix = endFix;
+	}
+	public String getEmpFix() {
+		return empFix;
+	}
+	public void setEmpFix(String empFix) {
+		this.empFix = empFix;
+	}
+	public String getReturnDate() {
+		return returnDate;
+	}
+	public void setReturnDate(String returnDate) {
+		this.returnDate = returnDate;
 	}
 	
 }

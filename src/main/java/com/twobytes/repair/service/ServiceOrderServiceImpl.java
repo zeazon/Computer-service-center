@@ -146,4 +146,21 @@ public class ServiceOrderServiceImpl implements ServiceOrderService {
 		return true;
 	}
 
+	@Override
+	@Transactional
+	public List<ServiceOrder> selectCloseSOByCriteria(String name, String date,
+			String type, Integer rows, Integer page, String orderBy,
+			String orderType) {
+		if(null != name && !name.equals("")) {
+			name = "%"+name+"%";
+		}
+		List<ServiceOrder> modelList = new ArrayList<ServiceOrder>();
+		try {
+			modelList = soDAO.selectCloseSOByCriteria(name, date, type, rows, page, orderBy, orderType);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return modelList;
+	}
+
 }

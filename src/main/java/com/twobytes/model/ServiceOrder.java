@@ -56,6 +56,7 @@ public class ServiceOrder extends BaseColumn implements Serializable {
 	public static String OUTSITE = "outsite";
 	public static String RECEIVED = "received";
 	public static String CLOSE = "close";
+	public static String RETURN = "return";
 	
 	@Id
     @Column(name="serviceOrderID")

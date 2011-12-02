@@ -51,6 +51,11 @@ public class CloseServiceOrderExcelView extends AbstractJExcelView{
 		
 		WritableSheet sheet1 = wb.getSheet(0);
 		
+		sheet1.addCell(new Label(20, 5, form.getStartFix()));
+        sheet1.addCell(new Label(20, 6, form.getStartFixTime()));
+        sheet1.addCell(new Label(20, 7, form.getEndFix()));
+        sheet1.addCell(new Label(20, 8, form.getEmpFix()));
+		
 		sheet1.mergeCells(2, 41, 9, 42);
 		sheet1.mergeCells(2, 43, 9, 44);
 		sheet1.mergeCells(2, 45, 9, 48);

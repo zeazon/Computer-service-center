@@ -193,6 +193,11 @@
 		<put-attribute name="body" value="/WEB-INF/jsp/repair/closeServiceOrderForm.jsp"/>
 	</definition>
 	
+	<definition name="returnServiceOrder.search" extends=".pageTemplate">
+		<put-attribute name="pageName" value="คืนเครื่อง" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/repair/returnServiceOrderSearch.jsp"/>
+	</definition>
+	
 	<!-- Sale -->
 	
 	<definition name="saleOrder.search" extends=".pageTemplate">

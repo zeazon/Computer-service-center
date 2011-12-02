@@ -174,7 +174,6 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 		}
 		List<ServiceOrder> result = q.list();
 		return result;
-
 	}
 
 	@Override
@@ -234,6 +233,52 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 		}
 		if(null != serialNo && !serialNo.equals("")) {
 			q.setString("serialNo", serialNo);
+		}
+		List<ServiceOrder> result = q.list();
+		return result;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<ServiceOrder> selectCloseSOByCriteria(String name, String date,
+			String type, Integer rows, Integer page, String orderBy,
+			String orderType) throws Exception {
+		StringBuilder sql = new StringBuilder();
+		sql.append("from ServiceOrder as serviceOrder where 1=1 ");
+		if(null != name && !name.equals("")){
+			sql.append("and serviceOrder.customer.name like :name ");
+		}
+		if(null != date && !date.equals("")){
+			sql.append("and DATE(serviceOrderDate) = :serviceOrderDate ");
+		}
+		if(null != type && !type.equals("")){
+			sql.append("and type = :type ");
+		}
+		
+		sql.append("and serviceOrder.status = '"+ServiceOrder.CLOSE+"' ");
+		
+		if(!orderBy.equals("")){
+			if(orderBy.equals("name")){
+				orderBy = "serviceOrder.customer.name";
+			}else if(orderBy.equals("tel")){
+				orderBy = "serviceOrder.customer.tel";
+			}else if(orderBy.equals("mobileTel")){
+				orderBy = "serviceOrder.customer.mobileTel";
+			}
+			sql.append("order by "+orderBy+" "+orderType);
+		}else{
+			sql.append("order by serviceOrder.serviceOrderDate desc");
+		}
+		
+		Query q = sessionFactory.getCurrentSession().createQuery(sql.toString());
+		if(null != name && !name.equals("")) {
+			q.setString("name", name);
+		}
+		if(null != date && !date.equals("")) {
+			q.setString("serviceOrderDate", date);
+		}
+		if(null != type && !type.equals("")) {
+			q.setString("type", type);
 		}
 		List<ServiceOrder> result = q.list();
 		return result;

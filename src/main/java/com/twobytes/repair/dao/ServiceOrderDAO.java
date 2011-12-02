@@ -13,4 +13,5 @@ public interface ServiceOrderDAO {
 	
 	public List<ServiceOrder> selectNewSOByCriteria(String name, String date, String type, Integer rows, Integer page, String orderBy, String orderType) throws Exception;
 	public List<ServiceOrder> selectSOForCloseByCriteria(String name, String startDate, String endDate, String type, String serialNo, Integer rows, Integer page, String orderBy, String orderType) throws Exception;
+	public List<ServiceOrder> selectCloseSOByCriteria(String name, String date, String type, Integer rows, Integer page, String orderBy, String orderType) throws Exception;
 }
