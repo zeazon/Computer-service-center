@@ -13,6 +13,7 @@ import com.twobytes.model.ServiceOrder;
 import com.twobytes.repair.dao.IssuePartDAO;
 import com.twobytes.repair.dao.ServiceListDAO;
 import com.twobytes.repair.dao.ServiceOrderDAO;
+import com.twobytes.report.form.NumRepairReportForm;
 import com.twobytes.util.DocRunningUtil;
 
 @Service
@@ -148,7 +149,7 @@ public class ServiceOrderServiceImpl implements ServiceOrderService {
 
 	@Override
 	@Transactional
-	public List<ServiceOrder> selectCloseSOByCriteria(String name, String date,
+	public List<ServiceOrder> selectFixedSOByCriteria(String name, String date,
 			String type, Integer rows, Integer page, String orderBy,
 			String orderType) {
 		if(null != name && !name.equals("")) {
@@ -156,11 +157,35 @@ public class ServiceOrderServiceImpl implements ServiceOrderService {
 		}
 		List<ServiceOrder> modelList = new ArrayList<ServiceOrder>();
 		try {
-			modelList = soDAO.selectCloseSOByCriteria(name, date, type, rows, page, orderBy, orderType);
+			modelList = soDAO.selectFixedSOByCriteria(name, date, type, rows, page, orderBy, orderType);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return modelList;
+	}
+
+	@Override
+	@Transactional
+	public List<ServiceOrder> getRepairReport(String startDate, String endDate) {
+		List<ServiceOrder> retList = new ArrayList<ServiceOrder>();
+		try {
+			retList = soDAO.getRepairReport(startDate, endDate);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return retList;
+	}
+
+	@Override
+	@Transactional
+	public NumRepairReportForm getNumRepairReport(String date) {
+		NumRepairReportForm reportForm = new NumRepairReportForm();
+		try {
+			reportForm = soDAO.getNumRepairReport(date);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return reportForm;
 	}
 
 }

@@ -95,7 +95,7 @@ public class ReturnServiceOrderController {
 			e.printStackTrace();
 		}
 		
-		List<ServiceOrder> soList = soService.selectCloseSOByCriteria(name, searchDate, type, rows, page, sidx, sord);
+		List<ServiceOrder> soList = soService.selectFixedSOByCriteria(name, searchDate, type, rows, page, sidx, sord);
 		GridResponse response = new GridResponse();
 		
 		List<ServiceOrderGridData> rowsList = new ArrayList<ServiceOrderGridData>();
@@ -145,7 +145,7 @@ public class ReturnServiceOrderController {
 			ServiceOrder so = soService.selectByID(request.getParameter("serviceOrderID"));
 			
 			so.setReturnDate(now);
-			so.setStatus(ServiceOrder.RETURN);
+			so.setStatus(ServiceOrder.CLOSE);
 			so.setUpdatedBy(user.getEmployeeID());
 			so.setUpdatedDate(now);
 			success = soService.edit(so);

@@ -293,9 +293,9 @@ public class CloseServiceOrderController {
 		
 		so.setUpdatedBy(user.getEmployeeID());
 		so.setUpdatedDate(now);
-		so.setStatus(ServiceOrder.CLOSE);
+		so.setStatus(ServiceOrder.FIXED);
 		
-		Double netAmount = form.getNetAmount();
+//		Double netAmount = form.getNetAmount();
 //		System.out.println("netAmount = "+netAmount);
 		
 		// Add list of service cost and issue part and sent with service order to method save

@@ -24,7 +24,6 @@ import com.twobytes.model.Customer;
 import com.twobytes.model.Employee;
 import com.twobytes.model.GridResponse;
 import com.twobytes.model.OutsiteService;
-import com.twobytes.model.OutsiteServiceDetail;
 import com.twobytes.model.ServiceOrder;
 import com.twobytes.model.Type;
 import com.twobytes.repair.form.OutsiteServiceForm;
@@ -203,12 +202,12 @@ public class ReceivedOutsiteServiceController {
 		os.setUpdatedDate(now);
 		
 		ServiceOrder so = os.getServiceOrder();
-		so.setStatus(ServiceOrder.CLOSE);
+		so.setStatus(ServiceOrder.FIXING);
 		so.setUpdatedBy(user.getEmployeeID());
 		so.setUpdatedDate(now);
 		os.setServiceOrder(so);
 		
-		String[] serviceDescArry = form.getServiceDesc();
+		/*String[] serviceDescArry = form.getServiceDesc();
 		Double[] servicePriceArry = form.getServicePrice();
 		
 		String[] repairDescArry = form.getRepairDesc();
@@ -220,15 +219,15 @@ public class ReceivedOutsiteServiceController {
 //			for(String serviceDesc:form.getServiceDesc()){
 			for(int i=0; i<serviceDescArry.length; i++){
 				String serviceDesc = serviceDescArry[i];
-				System.out.println("i = "+i+" serviceDesc = "+serviceDesc);
+//				System.out.println("i = "+i+" serviceDesc = "+serviceDesc);
 				if(!serviceDesc.equals("")){
-					System.out.println("insert detail");
+//					System.out.println("insert detail");
 					OutsiteServiceDetail osd = new OutsiteServiceDetail();
 					osd.setOutsiteService(os);
 					osd.setType(OutsiteServiceDetail.TYPE_SERVICE);
 					osd.setDesc(serviceDesc);
 					Double servicePrice = servicePriceArry[i];
-					System.out.println("servicePrice = "+servicePrice);
+//					System.out.println("servicePrice = "+servicePrice);
 					osd.setPrice(servicePrice);
 					osd.setCreatedBy(user.getEmployeeID());
 					osd.setCreatedDate(now);
@@ -247,7 +246,7 @@ public class ReceivedOutsiteServiceController {
 					osd.setType(OutsiteServiceDetail.TYPE_REPAIR);
 					osd.setDesc(repairDesc);
 					Double repairPrice = repairPriceArry[j];
-					System.out.println("repairPrice = "+repairPrice);
+//					System.out.println("repairPrice = "+repairPrice);
 					osd.setPrice(repairPrice);
 					osd.setCreatedBy(user.getEmployeeID());
 					osd.setCreatedDate(now);
@@ -257,7 +256,7 @@ public class ReceivedOutsiteServiceController {
 					osdList.add(osd);
 				}
 			}
-		}
+		}*/
 		
 //		System.out.println("form.getServiceDesc().length = "+form.getServiceDesc().length);
 //		for(String serviceDesc:form.getServiceDesc()){
@@ -271,7 +270,8 @@ public class ReceivedOutsiteServiceController {
 		
 		boolean canSave;
 		try{
-			canSave = osService.received(os, osdList);
+			//canSave = osService.received(os, osdList);
+			canSave = osService.received(os);
 		}catch(Exception e){
 			e.printStackTrace();
 			model.addAttribute("errMsg", e.getMessage());

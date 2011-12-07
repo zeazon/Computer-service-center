@@ -13,6 +13,8 @@ public interface OutsiteServiceService {
 	public boolean delete(Integer outsiteServiceID, Integer employeeID) throws Exception;
 	public boolean sent(OutsiteService outsiteService) throws Exception;
 	public boolean received(OutsiteService outsiteService, List<OutsiteServiceDetail> outsiteServiceDetailList) throws Exception;
+	public boolean received(OutsiteService outsiteService) throws Exception;
+	public OutsiteService selectByServiceOrderID(String serviceOrderID);
 	
 	public List<OutsiteService> selectNewOSByCriteria(String name, String date, String type, Integer rows, Integer page, String orderBy, String orderType);
 	public List<OutsiteService> selectSentOSByCriteria(String name, String date, String type, Integer rows, Integer page, String orderBy, String orderType);

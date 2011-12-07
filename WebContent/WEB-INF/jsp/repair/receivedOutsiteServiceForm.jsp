@@ -207,7 +207,7 @@
 						<td valign="top" style="padding-top:9px;"><label><fmt:message key="outsiteService_repairing" />:</label></td>
 						<td colspan="5" align="left"><div class="rowElem"><form:textarea path="repairing" rows="5" col="30" class="textareaMockup" style="width:98%"></form:textarea><label class="error" for="problem" generated="true" style="display: none; float:left; padding-left:10px"></label></div></td>
 					</tr>
-					<tr>
+					<!-- tr>
 						<td></td>
 						<td colspan="5">
 							<div class="rowElem">
@@ -252,7 +252,7 @@
 					<tr>
 						<td><label><fmt:message key="outsiteService_netAmount" />:</label></td>
 						<td colspan="5"><div class="rowElem"><form:input path="netAmount" id="netAmount" class="number textboxMockup" style="text-align:right" readonly="true" />&nbsp;<label style="margin-top:6px; margin-left:3px; float:left"><fmt:message key="baht" /></label></div></td>
-					</tr>
+					</tr-->
 					<tr>
 						<td colspan="6" align="center"><div class="rowElem"><input type="submit" value="<fmt:message key='button.ok' />" /></div></td>
 					</tr>

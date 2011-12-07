@@ -58,6 +58,15 @@ public class OutsiteServiceServiceImpl implements OutsiteServiceService {
 	}
 
 	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public boolean received(OutsiteService outsiteService) throws Exception {
+		// Update data of outsite service document, update status of service order to 'close' and add outsite service detail if has any.s
+		osDAO.edit(outsiteService);
+		soDAO.edit(outsiteService.getServiceOrder());
+		return true;
+	}
+
+	@Override
 	@Transactional
 	public OutsiteService selectByID(Integer outsiteServiceID) {
 		OutsiteService model = new OutsiteService();
@@ -138,5 +147,17 @@ public class OutsiteServiceServiceImpl implements OutsiteServiceService {
 			e.printStackTrace();
 		}
 		return modelList;
+	}
+
+	@Override
+	@Transactional
+	public OutsiteService selectByServiceOrderID(String serviceOrderID) {
+		OutsiteService os = new OutsiteService();
+		try {
+			os = osDAO.selectByServiceOrderID(serviceOrderID);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return os;
 	}
 }

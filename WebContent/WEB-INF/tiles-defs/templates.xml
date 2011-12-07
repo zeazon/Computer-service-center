@@ -210,4 +210,16 @@
 		<put-attribute name="body" value="/WEB-INF/jsp/sale/saleOrderForm.jsp"/>
 	</definition>
 	
+	<!-- Report -->
+	
+	<definition name="repairReport.search" extends=".pageTemplate">
+		<put-attribute name="pageName" value="รายงานการซ่อม" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/report/repairReport.jsp"/>
+	</definition>
+	
+	<definition name="numRepairReport.search" extends=".pageTemplate">
+		<put-attribute name="pageName" value="รายงานจำนวนการซ่อม" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/report/numRepairReport.jsp"/>
+	</definition>
+	
 </tiles-definitions>

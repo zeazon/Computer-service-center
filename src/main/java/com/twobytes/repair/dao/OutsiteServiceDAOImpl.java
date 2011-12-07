@@ -195,4 +195,17 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 		List<OutsiteService> result = q.list();
 		return result;
 	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public OutsiteService selectByServiceOrderID(String serviceOrderID) throws Exception{
+		OutsiteService os = new OutsiteService();
+		Query q = sessionFactory.getCurrentSession().createQuery("from OutsiteService os where os.serviceOrder.serviceOrderID = :serviceOrderID ");
+		q.setString("serviceOrderID", serviceOrderID);
+		List<OutsiteService> retList = q.list();
+		if(retList.size() > 0){
+			os = retList.get(0);
+		}
+		return os;
+	}
 }

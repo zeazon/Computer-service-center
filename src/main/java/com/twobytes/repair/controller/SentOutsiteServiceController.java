@@ -30,7 +30,6 @@ import com.twobytes.repair.form.OutsiteServiceForm;
 import com.twobytes.repair.form.OutsiteServiceGridData;
 import com.twobytes.repair.form.OutsiteServiceSearchForm;
 import com.twobytes.repair.service.OutsiteServiceService;
-import com.twobytes.repair.service.ServiceOrderService;
 import com.twobytes.security.form.LoginForm;
 
 @Controller
@@ -42,8 +41,8 @@ public class SentOutsiteServiceController {
 	@Autowired
 	private TypeService typeService;
 	
-	@Autowired
-	private ServiceOrderService soService;
+//	@Autowired
+//	private ServiceOrderService soService;
 	
 	@Autowired
 	private MessageSource messages;

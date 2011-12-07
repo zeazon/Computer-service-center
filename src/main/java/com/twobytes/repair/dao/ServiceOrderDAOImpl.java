@@ -1,21 +1,31 @@
 package com.twobytes.repair.dao;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.transform.Transformers;
+import org.hibernate.type.IntegerType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.twobytes.model.ServiceOrder;
+import com.twobytes.report.form.NumRepairReportForm;
 
 @Repository
 public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 
 	@Autowired
 	private SessionFactory sessionFactory;
+	
+	private SimpleDateFormat sdfDateSQL = new SimpleDateFormat(
+			"yyyy-MM-dd", new Locale("US"));
+	private SimpleDateFormat sdfDate = new SimpleDateFormat(
+			"dd/MM/yyyy", new Locale("US"));
 	
 	@Override
 	public boolean save(ServiceOrder serviceOrder) throws Exception{
@@ -240,7 +250,7 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<ServiceOrder> selectCloseSOByCriteria(String name, String date,
+	public List<ServiceOrder> selectFixedSOByCriteria(String name, String date,
 			String type, Integer rows, Integer page, String orderBy,
 			String orderType) throws Exception {
 		StringBuilder sql = new StringBuilder();
@@ -255,7 +265,7 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 			sql.append("and type = :type ");
 		}
 		
-		sql.append("and serviceOrder.status = '"+ServiceOrder.CLOSE+"' ");
+		sql.append("and serviceOrder.status = '"+ServiceOrder.FIXED+"' ");
 		
 		if(!orderBy.equals("")){
 			if(orderBy.equals("name")){
@@ -284,4 +294,60 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 		return result;
 	}
 
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<ServiceOrder> getRepairReport(String startDate, String endDate) throws Exception {
+		StringBuilder sql = new StringBuilder();
+		sql.append("from ServiceOrder as serviceOrder where 1=1 ");
+		if((null != startDate && !startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			sql.append("and DATE(serviceOrderDate) between :startDate and :endDate ");
+		}else if((null != startDate && !startDate.equals("")) && (null == endDate || endDate.equals(""))){
+			sql.append("and DATE(serviceOrderDate) >= :startDate ");
+		}else if((null == startDate || startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			sql.append("and DATE(serviceOrderDate) <= :endDate ");
+		}
+		
+		sql.append("and serviceOrder.status != 'cancel' ");
+		
+		sql.append("order by serviceOrder.serviceOrderDate ");
+		
+		Query q = sessionFactory.getCurrentSession().createQuery(sql.toString());
+		
+		if((null != startDate && !startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			q.setString("startDate", startDate);
+			q.setString("endDate", endDate);
+		}else if((null != startDate && !startDate.equals("")) && (null == endDate || endDate.equals(""))){
+			q.setString("startDate", startDate);
+		}else if((null == startDate || startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			q.setString("endDate", endDate);
+		}
+		
+		List<ServiceOrder> result = q.list();
+		return result;
+	}
+
+	@Override
+	public NumRepairReportForm getNumRepairReport(String date)
+			throws Exception {
+		
+		/*select openProd.numOpen, fixingProd.numFixing, fixedProd.numFixed,returnProd.numReturn from
+	    (select count(*) numOpen from serviceOrder where status = 'new' and DATE(serviceOrderDate) = '2011-09-26') openProd, 
+	    (select count(*) numReturn from serviceOrder where status = 'close' and DATE(serviceOrderDate) = '2011-09-26') returnProd, 
+	    (select count(*) numFixed from serviceOrder where status = 'fixed' and DATE(serviceOrderDate) = '2011-09-26') fixedProd,
+	    (select count(*) numFixing from serviceOrder where status in ('fixing', 'outsite') and DATE(serviceOrderDate) = '2011-09-26') fixingProd;*/
+		
+		StringBuilder sql = new StringBuilder();
+		sql.append("select openProd.numOpen numOpen, fixingProd.numFixing numFixing, fixedProd.numFixed numFixed, returnProd.numReturn numReturn from ");
+		sql.append("(select count(*) numOpen from serviceOrder where status = 'new' and DATE(serviceOrderDate) = :date) openProd, ");
+		sql.append("(select count(*) numReturn from serviceOrder where status = 'close' and DATE(serviceOrderDate) = :date) returnProd,");
+		sql.append("(select count(*) numFixed from serviceOrder where status = 'fixed' and DATE(serviceOrderDate) = :date) fixedProd,");
+		sql.append("(select count(*) numFixing from serviceOrder where status in ('fixing', 'outsite') and DATE(serviceOrderDate) = :date) fixingProd;");
+		Query q = sessionFactory.getCurrentSession().createSQLQuery(sql.toString()).addScalar("numOpen", new IntegerType()).addScalar("numFixing", new IntegerType()).addScalar("numFixed", new IntegerType()).addScalar("numReturn", new IntegerType()).setResultTransformer(Transformers.aliasToBean(NumRepairReportForm.class)).setString("date", date);
+		
+		NumRepairReportForm reportForm = (NumRepairReportForm)q.uniqueResult();
+		Date dateSQL = sdfDateSQL.parse(date);
+		reportForm.setDate(sdfDate.format(dateSQL));
+		return reportForm;
+	}
+	
 }

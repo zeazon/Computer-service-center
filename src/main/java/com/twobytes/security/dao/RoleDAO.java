@@ -2,7 +2,6 @@ package com.twobytes.security.dao;
 
 import java.util.List;
 
-import com.twobytes.model.Brand;
 import com.twobytes.model.Role;
 
 public interface RoleDAO {

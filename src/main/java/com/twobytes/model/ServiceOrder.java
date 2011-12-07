@@ -53,10 +53,10 @@ public class ServiceOrder extends BaseColumn implements Serializable {
 	public static String NEW = "new";
 	public static String CANCEL = "cancel";
 	public static String FIXING = "fixing";
+	public static String FIXED = "fixed";
 	public static String OUTSITE = "outsite";
 	public static String RECEIVED = "received";
 	public static String CLOSE = "close";
-	public static String RETURN = "return";
 	
 	@Id
     @Column(name="serviceOrderID")
