@@ -95,8 +95,8 @@
 		}).navGrid("#pager",{edit:false,add:false,del:false,search:false,refresh:false,cloneToTop:true})
 		.navButtonAdd('#list_toppager',
 		{
-			caption:"<fmt:message key='button.edit' />",
-			title:"<fmt:message key='button.edit' />",
+			caption:"<fmt:message key='button.receiveOutsite' />",
+			title:"<fmt:message key='button.receiveOutsite' />",
 			buttonicon:"ui-icon-pencil", 
 			onClickButton: function(){ 
 				 var gsr = jQuery("#list").getGridParam('selrow');
