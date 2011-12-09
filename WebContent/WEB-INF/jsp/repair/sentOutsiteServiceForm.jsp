@@ -178,6 +178,10 @@
 						<td colspan="5"><div class="rowElem">${form.accessories}</div></td>
 					</tr>
 					<tr>
+						<td><label><fmt:message key="serviceOrder_problem" />:</label></td>
+						<td colspan="5" align="left"><div class="rowElem"><span id="os_problem" >${form.problem}&nbsp;</span></div></td>
+					</tr>
+					<tr>
 						<td><div class="rowElem"><label><fmt:message key="outsiteService_outsiteCompany" />:</label></div></td>
 						<td colspan="2">
 							<div class="rowElem">

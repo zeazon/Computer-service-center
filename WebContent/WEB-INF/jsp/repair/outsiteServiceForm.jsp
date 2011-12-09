@@ -1,7 +1,6 @@
 <%@ taglib prefix="fmt" uri="/WEB-INF/tld/fmt.tld"%>
 <%@ taglib prefix="form" uri="/WEB-INF/tld/spring-form.tld"%>
 <%@ taglib prefix="c" uri="/WEB-INF/tld/c.tld"%>
-
 <table width="100%">
 	<tr>
 		<td>
@@ -11,20 +10,52 @@
 				</div>
 			</c:if>
 			<form:form commandName="form" id="form" class="jqtransform" action="outsiteService.html?do=save">
+				<form:hidden path="status"/>
 				<table width="100%">
 					<tr>
 						<td width="161px"><label><fmt:message key="outsiteServiceID" />:</label></td>
 						<td colspan="2"><div class="rowElem"><form:input path="outsiteServiceID" readonly="true" class="textboxMockup" /></div></td>
 						<td><label><fmt:message key="date" />:</label></td>
-						<td colspan="2"><div class="rowElem"><form:input path="outsiteServiceDate" id="outsiteServiceDate" class="textboxMockup" size="15" /></div></td>
+						<td colspan="2">
+							<c:choose>
+								<c:when test="${form.status != 'close'}">
+									<div class="rowElem"><form:input path="outsiteServiceDate" id="outsiteServiceDate" class="textboxMockup" size="15" /></div>
+								</c:when>
+								<c:otherwise>
+									<div class="rowElem">${form.outsiteServiceDate}</div>
+								</c:otherwise>
+							</c:choose>
+						</td>
 					</tr>
 					<tr>
 						<td><div class="rowElem"><label><fmt:message key="outsiteServiceServiceType" />:</label></div></td>
-						<td colspan="5"><div class="rowElem"><form:radiobutton path="serviceType" value="warranty" cssStyle="margin-top:4px;" /><label style="float:left; margin-top:4px"><fmt:message key="outsiteServiceServiceType_inWarranty" /></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><form:radiobutton  path="serviceType" value="repair" cssStyle="margin-top:4px;" /><label style="float:left; margin-top:4px;" ><fmt:message key="outsiteServiceServiceType_outWarranty" /></label></div></td>
+						<td colspan="5">
+							<div class="rowElem">
+							<c:choose>
+								<c:when test="${form.status != 'close'}">
+									<form:radiobutton path="serviceType" value="warranty" cssStyle="margin-top:4px;" /><label style="float:left; margin-top:4px"><fmt:message key="outsiteServiceServiceType_inWarranty" /></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><form:radiobutton  path="serviceType" value="repair" cssStyle="margin-top:4px;" /><label style="float:left; margin-top:4px;" ><fmt:message key="outsiteServiceServiceType_outWarranty" /></label>
+								</c:when>
+								<c:otherwise>
+									<form:radiobutton path="serviceType" value="warranty" cssStyle="margin-top:4px;" disabled="true" /><label style="float:left; margin-top:4px"><fmt:message key="outsiteServiceServiceType_inWarranty" /></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><form:radiobutton  path="serviceType" value="repair" cssStyle="margin-top:4px;" disabled="true"/><label style="float:left; margin-top:4px;" ><fmt:message key="outsiteServiceServiceType_outWarranty" /></label>
+								</c:otherwise>
+							</c:choose>
+							</div>
+						</td>
 					</tr>
 					<tr>
-						<td><label><fmt:message key="serviceOrderID" />:<font color="red">*</font></label></td>
-						<td colspan="5"><div class="rowElem"><form:input path="serviceOrderID" class="required textboxMockup" style="float:left" id="serviceOrderID" readonly="readonly" size="10"/> <input type="button" id="lov" class="lov_button" value="..." > <label class="error" id="ui-state-error" for="serviceOrderID" generated="true" style="display: none; float:left; padding-left:10px"></label></div></td>
+						<td><label><fmt:message key="serviceOrderID" />:<c:if test="${form.status != 'close'}"><font color="red">*</font></c:if></label></td>
+						<td colspan="5">
+							<div class="rowElem">
+								<c:choose>
+									<c:when test="${form.status != 'close'}">
+										<form:input path="serviceOrderID" class="required textboxMockup" style="float:left" id="serviceOrderID" readonly="readonly" size="10"/> <input type="button" id="lov" class="lov_button" value="..." > <label class="error" id="ui-state-error" for="serviceOrderID" generated="true" style="display: none; float:left; padding-left:10px"></label>
+									</c:when>
+									<c:otherwise>
+										${form.serviceOrderID}
+									</c:otherwise>
+								</c:choose>
+							</div>
+						</td>
 					</tr>
 					<tr>
 						<td colspan="6">
@@ -157,7 +188,7 @@
 										<td colspan="4"><div class="rowElem"><span id="serviceOrder_desc">${form.serviceOrder.description}&nbsp;</span></div></td>
 									</tr>
 									<tr>
-										<td valign="top"><label><fmt:message key="serviceOrder_problem" />:</label></td>
+										<td valign="top" style="padding-top:3px;"><label><fmt:message key="serviceOrder_problem" />:</label></td>
 										<td colspan="7" align="left" valign="top"><div class="rowElem"><pre id="problem" class="display" >${form.serviceOrder.problem}&nbsp;</pre></div></td>
 									</tr>
 									
@@ -208,33 +239,115 @@
 					</tr>
 					<tr>
 						<td style="width:13%"><div class="rowElem"><label><fmt:message key="outsiteService_accessories" />:</label></div></td>
-						<td colspan="5"><div class="rowElem"><form:input path="accessories" class="textboxMockup" style="width:99%"/></div></td>
+						<td colspan="5">
+							<div class="rowElem">
+								<c:choose>
+									<c:when test="${form.status != 'close'}">
+										<form:input path="accessories" class="textboxMockup" style="width:99%"/>
+									</c:when>
+									<c:otherwise>
+										<div style="margin-top:3px">${form.accessories}</div>
+									</c:otherwise>
+								</c:choose>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" style="padding-top:7px;"><label><fmt:message key="serviceOrder_problem" />:<c:if test="${form.status != 'close'}"><font color="red">*</font></c:if></label></td>
+						<td colspan="5" align="left">
+							<c:choose>
+								<c:when test="${form.status != 'close'}">
+									<div class="rowElem"><form:textarea path="problem" id="os_problem" rows="5" col="30" class="textareaMockup" style="width:98%" name="problem" ></form:textarea><label class="error" for="problem" generated="true" style="display: none; float:left; padding-left:10px"></label></div>
+								</c:when>
+								<c:otherwise>
+									<div class="rowElem" style="margin-top:3px"><pre class="display">${form.problem}</pre></div>
+								</c:otherwise>
+							</c:choose>
+						</td>
 					</tr>
 					<tr>
 						<td><div class="rowElem"><label><fmt:message key="outsiteService_outsiteCompany" />:</label></div></td>
 						<td colspan="2">
 							<div class="rowElem">
-								<form:select path="outsiteCompanyID" id="outsiteCompany">
-									<form:option value="">All</form:option>
-									<form:options items="${outsiteCompanyList}" itemValue="outsiteCompanyID" itemLabel="name"/>
-								</form:select>
-								<label class="error" id="ui-state-error" for="outsiteCompany" generated="true" style="display: none; float:left; padding-left:10px"></label>
+								<c:choose>
+									<c:when test="${form.status != 'close'}">
+										<form:select path="outsiteCompanyID" id="outsiteCompany">
+											<form:option value="">All</form:option>
+											<form:options items="${outsiteCompanyList}" itemValue="outsiteCompanyID" itemLabel="name"/>
+										</form:select>
+										<label class="error" id="ui-state-error" for="outsiteCompany" generated="true" style="display: none; float:left; padding-left:10px"></label>
+									</c:when>
+									<c:otherwise>
+										<form:select path="outsiteCompanyID" id="outsiteCompany" class="disabled">
+											<form:option value="">All</form:option>
+											<form:options items="${outsiteCompanyList}" itemValue="outsiteCompanyID" itemLabel="name"/>
+										</form:select>
+									</c:otherwise>
+								</c:choose>
 							</div>
 						</td>
 						<td><div class="rowElem"><label><fmt:message key="transportCompany" />:</label></div></td>
 						<td colspan="2">
 							<div class="rowElem">
-								<form:select path="transportCompanyID" id="transportCompany">
-									<form:option value="">All</form:option>
-									<form:options items="${transportCompanyList}" itemValue="transportCompanyID" itemLabel="name"/>
-								</form:select>
-								<label class="error" id="ui-state-error" for="transportCompany" generated="true" style="display: none; float:left; padding-left:10px"></label>
+								<c:choose>
+									<c:when test="${form.status != 'close'}">
+										<form:select path="transportCompanyID" id="transportCompany">
+											<form:option value="">All</form:option>
+											<form:options items="${transportCompanyList}" itemValue="transportCompanyID" itemLabel="name"/>
+										</form:select>
+										<label class="error" id="ui-state-error" for="transportCompany" generated="true" style="display: none; float:left; padding-left:10px"></label>
+									</c:when>
+									<c:otherwise>
+										<form:select path="transportCompanyID" id="transportCompany" disabled="disabled">
+											<form:option value="">All</form:option>
+											<form:options items="${transportCompanyList}" itemValue="transportCompanyID" itemLabel="name"/>
+										</form:select>
+									</c:otherwise>
+								</c:choose>
 							</div>
 						</td>
 					</tr>
+					
+					<c:choose>
+						<c:when test="${form.status == 'close'}">
+							<tr>
+								<td><label><fmt:message key="outsiteService_sentDate" />:</label></td>
+								<td colspan="2"><div class="rowElem">${form.sentDate}</div></td>
+								<td><label><fmt:message key="outsiteService_sentTransportNo" />:</label></td>
+								<td colspan="2"><div class="rowElem">${form.sentTransportNo}</div></td>
+							</tr>
+							<tr>
+								<td><label><fmt:message key="outsiteService_receivedDate" />:</label></td>
+								<td colspan="2"><div class="rowElem">${form.receivedDate}</div></td>
+								<td><label><fmt:message key="outsiteService_receivedTransportNo" />:</label></td>
+								<td colspan="2"><div class="rowElem">${form.receivedTransportNo}</div></td>
+							</tr>
+						</c:when>
+						<c:otherwise>
+							<c:if test="${form.status == 'sent' || form.status == 'received'}">
+							<tr>
+								<td><label><fmt:message key="outsiteService_sentDate" />:<font color="red">*</font></label></td>
+								<td colspan="2"><div class="rowElem"><form:input class="required textboxMockup" id="sentDate" path="sentDate" readonly="readonly" size="10"/></div></td>
+								<td><label><fmt:message key="outsiteService_sentTransportNo" />:<font color="red">*</font></label></td>
+								<td colspan="2"><div class="rowElem"><form:input class="required textboxMockup" path="sentTransportNo" /></div></td>
+							</tr>
+							</c:if>
+							<c:if test="${form.status == 'received'}">
+							<tr>
+								<td><label><fmt:message key="outsiteService_receivedDate" />:<font color="red">*</font></label></td>
+								<td colspan="2"><div class="rowElem"><form:input class="required textboxMockup" id="receivedDate" path="receivedDate" readonly="readonly" size="10"/></div></td>
+								<td><label><fmt:message key="outsiteService_receivedTransportNo" />:<font color="red">*</font></label></td>
+								<td colspan="2"><div class="rowElem"><form:input class="required textboxMockup" path="receivedTransportNo" /></div></td>
+							</tr>
+							</c:if>
+						</c:otherwise>
+					</c:choose>
+					
+					<c:if test="${form.status != 'close'}">
 					<tr>
 						<td colspan="6" align="center"><div class="rowElem"><input type="submit" value="<fmt:message key='button.ok' />" /></div></td>
 					</tr>
+					</c:if>
 				</table>
 			</form:form>
 		</td>
@@ -323,17 +436,24 @@
 
 $(document).ready(function(){
 	
+	<%--c:if test="${action == 'print' && form.status != 'new'}"--%>
 	<c:if test="${action == 'print'}">
 		document.forms["printJasperForm"].submit();
 	</c:if>
 	
-	$('#outsiteServiceDate').datetimeEntry({datetimeFormat: 'D/O/Y H:M'});
+	<c:if test="${form.status != 'close'}">
+		$('#outsiteServiceDate').datetimeEntry({datetimeFormat: 'D/O/Y H:M'});
+	</c:if>
+	
+	$('#sentDate').calendarsPicker($.extend({calendar: $.calendars.instance('gregorian','th')}));
+	$('#receivedDate').calendarsPicker($.extend({calendar: $.calendars.instance('gregorian','th')}));
 	
 	$("#form").validate({
 		rules: {
 			serviceOrderID: "required",
 			outsiteCompanyID: "required",
-			transportCompanyID: "required"
+			transportCompanyID: "required",
+			problem: "required"
 		}
 	});
 	
@@ -371,7 +491,7 @@ $(document).ready(function(){
 		//autoheight: true,
 		//width: "100%",
 		autowidth: true,
-		colNames:['<fmt:message key="serviceOrderID" />','<fmt:message key="serviceOrderDate" />', 'serviceType', 'customerID','<fmt:message key="name" />','<fmt:message key="company" />','<fmt:message key="address" />','email','<fmt:message key="tel" />','<fmt:message key="mobileTel" />','deliveryCustomer','deliveryEmail','deliveryTel','deliveryMobileTel','productID','type','brand','model','serialNo','accessories','description','problem','empOpen','appointmentDate'],
+		colNames:['<fmt:message key="serviceOrderID" />','<fmt:message key="serviceOrderDate" />', 'serviceType', 'customerID','<fmt:message key="name" />','<fmt:message key="company" />','<fmt:message key="address" />','email','<fmt:message key="tel" />','<fmt:message key="mobileTel" />','deliveryCustomer','deliveryEmail','deliveryTel','deliveryMobileTel','productID','type','brand','model','serialNo','accessories','description','problem','empOpen','appointmentDate','problem'],
 		colModel:[
 			{name:'serviceOrderID',index:'serviceOrderID', width:'180'},
 			{name:'serviceOrderDate', index:'serviceOrderDate', align:'center', sorttype:'date',formatter:'date', formatoptions: {srcformat:'d/m/Y H:i',newformat:'d/m/Y H:i'}, width:'140', firstSortOrder:'desc'},
@@ -396,7 +516,8 @@ $(document).ready(function(){
 			{name:'description',index:'description', hidden:true},
 			{name:'problem',index:'problem', hidden:true},
 			{name:'empOpen',index:'empOpen', hidden:true},
-			{name:'appointmentDate',index:'appointmentDate', hidden:true}],
+			{name:'appointmentDate',index:'appointmentDate', hidden:true},
+			{name:'problem',index:'problem', hidden:true}],
 		multiselect: false,
 		//caption: "Manipulating Array Data",
 		rownumbers: true,
@@ -453,6 +574,7 @@ $(document).ready(function(){
 		$("#accessories").html($("#lov_accessories").val());
 		$("#description").html($("#lov_description").val());
 		$("#problem").html($("#lov_problem").val());
+		$("#os_problem").val($("#lov_problem").val());
 		$("#empOpen").html($("#lov_empOpen").val());
 		
 		tDialog.dialog( "destroy" );

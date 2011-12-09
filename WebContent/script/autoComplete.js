@@ -1,7 +1,8 @@
 (function( $ ) {
 	$.widget( "ui.combobox", {
 		options:{
-			showBlankValue: false
+			showBlankValue: false,
+			disabled: false
 		},
 		_create: function() {
 			var self = this,
@@ -177,6 +178,11 @@
 		
 			// set input value to initial select list.
 			input.val($("#"+self.element.context.id+" :selected").text());
+			
+			if(self.options.disabled){
+				input.attr("disabled", "disabled");
+				this.button.attr("disabled", "disabled");
+			}
 		},
 
 		destroy: function() {

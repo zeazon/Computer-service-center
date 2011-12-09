@@ -5,7 +5,6 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -17,11 +16,12 @@ public class OutsiteService implements Serializable {
 
 	private static final long serialVersionUID = 7871156654707313607L;
 	
-	private Integer outsiteServiceID;
+	private String outsiteServiceID;
 	private Date outsiteServiceDate;
 	private ServiceOrder serviceOrder;
 	private String serviceType;
 	private String accessories;
+	private String problem;
 	private Employee empOpen;
 	private OutsiteCompany outsiteCompany;
 	private TransportCompany transportCompany;
@@ -45,13 +45,12 @@ public class OutsiteService implements Serializable {
 	public static String CLOSE = "close";
 	
 	@Id
-    @Column(name="outsiteServiceID")
-    @GeneratedValue
-	public Integer getOutsiteServiceID() {
+    @Column(name="outsiteServiceID")    
+	public String getOutsiteServiceID() {
 		return outsiteServiceID;
 	}
 	
-	public void setOutsiteServiceID(Integer outsiteServiceID) {
+	public void setOutsiteServiceID(String outsiteServiceID) {
 		this.outsiteServiceID = outsiteServiceID;
 	}
 	
@@ -90,6 +89,15 @@ public class OutsiteService implements Serializable {
 
 	public void setAccessories(String accessories) {
 		this.accessories = accessories;
+	}
+
+	@Column(name="problem")
+	public String getProblem() {
+		return problem;
+	}
+
+	public void setProblem(String problem) {
+		this.problem = problem;
 	}
 
 	@OneToOne

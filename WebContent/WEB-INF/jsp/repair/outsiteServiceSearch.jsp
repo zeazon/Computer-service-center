@@ -197,6 +197,8 @@
 			return "<fmt:message key='outsiteService_status_new' />";
 		}else if(cellvalue == 'sent'){
 			return "<fmt:message key='outsiteService_status_sent' />";
+		}else if(cellvalue == 'received'){
+			return "<fmt:message key='outsiteService_status_received' />";
 		}else if(cellvalue == 'close'){
 			return "<fmt:message key='outsiteService_status_close' />";
 		}

@@ -7,6 +7,7 @@ public class OutsiteServiceForm {
 	private String outsiteServiceDate;
 	private String serviceType;
 	private String accessories;
+	private String problem;
 	private String serviceOrderID;
 	private Integer outsiteCompanyID;
 	private String outsiteCompanyName;
@@ -28,6 +29,8 @@ public class OutsiteServiceForm {
 	private Double[] repairPrice;
 	private Double netAmount;
 	
+	private String status;
+
 	public String getOutsiteServiceID() {
 		return outsiteServiceID;
 	}
@@ -75,6 +78,12 @@ public class OutsiteServiceForm {
 	}
 	public void setAccessories(String accessories) {
 		this.accessories = accessories;
+	}
+	public String getProblem() {
+		return problem;
+	}
+	public void setProblem(String problem) {
+		this.problem = problem;
 	}
 	public String getSentDate() {
 		return sentDate;
@@ -154,4 +163,11 @@ public class OutsiteServiceForm {
 	public void setRepairPrice(Double[] repairPrice) {
 		this.repairPrice = repairPrice;
 	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
 }

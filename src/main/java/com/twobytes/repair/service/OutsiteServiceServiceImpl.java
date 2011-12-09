@@ -12,6 +12,7 @@ import com.twobytes.model.OutsiteServiceDetail;
 import com.twobytes.repair.dao.OutsiteServiceDAO;
 import com.twobytes.repair.dao.OutsiteServiceDetailDAO;
 import com.twobytes.repair.dao.ServiceOrderDAO;
+import com.twobytes.util.DocRunningUtil;
 
 @Service
 public class OutsiteServiceServiceImpl implements OutsiteServiceService {
@@ -25,10 +26,21 @@ public class OutsiteServiceServiceImpl implements OutsiteServiceService {
 	@Autowired
 	private OutsiteServiceDetailDAO osdDAO;
 	
+	@Autowired
+	private DocRunningUtil docRunningUtil;
+
 	@Override
-	@Transactional
-	public boolean save(OutsiteService outsiteService) throws Exception{
-		return osDAO.save(outsiteService);
+	@Transactional(rollbackFor = Exception.class)
+	public String save(OutsiteService outsiteService) throws Exception{
+		if (outsiteService.getOutsiteServiceID() == null) {
+			String outsiteServiceID = docRunningUtil.genDoc("outsite");
+			outsiteService.setOutsiteServiceID(outsiteServiceID);
+		}
+		if(osDAO.save(outsiteService)){
+			return outsiteService.getOutsiteServiceID();
+		}else{
+			return "false";
+		}
 	}
 
 	@Override
@@ -68,7 +80,7 @@ public class OutsiteServiceServiceImpl implements OutsiteServiceService {
 
 	@Override
 	@Transactional
-	public OutsiteService selectByID(Integer outsiteServiceID) {
+	public OutsiteService selectByID(String outsiteServiceID) {
 		OutsiteService model = new OutsiteService();
 		try {
 			model = osDAO.selectByID(outsiteServiceID);
@@ -106,7 +118,7 @@ public class OutsiteServiceServiceImpl implements OutsiteServiceService {
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public boolean delete(Integer outsiteServiceID, Integer employeeID) throws Exception{
+	public boolean delete(String outsiteServiceID, Integer employeeID) throws Exception{
 		OutsiteService os = osDAO.selectByID(outsiteServiceID);
 		if(null != os){
 			return osDAO.delete(os, employeeID);

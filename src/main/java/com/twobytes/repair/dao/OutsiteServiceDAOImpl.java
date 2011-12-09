@@ -30,7 +30,7 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 	}
 
 	@Override
-	public OutsiteService selectByID(Integer outsiteServiceID) throws Exception{
+	public OutsiteService selectByID(String outsiteServiceID) throws Exception{
 		OutsiteService outsiteService = new OutsiteService();
 		outsiteService = (OutsiteService)sessionFactory.getCurrentSession().get(OutsiteService.class, outsiteServiceID);
 		return outsiteService;

@@ -20,7 +20,11 @@ $(document).ready(function(){
 	if($('select', this).hasClass("selectSearch")){
 		$('select', this).combobox({showBlankValue:true});
 	}else if(!$('select', this).hasClass("selectSearch")) {
-		$('select', this).combobox();
+		if($('select', this).hasClass("disabled")){
+			$('select', this).combobox({disabled:true});
+		}else{
+			$('select', this).combobox();
+		}
 	}
 	
 });

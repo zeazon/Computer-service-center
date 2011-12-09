@@ -149,7 +149,7 @@ public class SentOutsiteServiceController {
 			model.addAttribute(loginForm);
 			return "loginScreen";
 		}
-		OutsiteService os = osService.selectByID(Integer.parseInt(outsiteServiceID));
+		OutsiteService os = osService.selectByID(outsiteServiceID);
 		OutsiteServiceForm form = new OutsiteServiceForm();
 		form.setOutsiteServiceID(os.getOutsiteServiceID().toString());
 		form.setOutsiteServiceDate(sdfDateTime.format(os.getOutsiteServiceDate()));
@@ -161,6 +161,7 @@ public class SentOutsiteServiceController {
 		form.setServiceOrder(os.getServiceOrder());
 		
 		form.setAccessories(os.getAccessories());
+		form.setProblem(os.getProblem());
 		form.setTransportCompanyName(os.getTransportCompany().getName());
 		form.setOutsiteCompanyName(os.getOutsiteCompany().getName());
 		
@@ -179,12 +180,12 @@ public class SentOutsiteServiceController {
 		}
 		Date now = new Date();
 		Employee user = (Employee)request.getSession().getAttribute("UserLogin");
-		OutsiteService os = osService.selectByID(Integer.parseInt(form.getOutsiteServiceID()));
+		OutsiteService os = osService.selectByID(form.getOutsiteServiceID());
 		try {
 			os.setSentDate(sdfDate.parse(form.getSentDate()));
 		} catch (ParseException e) {
 			e.printStackTrace();
-			os.setSentDate(now);
+			os.setSentDate(null);
 		}
 		os.setSentTransportNo(form.getSentTransportNo());
 		os.setStatus(OutsiteService.SENT);

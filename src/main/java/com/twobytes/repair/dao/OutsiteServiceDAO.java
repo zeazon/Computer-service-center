@@ -6,7 +6,7 @@ import com.twobytes.model.OutsiteService;
 
 public interface OutsiteServiceDAO {
 	public boolean save(OutsiteService outsiteService) throws Exception;
-	public OutsiteService selectByID(Integer outsiteServiceID) throws Exception;
+	public OutsiteService selectByID(String outsiteServiceID) throws Exception;
 	public List<OutsiteService> selectByCriteria(String name, String surname, String date, String type, Integer rows, Integer page, String orderBy, String orderType) throws Exception;
 	public boolean edit(OutsiteService outsiteService) throws Exception;
 	public boolean delete(OutsiteService outsiteService, Integer employeeID) throws Exception;

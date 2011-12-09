@@ -143,7 +143,7 @@ public class ReceivedOutsiteServiceController {
 			model.addAttribute(loginForm);
 			return "loginScreen";
 		}
-		OutsiteService os = osService.selectByID(Integer.parseInt(outsiteServiceID));
+		OutsiteService os = osService.selectByID(outsiteServiceID);
 		OutsiteServiceForm form = new OutsiteServiceForm();
 		form.setOutsiteServiceID(os.getOutsiteServiceID().toString());
 		form.setOutsiteServiceDate(sdfDateTime.format(os.getOutsiteServiceDate()));
@@ -155,6 +155,7 @@ public class ReceivedOutsiteServiceController {
 		form.setServiceOrder(os.getServiceOrder());
 		
 		form.setAccessories(os.getAccessories());
+		form.setProblem(os.getProblem());
 		form.setTransportCompanyName(os.getTransportCompany().getName());
 		form.setOutsiteCompanyName(os.getOutsiteCompany().getName());
 		
@@ -185,7 +186,7 @@ public class ReceivedOutsiteServiceController {
 		}
 		Date now = new Date();
 		Employee user = (Employee)request.getSession().getAttribute("UserLogin");
-		OutsiteService os = osService.selectByID(Integer.parseInt(form.getOutsiteServiceID()));
+		OutsiteService os = osService.selectByID(form.getOutsiteServiceID());
 		try {
 			os.setReceivedDate(sdfDate.parse(form.getReceivedDate()));
 		} catch (ParseException e) {
@@ -193,10 +194,10 @@ public class ReceivedOutsiteServiceController {
 			os.setSentDate(now);
 		}
 		os.setReceivedTransportNo(form.getReceivedTransportNo());
-		os.setRepairing(form.getRepairing());
-		os.setCosting(form.getCosting());
+//		os.setRepairing(form.getRepairing());
+//		os.setCosting(form.getCosting());
 		
-		os.setNetAmount(form.getNetAmount());
+//		os.setNetAmount(form.getNetAmount());
 		os.setStatus(OutsiteService.CLOSE);
 		os.setUpdatedBy(user.getEmployeeID());
 		os.setUpdatedDate(now);

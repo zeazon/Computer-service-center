@@ -67,6 +67,7 @@ public class OutsiteServiceController {
 	private String VIEWNAME_SEARCH = "outsiteService.search";
 	private String VIEWNAME_FORM = "outsiteService.form";
 	
+	private SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy", new Locale("US"));
 	private SimpleDateFormat sdfDateTime = new SimpleDateFormat("dd/MM/yyyy HH:mm", new Locale("US"));
 	private SimpleDateFormat sdfDateTimeMin = new SimpleDateFormat("d-MMM-yy HH:mm", new Locale("US"));
 	
@@ -254,7 +255,7 @@ public class OutsiteServiceController {
 //		if(null != form.getOutsiteServiceID()){
 		if(!form.getOutsiteServiceID().equals("")){
 			// update
-			os = osService.selectByID(Integer.parseInt(form.getOutsiteServiceID()));
+			os = osService.selectByID(form.getOutsiteServiceID());
 			if(os.getOutsiteCompany().getOutsiteCompanyID() != form.getOutsiteCompanyID()){
 				OutsiteCompany oc = new OutsiteCompany();
 				try{
@@ -289,6 +290,27 @@ public class OutsiteServiceController {
 				}
 				os.setTransportCompany(tc);
 			}
+			
+			if(os.getStatus().equals(OutsiteService.SENT) || os.getStatus().equals(OutsiteService.RECEIVED)){
+				try {
+					os.setSentDate(sdfDate.parse(form.getSentDate()));
+				} catch (ParseException e) {
+					e.printStackTrace();
+					os.setSentDate(null);
+				}
+				os.setSentTransportNo(form.getSentTransportNo());
+			}
+			
+			if(os.getStatus().equals(OutsiteService.RECEIVED)){
+				try {
+					os.setReceivedDate(sdfDate.parse(form.getReceivedDate()));
+				} catch (ParseException e) {
+					e.printStackTrace();
+					os.setSentDate(now);
+				}
+				os.setReceivedTransportNo(form.getReceivedTransportNo());
+			}
+			
 			msg = this.messages.getMessage("msg.updateComplete", null, new Locale("th", "TH"));
 		}else{
 			// add
@@ -339,6 +361,8 @@ public class OutsiteServiceController {
 			os.setStatus(OutsiteService.NEW);
 			msg = this.messages.getMessage("msg.addComplete", null, new Locale("th", "TH"));
 		}
+		os.setProblem(form.getProblem());
+		
 		ServiceOrder so = serviceOrderService.selectByID(form.getServiceOrderID());
 		os.setServiceOrder(so);
 		os.setServiceType(form.getServiceType());
@@ -350,9 +374,9 @@ public class OutsiteServiceController {
 		
 		model.addAttribute("outsiteCompanyList", ocList);
 		model.addAttribute("transportCompanyList", tcList);
-		boolean canSave;
+		String result;
 		try{
-			canSave = osService.save(os);
+			result = osService.save(os);
 		}catch(Exception e){
 			e.printStackTrace();
 			model.addAttribute("errMsg", e.getMessage());
@@ -364,7 +388,7 @@ public class OutsiteServiceController {
 			model.addAttribute("docForm", docForm);
 			return VIEWNAME_FORM;
 		}
-		if(!canSave){
+		if(result.equals("false")){
 			model.addAttribute("errMsg", this.messages.getMessage("error.cannotSave", null, new Locale("th", "TH")));
 			
 			model.addAttribute("outsiteCompanyList", ocList);
@@ -375,6 +399,8 @@ public class OutsiteServiceController {
 			
 			return VIEWNAME_FORM;
 		}
+		os.setOutsiteServiceID(result);
+		form.setOutsiteServiceID(result);
 		model.addAttribute("msg", msg);
 		
 		model.addAttribute("fullAddr", os.getServiceOrder().getCustomer().getAddress()+" "+this.messages.getMessage("subdistrict_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getSubdistrict().getName()+" "+this.messages.getMessage("district_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getDistrict().getName()+" "+this.messages.getMessage("province_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getProvince().getName());
@@ -401,12 +427,14 @@ public class OutsiteServiceController {
 		docForm.setOutsiteCompany(os.getOutsiteCompany().getName());
 		docForm.setOutsiteServiceDate(sdfDateTimeMin.format(os.getOutsiteServiceDate()));
 //		docForm.setCustomerName(os.getServiceOrder().getCustomer().getName()+" "+os.getServiceOrder().getCustomer().getSurname());
+		docForm.setCustomerName(os.getServiceOrder().getCustomer().getName());
 		docForm.setTel(os.getServiceOrder().getCustomer().getTel());
 		docForm.setMobileTel(os.getServiceOrder().getCustomer().getMobileTel());
 		docForm.setType(os.getServiceOrder().getProduct().getType().getName());
-		docForm.setBrandModel(os.getServiceOrder().getProduct().getBrand().getName()+" "+os.getServiceOrder().getProduct().getModel());
+		docForm.setBrandModel(os.getServiceOrder().getProduct().getBrand().getName()+" "+os.getServiceOrder().getProduct().getModel().getName());
 		docForm.setSerialNo(os.getServiceOrder().getProduct().getSerialNo());
 		docForm.setAccessories(os.getAccessories());
+		docForm.setProblem(os.getProblem());
 		docForm.setTransportCompany(os.getTransportCompany().getName());
 		docForm.setServiceOrderID(os.getServiceOrder().getServiceOrderID());
 		docForm.setEmpOpen(os.getEmpOpen().getName()+" "+os.getEmpOpen().getSurname());
@@ -423,7 +451,7 @@ public class OutsiteServiceController {
 			model.addAttribute(loginForm);
 			return "loginScreen";
 		}
-		OutsiteService os = osService.selectByID(Integer.parseInt(outsiteServiceID));
+		OutsiteService os = osService.selectByID(outsiteServiceID);
 		OutsiteServiceForm form = new OutsiteServiceForm();
 		form.setOutsiteServiceID(os.getOutsiteServiceID().toString());
 		form.setOutsiteServiceDate(sdfDateTime.format(os.getOutsiteServiceDate()));
@@ -435,6 +463,7 @@ public class OutsiteServiceController {
 		form.setServiceOrder(os.getServiceOrder());
 		
 		form.setAccessories(os.getAccessories());
+		form.setProblem(os.getProblem());
 		
 		List<OutsiteCompany> ocList = new ArrayList<OutsiteCompany>(); 
 		try {
@@ -449,6 +478,17 @@ public class OutsiteServiceController {
 			e.printStackTrace();
 		}
 		
+		if(os.getSentDate() != null){
+			form.setSentDate(sdfDate.format(os.getSentDate()));
+		}
+		form.setSentTransportNo(os.getSentTransportNo());
+		if(os.getReceivedDate() != null){
+			form.setReceivedDate(sdfDate.format(os.getReceivedDate()));
+		}
+		form.setReceivedTransportNo(os.getReceivedTransportNo());
+		
+		form.setStatus(os.getStatus());
+		
 		model.addAttribute("outsiteCompanyList", ocList);
 		model.addAttribute("transportCompanyList", tcList);
 
@@ -459,12 +499,14 @@ public class OutsiteServiceController {
 		docForm.setOutsiteCompany(os.getOutsiteCompany().getName());
 		docForm.setOutsiteServiceDate(sdfDateTimeMin.format(os.getOutsiteServiceDate()));
 //		docForm.setCustomerName(os.getServiceOrder().getCustomer().getName()+" "+os.getServiceOrder().getCustomer().getSurname());
+		docForm.setCustomerName(os.getServiceOrder().getCustomer().getName());
 		docForm.setTel(os.getServiceOrder().getCustomer().getTel());
 		docForm.setMobileTel(os.getServiceOrder().getCustomer().getMobileTel());
 		docForm.setType(os.getServiceOrder().getProduct().getType().getName());
-		docForm.setBrandModel(os.getServiceOrder().getProduct().getBrand().getName()+" "+os.getServiceOrder().getProduct().getModel());
+		docForm.setBrandModel(os.getServiceOrder().getProduct().getBrand().getName()+" "+os.getServiceOrder().getProduct().getModel().getName());
 		docForm.setSerialNo(os.getServiceOrder().getProduct().getSerialNo());
 		docForm.setAccessories(os.getAccessories());
+		docForm.setProblem(os.getProblem());
 		docForm.setTransportCompany(os.getTransportCompany().getName());
 		docForm.setServiceOrderID(os.getServiceOrder().getServiceOrderID());
 		docForm.setEmpOpen(os.getEmpOpen().getName()+" "+os.getEmpOpen().getSurname());
@@ -479,7 +521,7 @@ public class OutsiteServiceController {
 		CustomGenericResponse response = new CustomGenericResponse();
 		response.setSuccess(true);
 		try{
-			osService.delete(Integer.parseInt(outsiteServiceID), user.getEmployeeID());
+			osService.delete(outsiteServiceID, user.getEmployeeID());
 			response.setMessage(this.messages.getMessage("msg.deleteSuccess", null, new Locale("th", "TH")));
 		}catch(Exception e){
 			response.setSuccess(false);
@@ -495,7 +537,7 @@ public class OutsiteServiceController {
 		
 		resultList.add(docForm);
 		
-		model.addAttribute("serviceOrderResultList", resultList);
+		model.addAttribute("outsiteServiceResultList", resultList);
 		return "outsiteServiceDoc";
 	}
 
