@@ -42,6 +42,8 @@ public class ServiceOrderForm {
 	private Double netAmount;
 	private String remark;
 	
+	private String status;
+	
 	private String serviceList_1;
 	private String serviceList_2;
 	private String serviceList_3;
@@ -785,6 +787,14 @@ public class ServiceOrderForm {
 
 	public void setIssuePartPrice_11(Double issuePartPrice_11) {
 		this.issuePartPrice_11 = issuePartPrice_11;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 }

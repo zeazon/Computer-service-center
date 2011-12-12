@@ -825,6 +825,7 @@ public class ServiceOrderController {
 		form.setAccessories(so.getAccessories());
 		form.setDesc(so.getDescription());
 		form.setProblem(so.getProblem());
+		form.setStatus(so.getStatus());
 		// form.setName(brand.getName());
 		// List<Integer> l = new ArrayList<Integer>();
 		// for(Type type:brand.getTypes()){
@@ -840,6 +841,38 @@ public class ServiceOrderController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		// for closed service order
+		if(!so.getStatus().equals(ServiceOrder.NEW)){
+			if(so.getStartFix() != null){
+				form.setStartFix(sdfDateTime.format(so.getStartFix()));
+			}else{
+				form.setStartFix("-");
+			}
+			if(so.getEndFix() != null){
+				form.setEndFix(sdfDateTime.format(so.getEndFix()));
+			}else{
+				form.setEndFix("-");
+			}
+			form.setRealProblem(so.getRealProblem());
+			form.setCause(so.getCause());
+			form.setFixDesc(so.getFixDesc());
+			form.setCosting(so.getCosting());
+			
+			List<ServiceList> serviceList = serviceListService.getByServiceOrder(so.getServiceOrderID());
+			model.addAttribute("serviceList", serviceList);
+			
+			List<IssuePart> issuePartList = issuePartService.getByServiceOrder(so.getServiceOrderID());
+			if(issuePartList.size() > 0){
+				form.setIssuePart("haveIssuedPart");
+			}else{
+				form.setIssuePart("noIssuedPart");
+			}
+			model.addAttribute("issuePartList", issuePartList);
+			form.setNetAmount(so.getTotalPrice());
+			form.setRemark(so.getRemark());
+		}
+		
 		model.addAttribute("form", form);
 
 		model.addAttribute("customer", so.getCustomer());

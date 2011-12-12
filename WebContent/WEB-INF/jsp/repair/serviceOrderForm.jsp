@@ -13,10 +13,22 @@
 			</c:if>
 			<form:form commandName="form" id="form" class="jqtransform" action="serviceOrder.html?do=save">
 				<input type="hidden" name="mode" value="${mode}"/>
+				<form:hidden path="status"/>
 				<table width="100%">
 					<tr>
 						<td width="13%"><label><fmt:message key="serviceOrderDate" />:</label></td>
-						<td align="left" colspan="3"><div class="rowElem"><form:input path="serviceOrderDate" class="textboxMockup" /></div></td>
+						<td align="left" colspan="3">
+							<div class="rowElem">
+								<c:choose>
+									<c:when test="${form.status != 'close'}">
+										<form:input path="serviceOrderDate" class="textboxMockup" />
+									</c:when>
+									<c:otherwise>
+										${form.serviceOrderDate}
+									</c:otherwise>
+								</c:choose>
+							</div>
+						</td>
 						<td width="40%"><label><fmt:message key="serviceOrderID" />:</label></td>
 						<td><div class="rowElem"><form:input path="serviceOrderID" readonly="true" class="textboxMockup" /></div></td>
 					</tr>
@@ -31,8 +43,8 @@
 									<form:radiobutton path="serviceType" value="4" cssStyle="margin-top:4px" id="serviceType_outsiteService" onclick="checkServiceType()" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_outsiteService" /></label><form:input path="refJobID" class="textboxMockup" id="refJobID" maxlength="30" size="16" />
 									<form:radiobutton path="serviceType" value="5" cssStyle="margin-top:4px" id="serviceType_refix" onclick="checkServiceType()" /><label style="float:left; margin-top:4px;"><fmt:message key="serviceOrderType_refix" /></label><form:input path="refServiceOrder" class="textboxMockup" id="refServiceOrder" maxlength="20" size="16" />
 								</c:if>
-								<c:if test="${mode=='edit'}">
-									<form:radiobutton path="serviceType" value="1" cssStyle="margin-top:4px" id="serviceType_guarantee" disabled="true" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_guarantee" /></label><form:select path="guaranteeNo" id="guaranteeNo" disabled="true"><c:forEach var="i" begin="1" end="7" step="1"><form:option value="${i}" /></c:forEach></form:select>
+								<c:if test="${mode=='edit' || form.status == 'close'}">
+									<form:radiobutton path="serviceType" value="1" cssStyle="margin-top:4px" id="serviceType_guarantee" disabled="true" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_guarantee" /></label><form:select path="guaranteeNo" id="guaranteeNo" class="disabled"><c:forEach var="i" begin="1" end="7" step="1"><form:option value="${i}" /></c:forEach></form:select>
 									<form:radiobutton path="serviceType" value="2" cssStyle="margin-top:4px;" id="serviceType_repair" disabled="true" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_repair" /></label>
 									<form:radiobutton path="serviceType" value="3" cssStyle="margin-top:4px" id="serviceType_claim" disabled="true" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_claim" /></label>
 									<form:radiobutton path="serviceType" value="4" cssStyle="margin-top:4px" id="serviceType_outsiteService" disabled="true" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_outsiteService" /></label> <form:input path="refJobID" class="textboxMockup" id="refJobID" maxlength="30" readonly="true" />
@@ -46,7 +58,14 @@
 						<td><label><fmt:message key="appointmentDate"/>:</label></td>
 						<td colspan="5">
 							<div class="rowElem" style="z-index:200">
-								<form:input path="appointmentDate" class="textboxMockup" id="appointmentDate"/>
+								<c:choose>
+									<c:when test="${form.status != 'close'}">
+										<form:input path="appointmentDate" class="textboxMockup" id="appointmentDate"/>
+									</c:when>
+									<c:otherwise>
+										${form.appointmentDate}
+									</c:otherwise>
+								</c:choose>
 							</div>
 						</td>
 					</tr>
@@ -68,14 +87,19 @@
 									</td>
 								</tr>
 								<tr>
-									<td><label><fmt:message key="productID" />:<font color="red">*</font></label></td>
+									<td><label><fmt:message key="productID" />:<c:if test="${mode == 'add'}"><font color="red">*</font></c:if></label></td>
 									<td colspan="7">
 										<div class="rowElem">
 											<c:if test="${mode == 'add'}">
 												<form:input path="productID" class="textboxMockup" style="float:left" id="productID" readonly="true" size="18" maxlength="20"/> <input type="button" id="productLov" value="..." > <label class="error" for="productID" generated="true" style="display: none; float:left; padding-left:10px"></label>
 											</c:if>
 											<c:if test="${mode == 'edit'}">
-												<form:input path="productID" class="textboxMockup" style="float:left" id="productID" readonly="true" size="18" maxlength="20"/>
+												<c:if test="${form.status != 'close'}">
+													<form:input path="productID" class="textboxMockup" style="float:left" id="productID" readonly="true" size="18" maxlength="20"/>
+												</c:if>
+												<c:if test="${form.status == 'close'}">
+													${form.productID}
+												</c:if>
 											</c:if>
 										</div>
 									</td>
@@ -100,16 +124,43 @@
 								</tr>
 								<tr>
 									<td><label><fmt:message key="accessories" />:</label></td>
-									<td colspan="2"><div class="rowElem"><form:input path="accessories" class="textboxMockup" style="width:98%" maxlength="5000"/></div></td>
+									<td colspan="2">
+										<div class="rowElem">
+											<c:if test="${form.status != 'close'}">
+												<form:input path="accessories" class="textboxMockup" style="width:98%" maxlength="5000"/>
+											</c:if>
+											<c:if test="${form.status == 'close'}">
+												${form.accessories}
+											</c:if>
+										</div>
+									</td>
 									<td><label><fmt:message key="serviceOrder_desc" />:</label></td>
-									<td colspan="4"><div class="rowElem"><form:input path="desc" class="textboxMockup" style="width:98%" maxlength="255"/></div></td>
+									<td colspan="4">
+										<div class="rowElem">
+											<c:if test="${form.status != 'close'}">
+												<form:input path="desc" class="textboxMockup" style="width:98%" maxlength="255"/>
+											</c:if>
+											<c:if test="${form.status == 'close'}">
+												${form.desc}
+											</c:if>
+										</div>
+									</td>
 								</tr>		
 							</table>
 						</td>
 					</tr>
 					<tr>
-						<td valign="top" style="padding-top:7px;"><label><fmt:message key="serviceOrder_problem" />:<font color="red">*</font></label></td>
-						<td colspan="5" align="left"><div class="rowElem"><form:textarea path="problem" rows="5" col="30" class="textareaMockup" style="width:98%" name="problem" ></form:textarea><label class="error" for="problem" generated="true" style="display: none; float:left; padding-left:10px"></label></div></td>
+						<td valign="top" style="padding-top:7px;"><label><fmt:message key="serviceOrder_problem" />:<c:if test="${form.status != 'close'}"><font color="red">*</font></c:if></label></td>
+						<td colspan="5" align="left">
+							<div class="rowElem">
+								<c:if test="${form.status != 'close'}">
+									<form:textarea path="problem" rows="5" col="30" class="textareaMockup" style="width:98%" name="problem" ></form:textarea><label class="error" for="problem" generated="true" style="display: none; float:left; padding-left:10px"></label>
+								</c:if>
+								<c:if test="${form.status == 'close'}">
+									<pre style="font-size:16px">${form.problem}</pre>
+								</c:if>
+							</div>
+						</td>
 					</tr>
 					<tr align="left">
 						<td colspan="6">
@@ -142,7 +193,12 @@
 									<form:input path="customerID" class="textboxMockup" style="float:left" id="custID" readonly="true" size="9" maxlength="10"/> <input type="button" id="lov" value="..." > <label class="error" for="custID" generated="true" style="display: none; float:left; padding-left:10px"></label>
 								</c:if>
 								<c:if test="${mode=='edit'}">
-									<form:input path="customerID" class="textboxMockup" style="float:left" id="custID" readonly="true" size="9" maxlength="10"/>
+									<c:if test="${form.status != 'close'}">
+										<form:input path="customerID" class="textboxMockup" style="float:left" id="custID" readonly="true" size="9" maxlength="10"/>
+									</c:if>
+									<c:if test="${form.status == 'close'}">
+										${form.customerID}
+									</c:if>
 								</c:if>
 							</div>
 						</td>
@@ -188,13 +244,49 @@
 								</tr>
 								<tr>
 									<td><label><fmt:message key="deliveryCustomer" />:</label></td>
-									<td><div class="rowElem"><form:input path="deliveryCustomer" class="textboxMockup" style="float:left" id="deliveryCustomer" size="30" maxlength="255"/></div></td>
+									<td>
+										<div class="rowElem">
+											<c:if test="${form.status != 'close'}">
+												<form:input path="deliveryCustomer" class="textboxMockup" style="float:left" id="deliveryCustomer" size="30" maxlength="255"/>
+											</c:if>
+											<c:if test="${form.status == 'close'}">
+												${form.deliveryCustomer}
+											</c:if>
+										</div>
+									</td>
 									<td><label><fmt:message key="email" />:</label></td>
-									<td><div class="rowElem"><form:input path="deliveryEmail" class="textboxMockup" style="float:left" id="deliveryEmail" maxlength="50"/></div></td>
+									<td>
+										<div class="rowElem">
+											<c:if test="${form.status != 'close'}">
+												<form:input path="deliveryEmail" class="textboxMockup" style="float:left" id="deliveryEmail" maxlength="50"/>
+											</c:if>
+											<c:if test="${form.status == 'close'}">
+												${form.deliveryEmail}
+											</c:if>
+										</div>
+									</td>
 									<td><label><fmt:message key="tel" />:</label></td>
-									<td><div class="rowElem"><form:input path="deliveryTel" class="textboxMockup" style="float:left" id="deliveryTel" maxlength="100"/></div></td>
+									<td>
+										<div class="rowElem">
+											<c:if test="${form.status != 'close'}">
+												<form:input path="deliveryTel" class="textboxMockup" style="float:left" id="deliveryTel" maxlength="100"/>
+											</c:if>
+											<c:if test="${form.status == 'close'}">
+												${form.deliveryTel}
+											</c:if>
+										</div>
+									</td>
 									<td><label><fmt:message key="mobileTel"/>:</label></td>
-									<td><div class="rowElem"><form:input path="deliveryMobileTel" class="textboxMockup" style="float:left" id="deliveryMobileTel" maxlength="100"/></div></td>
+									<td>
+										<div class="rowElem">
+											<c:if test="${form.status != 'close'}">
+												<form:input path="deliveryMobileTel" class="textboxMockup" style="float:left" id="deliveryMobileTel" maxlength="100"/>
+											</c:if>
+											<c:if test="${form.status == 'close'}">
+												${form.deliveryMobileTel}
+											</c:if>
+										</div>
+									</td>
 								</tr>
 							</table>
 						</td>
@@ -254,9 +346,110 @@
 						</td>
 					</tr--%>
 					
+					<c:if test="${form.status == 'fixing'}">
+					<tr>
+						<td><label><fmt:message key="serviceOrder_startFix" />:</label></td>
+						<td colspan="5"><div class="rowElem">${form.startFix}</div></td>
+					</tr>
+					</c:if>
+					
+					<c:if test="${form.status != 'close'}">
 					<tr align="center">
 						<td colspan="6"><div class="rowElem"><input type="submit" value="<fmt:message key='button.ok' />" /></div></td>
 					</tr>
+					</c:if>
+					<c:if test="${form.status == 'close'}">
+					<tr>
+						<td><label><fmt:message key="serviceOrder_startFix" />:</label></td>
+						<td colspan="2"><div class="rowElem">${form.startFix}</div></td>
+						<td><label><fmt:message key="serviceOrder_endFix" />:</label></td>
+						<td colspan="2"><div class="rowElem">${form.endFix}</div></td>
+					</tr>
+					<tr>
+						<td valign="top" style="padding-top:4px;"><label><fmt:message key="serviceOrder_realProblem" />:</label></td>
+						<td colspan="5" align="left"><div class="rowElem">${form.realProblem}</label></div></td>
+					</tr>
+					<tr>
+						<td valign="top" style="padding-top:4px;"><label><fmt:message key="cause" />:</label></td>
+						<td colspan="5" align="left"><div class="rowElem">${form.cause}</div></td>
+					</tr>
+					<tr>
+						<td valign="top" style="padding-top:4px;"><label><fmt:message key="fix" />:</label></td>
+						<td colspan="5" align="left"><div class="rowElem">${form.fixDesc}</div></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td colspan="5">
+							<div class="rowElem">
+								<form:radiobutton path="costing" value="cost" cssClass="costing" cssStyle="margin-top:4px" id="costing_cost" disabled="true" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrder_costing_cost" /></label>
+								<form:radiobutton path="costing" value="free" cssClass="costing" cssStyle="margin-top:4px" id="costing_free" disabled="true" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrder_costing_free" /></label>
+								<form:radiobutton path="costing" value="warranty" cssClass="costing" cssStyle="margin-top:4px" id="costing_warranty" disabled="true" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrder_costing_warranty" /></label>
+								<label class="error" for="costing" generated="true" style="display: none; padding-left:10px"></label>
+							</div>
+						</td>
+					</tr>
+						<c:if test="${serviceList.size() > 0}">
+						
+						<tr id="serviceCostRow">
+							<td></td>
+							<td colspan="5">
+								<table border="0">
+									<tr>
+										<th class="ui-widget-header ui-corner-all"><fmt:message key="serviceOrder_partList" /></th>
+										<th class="ui-widget-header ui-corner-all"><fmt:message key="price" /></th>
+									</tr>
+									<c:forEach var="service" items="${serviceList}" varStatus="status">
+									<tr class="serviceList">
+										<td>${service.serviceName}</td>
+										<td>${service.price}</td>
+									</tr>
+									</c:forEach>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td colspan="5">
+								<div class="rowElem">
+									<form:radiobutton path="issuePart" value="noIssuedPart" cssClass="issuePart" cssStyle="margin-top:4px" id="noPart" disabled="true" /><label style="float:left; margin-top:4px"><fmt:message key="noIssuedPart" /></label>
+									<form:radiobutton path="issuePart" value="haveIssuedPart" cssClass="issuePart" cssStyle="margin-top:4px" id="hasPart" disabled="true" /><label style="float:left; margin-top:4px"><fmt:message key="haveIssuedPart" /></label>
+									<label class="error" for="issuePart" generated="true" style="display: none; padding-left:10px"></label>
+								</div>
+							</td>
+						</tr>
+						</c:if>
+						<c:if test="${issuePartList.size() > 0}">
+						<tr id="partCostRow">
+							<td></td>
+							<td colspan="5">
+								<table id="partTable">
+									<tr>
+										<th class="ui-widget-header ui-corner-all"><fmt:message key="productID" /></th>
+										<th class="ui-widget-header ui-corner-all"><fmt:message key="serviceOrder_partList" /></th>
+										<th class="ui-widget-header ui-corner-all"><fmt:message key="amount" /></th>
+										<th class="ui-widget-header ui-corner-all"><fmt:message key="price" /></th>
+									</tr>
+									<c:forEach var="issuePart" items="${issuePartList}" varStatus="status">
+									<tr class="issuePartList">
+										<td>${issuePart.code}</td>
+										<td>${issuePart.name}</td>
+										<td align="right">${issuePart.quantity}</td>
+										<td align="right">${issuePart.price}</td>
+									</tr>
+									</c:forEach>
+								</table>
+							</td>
+						</tr>
+						</c:if>
+						<tr>
+							<td><label><fmt:message key="serviceOrder_netAmount" />:</label></td>
+							<td colspan="5"><div class="rowElem"><span style="float:left; margin-top:-4px">${form.netAmount}&nbsp;<fmt:message key="baht" /></span></div></td>
+						</tr>
+						<tr>
+							<td valign="top" style="padding-top:5px;"><label><fmt:message key="remark"/>:</label></td>
+							<td colspan="5" align="left"><div class="rowElem"><pre style="font-size:16px;">${form.remark}</pre></div></td>
+						</tr>
+					</c:if>
 				</table>
 			</form:form>
 		</td>
@@ -677,8 +870,12 @@ $(document).ready(function(){
 	$("#guaranteeNo_autoComplete").css('width','20px');
 	
 	//$("#appointmentDate").calendarsPicker($.extend({calendar: $.calendars.instance('thai','th')}));
-	$('#appointmentDate').datetimeEntry({datetimeFormat: 'D/O/Y H:M'});
-	$('#serviceOrderDate').datetimeEntry({datetimeFormat: 'D/O/Y H:M'});
+	<c:if test="${form.status != 'close'}">
+		$('#appointmentDate').datetimeEntry({datetimeFormat: 'D/O/Y H:M'});
+	</c:if>
+	<c:if test="${form.status != 'close'}">
+		$('#serviceOrderDate').datetimeEntry({datetimeFormat: 'D/O/Y H:M'});
+	</c:if>
 	
 	$("#shopCustomerDetail").hide();
 	$("#walkinCustomerDetail").hide();

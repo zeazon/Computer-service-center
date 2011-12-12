@@ -17,14 +17,14 @@ $(document).ready(function(){
 		.blur(function(){$(this).removeClass("textareaMockup_focus");})
 		.hover(function(){$(this).addClass("textareaMockup_hover");},function(){$(this).removeClass("textareaMockup_hover");});
 
-	if($('select', this).hasClass("selectSearch")){
-		$('select', this).combobox({showBlankValue:true});
-	}else if(!$('select', this).hasClass("selectSearch")) {
-		if($('select', this).hasClass("disabled")){
-			$('select', this).combobox({disabled:true});
-		}else{
+	if($('select', this).hasClass("disabled")){
+		$('select', this).combobox({disabled:true});
+	}else{
+		if($('select', this).hasClass("selectSearch")){
+			$('select', this).combobox({showBlankValue:true});
+		}else if(!$('select', this).hasClass("selectSearch")) {
 			$('select', this).combobox();
 		}
 	}
-	
+
 });
