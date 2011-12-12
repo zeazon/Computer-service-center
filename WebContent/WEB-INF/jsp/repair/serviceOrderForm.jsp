@@ -349,7 +349,7 @@
 					<c:if test="${form.status == 'fixing'}">
 					<tr>
 						<td><label><fmt:message key="serviceOrder_startFix" />:</label></td>
-						<td colspan="5"><div class="rowElem">${form.startFix}</div></td>
+						<td colspan="5"><div class="rowElem">${form.startFix}<form:hidden path="startFix"/></div></td>
 					</tr>
 					</c:if>
 					
