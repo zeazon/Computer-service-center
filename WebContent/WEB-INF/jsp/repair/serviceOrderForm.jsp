@@ -346,7 +346,7 @@
 						</td>
 					</tr--%>
 					
-					<c:if test="${form.status == 'fixing'}">
+					<c:if test="${form.status == 'fixing' || form.status == 'outsite'}">
 					<tr>
 						<td><label><fmt:message key="serviceOrder_startFix" />:</label></td>
 						<td colspan="5"><div class="rowElem">${form.startFix}<form:hidden path="startFix"/></div></td>
