@@ -3,6 +3,7 @@ package com.twobytes.repair.dao;
 import java.util.List;
 
 import com.twobytes.model.ServiceOrder;
+import com.twobytes.report.form.NumRepairByEmpReportForm;
 import com.twobytes.report.form.NumRepairReportForm;
 
 public interface ServiceOrderDAO {
@@ -18,4 +19,5 @@ public interface ServiceOrderDAO {
 	
 	public List<ServiceOrder> getRepairReport(String startDate, String endDate) throws Exception;
 	public NumRepairReportForm getNumRepairReport(String date) throws Exception;
+	public List<NumRepairByEmpReportForm> getNumRepairByEmpReport(String startDate, String endDate, Integer employeeID) throws Exception;
 }

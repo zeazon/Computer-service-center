@@ -5,6 +5,7 @@ import java.util.List;
 import com.twobytes.model.IssuePart;
 import com.twobytes.model.ServiceList;
 import com.twobytes.model.ServiceOrder;
+import com.twobytes.report.form.NumRepairByEmpReportForm;
 import com.twobytes.report.form.NumRepairReportForm;
 
 public interface ServiceOrderService {
@@ -21,4 +22,5 @@ public interface ServiceOrderService {
 	
 	public List<ServiceOrder> getRepairReport(String startDate, String endDate);
 	public NumRepairReportForm getNumRepairReport(String date);
+	public List<NumRepairByEmpReportForm> getNumRepairByEmpReport(String startDate, String endDate, Integer employeeID);
 }

@@ -13,6 +13,7 @@ import com.twobytes.model.ServiceOrder;
 import com.twobytes.repair.dao.IssuePartDAO;
 import com.twobytes.repair.dao.ServiceListDAO;
 import com.twobytes.repair.dao.ServiceOrderDAO;
+import com.twobytes.report.form.NumRepairByEmpReportForm;
 import com.twobytes.report.form.NumRepairReportForm;
 import com.twobytes.util.DocRunningUtil;
 
@@ -186,6 +187,19 @@ public class ServiceOrderServiceImpl implements ServiceOrderService {
 			e.printStackTrace();
 		}
 		return reportForm;
+	}
+
+	@Override
+	@Transactional
+	public List<NumRepairByEmpReportForm> getNumRepairByEmpReport(
+			String startDate, String endDate, Integer employeeID) {
+		List<NumRepairByEmpReportForm> retList = new ArrayList<NumRepairByEmpReportForm>();
+		try{
+			retList = soDAO.getNumRepairByEmpReport(startDate, endDate, employeeID);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return retList;
 	}
 
 }
