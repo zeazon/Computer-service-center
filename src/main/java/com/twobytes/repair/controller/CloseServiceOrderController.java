@@ -174,7 +174,9 @@ public class CloseServiceOrderController {
 		}else if(so.getServiceType() == 4){
 			form.setRefJobID(so.getRefJobID());
 		}
-		form.setAppointmentDate(sdfDateTime.format(so.getAppointmentDate()));
+		if(so.getAppointmentDate() != null){
+			form.setAppointmentDate(sdfDateTime.format(so.getAppointmentDate()));
+		}
 		form.setRefServiceOrder(so.getRefServiceOrder());
 		form.setCustomerType(so.getCustomerType());
 		form.setCustomerID(so.getCustomer().getCustomerID().toString());
@@ -552,7 +554,9 @@ public class CloseServiceOrderController {
 		}else if(so.getServiceType() == 4){
 			form.setRefJobID(so.getRefJobID());
 		}
-		form.setAppointmentDate(sdfDateTime.format(so.getAppointmentDate()));
+		if(so.getAppointmentDate() != null){
+			form.setAppointmentDate(sdfDateTime.format(so.getAppointmentDate()));
+		}
 		form.setRefServiceOrder(so.getRefServiceOrder());
 		form.setCustomerType(so.getCustomerType());
 		form.setCustomerID(so.getCustomer().getCustomerID().toString());
