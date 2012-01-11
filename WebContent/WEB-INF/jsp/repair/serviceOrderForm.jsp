@@ -363,7 +363,7 @@
 					</tr>
 					</c:if>
 					
-					<c:if test="${form.status != 'close' || form.status == 'fixed'}">
+					<c:if test="${form.status == 'new' || form.status == 'fixing' || mode == 'add'}">
 					<tr align="center">
 						<td colspan="6">
 							<div class="rowElem">
@@ -375,9 +375,19 @@
 					<c:if test="${form.status == 'close' || form.status == 'fixed'}">
 					<tr>
 						<td><label><fmt:message key="serviceOrder_startFix" />:</label></td>
-						<td colspan="2"><div class="rowElem">${form.startFix}</div></td>
+						<td><div class="rowElem">${form.startFix}</div></td>
 						<td><label><fmt:message key="serviceOrder_endFix" />:</label></td>
-						<td colspan="2"><div class="rowElem">${form.endFix}</div></td>
+						<td><div class="rowElem">${form.endFix}</div></td>
+						<td><label><fmt:message key="serviceOrder_empFix" />:</label></td>
+						<td>
+							<div class="rowElem">
+								<form:select path="empFixID" id="empFixID" disabled="true">
+									<c:forEach items="${employeeList}" var="employee">
+										<form:option value="${employee.employeeID}">${employee.name} ${employee.surname}</form:option>
+									</c:forEach>
+								</form:select>
+							</div>
+						</td>
 					</tr>
 					<tr>
 						<td valign="top" style="padding-top:4px;"><label><fmt:message key="serviceOrder_realProblem" />:</label></td>
@@ -462,6 +472,13 @@
 						<tr>
 							<td valign="top" style="padding-top:5px;"><label><fmt:message key="remark"/>:</label></td>
 							<td colspan="5" align="left"><div class="rowElem"><pre style="font-size:16px;">${form.remark}</pre></div></td>
+						</tr>
+						<tr align="center">
+							<td colspan="6">
+								<div class="rowElem">
+									<input type="submit" value="<fmt:message key='button.ok' />" />
+								</div>
+							</td>
 						</tr>
 					</c:if>
 				</table>
@@ -681,6 +698,10 @@
 									</select>
 								</div>
 							</td>
+						</tr>
+						<tr>
+							<td><label><fmt:message key="serialNo" />:</label></td>
+							<td><div class="rowElem"><input type="text" id="lovSerialNo" class="textboxMockup" /></div></td>
 						</tr>
 						<tr>
 							<td></td>
@@ -2164,7 +2185,8 @@ function gridProductReload(){
 	var typeID = jQuery("#lovType").val();
 	var brandID = jQuery("#lovBrand").val();
 	var modelID = jQuery("#lovModel").val();
-	jQuery("#productList").jqGrid('setGridParam',{url:"searchProduct.html?&typeID="+typeID+"&brandID="+brandID+"&modelID="+modelID,page:1}).trigger("reloadGrid");
+	var serialNo = jQuery("#lovSerialNo").val();
+	jQuery("#productList").jqGrid('setGridParam',{url:"searchProduct.html?&typeID="+typeID+"&brandID="+brandID+"&modelID="+modelID+"&serialNo="+serialNo,page:1}).trigger("reloadGrid");
 }
 
 function saveCustomer(){
