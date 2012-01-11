@@ -79,6 +79,27 @@ public class ServiceOrderServiceImpl implements ServiceOrderService {
 	}
 
 	@Override
+	@Transactional
+	public List<ServiceOrder> selectByCriteria(String name, String startDate,
+			String endDate, String type, String serialNo, String employee,
+			Integer rows, Integer page, String orderBy, String orderType) {
+		if(null != name && !name.equals("")) {
+			name = "%"+name+"%";
+		}
+		if(null != serialNo && !serialNo.equals("")) {
+			serialNo = "%"+serialNo+"%";
+		}
+		List<ServiceOrder> modelList = new ArrayList<ServiceOrder>();
+
+		try {
+			modelList = soDAO.selectByCriteria(name, startDate, endDate, type, serialNo, employee, rows, page, orderBy, orderType);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return modelList;
+	}
+
+	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public boolean edit(ServiceOrder serviceOrder) throws Exception{
 		return soDAO.edit(serviceOrder);
@@ -133,10 +154,32 @@ public class ServiceOrderServiceImpl implements ServiceOrderService {
 	}
 
 	@Override
+	@Transactional
+	public List<ServiceOrder> selectSOForCloseByCriteria(Integer employeeID, String name,
+			String startDate, String endDate, String type, String serialNo,
+			Integer rows, Integer page, String orderBy, String orderType) {
+		if(null != name && !name.equals("")) {
+			name = "%"+name+"%";
+		}
+		if(null != serialNo && !serialNo.equals("")) {
+			serialNo = "%"+serialNo+"%";
+		}
+		List<ServiceOrder> modelList = new ArrayList<ServiceOrder>();
+		try {
+			modelList = soDAO.selectSOForCloseByCriteria(employeeID, name, startDate, endDate, type, serialNo, rows, page, orderBy, orderType);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return modelList;
+	}
+	
+	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public boolean close(ServiceOrder so, List<IssuePart> issuePartList,
 			List<ServiceList> serviceList) throws Exception {
 		soDAO.save(so);
+		ipDAO.delete(so.getServiceOrderID());
+		slDAO.delete(so.getServiceOrderID());
 		for(int i=0; i<issuePartList.size(); i++){
 			IssuePart ip = issuePartList.get(i);
 			ipDAO.save(ip);

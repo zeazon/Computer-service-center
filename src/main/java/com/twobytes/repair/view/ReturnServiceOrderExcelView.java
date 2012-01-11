@@ -170,7 +170,7 @@ WritableFont normalFont = new WritableFont(WritableFont.ARIAL, 10);
         sheet1.addCell(new Label(17, 13, form.getProvince(), border_bottom_dotted));
         sheet1.addCell(new Label(21, 13, form.getZipcode(), border_bottom_dotted));
         
-        sheet1.addCell(new Label(4, 14, form.getDeliveryCustomer(), border_bottom_dotted));
+        sheet1.addCell(new Label(3, 14, form.getDeliveryCustomer(), border_bottom_dotted));
         sheet1.addCell(new Label(10, 14, form.getDeliveryEmail(), border_bottom_dotted));
         sheet1.addCell(new Label(16, 14, form.getDeliveryTel(), border_bottom_dotted));
         sheet1.addCell(new Label(20, 14, form.getDeliveryMobileTel(), border_bottom_dotted));

@@ -242,13 +242,6 @@ public class BrandController {
 		List<Type> typeList = new ArrayList<Type>();
 		try {
 			typeList = typeService.getAll();
-			
-			
-			for(Type type:typeList){
-				System.out.println(type.getTypeID()+":"+type.getName());
-			}
-			
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

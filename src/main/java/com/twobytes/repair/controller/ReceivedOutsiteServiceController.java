@@ -115,13 +115,20 @@ public class ReceivedOutsiteServiceController {
 				OutsiteServiceGridData gridData = new OutsiteServiceGridData();
 				gridData.setOutsiteServiceID(os.getOutsiteServiceID().toString());
 				gridData.setOutsiteServiceDate(sdfDateTime.format(os.getOutsiteServiceDate()));
-				Customer customer = os.getServiceOrder().getCustomer();
-				gridData.setName(customer.getName());
+//				Customer customer = os.getServiceOrder().getCustomer();
+//				gridData.setName(customer.getName());
 //				gridData.setSurname(customer.getSurname());
-				gridData.setType(os.getServiceOrder().getProduct().getType().getName());
-				gridData.setBrand(os.getServiceOrder().getProduct().getBrand().getName());
-				gridData.setModel(os.getServiceOrder().getProduct().getModel().getName());
-				gridData.setProblem(os.getServiceOrder().getProblem());
+				gridData.setName(os.getCustomerName());
+//				gridData.setType(os.getServiceOrder().getProduct().getType().getName());
+				if(os.getType() != null)
+					gridData.setType(os.getType().getName());
+//				gridData.setBrand(os.getServiceOrder().getProduct().getBrand().getName());
+				if(os.getBrand() != null)
+					gridData.setBrand(os.getBrand().getName());
+//				gridData.setModel(os.getServiceOrder().getProduct().getModel().getName());
+				if(os.getModel() != null)
+					gridData.setModel(os.getModel().getName());
+				gridData.setProblem(os.getProblem());
 				gridData.setStatus(os.getStatus());
 				rowsList.add(gridData);
 			}
@@ -148,18 +155,35 @@ public class ReceivedOutsiteServiceController {
 		form.setOutsiteServiceID(os.getOutsiteServiceID().toString());
 		form.setOutsiteServiceDate(sdfDateTime.format(os.getOutsiteServiceDate()));
 		form.setServiceType(os.getServiceType());
-		form.setServiceOrderID(os.getServiceOrder().getServiceOrderID());
+		if(os.getServiceOrder() != null){
+			form.setServiceOrderID(os.getServiceOrder().getServiceOrderID());
+			form.setServiceOrder(os.getServiceOrder());
+		}
+		form.setCustomerName(os.getCustomerName());
+		form.setTel(os.getTel());
+		form.setMobileTel(os.getMobileTel());
+		if(os.getType() != null){
+			form.setTypeID(os.getType().getTypeID());
+			form.setTypeName(os.getType().getName());
+		}
+		if(os.getBrand() != null){
+			form.setBrandID(os.getBrand().getBrandID());
+			form.setBrandName(os.getBrand().getName());
+		}
+		if(os.getModel() != null){
+			form.setModelID(os.getModel().getModelID());
+			form.setModelName(os.getModel().getName());
+		}
+		form.setSerialNo(os.getSerialNo());
 		form.setOutsiteCompanyID(os.getOutsiteCompany().getOutsiteCompanyID());
 		form.setTransportCompanyID(os.getTransportCompany().getTransportCompanyID());
-		
-		form.setServiceOrder(os.getServiceOrder());
 		
 		form.setAccessories(os.getAccessories());
 		form.setProblem(os.getProblem());
 		form.setTransportCompanyName(os.getTransportCompany().getName());
 		form.setOutsiteCompanyName(os.getOutsiteCompany().getName());
 		
-		form.setSentDate(sdfDateTime.format(os.getSentDate()));
+		form.setSentDate(sdfDate.format(os.getSentDate()));
 		form.setSentTransportNo(os.getSentTransportNo());
 		
 		form.setCosting("free");
@@ -172,7 +196,7 @@ public class ReceivedOutsiteServiceController {
 //		form.setServiceDesc(serviceDesc);
 		
 		model.addAttribute("form", form);
-		model.addAttribute("fullAddr", os.getServiceOrder().getCustomer().getAddress()+" "+this.messages.getMessage("subdistrict_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getSubdistrict().getName()+" "+this.messages.getMessage("district_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getDistrict().getName()+" "+this.messages.getMessage("province_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getProvince().getName());
+//		model.addAttribute("fullAddr", os.getServiceOrder().getCustomer().getAddress()+" "+this.messages.getMessage("subdistrict_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getSubdistrict().getName()+" "+this.messages.getMessage("district_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getDistrict().getName()+" "+this.messages.getMessage("province_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getProvince().getName());
 		
 		return VIEWNAME_FORM;
 	}
@@ -202,11 +226,16 @@ public class ReceivedOutsiteServiceController {
 		os.setUpdatedBy(user.getEmployeeID());
 		os.setUpdatedDate(now);
 		
-		ServiceOrder so = os.getServiceOrder();
-		so.setStatus(ServiceOrder.FIXING);
-		so.setUpdatedBy(user.getEmployeeID());
-		so.setUpdatedDate(now);
-		os.setServiceOrder(so);
+		if(os.getServiceOrder() != null){
+			Integer count = osService.countUncloseOutsiteService(os.getServiceOrder().getServiceOrderID(), os.getOutsiteServiceID()); 
+			if(count != null && count == 0){
+				ServiceOrder so = os.getServiceOrder();
+				so.setStatus(ServiceOrder.FIXING);
+				so.setUpdatedBy(user.getEmployeeID());
+				so.setUpdatedDate(now);
+				os.setServiceOrder(so);
+			}
+		}
 		
 		/*String[] serviceDescArry = form.getServiceDesc();
 		Double[] servicePriceArry = form.getServicePrice();
@@ -277,14 +306,14 @@ public class ReceivedOutsiteServiceController {
 			e.printStackTrace();
 			model.addAttribute("errMsg", e.getMessage());
 			model.addAttribute("form",form);
-			model.addAttribute("fullAddr", os.getServiceOrder().getCustomer().getAddress()+" "+this.messages.getMessage("subdistrict_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getSubdistrict().getName()+" "+this.messages.getMessage("district_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getDistrict().getName()+" "+this.messages.getMessage("province_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getProvince().getName());
+//			model.addAttribute("fullAddr", os.getServiceOrder().getCustomer().getAddress()+" "+this.messages.getMessage("subdistrict_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getSubdistrict().getName()+" "+this.messages.getMessage("district_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getDistrict().getName()+" "+this.messages.getMessage("province_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getProvince().getName());
 			return VIEWNAME_FORM;
 		}
 		
 		if(!canSave){
 			model.addAttribute("errMsg", this.messages.getMessage("error.cannotSave", null, new Locale("th", "TH")));
 			model.addAttribute("form",form);
-			model.addAttribute("fullAddr", os.getServiceOrder().getCustomer().getAddress()+" "+this.messages.getMessage("subdistrict_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getSubdistrict().getName()+" "+this.messages.getMessage("district_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getDistrict().getName()+" "+this.messages.getMessage("province_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getProvince().getName());
+//			model.addAttribute("fullAddr", os.getServiceOrder().getCustomer().getAddress()+" "+this.messages.getMessage("subdistrict_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getSubdistrict().getName()+" "+this.messages.getMessage("district_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getDistrict().getName()+" "+this.messages.getMessage("province_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getProvince().getName());
 			return VIEWNAME_FORM;
 		}
 		

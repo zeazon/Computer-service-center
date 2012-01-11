@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,6 +25,7 @@ import com.twobytes.model.Employee;
 import com.twobytes.model.GridResponse;
 import com.twobytes.model.ServiceOrder;
 import com.twobytes.model.Type;
+import com.twobytes.repair.form.ServiceOrderForm;
 import com.twobytes.repair.form.ServiceOrderGridData;
 import com.twobytes.repair.form.ServiceOrderSearchForm;
 import com.twobytes.repair.service.ServiceOrderService;
@@ -46,6 +48,7 @@ public class GetServiceOrderController {
 	}
 	
 	private String VIEWNAME_SEARCH = "getServiceOrder.search";
+	private String VIEWNAME_FORM = "getServiceOrder.form";
 	
 //	private SimpleDateFormat sdfDateTime = new SimpleDateFormat("dd/MM/yyyy HH:mm", new Locale("th", "TH"));
 	private SimpleDateFormat sdfDateTime = new SimpleDateFormat("dd/MM/yyyy HH:mm", new Locale ( "US" ));
@@ -133,6 +136,66 @@ public class GetServiceOrderController {
 		return response;
 	}
 	
+	@RequestMapping(value = "/getServiceOrder", params = "do=preview")
+	public String preview(@RequestParam(value="serviceOrderID") String serviceOrderID, ModelMap model, HttpServletRequest request){
+		if (null == request.getSession().getAttribute("UserLogin")) {
+			LoginForm loginForm = new LoginForm();
+			model.addAttribute(loginForm);
+			return "loginScreen";
+		}
+		
+		ServiceOrder so = soService.selectByID(serviceOrderID);
+		ServiceOrderForm form = new ServiceOrderForm();
+		form.setServiceOrderID(so.getServiceOrderID());
+		form.setServiceOrderDate(sdfDateTime.format(so.getServiceOrderDate()));
+		form.setServiceType(so.getServiceType());
+		if(so.getAppointmentDate() != null){
+			form.setAppointmentDate(sdfDateTime.format(so.getAppointmentDate()));
+		}
+		form.setRefServiceOrder(so.getRefServiceOrder());
+		form.setCustomerType(so.getCustomerType());
+		form.setCustomerID(so.getCustomer().getCustomerID().toString());
+		form.setDeliveryCustomer(so.getDeliveryCustomer());
+		form.setDeliveryEmail(so.getDeliveryEmail());
+		form.setDeliveryMobileTel(so.getDeliveryMobileTel());
+		form.setDeliveryTel(so.getDeliveryTel());
+		form.setProductID(so.getProduct().getProductID());
+		form.setTypeID(so.getProduct().getType().getTypeID());
+		form.setBrandID(so.getProduct().getBrand().getBrandID());
+		form.setModel(so.getProduct().getModel().getName());
+		form.setSerialNo(so.getProduct().getSerialNo());
+		form.setAccessories(so.getAccessories());
+		form.setDesc(so.getDescription());
+		form.setProblem(so.getProblem());
+		form.setStatus(so.getStatus());
+
+		model.addAttribute("form", form);
+
+		model.addAttribute("customer", so.getCustomer());
+
+		model.addAttribute(
+				"fullAddr",
+				so.getCustomer().getAddress()
+						+ " "
+						+ this.messages.getMessage("subdistrict_abbr", null,
+								new Locale("th", "TH"))
+						+ " "
+						+ so.getCustomer().getSubdistrict().getName()
+						+ " "
+						+ this.messages.getMessage("district_abbr", null,
+								new Locale("th", "TH"))
+						+ " "
+						+ so.getCustomer().getDistrict().getName()
+						+ " "
+						+ this.messages.getMessage("province_abbr", null,
+								new Locale("th", "TH")) + " "
+						+ so.getCustomer().getProvince().getName());
+
+		model.addAttribute("product", so.getProduct());		
+		
+		return VIEWNAME_FORM;
+	}
+	
 	@RequestMapping(value = "/getServiceOrder", params = "do=getServiceOrder")
 	public @ResponseBody CustomGenericResponse getServiceOrder(HttpServletRequest request){
 		Employee user = (Employee)request.getSession().getAttribute("UserLogin");
@@ -163,4 +226,52 @@ public class GetServiceOrderController {
 		return response;
 	}
 
+	@RequestMapping(value = "/getServiceOrder", params = "do=accept")
+	public String accept(@ModelAttribute("form") ServiceOrderForm form,
+			HttpServletRequest request, ModelMap model, @RequestParam String mode) {
+		if (null == request.getSession().getAttribute("UserLogin")) {
+			LoginForm loginForm = new LoginForm();
+			model.addAttribute(loginForm);
+			return "loginScreen";
+		}
+		
+		Employee user = (Employee)request.getSession().getAttribute("UserLogin");
+		Date now = new Date();
+		ServiceOrder so = soService.selectByID(request.getParameter("serviceOrderID"));
+		
+		so.setEmpFix(user);
+		so.setStartFix(now);
+		so.setStatus(ServiceOrder.FIXING);
+		so.setUpdatedBy(user.getEmployeeID());
+		so.setUpdatedDate(now);
+		
+		String msg = "";
+		try {
+			soService.edit(so);
+			msg = this.messages.getMessage("msg.getServiceOrder_success", null,
+					new Locale("th", "TH"));
+		}catch(Exception e){
+			e.printStackTrace();
+			model.addAttribute("form", form);
+			
+			msg = this.messages.getMessage("msg.getServiceOrder_failure", null,
+					new Locale("th", "TH"));
+			
+			model.addAttribute("errMsg", msg);
+			return VIEWNAME_FORM;
+		}
+		model.addAttribute("msg", msg);
+		
+		ServiceOrderSearchForm searchForm = new ServiceOrderSearchForm();
+		model.addAttribute("searchForm", searchForm);
+		List<Type> typeList = new ArrayList<Type>();
+		try {
+			typeList = typeService.getAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		model.addAttribute("typeList", typeList);
+		
+		return VIEWNAME_SEARCH;
+	}
 }

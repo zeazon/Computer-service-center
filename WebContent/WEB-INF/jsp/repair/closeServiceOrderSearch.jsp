@@ -121,7 +121,7 @@
 			title:"<fmt:message key='button.closeServiceOrder' />",
 			buttonicon:"ui-icon-pencil", 
 			onClickButton: function(){ 
-				 var gsr = jQuery("#list").getGridParam('selrow');
+				var gsr = jQuery("#list").getGridParam('selrow');
 				if(gsr){
 					jQuery("#list").GridToForm(gsr,"#editForm");
 					$("#editForm").submit();
@@ -211,10 +211,12 @@
 			return "<fmt:message key='serviceOrder_status_fixing' />";
 		}else if(cellvalue == 'outsite'){
 			return "<fmt:message key='serviceOrder_status_outsite' />";
+		}else if(cellvalue == 'fixed'){
+			return "<fmt:message key='serviceOrder_status_fixed' />";
 		}else if(cellvalue == 'close'){
 			return "<fmt:message key='serviceOrder_status_close' />";
 		}
-	   return cellvalue;
+		return cellvalue;
 	}
 	
 	function gridReload(){

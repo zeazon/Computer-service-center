@@ -40,6 +40,18 @@
 						<td><div class="rowElem"><form:input path="serialNo" class="textboxMockup" id="serialNo"/></div></td>
 					</tr>
 					<tr>
+						<td><label><fmt:message key="serviceOrder_empFix" />:</label></td>
+						<td>
+							<form:select path="employee" id="employee" cssClass="selectSearch">
+								<form:option value="">All</form:option>
+								<%--form:options items="${employeeList}" itemValue="employeeID" itemLabel="name"/--%>
+								<c:forEach items="${employeeList}" var="employee">
+									<form:option value="${employee.employeeID}">${employee.name} ${employee.surname}</form:option>
+								</c:forEach>
+							</form:select>
+						</td>
+					</tr>
+					<tr>
 						<td colspan="2"><div class="rowElem"><input type="submit" id="searchButton" value="<fmt:message key='button.search' />" /></div></td>
 					</tr>
 				</table>
@@ -83,7 +95,7 @@
 			datatype: "json",
 			height: "100%",
 			autowidth: true,
-			colNames:['<fmt:message key="serviceOrderID" />','<fmt:message key="date" />','<fmt:message key="name" />','<fmt:message key="tel" />','<fmt:message key="mobileTel" />','<fmt:message key="type" />','<fmt:message key="brand" />','<fmt:message key="model" />','<fmt:message key="serialNo" />','<fmt:message key="status" />'],
+			colNames:['<fmt:message key="serviceOrderID" />','<fmt:message key="date" />','<fmt:message key="name" />','<fmt:message key="tel" />','<fmt:message key="mobileTel" />','<fmt:message key="type" />','<fmt:message key="brand" />','<fmt:message key="model" />','<fmt:message key="serialNo" />','<fmt:message key="serviceOrder_empFix" />','<fmt:message key="status" />'],
 			colModel:[
 				{name:'serviceOrderID',index:'serviceOrderID', width:'200'},
 				{name:'serviceOrderDate', index:'serviceOrderDate', align:'center', sorttype:'date',formatter:'date', formatoptions: {srcformat:'d/m/Y',newformat:'d/m/Y'}, width:'100', firstSortOrder:'desc'},
@@ -94,7 +106,8 @@
 				{name:'brand',index:'brand', sortable:false},
 				{name:'model',index:'model', sortable:false},
 				{name:'serialNo',index:'serialNo', sortable:false},
-				{name:'status',index:'status', formatter:statusFormatter, align:'center', sortable:false}],
+				{name:'empFix',index:'empFix', sortable:true},
+				{name:'status',index:'status', formatter:statusFormatter, align:'center'}],
 			multiselect: false,
 			rownumbers: true,
 			rowNum:10,
@@ -123,7 +136,14 @@
 			title:"<fmt:message key='button.edit' />",
 			buttonicon:"ui-icon-pencil", 
 			onClickButton: function(){ 
-				 var gsr = jQuery("#list").getGridParam('selrow');
+				var gsr = jQuery("#list").getGridParam('selrow');
+				 
+				//var rowData = jQuery(this).getRowData(gsr); 
+                //var temp= rowData['status'];//replace name with you column
+                //if(temp == "<fmt:message key='serviceOrder_status_close' />"){
+                //	alert('close already');
+                //}
+
 				if(gsr){
 					jQuery("#list").GridToForm(gsr,"#editForm");
 					$("#editForm").submit();
@@ -212,10 +232,12 @@
 			return "<fmt:message key='serviceOrder_status_fixing' />";
 		}else if(cellvalue == 'outsite'){
 			return "<fmt:message key='serviceOrder_status_outsite' />";
+		}else if(cellvalue == 'fixed'){
+			return "<fmt:message key='serviceOrder_status_fixed' />";
 		}else if(cellvalue == 'close'){
 			return "<fmt:message key='serviceOrder_status_close' />";
 		}
-	   return cellvalue;
+		return cellvalue;
 	}
 	
 	function gridReload(){
@@ -223,8 +245,9 @@
 		var surname = jQuery("#surname").val();
 		var startDate = jQuery("#dateInput").val();
 		var endDate = jQuery("#endDateInput").val();
-		var type = jQuery("#type").val();
+		var type = jQuery("#serialNo").val();
 		var serialNo = jQuery("#serialNo").val();
-		jQuery("#list").jqGrid('setGridParam',{url:"searchServiceOrder.html?name="+name+"&surname="+surname+"&startDate="+startDate+"&endDate="+endDate+"&type="+type+"&serialNo="+serialNo,page:1}).trigger("reloadGrid");
+		var employee = jQuery("#employee").val();
+		jQuery("#list").jqGrid('setGridParam',{url:"searchServiceOrder.html?name="+name+"&surname="+surname+"&startDate="+startDate+"&endDate="+endDate+"&type="+type+"&serialNo="+serialNo+"&employee="+employee,page:1}).trigger("reloadGrid");
 	}
 </script>

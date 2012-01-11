@@ -28,7 +28,10 @@
 						<td colspan="7">
 							<div class="rowElem">
 								<form:select path="employeeID" id="employee">
-									<form:options items="${employeeList}" itemValue="employeeID" itemLabel="name"/>
+									<%--form:options items="${employeeList}" itemValue="employeeID" itemLabel="name"/--%>
+									<c:forEach items="${employeeList}" var="employee">
+										<form:option value="${employee.employeeID}">${employee.name} ${employee.surname}</form:option>
+									</c:forEach>
 								</form:select>
 							</div>
 						</td>

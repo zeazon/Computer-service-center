@@ -18,8 +18,11 @@ public class ServiceOrderGridData {
 	private String deliveryTel;
 	private String deliveryMobileTel;
 	private String productID;
+	private String typeID;
 	private String type;
+	private Integer brandID;
 	private String brand;
+	private Integer modelID;
 	private String model;
 	private String serialNo;
 	private String accessories;
@@ -27,6 +30,7 @@ public class ServiceOrderGridData {
 	private String problem;
 	private String status;
 	private String empOpen;
+	private String empFix;
 	
 	private Customer customer;
 	private String customerFullAddress;
@@ -186,6 +190,30 @@ public class ServiceOrderGridData {
 	}
 	public void setProductID(String productID) {
 		this.productID = productID;
+	}
+	public String getEmpFix() {
+		return empFix;
+	}
+	public void setEmpFix(String empFix) {
+		this.empFix = empFix;
+	}
+	public String getTypeID() {
+		return typeID;
+	}
+	public void setTypeID(String typeID) {
+		this.typeID = typeID;
+	}
+	public Integer getBrandID() {
+		return brandID;
+	}
+	public void setBrandID(Integer brandID) {
+		this.brandID = brandID;
+	}
+	public Integer getModelID() {
+		return modelID;
+	}
+	public void setModelID(Integer modelID) {
+		this.modelID = modelID;
 	}
 
 }

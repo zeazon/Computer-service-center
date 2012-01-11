@@ -12,6 +12,7 @@
 			</c:if>
 			<form:form commandName="form" id="form" class="jqtransform" action="closeServiceOrder.html?do=save">
 				<input type="hidden" name="serviceOrderID" value="${form.serviceOrderID}"/>
+				<input type="hidden" name="mode" value="${mode}"/>
 				<table width="100%">
 					<tr>
 						<td width="161px"><label><fmt:message key="serviceOrderDate" />:</label></td>

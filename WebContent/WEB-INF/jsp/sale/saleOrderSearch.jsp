@@ -17,7 +17,10 @@
 							<div class="rowElem" style="z-index:100">
 								<form:select path="employeeID" id="employeeID" cssClass="selectSearch">
 									<form:option value="">All</form:option>
-									<form:options items="${employeeList}" itemValue="employeeID" itemLabel="name"/>
+									<%--form:options items="${employeeList}" itemValue="employeeID" itemLabel="name"/--%>
+									<c:forEach items="${employeeList}" var="employee">
+										<form:option value="${employee.employeeID}">${employee.name} ${employee.surname}</form:option>
+									</c:forEach>
 								</form:select>
 							</div>
 						</td>

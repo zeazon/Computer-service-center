@@ -10,6 +10,8 @@ public class ServiceOrderSearchForm {
 	private String endDate;
 	private String serialNo;
 	
+	private String employee;
+	
 	public String getName() {
 		return name;
 	}
@@ -51,6 +53,12 @@ public class ServiceOrderSearchForm {
 	}
 	public void setSerialNo(String serialNo) {
 		this.serialNo = serialNo;
+	}
+	public String getEmployee() {
+		return employee;
+	}
+	public void setEmployee(String employee) {
+		this.employee = employee;
 	}
 	
 }

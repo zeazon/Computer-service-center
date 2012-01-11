@@ -153,6 +153,11 @@
 		<put-attribute name="body" value="/WEB-INF/jsp/repair/getServiceOrderSearch.jsp"/>
 	</definition>
 	
+	<definition name="getServiceOrder.form" extends=".pageTemplate">
+		<put-attribute name="pageName" value="รับงานซ่อม" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/repair/getServiceOrderForm.jsp"/>
+	</definition>
+	
 	<definition name="outsiteService.search" extends=".pageTemplate">
 		<put-attribute name="pageName" value="ส่งซ่อมต่อภายนอก" type="string"/>
 		<put-attribute name="body" value="/WEB-INF/jsp/repair/outsiteServiceSearch.jsp"/>

@@ -43,12 +43,12 @@
 						</td>
 					</tr>
 					<tr>
-						<td><label><fmt:message key="serviceOrderID" />:<c:if test="${form.status != 'close'}"><font color="red">*</font></c:if></label></td>
+						<td><label><fmt:message key="serviceOrderID" />:<c:if test="${form.status != 'close'}"></c:if></label></td>
 						<td colspan="5">
 							<div class="rowElem">
 								<c:choose>
 									<c:when test="${form.status != 'close'}">
-										<form:input path="serviceOrderID" class="required textboxMockup" style="float:left" id="serviceOrderID" readonly="readonly" size="10"/> <input type="button" id="lov" class="lov_button" value="..." > <label class="error" id="ui-state-error" for="serviceOrderID" generated="true" style="display: none; float:left; padding-left:10px"></label>
+										<form:input path="serviceOrderID" class="textboxMockup" style="float:left" id="serviceOrderID" readonly="readonly" size="10"/> <input type="button" id="lov" class="lov_button" value="..." > <label class="error" id="ui-state-error" for="serviceOrderID" generated="true" style="display: none; float:left; padding-left:10px"></label>
 									</c:when>
 									<c:otherwise>
 										${form.serviceOrderID}
@@ -159,84 +159,71 @@
 											</table>
 										</td>
 									</tr-->
-									
-									
-									
-									<tr align="left">
-										<td colspan="8">
-											<div class="rowElem"><br>&nbsp;&nbsp;&nbsp;<b><u><fmt:message key="productDetail" /></u></b></div>
-										</td>
-									</tr>
-									<tr>
-										<td><label><fmt:message key="productID" />:</label></td>
-										<td colspan="7"><div class="rowElem"><span id="productID">${form.serviceOrder.product.productID}&nbsp;</span></div></td>
-									</tr>
-									<tr>
-										<td><label><fmt:message key="type" />:</label></td>
-										<td><div class="rowElem"><span id="type">${form.serviceOrder.product.type.name}&nbsp;</span></div></td>
-										<td><label><fmt:message key="brand" />:</label></td>
-										<td><div class="rowElem"><span id="brand">${form.serviceOrder.product.brand.name}&nbsp;</span></div></td>
-										<td><label><fmt:message key="model" />:</label></td>
-										<td><div class="rowElem"><span id="model">${form.serviceOrder.product.model.name}&nbsp;</span></span></div></td>
-										<td><label><fmt:message key="serialNo" />:</label></td>
-										<td><div class="rowElem"><span id="serialNo">${form.serviceOrder.product.serialNo}&nbsp;</span></div></td>
-									</tr>
-									<tr>
-										<td><label><fmt:message key="accessories" />:</label></td>
-										<td colspan="2"><div class="rowElem"><span id="accessories">${form.serviceOrder.accessories}</span></div></td>
-										<td><label><fmt:message key="serviceOrder_desc" />:</label></td>
-										<td colspan="4"><div class="rowElem"><span id="serviceOrder_desc">${form.serviceOrder.description}&nbsp;</span></div></td>
-									</tr>
-									<tr>
-										<td valign="top" style="padding-top:3px;"><label><fmt:message key="serviceOrder_problem" />:</label></td>
-										<td colspan="7" align="left" valign="top"><div class="rowElem"><pre id="problem" class="display" >${form.serviceOrder.problem}&nbsp;</pre></div></td>
-									</tr>
-									
-									
-									
-									<tr align="left">
-										<td colspan="8">
-											<div class="rowElem"><br>&nbsp;&nbsp;&nbsp;<b><u><fmt:message key="customerDetail" /></u></b></div>
-										</td>
-									</tr>
-									<tr>
-										<td><label><fmt:message key="customerID" />:</label></td>
-										<td align="left" colspan="7"><div class="rowElem"><span id="customerID">${form.serviceOrder.customer.customerID}&nbsp;</span></div></td>
-										<%--td><label><fmt:message key="company" />:</label></td>
-										<td colspan="3" align="left"><div class="rowElem"><span id="company">${form.serviceOrder.customer.company}&nbsp;</span></div></td--%>
-									</tr>
-									<tr>
-										<td><label><fmt:message key="contactName" />:</label></td>
-										<td><div class="rowElem"><span id="contactName">${form.serviceOrder.customer.name}</span></div></td>
-										<td><label><fmt:message key="email" />:</label></td>
-										<td><div class="rowElem"><span id="email">&nbsp;${form.serviceOrder.customer.email}</span></div></td>
-										<td><label><fmt:message key="tel" />:</label></td>
-										<td><div class="rowElem"><span id="tel">${form.serviceOrder.customer.tel}&nbsp;</span></div></td>
-										<td><label><fmt:message key="mobileTel" />:</label></td>
-										<td width="120px"><div class="rowElem"><span id="mobileTel">${form.serviceOrder.customer.mobileTel}</span></div></td>
-									</tr>
-									<tr>
-										<td><label><fmt:message key="address" />:</label></td>
-										<td colspan="7" align="left"><div class="rowElem"><span id="address">${fullAddr}&nbsp;</span></div></td>
-									</tr>
-									<tr>
-										<td><label><fmt:message key="deliveryCustomer" />:</label></td>
-										<td><div class="rowElem"><span id="deliveryCustomer">${form.serviceOrder.deliveryCustomer}&nbsp;</span></div></td>
-										<td><label><fmt:message key="email" />:</label></td>
-										<td><div class="rowElem"><span id="deliveryEmail">${form.serviceOrder.deliveryEmail}&nbsp;</span></div></td>
-										<td><label><fmt:message key="tel" />:</label></td>
-										<td><div class="rowElem"><span id="deliveryTel">${form.serviceOrder.deliveryTel}&nbsp;</span></div></td>
-										<td><label><fmt:message key="mobileTel"/>:</label></td>
-										<td><div class="rowElem"><span id="deliveryMobileTel">${form.serviceOrder.deliveryMobileTel}&nbsp;</span></div></td>
-									</tr>
-									<tr>
+
+									<!-- tr>
 										<td><label><fmt:message key="serviceOrder_empCreate" />:</label></td>
 										<td colspan="7"><div class="rowElem"><span id="empOpen">${form.serviceOrder.empOpen.name}&nbsp;${form.serviceOrder.empOpen.surname}</span></div></td>
-									</tr>
+									</tr-->
 								</table>
 							</fieldset>
 						</td>
 					</tr>
+					
+					
+					<tr>
+						<td colspan="6">
+							<div class="rowElem"><br>&nbsp;&nbsp;&nbsp;<b><u><fmt:message key="customerDetail" /></u></b></div>
+						</td>
+					</tr>
+					<tr>
+						<td><label><fmt:message key="contactName" />:</label></td>
+						<td colspan="5"><div class="rowElem"><form:input path="customerName" id="customerName" style="width:99%"/></div></td>
+					</tr>
+					<tr>
+						<td><label><fmt:message key="tel" />:</label></td>
+						<td colspan="2"><div class="rowElem"><form:input path="tel" id="tel"/></div></td>
+						<td><label><fmt:message key="mobileTel" />:</label></td>
+						<td colspan="2"><div class="rowElem"><form:input path="mobileTel" id="mobileTel"/></div></td>
+					</tr>
+					<tr>
+						<td colspan="6">
+							<div class="rowElem"><br>&nbsp;&nbsp;&nbsp;<b><u><fmt:message key="productDetail" /></u></b></div>
+						</td>
+					</tr>
+					<tr>
+						<td><label><fmt:message key="type" />:</label></td>
+						<td colspan="2">
+							<div class="rowElem">
+								<form:select path="typeID" id="type">
+									<form:options items="${typeList}" itemValue="typeID" itemLabel="name"/>
+								</form:select>
+							</div>
+						</td>
+						<td><label><fmt:message key="brand" />:</label></td>
+						<td colspan="2">
+							<div class="rowElem">
+								<form:select path="brandID" id="brand">
+									<form:options items="${brandList}" itemValue="brandID" itemLabel="name"/>
+								</form:select>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td><label><fmt:message key="model" />:</label></td>
+						<td colspan="2">
+							<div class="rowElem">
+								<form:select path="modelID" id="model">
+									<form:options items="${modelList}" itemValue="modelID" itemLabel="name"/>
+								</form:select>
+							</div>
+						</td>
+						<td><label><fmt:message key="serialNo" />:</label></td>
+						<td colspan="2"><div class="rowElem"><form:input path="serialNo" id="serialNo" /></div></td>
+					</tr>
+					
+					
+					
+					
 					<tr>
 						<td style="width:13%"><div class="rowElem"><label><fmt:message key="outsiteService_accessories" />:</label></div></td>
 						<td colspan="5">
@@ -411,6 +398,9 @@
 		<input type="hidden" id="lov_description" name="description" />
 		<input type="hidden" id="lov_problem" name="problem" />
 		<input type="hidden" id="lov_empOpen" name="empOpen" />
+		<input type="hidden" id="lov_typeID" name="typeID" />
+		<input type="hidden" id="lov_brandID" name="brandID" />
+		<input type="hidden" id="lov_modelID" name="modelID" />
 	</form>
 </div>
 
@@ -431,6 +421,8 @@
 	<form:hidden path="empOpen"/>
 </form:form>
 
+<c:url var="findBrandURL" value="/brand.html?do=getBrandByType" />
+<c:url var="findModelURL" value="/model.html?do=getModel" />
 
 <script type="text/javascript">
 
@@ -450,7 +442,6 @@ $(document).ready(function(){
 	
 	$("#form").validate({
 		rules: {
-			serviceOrderID: "required",
 			outsiteCompanyID: "required",
 			transportCompanyID: "required",
 			problem: "required"
@@ -491,7 +482,7 @@ $(document).ready(function(){
 		//autoheight: true,
 		//width: "100%",
 		autowidth: true,
-		colNames:['<fmt:message key="serviceOrderID" />','<fmt:message key="serviceOrderDate" />', 'serviceType', 'customerID','<fmt:message key="name" />','<fmt:message key="company" />','<fmt:message key="address" />','email','<fmt:message key="tel" />','<fmt:message key="mobileTel" />','deliveryCustomer','deliveryEmail','deliveryTel','deliveryMobileTel','productID','type','brand','model','serialNo','accessories','description','problem','empOpen','appointmentDate','problem'],
+		colNames:['<fmt:message key="serviceOrderID" />','<fmt:message key="serviceOrderDate" />', 'serviceType', 'customerID','<fmt:message key="name" />','<fmt:message key="company" />','<fmt:message key="address" />','email','<fmt:message key="tel" />','<fmt:message key="mobileTel" />','deliveryCustomer','deliveryEmail','deliveryTel','deliveryMobileTel','productID','type','brand','model','serialNo','accessories','description','problem','empOpen','appointmentDate','problem','typeID','brandID','modelID'],
 		colModel:[
 			{name:'serviceOrderID',index:'serviceOrderID', width:'180'},
 			{name:'serviceOrderDate', index:'serviceOrderDate', align:'center', sorttype:'date',formatter:'date', formatoptions: {srcformat:'d/m/Y H:i',newformat:'d/m/Y H:i'}, width:'140', firstSortOrder:'desc'},
@@ -517,7 +508,10 @@ $(document).ready(function(){
 			{name:'problem',index:'problem', hidden:true},
 			{name:'empOpen',index:'empOpen', hidden:true},
 			{name:'appointmentDate',index:'appointmentDate', hidden:true},
-			{name:'problem',index:'problem', hidden:true}],
+			{name:'problem',index:'problem', hidden:true},
+			{name:'typeID', index:'typeID', hidden:true},
+			{name:'brandID', index:'brandID', hidden:true},
+			{name:'modelID', index:'modelID', hidden:true}],
 		multiselect: false,
 		//caption: "Manipulating Array Data",
 		rownumbers: true,
@@ -557,25 +551,31 @@ $(document).ready(function(){
 		$("#customerID").html($("#lov_customerID").val());
 		$("#contactName").html(lov_name_val);
 		//$("#contactName").val(lov_name_val+" "+lov_surname_val);
+		$("#customerName").val(lov_name_val);
 		$("#company").html($("#lov_company").val());
 		$("#address").html($("#lov_address").val());
 		$("#email").html($("#lov_email").val());
-		$("#tel").html(lov_tel_val);
-		$("#mobileTel").html($("#lov_mobileTel").val());
+		//$("#tel").html(lov_tel_val);
+		$("#tel").val(lov_tel_val);
+		//$("#mobileTel").html($("#lov_mobileTel").val());
+		$("#mobileTel").val($("#lov_mobileTel").val());
 		$("#deliveryCustomer").html($("#lov_deliveryCustomer").val());
 		$("#deliveryEmail").html($("#lov_deliveryEmail").val());
 		$("#deliveryTel").html($("#lov_deliveryTel").val());
 		$("#deliveryMobileTel").html($("#lov_deliveryMobileTel").val());
 		$("#productID").html($("#lov_productID").val());
-		$("#type").html($("#lov_type").val());
-		$("#brand").html($("#lov_brand").val());
-		$("#model").html($("#lov_model").val());
-		$("#serialNo").html($("#lov_serialNo").val());
+		//$("#type").html($("#lov_type").val());
+		//$("#brand").html($("#lov_brand").val());
+		//$("#model").html($("#lov_model").val());
+		//$("#serialNo").html($("#lov_serialNo").val());
+		$("#serialNo").val($("#lov_serialNo").val());
 		$("#accessories").html($("#lov_accessories").val());
 		$("#description").html($("#lov_description").val());
 		$("#problem").html($("#lov_problem").val());
 		$("#os_problem").val($("#lov_problem").val());
 		$("#empOpen").html($("#lov_empOpen").val());
+		
+		setTypeBrandModel();
 		
 		tDialog.dialog( "destroy" );
 		// init lov for call again
@@ -586,6 +586,230 @@ $(document).ready(function(){
 		gridReload();
 	});
 	
+	
+	$( "#type_autoComplete" ).autocomplete({
+		change: function(event, ui) {
+			var select = $("#type");
+			var selected = select.children( ":selected" );
+			if ( !ui.item ) {
+				var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+					valid = false;
+				select.children( "option" ).each(function() {
+					if ( $( this ).text().match( matcher ) ) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+			 	if ( !valid ){
+					// remove invalid value, as it didn't match anything
+					//$(this).val( "" );
+					//select.val( "" );
+					//this.data( "autocomplete" ).term = "";
+					$( "#type_autoComplete" ).data( "autocomplete" ).term = "";
+					// get text from blank value option
+					$( this ).val(select.children( ":selected" ).text());
+					
+					//$("#brand_autoComplete").trigger('change');
+					//getModelSelectList();
+					return false;
+				}
+			 }else{
+				 $.getJSON('${findBrandURL}', {
+					typeID : select.val(),
+					ajax : 'true'
+				}, function(data) {
+					var html = '';
+					var len = data.length;
+					if(len > 0){
+						for ( var i = 0; i < len; i++) {
+							html += '<option value="' + data[i].brandID + '">'
+									+ data[i].name + '</option>';
+						}
+						html += '</option>';
+					}else{
+						html += '<option value=""></option>';
+					}
+					
+					$('#brand').html(html);
+					
+					$('#brand_autoComplete').width($('#brand').width());
+					$('#brand_autoComplete').val($("#brand :selected").text());
+					
+					$("#brandRow").css("z-index", 9);
+					
+					$("#brand_autoComplete").trigger('change');
+					getModelSelectList();
+				});
+			 }
+		}
+	});
+	
+	$( "#brand_autoComplete" ).autocomplete({
+		change: function(event, ui) {
+	//$( "#brand_autoComplete" ).bind( "autocompletechange", function(event, ui) {
+			var select = $("#brand");
+			var selected = select.children( ":selected" );
+			if ( !ui.item ) {
+				var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+					valid = false;
+				select.children( "option" ).each(function() {
+					if ( $( this ).text().match( matcher ) ) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+			 	if ( !valid ){
+					// remove invalid value, as it didn't match anything
+				//	$(this).val( "" );
+				//	select.val( "" );
+					$( "#brand_autoComplete" ).data( "autocomplete" ).term = "";
+					// get text from blank value option
+					$( this ).val(select.children( ":selected" ).text());
+					
+					// set model to empty
+				//	html += '<option value=""></option>';
+				//	$('#model').html(html);
+				//	$('#model_autoComplete').width($('#model').width());
+				//	$('#model_autoComplete').val($("#model :selected").text());
+					
+				//	$("#modelRow").css("z-index", 8);
+					return false;
+				}
+			 }else{
+				 getModelSelectList();
+			 }
+		}
+	});
+	
+	$( "#model_autoComplete" ).autocomplete({
+		change: function(event, ui) {
+			var select = $("#model");
+			var selected = select.children( ":selected" );
+			if ( !ui.item ) {
+				var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+					valid = false;
+				select.children( "option" ).each(function() {
+					if ( $( this ).text().match( matcher ) ) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+			 	if ( !valid ){
+					// remove invalid value, as it didn't match anything
+					//$(this).val( "" );
+					//select.val( "" );
+					//this.data( "autocomplete" ).term = "";
+					$( "#model_autoComplete" ).data( "autocomplete" ).term = "";
+					// get text from blank value option
+					$( this ).val(select.children( ":selected" ).text());
+					
+					//$("#brand_autoComplete").trigger('change');
+					//getModelSelectList();
+					return false;
+				}
+			 }
+		}
+	});
+	
+	function getModelSelectList(){
+		var select = $("#brand");
+		$.getJSON('${findModelURL}', {
+			typeID : $("#type").val(),
+			brandID :select.val(),
+			ajax : 'true'
+		}, function(data) {
+			var html = '';
+			var len = data.length;
+			if(len > 0){
+				for ( var i = 0; i < len; i++) {
+					html += '<option value="' + data[i].modelID + '">'
+							+ data[i].name + '</option>';
+				}
+				html += '</option>';
+			}else{
+				html += '<option value=""></option>';
+			}
+			
+			$('#model').html(html);
+			
+			$('#model_autoComplete').width($('#model').width());
+			$('#model_autoComplete').val($("#model :selected").text());
+			
+			$("#modelRow").css("z-index", 8);
+		});
+	}
+	
+	function setTypeBrandModel(){
+		$("#type").val($("#lov_typeID").val());
+		$('#type_autoComplete').val($("#type :selected").text());
+	
+		$("#type_autoComplete").trigger('change');
+
+		var select = $("#type");
+		console.info(select.val());
+		$.getJSON('${findBrandURL}', {
+			typeID : select.val(),
+			ajax : 'true'
+		}, function(data) {
+			var html = '';
+			var len = data.length;
+			if(len > 0){
+				for ( var i = 0; i < len; i++) {
+					html += '<option value="' + data[i].brandID + '">'
+							+ data[i].name + '</option>';
+				}
+				html += '</option>';
+			}else{
+				html += '<option value=""></option>';
+			}
+			
+			$('#brand').html(html);
+			
+			$('#brand').val($('#lov_brandID').val());
+			
+			$('#brand_autoComplete').width($('#brand').width());
+			$('#brand_autoComplete').val($("#brand :selected").text());
+			
+			$("#brandRow").css("z-index", 9);
+			
+			$("#brand_autoComplete").trigger('change');
+
+
+			var selectBrand = $("#brand");
+			$.getJSON('${findModelURL}', {
+				typeID : $("#type").val(),
+				brandID :selectBrand.val(),
+				ajax : 'true'
+			}, function(data) {
+				var html = '';
+				var len = data.length;
+				if(len > 0){
+					for ( var i = 0; i < len; i++) {
+						html += '<option value="' + data[i].modelID + '">'
+								+ data[i].name + '</option>';
+					}
+					html += '</option>';
+				}else{
+					html += '<option value=""></option>';
+				}
+				
+				$('#model').html(html);
+				
+				$('#model').val($('#lov_modelID').val());
+				
+				$('#model_autoComplete').width($('#model').width());
+				$('#model_autoComplete').val($("#model :selected").text());
+				
+				$("#modelRow").css("z-index", 8);
+			});
+			
+		});
+		
+	}
+	
+	function setBrandModelSelectList(){
+		
+	}
 	
 });
 

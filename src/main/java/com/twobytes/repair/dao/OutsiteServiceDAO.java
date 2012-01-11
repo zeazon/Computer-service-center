@@ -14,4 +14,6 @@ public interface OutsiteServiceDAO {
 	
 	public List<OutsiteService> selectNewOSByCriteria(String name, String date, String type, Integer rows, Integer page, String orderBy, String orderType) throws Exception;
 	public List<OutsiteService> selectSentOSByCriteria(String name, String date, String type, Integer rows, Integer page, String orderBy, String orderType) throws Exception;
+	
+	public Integer countUncloseOutsiteService(String serviceOrderID, String outsiteServiceID) throws Exception;
 }

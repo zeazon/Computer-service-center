@@ -13,6 +13,17 @@ public class OutsiteServiceForm {
 	private String outsiteCompanyName;
 	private Integer transportCompanyID;
 	private String transportCompanyName;
+	private String customerName;
+	private String tel;
+	private String mobileTel;
+	private String typeID;
+	private Integer brandID;
+	private Integer modelID;
+	private String serialNo;
+	
+	private String typeName;
+	private String brandName;
+	private String modelName;
 	
 	private ServiceOrder serviceOrder;
 	
@@ -121,6 +132,48 @@ public class OutsiteServiceForm {
 	public void setTransportCompanyName(String transportCompanyName) {
 		this.transportCompanyName = transportCompanyName;
 	}
+	public String getCustomerName() {
+		return customerName;
+	}
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
+	}
+	public String getTel() {
+		return tel;
+	}
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
+	public String getMobileTel() {
+		return mobileTel;
+	}
+	public void setMobileTel(String mobileTel) {
+		this.mobileTel = mobileTel;
+	}
+	public String getTypeID() {
+		return typeID;
+	}
+	public void setTypeID(String typeID) {
+		this.typeID = typeID;
+	}
+	public Integer getBrandID() {
+		return brandID;
+	}
+	public void setBrandID(Integer brandID) {
+		this.brandID = brandID;
+	}
+	public Integer getModelID() {
+		return modelID;
+	}
+	public void setModelID(Integer modelID) {
+		this.modelID = modelID;
+	}
+	public String getSerialNo() {
+		return serialNo;
+	}
+	public void setSerialNo(String serialNo) {
+		this.serialNo = serialNo;
+	}
 	public String getRepairing() {
 		return repairing;
 	}
@@ -168,6 +221,24 @@ public class OutsiteServiceForm {
 	}
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	public String getTypeName() {
+		return typeName;
+	}
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
+	}
+	public String getBrandName() {
+		return brandName;
+	}
+	public void setBrandName(String brandName) {
+		this.brandName = brandName;
+	}
+	public String getModelName() {
+		return modelName;
+	}
+	public void setModelName(String modelName) {
+		this.modelName = modelName;
 	}
 	
 }

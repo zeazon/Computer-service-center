@@ -112,6 +112,9 @@ public class ServiceOrderController {
 	private ServiceListService serviceListService;
 	
 	@Autowired
+	private EmployeeService employeeService;
+	
+	@Autowired
 	private MessageSource messages;
 
 	public void setMessages(MessageSource messages) {
@@ -148,6 +151,9 @@ public class ServiceOrderController {
 			e.printStackTrace();
 		}
 		model.addAttribute("typeList", typeList);
+		
+		List<Employee> empList = employeeService.getAll();
+		model.addAttribute("employeeList", empList);
 		return VIEWNAME_SEARCH;
 	}
 
@@ -159,6 +165,7 @@ public class ServiceOrderController {
 			@RequestParam(value = "endDate", required = false) String endDate,
 			@RequestParam(value = "type", required = false) String type,
 			@RequestParam(value = "serialNo", required = false) String serialNo,
+			@RequestParam(value = "employee", required = false) String employee,
 			@RequestParam("rows") Integer rows,
 			@RequestParam("page") Integer page,
 			@RequestParam("sidx") String sidx, @RequestParam("sord") String sord) {
@@ -202,7 +209,7 @@ public class ServiceOrderController {
 		}
 
 		List<ServiceOrder> soList = soService.selectByCriteria(name,
-				searchStartDate, searchEndDate, type, serialNo, rows, page,
+				searchStartDate, searchEndDate, type, serialNo, employee, rows, page,
 				sidx, sord);
 		GridResponse response = new GridResponse();
 
@@ -301,8 +308,11 @@ public class ServiceOrderController {
 				gridData.setDeliveryMobileTel(so.getDeliveryMobileTel());
 				gridData.setStatus(so.getStatus());
 				gridData.setProductID(so.getProduct().getProductID());
+				gridData.setTypeID(so.getProduct().getType().getTypeID());
 				gridData.setType(so.getProduct().getType().getName());
+				gridData.setBrandID(so.getProduct().getBrand().getBrandID());
 				gridData.setBrand(so.getProduct().getBrand().getName());
+				gridData.setModelID(so.getProduct().getModel().getModelID());
 				gridData.setModel(so.getProduct().getModel().getName());
 				gridData.setSerialNo(so.getProduct().getSerialNo());
 				gridData.setAccessories(so.getAccessories());
@@ -311,6 +321,10 @@ public class ServiceOrderController {
 				gridData.setEmpOpen(so.getEmpOpen().getName() + " "
 						+ so.getEmpOpen().getSurname());
 
+				if(so.getEmpFix() != null){
+					gridData.setEmpFix(so.getEmpFix().getName() + " "
+						+ so.getEmpFix().getSurname());
+				}
 				
 				rowsList.add(gridData);
 			}
@@ -441,6 +455,16 @@ public class ServiceOrderController {
 			so = soService.selectByID(form.getServiceOrderID());
 			msg = this.messages.getMessage("msg.updateComplete", null,
 					new Locale("th", "TH"));
+			
+			if(form.getEmpFixID() != null){
+				Employee empFix = new Employee();
+				try {
+					empFix = employeeService.selectByID(form.getEmpFixID());
+					so.setEmpFix(empFix);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		} else {
 			// add
 			// DocRunning docRunning = docRunningService.getDoc("SO");
@@ -501,6 +525,10 @@ public class ServiceOrderController {
 			so.setCustomer(customer);
 			model.addAttribute("customer", customer);
 			
+			so.setDeliveryCustomer(form.getDeliveryCustomer());
+			so.setDeliveryEmail(form.getDeliveryEmail());
+			so.setDeliveryMobileTel(form.getDeliveryMobileTel());
+			so.setDeliveryTel(form.getDeliveryTel());
 			
 			model.addAttribute(
 					"fullAddr",
@@ -640,6 +668,10 @@ public class ServiceOrderController {
 			
 			model.addAttribute("product", so.getProduct());
 			
+			List<Employee> empList = employeeService.getAll();
+			
+			model.addAttribute("employeeList", empList);
+			
 			// get form for print document
 			ServiceOrderDocForm docForm = new ServiceOrderDocForm();
 			model.addAttribute("docForm", docForm);
@@ -720,6 +752,10 @@ public class ServiceOrderController {
 			
 			model.addAttribute("product", so.getProduct());
 			
+			List<Employee> empList = employeeService.getAll();
+			
+			model.addAttribute("employeeList", empList);
+			
 			// get form for print document
 			ServiceOrderDocForm docForm = new ServiceOrderDocForm();
 			model.addAttribute("docForm", docForm);
@@ -788,6 +824,10 @@ public class ServiceOrderController {
 		
 		model.addAttribute("product", so.getProduct());
 		
+		List<Employee> empList = employeeService.getAll();
+		
+		model.addAttribute("employeeList", empList);
+		
 		// get data for print document
 		ServiceOrderDocForm docForm = setDocPrintForm(so);
 
@@ -817,6 +857,10 @@ public class ServiceOrderController {
 		form.setRefServiceOrder(so.getRefServiceOrder());
 		form.setCustomerType(so.getCustomerType());
 		form.setCustomerID(so.getCustomer().getCustomerID().toString());
+		form.setDeliveryCustomer(so.getDeliveryCustomer());
+		form.setDeliveryEmail(so.getDeliveryEmail());
+		form.setDeliveryMobileTel(so.getDeliveryMobileTel());
+		form.setDeliveryTel(so.getDeliveryTel());
 		form.setProductID(so.getProduct().getProductID());
 		form.setTypeID(so.getProduct().getType().getTypeID());
 		form.setBrandID(so.getProduct().getBrand().getBrandID());
@@ -841,6 +885,15 @@ public class ServiceOrderController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		// for fixing service order
+		if(so.getEmpFix() != null){
+			form.setEmpFixID(so.getEmpFix().getEmployeeID());
+		}
+		
+		List<Employee> empList = employeeService.getAll();
+		
+		model.addAttribute("employeeList", empList);
 		
 		// for closed service order
 		if(!so.getStatus().equals(ServiceOrder.NEW)){
@@ -1067,6 +1120,8 @@ public class ServiceOrderController {
 			HttpServletRequest request, ModelMap model) {
 		ServiceOrder so = soService.selectByID(docForm.getServiceOrderID());
 		
+		docForm = setDocPrintForm(so);
+		
 		docForm.setStartFix(sdf.format(so.getStartFix()));
 		docForm.setStartFixTime(sdfTime.format(so.getStartFix()));
 		docForm.setEndFix(sdfDateTime.format(so.getEndFix()));
@@ -1088,7 +1143,8 @@ public class ServiceOrderController {
 		docForm.setServiceList(serviceList);
 		
         model.addAttribute("form", docForm);
-		return "closeServiceOrderDocExcel";
+//		return "closeServiceOrderDocExcel";
+        return "closeServiceOrderDocExcelFull";
 	}
 	
 	@RequestMapping(value = "/serviceOrder", params = "do=printReturnExcel")

@@ -33,6 +33,8 @@ import com.twobytes.repair.form.ServiceOrderDocForm;
 import com.twobytes.repair.form.ServiceOrderForm;
 import com.twobytes.repair.form.ServiceOrderGridData;
 import com.twobytes.repair.form.ServiceOrderSearchForm;
+import com.twobytes.repair.service.IssuePartService;
+import com.twobytes.repair.service.ServiceListService;
 import com.twobytes.repair.service.ServiceOrderService;
 import com.twobytes.security.form.LoginForm;
 
@@ -47,6 +49,12 @@ public class CloseServiceOrderController {
 	
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private ServiceListService slService;
+	
+	@Autowired
+	private IssuePartService ipService;
 	
 	@Autowired
 	private MessageSource messages;
@@ -82,7 +90,7 @@ public class CloseServiceOrderController {
 	
 	
 	@RequestMapping(value="/searchCloseServiceOrder")
-	public @ResponseBody GridResponse getData(@RequestParam(value="name", required=false) String name, @RequestParam(value="startDate", required=false) String startDate, @RequestParam(value="endDate", required=false) String endDate, @RequestParam(value="type", required=false) String type, @RequestParam(value="serialNo", required=false) String serialNo, @RequestParam("rows") Integer rows, @RequestParam("page") Integer page, @RequestParam("sidx") String sidx, @RequestParam("sord") String sord){
+	public @ResponseBody GridResponse getData(@RequestParam(value="name", required=false) String name, @RequestParam(value="startDate", required=false) String startDate, @RequestParam(value="endDate", required=false) String endDate, @RequestParam(value="type", required=false) String type, @RequestParam(value="serialNo", required=false) String serialNo, @RequestParam("rows") Integer rows, @RequestParam("page") Integer page, @RequestParam("sidx") String sidx, @RequestParam("sord") String sord, HttpServletRequest request){
 		// Because default Tomcat URI encoding is iso-8859-1 so it must encode back to tis620
 		String[] datePart;
 		String searchStartDate = null;
@@ -111,8 +119,10 @@ public class CloseServiceOrderController {
 		}catch(UnsupportedEncodingException e){
 			e.printStackTrace();
 		}
+
+		Employee user = (Employee)request.getSession().getAttribute("UserLogin");
 		
-		List<ServiceOrder> soList = soService.selectSOForCloseByCriteria(name,
+		List<ServiceOrder> soList = soService.selectSOForCloseByCriteria(user.getEmployeeID(), name,
 				searchStartDate, searchEndDate, type, serialNo, rows, page,
 				sidx, sord);
 		GridResponse response = new GridResponse();
@@ -192,6 +202,12 @@ public class CloseServiceOrderController {
 		form.setAccessories(so.getAccessories());
 		form.setDesc(so.getDescription());
 		form.setProblem(so.getProblem());
+		
+		form.setRealProblem(so.getRealProblem());
+		form.setCause(so.getCause());
+		form.setFixDesc(so.getFixDesc());
+		form.setRemark(so.getRemark());
+		
 		List<Type> typeList = new ArrayList<Type>();
 		try {
 			typeList = typeService.getAll();
@@ -211,17 +227,110 @@ public class CloseServiceOrderController {
 			form.setEndFix("-");
 		}
 		
-		if(form.getServiceType() == 1){
-			form.setCosting("warranty");
-		}else if(form.getServiceType() == 2 || form.getServiceType() == 3 || form.getServiceType() == 4){
-			form.setCosting("cost");
-		}else if(form.getServiceType() == 5){
-			form.setCosting("free");
+		if(so.getStatus().equals(ServiceOrder.FIXING)){
+			if(form.getServiceType() == 1){
+				form.setCosting("warranty");
+			}else if(form.getServiceType() == 2 || form.getServiceType() == 3 || form.getServiceType() == 4){
+				form.setCosting("cost");
+			}else if(form.getServiceType() == 5){
+				form.setCosting("free");
+			}
+			
+			form.setIssuePart("noIssuedPart");
+			
+			form.setNetAmount(0.00);
+		}else if(so.getStatus().equals(ServiceOrder.FIXED)){
+			form.setCosting(so.getCosting());
+			
+			form.setNetAmount(so.getTotalPrice());
+			
+			List<ServiceList> serviceList = slService.getByServiceOrder(so.getServiceOrderID());
+			List<IssuePart> issuePartList = ipService.getByServiceOrder(so.getServiceOrderID());
+			
+			if(issuePartList.size() > 0){
+				form.setIssuePart("haveIssuedPart");
+			}else{
+				form.setIssuePart("noIssuedPart");
+			}
+			
+			for(int i=0 ;i<serviceList.size(); i++){
+				ServiceList sl = serviceList.get(i);
+				if(i == 0){
+					form.setServiceList_1(sl.getServiceName());
+					form.setServicePrice_1(sl.getPrice());
+				}else if(i == 1){
+					form.setServiceList_2(sl.getServiceName());
+					form.setServicePrice_2(sl.getPrice());
+				}else if(i == 2){
+					form.setServiceList_3(sl.getServiceName());
+					form.setServicePrice_3(sl.getPrice());
+				}else if(i == 3){
+					form.setServiceList_4(sl.getServiceName());
+					form.setServicePrice_4(sl.getPrice());
+				}
+			}
+			
+			for(int j=0; j<issuePartList.size(); j++){
+				IssuePart sp = issuePartList.get(j);
+				if(j == 0){
+					form.setIssuePartCode_1(sp.getCode());
+					form.setIssuePartName_1(sp.getName());
+					form.setIssuePartQty_1(sp.getQuantity());
+					form.setIssuePartPrice_1(sp.getPrice());
+				}else if(j == 1){
+					form.setIssuePartCode_2(sp.getCode());
+					form.setIssuePartName_2(sp.getName());
+					form.setIssuePartQty_2(sp.getQuantity());
+					form.setIssuePartPrice_2(sp.getPrice());
+				}else if(j == 2){
+					form.setIssuePartCode_3(sp.getCode());
+					form.setIssuePartName_3(sp.getName());
+					form.setIssuePartQty_3(sp.getQuantity());
+					form.setIssuePartPrice_3(sp.getPrice());
+				}else if(j == 3){
+					form.setIssuePartCode_4(sp.getCode());
+					form.setIssuePartName_4(sp.getName());
+					form.setIssuePartQty_4(sp.getQuantity());
+					form.setIssuePartPrice_4(sp.getPrice());
+				}else if(j == 4){
+					form.setIssuePartCode_5(sp.getCode());
+					form.setIssuePartName_5(sp.getName());
+					form.setIssuePartQty_5(sp.getQuantity());
+					form.setIssuePartPrice_5(sp.getPrice());
+				}else if(j == 5){
+					form.setIssuePartCode_6(sp.getCode());
+					form.setIssuePartName_6(sp.getName());
+					form.setIssuePartQty_6(sp.getQuantity());
+					form.setIssuePartPrice_6(sp.getPrice());
+				}else if(j == 6){
+					form.setIssuePartCode_7(sp.getCode());
+					form.setIssuePartName_7(sp.getName());
+					form.setIssuePartQty_7(sp.getQuantity());
+					form.setIssuePartPrice_7(sp.getPrice());
+				}else if(j == 7){
+					form.setIssuePartCode_8(sp.getCode());
+					form.setIssuePartName_8(sp.getName());
+					form.setIssuePartQty_8(sp.getQuantity());
+					form.setIssuePartPrice_8(sp.getPrice());
+				}else if(j == 8){
+					form.setIssuePartCode_9(sp.getCode());
+					form.setIssuePartName_9(sp.getName());
+					form.setIssuePartQty_9(sp.getQuantity());
+					form.setIssuePartPrice_9(sp.getPrice());
+				}else if(j == 9){
+					form.setIssuePartCode_10(sp.getCode());
+					form.setIssuePartName_10(sp.getName());
+					form.setIssuePartQty_10(sp.getQuantity());
+					form.setIssuePartPrice_10(sp.getPrice());
+				}else if(j == 10){
+					form.setIssuePartCode_11(sp.getCode());
+					form.setIssuePartName_11(sp.getName());
+					form.setIssuePartQty_11(sp.getQuantity());
+					form.setIssuePartPrice_11(sp.getPrice());
+				}
+			}
+			
 		}
-		
-		form.setIssuePart("noIssuedPart");
-		
-		form.setNetAmount(0.00);
 		
 		model.addAttribute("form", form);
 
@@ -270,6 +379,7 @@ public class CloseServiceOrderController {
 		ServiceOrderDocForm docForm = new ServiceOrderDocForm();
 		model.addAttribute("docForm", docForm);
 		
+		model.addAttribute("mode", "close");
 		return VIEWNAME_FORM;
 	}
 	
@@ -622,6 +732,7 @@ public class CloseServiceOrderController {
 		model.addAttribute("docForm", docForm);
 		model.addAttribute("action", "print");
 		model.addAttribute("form", form);
+		model.addAttribute("mode", "edit");
 		return VIEWNAME_FORM;
 	}
 	

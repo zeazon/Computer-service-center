@@ -19,13 +19,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.twobytes.master.service.BrandService;
+import com.twobytes.master.service.ModelService;
 import com.twobytes.master.service.OutsiteCompanyService;
 import com.twobytes.master.service.TransportCompanyService;
 import com.twobytes.master.service.TypeService;
+import com.twobytes.model.Brand;
 import com.twobytes.model.CustomGenericResponse;
-import com.twobytes.model.Customer;
 import com.twobytes.model.Employee;
 import com.twobytes.model.GridResponse;
+import com.twobytes.model.Model;
 import com.twobytes.model.OutsiteCompany;
 import com.twobytes.model.OutsiteService;
 import com.twobytes.model.ServiceOrder;
@@ -47,6 +50,12 @@ public class OutsiteServiceController {
 	
 	@Autowired
 	private TypeService typeService;
+	
+	@Autowired
+	private BrandService brandService;
+	
+	@Autowired
+	private ModelService modelService;
 	
 	@Autowired
 	private OutsiteCompanyService outsiteCompanyService;
@@ -142,13 +151,20 @@ public class OutsiteServiceController {
 //				System.out.println("sdfDateTimeNoLocale.format(so.getServiceOrderDate()) = "+sdfDateTimeNoLocale.format(so.getServiceOrderDate()));
 //				System.out.println("sdfDateTimeUSLocale.format(so.getServiceOrderDate()) = "+sdfDateTimeUSLocale.format(so.getServiceOrderDate()));
 				gridData.setOutsiteServiceDate(sdfDateTime.format(os.getOutsiteServiceDate()));
-				Customer customer = os.getServiceOrder().getCustomer();
-				gridData.setName(customer.getName());
+//				Customer customer = os.getServiceOrder().getCustomer();
+//				gridData.setName(customer.getName());
 //				gridData.setSurname(customer.getSurname());
-				gridData.setType(os.getServiceOrder().getProduct().getType().getName());
-				gridData.setBrand(os.getServiceOrder().getProduct().getBrand().getName());
-				gridData.setModel(os.getServiceOrder().getProduct().getModel().getName());
-				gridData.setProblem(os.getServiceOrder().getProblem());
+				gridData.setName(os.getCustomerName());
+//				gridData.setType(os.getServiceOrder().getProduct().getType().getName());
+				if(os.getType() != null)
+					gridData.setType(os.getType().getName());
+//				gridData.setBrand(os.getServiceOrder().getProduct().getBrand().getName());
+				if(os.getBrand() != null)
+					gridData.setBrand(os.getBrand().getName());
+//				gridData.setModel(os.getServiceOrder().getProduct().getModel().getName());
+				if(os.getModel() != null)
+					gridData.setModel(os.getModel().getName());
+				gridData.setProblem(os.getProblem());
 				gridData.setStatus(os.getStatus());
 				rowsList.add(gridData);
 			}
@@ -189,10 +205,46 @@ public class OutsiteServiceController {
 //			blankBrand.setName("");
 //			brandList.add(blankBrand);
 //		}
+		List<Type> typeList = new ArrayList<Type>();
+		try {
+			typeList = typeService.getAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		Type type = typeList.get(0);
+		form.setTypeID(type.getTypeID());
+		List<Brand> brandList = new ArrayList<Brand>();
+		if (type.getBrands().size() > 0) {
+			brandList = type.getBrands();
+			Brand brand = brandList.get(0);
+			form.setBrandID(brand.getBrandID());
+		} else {
+			Brand blankBrand = new Brand();
+			blankBrand.setBrandID(null);
+			blankBrand.setName("");
+			brandList.add(blankBrand);
+		}
 
+		List<Model> modelList = new ArrayList<Model>();
+		if (type.getBrands().size() > 0) {
+			brandList = type.getBrands();
+			form.setBrandID(form.getBrandID());
+			
+			Brand brand = brandList.get(0);
+			modelList = modelService.getModelByTypeAndBrand(type.getTypeID(), brand.getBrandID());
+		} else {
+			Brand blankBrand = new Brand();
+			blankBrand.setBrandID(null);
+			blankBrand.setName("");
+			brandList.add(blankBrand);
+		}
+
+		
+		
 		model.addAttribute("form", form);
-//		model.addAttribute("typeList", typeList);
-//		model.addAttribute("brandList", brandList);
+		model.addAttribute("typeList", typeList);
+		model.addAttribute("brandList", brandList);
+		model.addAttribute("modelList", modelList);
 		
 		List<OutsiteCompany> ocList = new ArrayList<OutsiteCompany>();
 		try{
@@ -335,6 +387,33 @@ public class OutsiteServiceController {
 				model.addAttribute("outsiteCompanyList", ocList);
 				model.addAttribute("transportCompanyList", tcList);
 
+				List<Type> typeList = new ArrayList<Type>();
+				try {
+					typeList = typeService.getAll();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+				Type type = typeList.get(0);
+				
+				List<Model> modelList = new ArrayList<Model>();
+				List<Brand> brandList = new ArrayList<Brand>();
+				if (type.getBrands().size() > 0) {
+					brandList = type.getBrands();
+					form.setBrandID(form.getBrandID());
+					
+					Brand brand = brandList.get(0);
+					modelList = modelService.getModelByTypeAndBrand(type.getTypeID(), brand.getBrandID());
+				} else {
+					Brand blankBrand = new Brand();
+					blankBrand.setBrandID(null);
+					blankBrand.setName("");
+					brandList.add(blankBrand);
+				}
+
+				model.addAttribute("typeList", typeList);
+				model.addAttribute("brandList", brandList);
+				model.addAttribute("modelList", modelList);
+				
 				OutsiteServiceDocForm docForm = new OutsiteServiceDocForm();
 				model.addAttribute("docForm", docForm);
 				return VIEWNAME_FORM;
@@ -350,10 +429,58 @@ public class OutsiteServiceController {
 				model.addAttribute("outsiteCompanyList", ocList);
 				model.addAttribute("transportCompanyList", tcList);
 
+				List<Type> typeList = new ArrayList<Type>();
+				try {
+					typeList = typeService.getAll();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+				Type type = typeList.get(0);
+				
+				List<Model> modelList = new ArrayList<Model>();
+				List<Brand> brandList = new ArrayList<Brand>();
+				if (type.getBrands().size() > 0) {
+					brandList = type.getBrands();
+					form.setBrandID(form.getBrandID());
+					
+					Brand brand = brandList.get(0);
+					modelList = modelService.getModelByTypeAndBrand(type.getTypeID(), brand.getBrandID());
+				} else {
+					Brand blankBrand = new Brand();
+					blankBrand.setBrandID(null);
+					blankBrand.setName("");
+					brandList.add(blankBrand);
+				}
+
+				model.addAttribute("typeList", typeList);
+				model.addAttribute("brandList", brandList);
+				model.addAttribute("modelList", modelList);
+				
 				OutsiteServiceDocForm docForm = new OutsiteServiceDocForm();
 				model.addAttribute("docForm", docForm);
 				return VIEWNAME_FORM;
 			}
+			os.setCustomerName(form.getCustomerName());
+			os.setTel(form.getTel());
+			os.setMobileTel(form.getMobileTel());
+			Type type = new Type();
+			try {
+				type = typeService.selectByID(form.getTypeID());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			os.setType(type);
+			Brand brand = new Brand();
+			try {
+				brand = brandService.selectByID(form.getBrandID());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			os.setBrand(brand);
+			Model modelObj = new Model();
+			modelObj = modelService.selectByID(form.getModelID());
+			os.setModel(modelObj);
+			os.setSerialNo(form.getSerialNo());
 			os.setTransportCompany(tc);
 			os.setEmpOpen(user);
 			os.setCreatedBy(user.getEmployeeID());
@@ -384,6 +511,33 @@ public class OutsiteServiceController {
 			model.addAttribute("outsiteCompanyList", ocList);
 			model.addAttribute("transportCompanyList", tcList);
 
+			List<Type> typeList = new ArrayList<Type>();
+			try {
+				typeList = typeService.getAll();
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+			Type type = typeList.get(0);
+			
+			List<Model> modelList = new ArrayList<Model>();
+			List<Brand> brandList = new ArrayList<Brand>();
+			if (type.getBrands().size() > 0) {
+				brandList = type.getBrands();
+				form.setBrandID(form.getBrandID());
+				
+				Brand brand = brandList.get(0);
+				modelList = modelService.getModelByTypeAndBrand(type.getTypeID(), brand.getBrandID());
+			} else {
+				Brand blankBrand = new Brand();
+				blankBrand.setBrandID(null);
+				blankBrand.setName("");
+				brandList.add(blankBrand);
+			}
+
+			model.addAttribute("typeList", typeList);
+			model.addAttribute("brandList", brandList);
+			model.addAttribute("modelList", modelList);
+			
 			OutsiteServiceDocForm docForm = new OutsiteServiceDocForm();
 			model.addAttribute("docForm", docForm);
 			return VIEWNAME_FORM;
@@ -403,7 +557,7 @@ public class OutsiteServiceController {
 		form.setOutsiteServiceID(result);
 		model.addAttribute("msg", msg);
 		
-		model.addAttribute("fullAddr", os.getServiceOrder().getCustomer().getAddress()+" "+this.messages.getMessage("subdistrict_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getSubdistrict().getName()+" "+this.messages.getMessage("district_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getDistrict().getName()+" "+this.messages.getMessage("province_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getProvince().getName());
+//		model.addAttribute("fullAddr", os.getServiceOrder().getCustomer().getAddress()+" "+this.messages.getMessage("subdistrict_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getSubdistrict().getName()+" "+this.messages.getMessage("district_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getDistrict().getName()+" "+this.messages.getMessage("province_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getProvince().getName());
 
 		if(ocList.size() > 0){
 			OutsiteCompany oc = new OutsiteCompany();
@@ -423,16 +577,57 @@ public class OutsiteServiceController {
 		model.addAttribute("outsiteCompanyList", ocList);
 		model.addAttribute("transportCompanyList", tcList);		
 		
+		List<Type> typeList = new ArrayList<Type>();
+		try {
+			typeList = typeService.getAll();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		Type type = typeList.get(0);
+		
+		List<Model> modelList = new ArrayList<Model>();
+		List<Brand> brandList = new ArrayList<Brand>();
+		if (type.getBrands().size() > 0) {
+			brandList = type.getBrands();
+			form.setBrandID(form.getBrandID());
+			
+			Brand brand = brandList.get(0);
+			modelList = modelService.getModelByTypeAndBrand(type.getTypeID(), brand.getBrandID());
+		} else {
+			Brand blankBrand = new Brand();
+			blankBrand.setBrandID(null);
+			blankBrand.setName("");
+			brandList.add(blankBrand);
+		}
+
+		model.addAttribute("typeList", typeList);
+		model.addAttribute("brandList", brandList);
+		model.addAttribute("modelList", modelList);
+		
 		OutsiteServiceDocForm docForm =  new OutsiteServiceDocForm();
 		docForm.setOutsiteCompany(os.getOutsiteCompany().getName());
 		docForm.setOutsiteServiceDate(sdfDateTimeMin.format(os.getOutsiteServiceDate()));
 //		docForm.setCustomerName(os.getServiceOrder().getCustomer().getName()+" "+os.getServiceOrder().getCustomer().getSurname());
-		docForm.setCustomerName(os.getServiceOrder().getCustomer().getName());
-		docForm.setTel(os.getServiceOrder().getCustomer().getTel());
-		docForm.setMobileTel(os.getServiceOrder().getCustomer().getMobileTel());
-		docForm.setType(os.getServiceOrder().getProduct().getType().getName());
-		docForm.setBrandModel(os.getServiceOrder().getProduct().getBrand().getName()+" "+os.getServiceOrder().getProduct().getModel().getName());
-		docForm.setSerialNo(os.getServiceOrder().getProduct().getSerialNo());
+//		docForm.setCustomerName(os.getServiceOrder().getCustomer().getName());
+		docForm.setCustomerName(os.getCustomerName());
+		docForm.setTel(os.getTel());
+		docForm.setMobileTel(os.getMobileTel());
+		if(os.getType() != null){
+			docForm.setType(os.getType().getName());
+		}else{
+			docForm.setType("-");
+		}
+		if(os.getBrand() != null && os.getModel() != null){
+			docForm.setBrandModel(os.getBrand().getName()+" "+os.getModel().getName());
+		}else if(os.getBrand() != null && os.getModel() == null){
+			docForm.setBrandModel(os.getBrand().getName());
+		}else if(os.getBrand() == null && os.getModel() != null){
+			docForm.setBrandModel(os.getModel().getName());
+		}else if(os.getBrand() == null && os.getModel() == null){
+			docForm.setBrandModel("-");
+		}
+//		docForm.setBrandModel(os.getServiceOrder().getProduct().getBrand().getName()+" "+os.getServiceOrder().getProduct().getModel().getName());
+		docForm.setSerialNo(os.getSerialNo());
 		docForm.setAccessories(os.getAccessories());
 		docForm.setProblem(os.getProblem());
 		docForm.setTransportCompany(os.getTransportCompany().getName());
@@ -456,11 +651,22 @@ public class OutsiteServiceController {
 		form.setOutsiteServiceID(os.getOutsiteServiceID().toString());
 		form.setOutsiteServiceDate(sdfDateTime.format(os.getOutsiteServiceDate()));
 		form.setServiceType(os.getServiceType());
-		form.setServiceOrderID(os.getServiceOrder().getServiceOrderID());
+		if(os.getServiceOrder() != null){
+			form.setServiceOrderID(os.getServiceOrder().getServiceOrderID());
+			form.setServiceOrder(os.getServiceOrder());
+		}
+		form.setCustomerName(os.getCustomerName());
+		form.setTel(os.getTel());
+		form.setMobileTel(os.getMobileTel());
+		if(os.getType() != null)
+			form.setTypeID(os.getType().getTypeID());
+		if(os.getBrand() != null)
+			form.setBrandID(os.getBrand().getBrandID());
+		if(os.getModel() != null)
+			form.setModelID(os.getModel().getModelID());
+		form.setSerialNo(os.getSerialNo());
 		form.setOutsiteCompanyID(os.getOutsiteCompany().getOutsiteCompanyID());
 		form.setTransportCompanyID(os.getTransportCompany().getTransportCompanyID());
-		
-		form.setServiceOrder(os.getServiceOrder());
 		
 		form.setAccessories(os.getAccessories());
 		form.setProblem(os.getProblem());
@@ -492,23 +698,71 @@ public class OutsiteServiceController {
 		model.addAttribute("outsiteCompanyList", ocList);
 		model.addAttribute("transportCompanyList", tcList);
 
+		List<Type> typeList = new ArrayList<Type>();
+		try {
+			typeList = typeService.getAll();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		Type type = typeList.get(0);
+		
+		List<Model> modelList = new ArrayList<Model>();
+		List<Brand> brandList = new ArrayList<Brand>();
+		if (type.getBrands().size() > 0) {
+			brandList = type.getBrands();
+			if(os.getBrand() != null){
+				form.setBrandID(os.getBrand().getBrandID());
+				
+				modelList = modelService.getModelByTypeAndBrand(type.getTypeID(), os.getBrand().getBrandID());
+			}else{
+				Brand brand = brandList.get(0);
+				modelList = modelService.getModelByTypeAndBrand(type.getTypeID(), brand.getBrandID());
+			}
+		} else {
+			Brand blankBrand = new Brand();
+			blankBrand.setBrandID(null);
+			blankBrand.setName("");
+			brandList.add(blankBrand);
+		}
+
+		model.addAttribute("typeList", typeList);
+		model.addAttribute("brandList", brandList);
+		model.addAttribute("modelList", modelList);
+		
 		model.addAttribute("form", form);
-		model.addAttribute("fullAddr", os.getServiceOrder().getCustomer().getAddress()+" "+this.messages.getMessage("subdistrict_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getSubdistrict().getName()+" "+this.messages.getMessage("district_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getDistrict().getName()+" "+this.messages.getMessage("province_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getProvince().getName());
+//		model.addAttribute("fullAddr", os.getServiceOrder().getCustomer().getAddress()+" "+this.messages.getMessage("subdistrict_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getSubdistrict().getName()+" "+this.messages.getMessage("district_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getDistrict().getName()+" "+this.messages.getMessage("province_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getProvince().getName());
 
 		OutsiteServiceDocForm docForm =  new OutsiteServiceDocForm();
 		docForm.setOutsiteCompany(os.getOutsiteCompany().getName());
 		docForm.setOutsiteServiceDate(sdfDateTimeMin.format(os.getOutsiteServiceDate()));
 //		docForm.setCustomerName(os.getServiceOrder().getCustomer().getName()+" "+os.getServiceOrder().getCustomer().getSurname());
-		docForm.setCustomerName(os.getServiceOrder().getCustomer().getName());
-		docForm.setTel(os.getServiceOrder().getCustomer().getTel());
-		docForm.setMobileTel(os.getServiceOrder().getCustomer().getMobileTel());
-		docForm.setType(os.getServiceOrder().getProduct().getType().getName());
-		docForm.setBrandModel(os.getServiceOrder().getProduct().getBrand().getName()+" "+os.getServiceOrder().getProduct().getModel().getName());
-		docForm.setSerialNo(os.getServiceOrder().getProduct().getSerialNo());
+//		docForm.setCustomerName(os.getServiceOrder().getCustomer().getName());
+		docForm.setCustomerName(os.getCustomerName());
+		docForm.setTel(os.getTel());
+		docForm.setMobileTel(os.getMobileTel());
+		if(os.getType() != null){
+			docForm.setType(os.getType().getName());
+		}else{
+			docForm.setType("-");
+		}
+		if(os.getBrand() != null && os.getModel() != null){
+			docForm.setBrandModel(os.getBrand().getName()+" "+os.getModel().getName());
+		}else if(os.getBrand() != null && os.getModel() == null){
+			docForm.setBrandModel(os.getBrand().getName());
+		}else if(os.getBrand() == null && os.getModel() != null){
+			docForm.setBrandModel(os.getModel().getName());
+		}else if(os.getBrand() == null && os.getModel() == null){
+			docForm.setBrandModel("-");
+		}
+		docForm.setSerialNo(os.getSerialNo());
 		docForm.setAccessories(os.getAccessories());
 		docForm.setProblem(os.getProblem());
 		docForm.setTransportCompany(os.getTransportCompany().getName());
-		docForm.setServiceOrderID(os.getServiceOrder().getServiceOrderID());
+		if(os.getServiceOrder() != null){
+			docForm.setServiceOrderID(os.getServiceOrder().getServiceOrderID());
+		}else{
+			docForm.setServiceOrderID("-");
+		}
 		docForm.setEmpOpen(os.getEmpOpen().getName()+" "+os.getEmpOpen().getSurname());
 		model.addAttribute("docForm", docForm);
 		

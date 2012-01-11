@@ -118,6 +118,80 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 	}
 	
 	@Override
+	@SuppressWarnings("unchecked")
+	public List<ServiceOrder> selectByCriteria(String name, String startDate,
+			String endDate, String type, String serialNo, String empID,
+			Integer rows, Integer page, String orderBy, String orderType)
+			throws Exception {
+		StringBuilder sql = new StringBuilder();
+		sql.append("from ServiceOrder as serviceOrder where 1=1 ");
+		if(null != name && !name.equals("")){
+			sql.append("and serviceOrder.customer.name like :name ");
+		}
+//		if(null != surname && !surname.equals("")){
+//			sql.append("and serviceOrder.customer.surname like :surname ");
+//		}
+		if((null != startDate && !startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			sql.append("and DATE(serviceOrderDate) between :startDate and :endDate ");
+		}else if((null != startDate && !startDate.equals("")) && (null == endDate || endDate.equals(""))){
+			sql.append("and DATE(serviceOrderDate) >= :startDate ");
+		}else if((null == startDate || startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			sql.append("and DATE(serviceOrderDate) <= :endDate ");
+		}
+		if(null != type && !type.equals("")){
+			sql.append("and serviceOrder.product.type.typeID = :type ");
+		}
+		if(null != serialNo && !serialNo.equals("")){
+			sql.append("and serviceOrder.product.serialNo like :serialNo ");
+		}
+		if(null != empID && !empID.equals("")){
+			sql.append("and empFix = :empID ");
+		}
+		
+		sql.append("and serviceOrder.status != 'cancel' ");
+		
+		if(!orderBy.equals("")){
+			if(orderBy.equals("name")){
+				orderBy = "serviceOrder.customer.name";
+			}else if(orderBy.equals("surname")){
+				orderBy = "serviceOrder.customer.surname";
+			}else if(orderBy.equals("fullName")){
+				orderBy = "serviceOrder.customer.name "+orderType+", serviceOrder.customer.surname"; 
+			}
+			sql.append("order by "+orderBy+" "+orderType);
+		}else{
+			sql.append("order by serviceOrder.serviceOrderDate desc");
+		}
+		
+		Query q = sessionFactory.getCurrentSession().createQuery(sql.toString());
+		if(null != name && !name.equals("")) {
+			q.setString("name", name);
+		}
+//		if(null != surname && !surname.equals("")) {
+//			q.setString("surname", surname);
+//		}
+		if((null != startDate && !startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			q.setString("startDate", startDate);
+			q.setString("endDate", endDate);
+		}else if((null != startDate && !startDate.equals("")) && (null == endDate || endDate.equals(""))){
+			q.setString("startDate", startDate);
+		}else if((null == startDate || startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			q.setString("endDate", endDate);
+		}
+		if(null != type && !type.equals("")) {
+			q.setString("type", type);
+		}
+		if(null != serialNo && !serialNo.equals("")) {
+			q.setString("serialNo", serialNo);
+		}
+		if(null != empID && !empID.equals("")){
+			q.setInteger("empID", Integer.parseInt(empID));
+		}
+		List<ServiceOrder> result = q.list();
+		return result;
+	}
+
+	@Override
 	public boolean edit(ServiceOrder serviceOrder) throws Exception{
 		Session session = sessionFactory.getCurrentSession();
 //		try{
@@ -251,6 +325,69 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 		return result;
 	}
 
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<ServiceOrder> selectSOForCloseByCriteria(Integer employeeID, String name,
+			String startDate, String endDate, String type, String serialNo,
+			Integer rows, Integer page, String orderBy, String orderType)
+			throws Exception {
+		StringBuilder sql = new StringBuilder();
+		sql.append("from ServiceOrder as serviceOrder where serviceOrder.empFix = :employeeID ");
+		if(null != name && !name.equals("")){
+			sql.append("and serviceOrder.customer.name like :name ");
+		}else
+		if((null != startDate && !startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			sql.append("and DATE(serviceOrderDate) between :startDate and :endDate ");
+		}else if((null != startDate && !startDate.equals("")) && (null == endDate || endDate.equals(""))){
+			sql.append("and DATE(serviceOrderDate) >= :startDate ");
+		}else if((null == startDate || startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			sql.append("and DATE(serviceOrderDate) <= :endDate ");
+		}
+		if(null != type && !type.equals("")){
+			sql.append("and serviceOrder.product.type.typeID = :type ");
+		}
+		if(null != serialNo && !serialNo.equals("")){
+			sql.append("and serviceOrder.product.serialNo like :serialNo ");
+		}
+		
+		sql.append("and serviceOrder.status in ('fixing','received','fixed') ");
+		
+		if(!orderBy.equals("")){
+			if(orderBy.equals("name")){
+				orderBy = "serviceOrder.customer.name";
+			}else if(orderBy.equals("surname")){
+				orderBy = "serviceOrder.customer.surname";
+			}else if(orderBy.equals("fullName")){
+				orderBy = "serviceOrder.customer.name "+orderType+", serviceOrder.customer.surname"; 
+			}
+			sql.append("order by "+orderBy+" "+orderType);
+		}else{
+			sql.append("order by serviceOrder.serviceOrderDate desc");
+		}
+		
+		Query q = sessionFactory.getCurrentSession().createQuery(sql.toString());
+		q.setInteger("employeeID", employeeID);
+		if(null != name && !name.equals("")) {
+			q.setString("name", name);
+		}
+		if((null != startDate && !startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			q.setString("startDate", startDate);
+			q.setString("endDate", endDate);
+		}else if((null != startDate && !startDate.equals("")) && (null == endDate || endDate.equals(""))){
+			q.setString("startDate", startDate);
+		}else if((null == startDate || startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			q.setString("endDate", endDate);
+		}
+		if(null != type && !type.equals("")) {
+			q.setString("type", type);
+		}
+		if(null != serialNo && !serialNo.equals("")) {
+			q.setString("serialNo", serialNo);
+		}
+		List<ServiceOrder> result = q.list();
+		return result;
+	}
+	
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<ServiceOrder> selectFixedSOByCriteria(String name, String date,

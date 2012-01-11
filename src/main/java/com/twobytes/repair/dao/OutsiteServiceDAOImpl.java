@@ -1,5 +1,6 @@
 package com.twobytes.repair.dao;
 
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 
@@ -208,4 +209,14 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 		}
 		return os;
 	}
+
+	@Override
+	public Integer countUncloseOutsiteService(String serviceOrderID, String outsiteServiceID)
+			throws Exception {
+		StringBuilder sql = new StringBuilder();
+		sql.append("select count(*) numUnclose from outsiteService where serviceOrderID = :serviceOrderID and status != 'close' and outsiteServiceID != :outsiteServiceID ;");
+		Query q = sessionFactory.getCurrentSession().createSQLQuery(sql.toString()).setString("serviceOrderID", serviceOrderID).setString("outsiteServiceID", outsiteServiceID);
+		return ((BigInteger)q.uniqueResult()).intValue();
+	}
+	
 }

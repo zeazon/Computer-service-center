@@ -32,4 +32,12 @@ public class IssuePartDAOImpl implements IssuePartDAO {
 		return retList;
 	}
 
+	@Override
+	public boolean delete(String serviceOrderID) throws Exception {
+		Query q = sessionFactory.getCurrentSession().createSQLQuery("delete from IssuePart where serviceOrderID = :serviceOrderID ");
+		q.setString("serviceOrderID", serviceOrderID);
+		q.executeUpdate();
+		return true;
+	}
+	
 }

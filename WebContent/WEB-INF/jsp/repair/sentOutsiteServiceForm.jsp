@@ -83,7 +83,7 @@
 										<td><label><fmt:message key="appointmentDate"/>:</label></td>
 										<td colspan="7"><div class="rowElem"><span id="appointmentDate">${form.serviceOrder.appointmentDate}&nbsp;</span></div></td>
 									</tr>
-									<tr align="left">
+									<!-- tr align="left">
 										<td colspan="8">
 											<div class="rowElem"><br>&nbsp;&nbsp;&nbsp;<b><u><fmt:message key="productDetail" /></u></b></div>
 										</td>
@@ -108,7 +108,7 @@
 										<td><label><fmt:message key="serialNo" />:</label></td>
 										<td colspan="4"><div class="rowElem"><span id="serialNo">${form.serviceOrder.product.serialNo}&nbsp;</span></div></td>
 									</tr-->
-									<tr>
+									<!-- tr>
 										<td><label><fmt:message key="type" />:</label></td>
 										<td><div class="rowElem"><span id="type">${form.serviceOrder.product.type.name}&nbsp;</span></div></td>
 										<td><label><fmt:message key="brand" />:</label></td>
@@ -168,11 +168,56 @@
 									<tr>
 										<td><label><fmt:message key="serviceOrder_empCreate" />:</label></td>
 										<td colspan="7"><div class="rowElem"><span id="empOpen">${form.serviceOrder.empOpen.name}&nbsp;${form.serviceOrder.empOpen.surname}</span></div></td>
-									</tr>
+									</tr-->
 								</table>
 							</fieldset>
 						</td>
 					</tr>
+					<tr>
+						<td colspan="6">
+							<div class="rowElem"><br>&nbsp;&nbsp;&nbsp;<b><u><fmt:message key="customerDetail" /></u></b></div>
+						</td>
+					</tr>
+					<tr>
+						<td><label><fmt:message key="contactName" />:</label></td>
+						<td colspan="5"><div class="rowElem"><span id="customerName">${form.customerName}</span></div></td>
+					</tr>
+					<tr>
+						<td><label><fmt:message key="tel" />:</label></td>
+						<td colspan="2"><div class="rowElem"><span id="tel">${form.tel}</span></div></td>
+						<td><label><fmt:message key="mobileTel" />:</label></td>
+						<td colspan="2"><div class="rowElem"><span id="mobileTel">${form.mobileTel}</span></div></td>
+					</tr>
+					<tr>
+						<td colspan="6">
+							<div class="rowElem"><br>&nbsp;&nbsp;&nbsp;<b><u><fmt:message key="productDetail" /></u></b></div>
+						</td>
+					</tr>
+					<tr>
+						<td><label><fmt:message key="type" />:</label></td>
+						<td colspan="2">
+							<div class="rowElem">
+								<span id="type">${form.typeName}</span>
+							</div>
+						</td>
+						<td><label><fmt:message key="brand" />:</label></td>
+						<td colspan="2">
+							<div class="rowElem">
+								<span id="brand">${form.brandName}</span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td><label><fmt:message key="model" />:</label></td>
+						<td colspan="2">
+							<div class="rowElem">
+								<span id="model">${form.modelName}</span>
+							</div>
+						</td>
+						<td><label><fmt:message key="serialNo" />:</label></td>
+						<td colspan="2"><div class="rowElem"><span id="serialNo">${form.serialNo}</span></div></td>
+					</tr>
+					
 					<tr>
 						<td style="width:13%"><div class="rowElem"><label><fmt:message key="outsiteService_accessories" />:</label></div></td>
 						<td colspan="5"><div class="rowElem">${form.accessories}</div></td>

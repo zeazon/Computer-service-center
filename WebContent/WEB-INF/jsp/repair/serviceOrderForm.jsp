@@ -36,14 +36,14 @@
 						<td><label><fmt:message key="serviceOrderType" />:</label></td>
 						<td colspan="5">
 							<div class="rowElem">
-								<c:if test="${mode=='add'}">
+								<c:if test="${mode=='add' || (mode=='edit' && (form.status != 'close' && form.status != 'fixed'))}">
 									<form:radiobutton path="serviceType" value="1" cssStyle="margin-top:4px" id="serviceType_guarantee" onclick="checkServiceType()" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_guarantee" /></label><form:select path="guaranteeNo" id="guaranteeNo" ><c:forEach var="i" begin="1" end="7" step="1"><form:option value="${i}" /></c:forEach></form:select>
 									<form:radiobutton path="serviceType" value="2" cssStyle="margin-top:4px;" id="serviceType_repair" onclick="checkServiceType()" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_repair" /></label>
 									<form:radiobutton path="serviceType" value="3" cssStyle="margin-top:4px" id="serviceType_claim" onclick="checkServiceType()" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_claim" /></label>
 									<form:radiobutton path="serviceType" value="4" cssStyle="margin-top:4px" id="serviceType_outsiteService" onclick="checkServiceType()" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_outsiteService" /></label><form:input path="refJobID" class="textboxMockup" id="refJobID" maxlength="30" size="16" />
 									<form:radiobutton path="serviceType" value="5" cssStyle="margin-top:4px" id="serviceType_refix" onclick="checkServiceType()" /><label style="float:left; margin-top:4px;"><fmt:message key="serviceOrderType_refix" /></label><form:input path="refServiceOrder" class="textboxMockup" id="refServiceOrder" maxlength="20" size="16" />
 								</c:if>
-								<c:if test="${mode=='edit' || form.status == 'close'}">
+								<c:if test="${form.status == 'close' || form.status == 'fixed'}">
 									<form:radiobutton path="serviceType" value="1" cssStyle="margin-top:4px" id="serviceType_guarantee" disabled="true" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_guarantee" /></label><form:select path="guaranteeNo" id="guaranteeNo" class="disabled"><c:forEach var="i" begin="1" end="7" step="1"><form:option value="${i}" /></c:forEach></form:select>
 									<form:radiobutton path="serviceType" value="2" cssStyle="margin-top:4px;" id="serviceType_repair" disabled="true" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_repair" /></label>
 									<form:radiobutton path="serviceType" value="3" cssStyle="margin-top:4px" id="serviceType_claim" disabled="true" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_claim" /></label>
@@ -349,16 +349,30 @@
 					<c:if test="${form.status == 'fixing' || form.status == 'outsite'}">
 					<tr>
 						<td><label><fmt:message key="serviceOrder_startFix" />:</label></td>
-						<td colspan="5"><div class="rowElem">${form.startFix}<form:hidden path="startFix"/></div></td>
+						<td colspan="2"><div class="rowElem">${form.startFix}<form:hidden path="startFix"/></div></td>
+						<td><label><fmt:message key="serviceOrder_empFix" />:</label></td>
+						<td colspan="2">
+							<div class="rowElem">
+								<form:select path="empFixID" id="empFixID">
+									<c:forEach items="${employeeList}" var="employee">
+										<form:option value="${employee.employeeID}">${employee.name} ${employee.surname}</form:option>
+									</c:forEach>
+								</form:select>
+							</div>
+						</td>
 					</tr>
 					</c:if>
 					
-					<c:if test="${form.status != 'close'}">
+					<c:if test="${form.status != 'close' || form.status == 'fixed'}">
 					<tr align="center">
-						<td colspan="6"><div class="rowElem"><input type="submit" value="<fmt:message key='button.ok' />" /></div></td>
+						<td colspan="6">
+							<div class="rowElem">
+								<input type="submit" value="<fmt:message key='button.ok' />" />
+							</div>
+						</td>
 					</tr>
 					</c:if>
-					<c:if test="${form.status == 'close'}">
+					<c:if test="${form.status == 'close' || form.status == 'fixed'}">
 					<tr>
 						<td><label><fmt:message key="serviceOrder_startFix" />:</label></td>
 						<td colspan="2"><div class="rowElem">${form.startFix}</div></td>

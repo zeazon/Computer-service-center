@@ -46,7 +46,7 @@
 						<table id="list"></table>
 						<div id="pager"></div>
 						
-						<form id="editForm" action="getServiceOrder.html?do=preEdit" method="post">
+						<form id="editForm" action="getServiceOrder.html?do=preview" method="post">
 							<input type="hidden" name="serviceOrderID"/>
 						</form>
 						
@@ -86,12 +86,18 @@
 			height: "100%",
 			autowidth: true,
 			colNames:['<fmt:message key="serviceOrderID" />','<fmt:message key="date" />','<fmt:message key="name" />','<fmt:message key="tel" />','<fmt:message key="mobileTel" />','<fmt:message key="status" />'],
+			colNames:['<fmt:message key="serviceOrderID" />','<fmt:message key="date" />','<fmt:message key="name" />','<fmt:message key="tel" />','<fmt:message key="mobileTel" />','<fmt:message key="type" />','<fmt:message key="brand" />','<fmt:message key="model" />','<fmt:message key="serialNo" />','<fmt:message key="serviceOrder_empFix" />','<fmt:message key="status" />'],
 			colModel:[
-				{name:'serviceOrderID',index:'serviceOrderID'},
+				{name:'serviceOrderID',index:'serviceOrderID', width:'200'},
 				{name:'serviceOrderDate', index:'serviceOrderDate', align:'center', sorttype:'date',formatter:'date', formatoptions: {srcformat:'d/m/Y',newformat:'d/m/Y'}, width:'100', firstSortOrder:'desc'},
-				{name:'name',index:'name'},
+				{name:'name',index:'name'},				
 				{name:'tel',index:'tel', sortable:false},
-				{name:'mobileTel',index:'mobileTel', sortable:false},
+				{name:'mobileTel',index:'mobileTel', sortable:false, width:'170'},
+				{name:'type',index:'type', sortable:false},
+				{name:'brand',index:'brand', sortable:false},
+				{name:'model',index:'model', sortable:false},
+				{name:'serialNo',index:'serialNo', sortable:false},
+				{name:'empFix',index:'empFix', sortable:true},
 				{name:'status',index:'status', formatter:statusFormatter, align:'center'}],
 			multiselect: false,
 			rownumbers: true,
@@ -113,7 +119,10 @@
 			onClickButton: function(){
 				var gsr = jQuery("#list").getGridParam('selrow');
 				if(gsr){
-					jQuery("#confirmDialog").text('<fmt:message key='msg.getServiceOrder' /> '+gsr+' ?');
+					jQuery("#list").GridToForm(gsr,"#editForm");
+					$("#editForm").submit();
+					
+				/*	jQuery("#confirmDialog").text('<fmt:message key='msg.getServiceOrder' /> '+gsr+' ?');
 					jQuery("#confirmDialog").dialog('option', 'buttons', {
 						"Confirm" : function() {
 							//window.location.href = theHREF;
@@ -152,7 +161,7 @@
 						"Cancel" : function() {
 							$(this).dialog("close");
 						}
-					});
+					});*/
 					//jQuery("#confirmDialog").dialog( 
 					//	{
 					//		title: 'Alert',
@@ -161,7 +170,7 @@
 					 //    		jQuery(this).dialog("close");} 
 					//      	}
 				    //});
-					jQuery("#confirmDialog").dialog("open");
+				/*	jQuery("#confirmDialog").dialog("open");*/
 					//jQuery("#list").GridToForm(gsr,"#editForm");
 					//$("#editForm").submit();
 				} else {
@@ -192,8 +201,16 @@
 	{
 		if(cellvalue == 'new'){
 			return "<fmt:message key='serviceOrder_status_new' />";
+		}else if(cellvalue == 'fixing'){
+			return "<fmt:message key='serviceOrder_status_fixing' />";
+		}else if(cellvalue == 'outsite'){
+			return "<fmt:message key='serviceOrder_status_outsite' />";
+		}else if(cellvalue == 'fixed'){
+			return "<fmt:message key='serviceOrder_status_fixed' />";
+		}else if(cellvalue == 'close'){
+			return "<fmt:message key='serviceOrder_status_close' />";
 		}
-	   return cellvalue;
+		return cellvalue;
 	}
 	
 	function gridReload(){

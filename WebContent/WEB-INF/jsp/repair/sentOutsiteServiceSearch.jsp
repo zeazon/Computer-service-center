@@ -131,11 +131,17 @@
 	function statusFormatter (cellvalue, options, rowObject)
 	{
 		if(cellvalue == 'new'){
-			return "<fmt:message key='outsiteService_status_new' />";
-		}else if(cellvalue == 'sent'){
-			return "<fmt:message key='outsiteService_status_sent' />";
+			return "<fmt:message key='serviceOrder_status_new' />";
+		}else if(cellvalue == 'fixing'){
+			return "<fmt:message key='serviceOrder_status_fixing' />";
+		}else if(cellvalue == 'outsite'){
+			return "<fmt:message key='serviceOrder_status_outsite' />";
+		}else if(cellvalue == 'fixed'){
+			return "<fmt:message key='serviceOrder_status_fixed' />";
+		}else if(cellvalue == 'close'){
+			return "<fmt:message key='serviceOrder_status_close' />";
 		}
-	   return cellvalue;
+		return cellvalue;
 	}
 	
 	function gridReload(){

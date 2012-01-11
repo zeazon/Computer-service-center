@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -20,6 +21,13 @@ public class OutsiteService implements Serializable {
 	private Date outsiteServiceDate;
 	private ServiceOrder serviceOrder;
 	private String serviceType;
+	private String customerName;
+	private String tel;
+	private String mobileTel;
+	private Type type;
+	private Brand brand;
+	private Model model;
+	private String serialNo;
 	private String accessories;
 	private String problem;
 	private Employee empOpen;
@@ -82,6 +90,72 @@ public class OutsiteService implements Serializable {
 		this.serviceType = serviceType;
 	}
 	
+	@Column(name="customerName")
+	public String getCustomerName() {
+		return customerName;
+	}
+
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
+	}
+
+	@Column(name="tel")
+	public String getTel() {
+		return tel;
+	}
+
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
+
+	@Column(name="mobileTel")
+	public String getMobileTel() {
+		return mobileTel;
+	}
+
+	public void setMobileTel(String mobileTel) {
+		this.mobileTel = mobileTel;
+	}
+
+	@ManyToOne
+	@JoinColumn(name="typeID")
+	public Type getType() {
+		return type;
+	}
+
+	public void setType(Type type) {
+		this.type = type;
+	}
+
+	@ManyToOne
+	@JoinColumn(name="brandID")
+	public Brand getBrand() {
+		return brand;
+	}
+
+	public void setBrand(Brand brand) {
+		this.brand = brand;
+	}
+
+	@ManyToOne
+	@JoinColumn(name="modelID")
+	public Model getModel() {
+		return model;
+	}
+
+	public void setModel(Model model) {
+		this.model = model;
+	}
+
+	@Column(name="serialNo")
+	public String getSerialNo() {
+		return serialNo;
+	}
+
+	public void setSerialNo(String serialNo) {
+		this.serialNo = serialNo;
+	}
+
 	@Column(name="accessories")
 	public String getAccessories() {
 		return accessories;

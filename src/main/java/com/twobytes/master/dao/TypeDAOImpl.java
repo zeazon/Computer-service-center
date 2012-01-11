@@ -18,8 +18,6 @@ public class TypeDAOImpl implements TypeDAO{
 	
 	@Override
 	public boolean save(Type type) throws Exception{
-		System.out.println("TypeDAOImpl");
-		System.out.println("del typeID = "+type.getTypeID());
 		Session session = sessionFactory.getCurrentSession();
 //		Transaction tx = session.beginTransaction();
 //		try{

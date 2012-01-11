@@ -48,7 +48,9 @@ public class OutsiteServiceServiceImpl implements OutsiteServiceService {
 	public boolean sent(OutsiteService outsiteService) throws Exception{
 		// Update data of outsite service document and update status of service order to 'outsite'
 		osDAO.edit(outsiteService);
-		soDAO.edit(outsiteService.getServiceOrder());
+		if(outsiteService.getServiceOrder() != null){
+			soDAO.edit(outsiteService.getServiceOrder());
+		}
 		return true;
 	}
 	
@@ -59,7 +61,9 @@ public class OutsiteServiceServiceImpl implements OutsiteServiceService {
 			throws Exception {
 		// Update data of outsite service document, update status of service order to 'close' and add outsite service detail if has any.s
 		osDAO.edit(outsiteService);
-		soDAO.edit(outsiteService.getServiceOrder());
+		if(outsiteService.getServiceOrder() != null){
+			soDAO.edit(outsiteService.getServiceOrder());
+		}
 		
 		if(outsiteServiceDetailList.size()>0){
 			for(OutsiteServiceDetail osd:outsiteServiceDetailList){
@@ -74,7 +78,12 @@ public class OutsiteServiceServiceImpl implements OutsiteServiceService {
 	public boolean received(OutsiteService outsiteService) throws Exception {
 		// Update data of outsite service document, update status of service order to 'close' and add outsite service detail if has any.s
 		osDAO.edit(outsiteService);
-		soDAO.edit(outsiteService.getServiceOrder());
+		if(outsiteService.getServiceOrder() != null){
+			Integer count = osDAO.countUncloseOutsiteService(outsiteService.getServiceOrder().getServiceOrderID(), outsiteService.getOutsiteServiceID());
+			if(count != null && count == 0){
+				soDAO.edit(outsiteService.getServiceOrder());
+			}
+		}
 		return true;
 	}
 
@@ -172,4 +181,17 @@ public class OutsiteServiceServiceImpl implements OutsiteServiceService {
 		}
 		return os;
 	}
+
+	@Override
+	@Transactional
+	public Integer countUncloseOutsiteService(String serviceOrderID, String outsiteServiceID) {
+		Integer count = null;
+		try {
+			count = osDAO.countUncloseOutsiteService(serviceOrderID, outsiteServiceID);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return count;
+	}
+	
 }

@@ -26,6 +26,7 @@ public class ServiceOrderForm {
 	private String problem;
 	private String appointmentDate;
 	private Employee empOpen;
+	private Integer empFixID;
 	
 	private String productID;
 	
@@ -795,6 +796,14 @@ public class ServiceOrderForm {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public Integer getEmpFixID() {
+		return empFixID;
+	}
+
+	public void setEmpFixID(Integer empFixID) {
+		this.empFixID = empFixID;
 	}
 
 }

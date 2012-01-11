@@ -18,4 +18,6 @@ public interface OutsiteServiceService {
 	
 	public List<OutsiteService> selectNewOSByCriteria(String name, String date, String type, Integer rows, Integer page, String orderBy, String orderType);
 	public List<OutsiteService> selectSentOSByCriteria(String name, String date, String type, Integer rows, Integer page, String orderBy, String orderType);
+	
+	public Integer countUncloseOutsiteService(String serviceOrderID, String outsiteServiceID);
 }
