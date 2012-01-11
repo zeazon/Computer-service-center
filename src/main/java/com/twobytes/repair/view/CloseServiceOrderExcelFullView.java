@@ -43,6 +43,10 @@ public class CloseServiceOrderExcelFullView extends AbstractJExcelView{
 		WritableCellFormat border_bottom_dotted = new WritableCellFormat();
 		border_bottom_dotted.setBorder(Border.BOTTOM, BorderLineStyle.DOTTED);
 		
+		WritableCellFormat border_bottom_dotted_center = new WritableCellFormat();
+		border_bottom_dotted_center.setBorder(Border.BOTTOM, BorderLineStyle.DOTTED);
+		border_bottom_dotted_center.setVerticalAlignment(VerticalAlignment.CENTRE);
+		
 		WritableCellFormat wrap = new WritableCellFormat();
 		wrap.setVerticalAlignment(VerticalAlignment.TOP);
 		wrap.setWrap(true);
@@ -81,11 +85,13 @@ public class CloseServiceOrderExcelFullView extends AbstractJExcelView{
         }
         if(form.getServiceType() == 4){
         	sheet1.addImage(new WritableImage(13, 27, 1, 1, new File(this.getWebApplicationContext().getServletContext().getRealPath("images/choice_check.png"))));
+        	sheet1.addCell(new Label(15, 27, form.getRefJobID(), border_bottom_dotted_center));
         }else{
         	sheet1.addImage(new WritableImage(13, 27, 1, 1, new File(this.getWebApplicationContext().getServletContext().getRealPath("images/choice.png"))));
         }
         if(form.getServiceType() == 5){
         	sheet1.addImage(new WritableImage(18, 27, 1, 1, new File(this.getWebApplicationContext().getServletContext().getRealPath("images/choice_check.png"))));
+        	sheet1.addCell(new Label(21, 27, form.getRefServiceOrder(), border_bottom_dotted_center));
         }else{
         	sheet1.addImage(new WritableImage(18, 27, 1, 1, new File(this.getWebApplicationContext().getServletContext().getRealPath("images/choice.png"))));
         }

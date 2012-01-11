@@ -854,6 +854,7 @@ public class ServiceOrderController {
 		if(so.getAppointmentDate() != null){
 			form.setAppointmentDate(sdfDateTime.format(so.getAppointmentDate()));
 		}
+		form.setRefJobID(so.getRefJobID());
 		form.setRefServiceOrder(so.getRefServiceOrder());
 		form.setCustomerType(so.getCustomerType());
 		form.setCustomerID(so.getCustomer().getCustomerID().toString());

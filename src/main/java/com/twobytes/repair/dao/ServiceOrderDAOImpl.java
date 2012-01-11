@@ -510,10 +510,10 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 			sql.append("and DATE(serviceOrderDate) <= :endDate ");
 		}
 		if(employeeID != null){
-			sql.append("and so.empOpen = :empID ");
+			sql.append("and empFix = :empID ");
 		}
 		sql.append(") c, employee emp ");
-		sql.append("WHERE so.empOpen = emp.employeeID ");
+		sql.append("WHERE so.empFix = emp.employeeID ");
 		
 		if((null != startDate && !startDate.equals("")) && (null != endDate && !endDate.equals(""))){
 			sql.append("and DATE(serviceOrderDate) between :startDate and :endDate ");
@@ -523,11 +523,11 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 			sql.append("and DATE(serviceOrderDate) <= :endDate ");
 		}
 		if(employeeID != null){
-			sql.append("and so.empOpen = :empID ");
+			sql.append("and so.empFix = :empID ");
 		}
 		
 		sql.append("and so.status = 'close' ");
-		sql.append("order by so.serviceOrderDate ");
+		sql.append("order by fullName, so.serviceOrderDate ");
 		
 		Query q = sessionFactory.getCurrentSession().createSQLQuery(sql.toString())
 			.addScalar("numOfDoc", new IntegerType())
