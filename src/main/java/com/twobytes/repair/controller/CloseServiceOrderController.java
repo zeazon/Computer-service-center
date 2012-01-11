@@ -405,7 +405,15 @@ public class CloseServiceOrderController {
 		
 		so.setUpdatedBy(user.getEmployeeID());
 		so.setUpdatedDate(now);
-		so.setStatus(ServiceOrder.FIXED);
+		
+		/*
+		 * If service type is outsite service set status to close
+		 */
+		if(so.getServiceType() == 4){
+			so.setStatus(ServiceOrder.CLOSE);
+		}else{
+			so.setStatus(ServiceOrder.FIXED);
+		}
 		
 //		Double netAmount = form.getNetAmount();
 //		System.out.println("netAmount = "+netAmount);
