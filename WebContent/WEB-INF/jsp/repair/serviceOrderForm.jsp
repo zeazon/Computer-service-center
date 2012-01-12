@@ -95,7 +95,7 @@
 											</c:if>
 											<c:if test="${mode == 'edit'}">
 												<c:if test="${form.status != 'close'}">
-													<form:input path="productID" class="textboxMockup" style="float:left" id="productID" readonly="true" size="18" maxlength="20"/>
+													<form:input path="productID" class="textboxMockup" style="float:left" id="productID" readonly="true" size="18" maxlength="20"/> <input type="button" id="productLov" value="..." > <label class="error" for="productID" generated="true" style="display: none; float:left; padding-left:10px"></label>
 												</c:if>
 												<c:if test="${form.status == 'close'}">
 													${form.productID}
@@ -194,7 +194,7 @@
 								</c:if>
 								<c:if test="${mode=='edit'}">
 									<c:if test="${form.status != 'close'}">
-										<form:input path="customerID" class="textboxMockup" style="float:left" id="custID" readonly="true" size="9" maxlength="10"/>
+										<form:input path="customerID" class="textboxMockup" style="float:left" id="custID" readonly="true" size="9" maxlength="10"/> <input type="button" id="lov" value="..." > <label class="error" for="custID" generated="true" style="display: none; float:left; padding-left:10px"></label>
 									</c:if>
 									<c:if test="${form.status == 'close'}">
 										${form.customerID}
