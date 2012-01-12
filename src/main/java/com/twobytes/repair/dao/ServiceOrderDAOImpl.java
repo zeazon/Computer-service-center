@@ -495,7 +495,7 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 	public List<NumRepairByEmpReportForm> getNumRepairByEmpReport(
 			String startDate, String endDate, Integer employeeID)
 			throws Exception {
-		//		select c.num, emp.name, emp.surname, CONCAT(emp.name,' ',emp.surname) fullname, serviceOrderID, serviceOrderDate, startFix, endFix, appointmentDate, returnDate, CALTIMEDIFF(startFix, serviceOrderDate) diffStartFix_sec, CALTIMEDIFF(endFix, startFix) diffFix_sec, CALTIMEDIFF(appointmentDate, endFix) diffFinish_sec, CALTIMEDIFF(returnDate, endFix) diffReturn_sec from serviceOrder so, (select count(*) num from serviceOrder where empOpen = 1) c, employee emp where so.empOpen = 1 and empOpen = emp.employeeID and so.status = 'close';
+		//		select c.num, emp.name, emp.surname, CONCAT(emp.name,' ',emp.surname) fullname, serviceOrderID, serviceOrderDate, startFix, endFix, appointmentDate, returnDate, CALTIMEDIFF(startFix, serviceOrderDate) diffStartFix_sec, CALTIMEDIFF(endFix, startFix) diffFix_sec, CALTIMEDIFF(appointmentDate, endFix) diffFinish_sec, CALTIMEDIFF(returnDate, endFix) diffReturn_sec from serviceOrder so, (select count(*) num from serviceOrder where empFix = 1) c, employee emp where so.empFix = 1 and so.empFix = emp.employeeID and so.status = 'close';
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT c.num numOfDoc, emp.name, emp.surname, CONCAT(emp.name,' ',emp.surname) fullName, serviceOrderID, " +
 				"serviceOrderDate, startFix, endFix, appointmentDate, returnDate, " +
