@@ -123,6 +123,25 @@ public class GetServiceOrderController {
 				gridData.setTel(customer.getTel());
 				gridData.setMobileTel(customer.getMobileTel());
 				gridData.setStatus(so.getStatus());
+				gridData.setProductID(so.getProduct().getProductID());
+				gridData.setTypeID(so.getProduct().getType().getTypeID());
+				gridData.setType(so.getProduct().getType().getName());
+				gridData.setBrandID(so.getProduct().getBrand().getBrandID());
+				gridData.setBrand(so.getProduct().getBrand().getName());
+				gridData.setModelID(so.getProduct().getModel().getModelID());
+				gridData.setModel(so.getProduct().getModel().getName());
+				gridData.setSerialNo(so.getProduct().getSerialNo());
+				gridData.setAccessories(so.getAccessories());
+				gridData.setProblem(so.getProblem());
+				gridData.setDescription(so.getDescription());
+				gridData.setEmpOpen(so.getEmpOpen().getName() + " "
+						+ so.getEmpOpen().getSurname());
+
+				if(so.getEmpFix() != null){
+					gridData.setEmpFix(so.getEmpFix().getName() + " "
+						+ so.getEmpFix().getSurname());
+				}
+
 				rowsList.add(gridData);
 			}
 			total_pages = new Double(Math.ceil(((double)soList.size()/(double)rows))).intValue();
