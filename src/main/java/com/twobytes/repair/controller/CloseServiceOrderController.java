@@ -26,14 +26,19 @@ import com.twobytes.model.Employee;
 import com.twobytes.model.GridResponse;
 import com.twobytes.model.IssuePart;
 import com.twobytes.model.Model;
+import com.twobytes.model.OutsiteService;
+import com.twobytes.model.OutsiteServiceDetail;
 import com.twobytes.model.ServiceList;
 import com.twobytes.model.ServiceOrder;
 import com.twobytes.model.Type;
+import com.twobytes.repair.form.OutsiteServiceDisplayForm;
 import com.twobytes.repair.form.ServiceOrderDocForm;
 import com.twobytes.repair.form.ServiceOrderForm;
 import com.twobytes.repair.form.ServiceOrderGridData;
 import com.twobytes.repair.form.ServiceOrderSearchForm;
 import com.twobytes.repair.service.IssuePartService;
+import com.twobytes.repair.service.OutsiteServiceDetailService;
+import com.twobytes.repair.service.OutsiteServiceService;
 import com.twobytes.repair.service.ServiceListService;
 import com.twobytes.repair.service.ServiceOrderService;
 import com.twobytes.security.form.LoginForm;
@@ -43,6 +48,12 @@ public class CloseServiceOrderController {
 
 	@Autowired
 	private ServiceOrderService soService;
+	
+	@Autowired
+	private OutsiteServiceService osService;
+	
+	@Autowired
+	private OutsiteServiceDetailService osdService;
 	
 	@Autowired
 	private TypeService typeService;
@@ -208,6 +219,23 @@ public class CloseServiceOrderController {
 		form.setFixDesc(so.getFixDesc());
 		form.setRemark(so.getRemark());
 		
+		List<OutsiteService> osList = osService.selectByServiceOrderID(so.getServiceOrderID());
+		List<OutsiteServiceDisplayForm> osdfList = new ArrayList<OutsiteServiceDisplayForm>();
+		for(OutsiteService os : osList){
+			OutsiteServiceDisplayForm osdf = new OutsiteServiceDisplayForm();
+			osdf.setOutsiteServiceID(os.getOutsiteServiceID());
+			osdf.setOutsiteServiceDate(os.getOutsiteServiceDate());
+			osdf.setServiceType(os.getServiceType());
+			osdf.setSentDate(os.getSentDate());
+			osdf.setReceivedDate(os.getReceivedDate());
+			osdf.setRepairing(os.getRepairing());
+			osdf.setCosting(os.getCosting());
+			osdf.setNetAmount(os.getNetAmount());
+			osdf.setDetailList(osdService.getByOutsiteService(os.getOutsiteServiceID()));
+			osdfList.add(osdf);
+		}
+		model.addAttribute("osdfList", osdfList);
+		
 		List<Type> typeList = new ArrayList<Type>();
 		try {
 			typeList = typeService.getAll();
@@ -238,7 +266,34 @@ public class CloseServiceOrderController {
 			
 			form.setIssuePart("noIssuedPart");
 			
-			form.setNetAmount(0.00);
+			if(osList.size()>0){
+				Double netTotal = 0.00;
+				for(OutsiteService os : osList){
+					netTotal = os.getNetAmount() + netTotal;
+					List<OutsiteServiceDetail> osdList = osdService.getByOutsiteService(os.getOutsiteServiceID());
+					for(OutsiteServiceDetail osd : osdList){
+						if(form.getServiceList_1() == null){
+							form.setServiceList_1(osd.getDesc());
+							form.setServicePrice_1(osd.getPrice());
+						}else if(form.getServiceList_2() == null){
+							form.setServiceList_2(osd.getDesc());
+							form.setServicePrice_2(osd.getPrice());
+						}else if(form.getServiceList_3() == null){
+							form.setServiceList_3(osd.getDesc());
+							form.setServicePrice_3(osd.getPrice());
+						}else if(form.getServiceList_4() == null){
+							form.setServiceList_4(osd.getDesc());
+							form.setServicePrice_4(osd.getPrice());
+						}else{
+							form.setServiceList_4(form.getServiceList_4()+"+"+osd.getDesc());
+							form.setServicePrice_4(form.getServicePrice_4()+osd.getPrice());
+						}
+					}
+				}
+				form.setNetAmount(netTotal);
+			}else{
+				form.setNetAmount(0.00);	
+			}
 		}else if(so.getStatus().equals(ServiceOrder.FIXED)){
 			form.setCosting(so.getCosting());
 			
@@ -711,6 +766,23 @@ public class CloseServiceOrderController {
 		}else if(form.getServiceType() == 5){
 			form.setCosting("free");
 		}*/
+		
+		List<OutsiteService> osList = osService.selectByServiceOrderID(so.getServiceOrderID());
+		List<OutsiteServiceDisplayForm> osdfList = new ArrayList<OutsiteServiceDisplayForm>();
+		for(OutsiteService os : osList){
+			OutsiteServiceDisplayForm osdf = new OutsiteServiceDisplayForm();
+			osdf.setOutsiteServiceID(os.getOutsiteServiceID());
+			osdf.setOutsiteServiceDate(os.getOutsiteServiceDate());
+			osdf.setServiceType(os.getServiceType());
+			osdf.setSentDate(os.getSentDate());
+			osdf.setReceivedDate(os.getReceivedDate());
+			osdf.setRepairing(os.getRepairing());
+			osdf.setCosting(os.getCosting());
+			osdf.setNetAmount(os.getNetAmount());
+			osdf.setDetailList(osdService.getByOutsiteService(os.getOutsiteServiceID()));
+			osdfList.add(osdf);
+		}
+		model.addAttribute("osdfList", osdfList);
 		
 		model.addAttribute("customer", so.getCustomer());
 		model.addAttribute(

@@ -8,6 +8,7 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -24,6 +25,13 @@ public class RepairReportController {
 	
 	@Autowired
 	private ServiceOrderService soService;
+
+	@Autowired
+	private MessageSource messages;
+	
+	public void setMessages(MessageSource messages) {
+		this.messages = messages;
+	}
 	
 	private String VIEWNAME_SEARCH = "repairReport.search";
 	
@@ -48,6 +56,7 @@ public class RepairReportController {
 		String[] datePart;
 		String searchStartDate = null;
 		String searchEndDate = null;
+		String statusTxt = "All";
 		if (null != form.getStartDate() && !form.getStartDate().equals("")) {
 //			form.setStartDate(new String(form.getStartDate().getBytes("iso-8859-1"),"tis620"));
 			datePart = form.getStartDate().split("/");
@@ -71,12 +80,17 @@ public class RepairReportController {
 					+ datePart[0];
 		}
 		
-		List<ServiceOrder> retList = soService.getRepairReport(searchStartDate, searchEndDate);
+		List<ServiceOrder> retList = soService.getRepairReport(searchStartDate, searchEndDate, form.getStatus());
 		List<RepairReportForm> reportResultList = new ArrayList<RepairReportForm>();
 		for(ServiceOrder so:retList){
 			RepairReportForm rrf = new RepairReportForm();
 			rrf.setServiceOrderID(so.getServiceOrderID());
 			rrf.setServiceOrderDate(sdfDateTime.format(so.getServiceOrderDate()));
+			if(so.getCustomer() != null){
+				rrf.setCustomerName(so.getCustomer().getName());
+			}else{
+				rrf.setCustomerName("-");
+			}
 			if(so.getStartFix() != null){
 				rrf.setStartFix(sdfDateTime.format(so.getStartFix()));
 			}else{
@@ -87,6 +101,11 @@ public class RepairReportController {
 			}else{
 				rrf.setEndFix("-");
 			}
+			if(so.getEmpFix() != null){
+				rrf.setEmpName(so.getEmpFix().getName()+" "+so.getEmpFix().getSurname());
+			}else{
+				rrf.setEmpName("-");
+			}
 			if(so.getReturnDate() != null){
 				rrf.setReturnDate(sdfDateTime.format(so.getReturnDate()));
 			}else{
@@ -95,8 +114,21 @@ public class RepairReportController {
 			reportResultList.add(rrf);
 		}
 		
+		if(form.getStatus().equals("new")){
+			statusTxt = this.messages.getMessage("serviceOrder_status_new", null, new Locale("th", "TH"));
+		}else if(form.getStatus().equals("fixing")){
+			statusTxt = this.messages.getMessage("serviceOrder_status_fixing", null, new Locale("th", "TH"));
+		}else if(form.getStatus().equals("outsite")){
+			statusTxt = this.messages.getMessage("serviceOrder_status_outsite", null, new Locale("th", "TH"));
+		}else if(form.getStatus().equals("fixed")){
+			statusTxt = this.messages.getMessage("serviceOrder_status_fixed", null, new Locale("th", "TH"));
+		}else if(form.getStatus().equals("close")){
+			statusTxt = this.messages.getMessage("serviceOrder_status_close", null, new Locale("th", "TH"));
+		}
+		
 		model.addAttribute("reportResultList", reportResultList);
 		model.addAttribute("startDate",form.getStartDate());
+		model.addAttribute("status", statusTxt);
 		model.addAttribute("endDate",form.getEndDate());
 		return "repairReportDoc";
 	}

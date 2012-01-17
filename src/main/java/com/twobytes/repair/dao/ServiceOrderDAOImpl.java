@@ -9,6 +9,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.transform.Transformers;
+import org.hibernate.type.DoubleType;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.StringType;
 import org.hibernate.type.TimestampType;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Repository;
 import com.twobytes.model.ServiceOrder;
 import com.twobytes.report.form.NumRepairByEmpReportForm;
 import com.twobytes.report.form.NumRepairReportForm;
+import com.twobytes.report.form.SumAmountReportForm;
 
 @Repository
 public class ServiceOrderDAOImpl implements ServiceOrderDAO {
@@ -436,7 +438,7 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<ServiceOrder> getRepairReport(String startDate, String endDate) throws Exception {
+	public List<ServiceOrder> getRepairReport(String startDate, String endDate, String status) throws Exception {
 		StringBuilder sql = new StringBuilder();
 		sql.append("from ServiceOrder as serviceOrder where 1=1 ");
 		if((null != startDate && !startDate.equals("")) && (null != endDate && !endDate.equals(""))){
@@ -445,6 +447,10 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 			sql.append("and DATE(serviceOrderDate) >= :startDate ");
 		}else if((null == startDate || startDate.equals("")) && (null != endDate && !endDate.equals(""))){
 			sql.append("and DATE(serviceOrderDate) <= :endDate ");
+		}
+		
+		if(status != null && status != ""){
+			sql.append("and serviceOrder.status = :status ");
 		}
 		
 		sql.append("and serviceOrder.status != 'cancel' ");
@@ -460,6 +466,10 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 			q.setString("startDate", startDate);
 		}else if((null == startDate || startDate.equals("")) && (null != endDate && !endDate.equals(""))){
 			q.setString("endDate", endDate);
+		}
+		
+		if(status != null && status != ""){
+			q.setString("status", status);
 		}
 		
 		List<ServiceOrder> result = q.list();
@@ -561,7 +571,40 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 		List<NumRepairByEmpReportForm> retList = q.list();
 		return retList;
 	}
-	
 
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<SumAmountReportForm> getSumAmountReport(String startDate,
+			String endDate) throws Exception {
+		// select concat(e.name,' ',e.surname) fullName, count(so.serviceOrderID) numServiceOrder, sum(so.totalPrice) amount from serviceOrder so, employee e where so.empFix = e.employeeID and so.status = 'close' group by fullName order by fullName;
+		StringBuilder sql = new StringBuilder();
+		sql.append("select concat(e.name,' ',e.surname) fullName, count(so.serviceOrderID) numServiceOrder, sum(so.totalPrice) amount from serviceOrder so, employee e where so.empFix = e.employeeID and so.status = 'close' ");
+		if((null != startDate && !startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			sql.append("and DATE(so.serviceOrderDate) between :startDate and :endDate ");
+		}else if((null != startDate && !startDate.equals("")) && (null == endDate || endDate.equals(""))){
+			sql.append("and DATE(so.serviceOrderDate) >= :startDate ");
+		}else if((null == startDate || startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			sql.append("and DATE(so.serviceOrderDate) <= :endDate ");
+		}
+		sql.append("group by fullName order by fullName ");
+		
+		Query q = sessionFactory.getCurrentSession().createSQLQuery(sql.toString())
+		.addScalar("fullName", new StringType())
+		.addScalar("numServiceOrder", new IntegerType())
+		.addScalar("amount", new DoubleType())
+		.setResultTransformer(Transformers.aliasToBean(SumAmountReportForm.class));
+		
+		if((null != startDate && !startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			q.setString("startDate", startDate);
+			q.setString("endDate", endDate);
+		}else if((null != startDate && !startDate.equals("")) && (null == endDate || endDate.equals(""))){
+			q.setString("startDate", startDate);
+		}else if((null == startDate || startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			q.setString("endDate", endDate);
+		}
+		
+		List<SumAmountReportForm> retList = q.list();
+		return retList;
+	}
 
 }

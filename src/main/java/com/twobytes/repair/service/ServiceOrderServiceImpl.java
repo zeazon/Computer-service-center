@@ -15,6 +15,7 @@ import com.twobytes.repair.dao.ServiceListDAO;
 import com.twobytes.repair.dao.ServiceOrderDAO;
 import com.twobytes.report.form.NumRepairByEmpReportForm;
 import com.twobytes.report.form.NumRepairReportForm;
+import com.twobytes.report.form.SumAmountReportForm;
 import com.twobytes.util.DocRunningUtil;
 
 @Service
@@ -210,10 +211,10 @@ public class ServiceOrderServiceImpl implements ServiceOrderService {
 
 	@Override
 	@Transactional
-	public List<ServiceOrder> getRepairReport(String startDate, String endDate) {
+	public List<ServiceOrder> getRepairReport(String startDate, String endDate, String status) {
 		List<ServiceOrder> retList = new ArrayList<ServiceOrder>();
 		try {
-			retList = soDAO.getRepairReport(startDate, endDate);
+			retList = soDAO.getRepairReport(startDate, endDate, status);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -240,6 +241,19 @@ public class ServiceOrderServiceImpl implements ServiceOrderService {
 		try{
 			retList = soDAO.getNumRepairByEmpReport(startDate, endDate, employeeID);
 		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return retList;
+	}
+
+	@Override
+	@Transactional
+	public List<SumAmountReportForm> getSumAmountReport(String startDate,
+			String endDate) {
+		List<SumAmountReportForm> retList = new ArrayList<SumAmountReportForm>();
+		try{
+			retList = soDAO.getSumAmountReport(startDate, endDate);
+		}catch(Exception e){
 			e.printStackTrace();
 		}
 		return retList;

@@ -31,6 +31,7 @@ import com.twobytes.model.GridResponse;
 import com.twobytes.model.Model;
 import com.twobytes.model.OutsiteCompany;
 import com.twobytes.model.OutsiteService;
+import com.twobytes.model.OutsiteServiceDetail;
 import com.twobytes.model.ServiceOrder;
 import com.twobytes.model.TransportCompany;
 import com.twobytes.model.Type;
@@ -38,6 +39,7 @@ import com.twobytes.repair.form.OutsiteServiceDocForm;
 import com.twobytes.repair.form.OutsiteServiceForm;
 import com.twobytes.repair.form.OutsiteServiceGridData;
 import com.twobytes.repair.form.OutsiteServiceSearchForm;
+import com.twobytes.repair.service.OutsiteServiceDetailService;
 import com.twobytes.repair.service.OutsiteServiceService;
 import com.twobytes.repair.service.ServiceOrderService;
 import com.twobytes.security.form.LoginForm;
@@ -47,6 +49,9 @@ public class OutsiteServiceController {
 
 	@Autowired
 	private OutsiteServiceService osService;
+	
+	@Autowired
+	private OutsiteServiceDetailService osdService;
 	
 	@Autowired
 	private TypeService typeService;
@@ -692,6 +697,12 @@ public class OutsiteServiceController {
 			form.setReceivedDate(sdfDate.format(os.getReceivedDate()));
 		}
 		form.setReceivedTransportNo(os.getReceivedTransportNo());
+		form.setRepairing(os.getRepairing());
+		form.setCosting(os.getCosting());
+		form.setNetAmount(os.getNetAmount());
+		
+		List<OutsiteServiceDetail> osdList = osdService.getByOutsiteService(os.getOutsiteServiceID());
+		model.addAttribute("osdList", osdList);
 		
 		form.setStatus(os.getStatus());
 		

@@ -7,8 +7,10 @@ public class RepairReportForm implements Serializable{
 	
 	private String serviceOrderID;
 	private String serviceOrderDate;
+	private String customerName;
 	private String startFix;
 	private String endFix;
+	private String empName;
 	private String returnDate;
 	
 	public String getServiceOrderID() {
@@ -40,6 +42,18 @@ public class RepairReportForm implements Serializable{
 	}
 	public void setReturnDate(String returnDate) {
 		this.returnDate = returnDate;
+	}
+	public String getCustomerName() {
+		return customerName;
+	}
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
+	}
+	public String getEmpName() {
+		return empName;
+	}
+	public void setEmpName(String empName) {
+		this.empName = empName;
 	}
 	
 }

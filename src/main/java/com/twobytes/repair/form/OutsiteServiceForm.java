@@ -40,6 +40,15 @@ public class OutsiteServiceForm {
 	private Double[] repairPrice;
 	private Double netAmount;
 	
+	private String serviceDesc_1;
+	private String serviceDesc_2;
+	private String serviceDesc_3;
+	private String serviceDesc_4;
+	private Double servicePrice_1;
+	private Double servicePrice_2;
+	private Double servicePrice_3;
+	private Double servicePrice_4;
+	
 	private String status;
 
 	public String getOutsiteServiceID() {
@@ -239,6 +248,54 @@ public class OutsiteServiceForm {
 	}
 	public void setModelName(String modelName) {
 		this.modelName = modelName;
+	}
+	public String getServiceDesc_1() {
+		return serviceDesc_1;
+	}
+	public void setServiceDesc_1(String serviceDesc_1) {
+		this.serviceDesc_1 = serviceDesc_1;
+	}
+	public String getServiceDesc_2() {
+		return serviceDesc_2;
+	}
+	public void setServiceDesc_2(String serviceDesc_2) {
+		this.serviceDesc_2 = serviceDesc_2;
+	}
+	public String getServiceDesc_3() {
+		return serviceDesc_3;
+	}
+	public void setServiceDesc_3(String serviceDesc_3) {
+		this.serviceDesc_3 = serviceDesc_3;
+	}
+	public String getServiceDesc_4() {
+		return serviceDesc_4;
+	}
+	public void setServiceDesc_4(String serviceDesc_4) {
+		this.serviceDesc_4 = serviceDesc_4;
+	}
+	public Double getServicePrice_1() {
+		return servicePrice_1;
+	}
+	public void setServicePrice_1(Double servicePrice_1) {
+		this.servicePrice_1 = servicePrice_1;
+	}
+	public Double getServicePrice_2() {
+		return servicePrice_2;
+	}
+	public void setServicePrice_2(Double servicePrice_2) {
+		this.servicePrice_2 = servicePrice_2;
+	}
+	public Double getServicePrice_3() {
+		return servicePrice_3;
+	}
+	public void setServicePrice_3(Double servicePrice_3) {
+		this.servicePrice_3 = servicePrice_3;
+	}
+	public Double getServicePrice_4() {
+		return servicePrice_4;
+	}
+	public void setServicePrice_4(Double servicePrice_4) {
+		this.servicePrice_4 = servicePrice_4;
 	}
 	
 }

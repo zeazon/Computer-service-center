@@ -232,4 +232,9 @@
 		<put-attribute name="body" value="/WEB-INF/jsp/report/numRepairByEmpReport.jsp"/>
 	</definition>
 	
+	<definition name="sumAmountReport.search" extends=".pageTemplate">
+		<put-attribute name="pageName" value="รายงานรายได้จากการซ่อม" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/report/sumAmountReport.jsp"/>
+	</definition>
+	
 </tiles-definitions>

@@ -7,6 +7,7 @@ import com.twobytes.model.ServiceList;
 import com.twobytes.model.ServiceOrder;
 import com.twobytes.report.form.NumRepairByEmpReportForm;
 import com.twobytes.report.form.NumRepairReportForm;
+import com.twobytes.report.form.SumAmountReportForm;
 
 public interface ServiceOrderService {
 	public String save(ServiceOrder serviceOrder) throws Exception;
@@ -22,7 +23,8 @@ public interface ServiceOrderService {
 	public boolean close(ServiceOrder so, List<IssuePart> issuePartList, List<ServiceList> serviceList) throws Exception;
 	public List<ServiceOrder> selectFixedSOByCriteria(String name, String date, String type, Integer rows, Integer page, String orderBy, String orderType);
 	
-	public List<ServiceOrder> getRepairReport(String startDate, String endDate);
+	public List<ServiceOrder> getRepairReport(String startDate, String endDate, String status);
 	public NumRepairReportForm getNumRepairReport(String date);
 	public List<NumRepairByEmpReportForm> getNumRepairByEmpReport(String startDate, String endDate, Integer employeeID);
+	public List<SumAmountReportForm> getSumAmountReport(String startDate, String endDate);
 }

@@ -309,6 +309,40 @@
 								<td><label><fmt:message key="outsiteService_receivedTransportNo" />:</label></td>
 								<td colspan="2"><div class="rowElem">${form.receivedTransportNo}</div></td>
 							</tr>
+							<tr>
+								<td valign="top" style="padding-top:9px;"><label><fmt:message key="outsiteService_repairing" />:</label></td>
+								<td colspan="5" align="left"><div class="rowElem"><pre style="font-size:16px; padding-top:4px">${form.repairing}</pre></div></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td colspan="5">
+									<div class="rowElem">
+										<form:radiobutton path="costing" id="costing_cost" value="cost" disabled="true"/> <label style="float:left;"><fmt:message key="outsiteService_costing_cost" /></label> <form:radiobutton path="costing" id="costing_free" value="free" disabled="true"/> <label style="float:left;"><fmt:message key="outsiteService_costing_free" /></label>
+									</div>
+								</td>
+							</tr>
+							<c:if test="${osdList.size() > 0}">
+							<tr>
+								<td width="13%"></td>
+								<td colspan="5">
+									<table id="serviceTable">
+										<tr>
+											<td colspan="2"><fmt:message key="serviceList" /></td>
+										</tr>
+										<c:forEach var="osd" items="${osdList}" varStatus="status">
+										<tr class="serviceList">
+											<td>${osd.desc}</td>
+											<td>${osd.price}</td>
+										</tr>
+										</c:forEach>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td><label><fmt:message key="serviceOrder_netAmount" />:</label></td>
+								<td colspan="5"><div class="rowElem">${form.netAmount}&nbsp;<fmt:message key="baht" /></div></td>
+							</tr>
+							</c:if>
 						</c:when>
 						<c:otherwise>
 							<c:if test="${form.status == 'sent' || form.status == 'received'}">
@@ -325,6 +359,40 @@
 								<td colspan="2"><div class="rowElem"><form:input class="required textboxMockup" id="receivedDate" path="receivedDate" readonly="readonly" size="10"/></div></td>
 								<td><label><fmt:message key="outsiteService_receivedTransportNo" />:<font color="red">*</font></label></td>
 								<td colspan="2"><div class="rowElem"><form:input class="required textboxMockup" path="receivedTransportNo" /></div></td>
+							</tr>
+							<tr>
+								<td valign="top" style="padding-top:9px;"><label><fmt:message key="outsiteService_repairing" />:</label></td>
+								<td colspan="5" align="left"><div class="rowElem"><pre style="font-size:16px; padding-top:4px">${form.repairing}</pre></div></td>
+							</tr>
+							</c:if>
+							<tr>
+								<td></td>
+								<td colspan="5">
+									<div class="rowElem">
+										<form:radiobutton path="costing" id="costing_cost" value="cost" disabled="true"/> <label style="float:left;"><fmt:message key="outsiteService_costing_cost" /></label> <form:radiobutton path="costing" id="costing_free" value="free" disabled="true"/> <label style="float:left;"><fmt:message key="outsiteService_costing_free" /></label>
+									</div>
+								</td>
+							</tr>
+							<c:if test="${osdList.size() > 0}">
+							<tr>
+								<td width="13%"></td>
+								<td colspan="5">
+									<table id="serviceTable">
+										<tr>
+											<td colspan="2"><fmt:message key="serviceList" /></td>
+										</tr>
+										<c:forEach var="osd" items="${osdList}" varStatus="status">
+										<tr class="serviceList">
+											<td>${osd.desc}</td>
+											<td>${osd.price}</td>
+										</tr>
+										</c:forEach>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td><label><fmt:message key="serviceOrder_netAmount" />:</label></td>
+								<td colspan="5"><div class="rowElem">${form.netAmount}&nbsp;<fmt:message key="baht" /></div></td>
 							</tr>
 							</c:if>
 						</c:otherwise>

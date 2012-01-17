@@ -199,15 +199,11 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public OutsiteService selectByServiceOrderID(String serviceOrderID) throws Exception{
-		OutsiteService os = new OutsiteService();
+	public List<OutsiteService> selectByServiceOrderID(String serviceOrderID) throws Exception{
 		Query q = sessionFactory.getCurrentSession().createQuery("from OutsiteService os where os.serviceOrder.serviceOrderID = :serviceOrderID ");
 		q.setString("serviceOrderID", serviceOrderID);
 		List<OutsiteService> retList = q.list();
-		if(retList.size() > 0){
-			os = retList.get(0);
-		}
-		return os;
+		return retList;
 	}
 
 	@Override

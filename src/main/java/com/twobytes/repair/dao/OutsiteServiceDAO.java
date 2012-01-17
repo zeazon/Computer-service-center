@@ -10,7 +10,7 @@ public interface OutsiteServiceDAO {
 	public List<OutsiteService> selectByCriteria(String name, String surname, String date, String type, Integer rows, Integer page, String orderBy, String orderType) throws Exception;
 	public boolean edit(OutsiteService outsiteService) throws Exception;
 	public boolean delete(OutsiteService outsiteService, Integer employeeID) throws Exception;
-	public OutsiteService selectByServiceOrderID(String serviceOrderID) throws Exception;
+	public List<OutsiteService> selectByServiceOrderID(String serviceOrderID) throws Exception;
 	
 	public List<OutsiteService> selectNewOSByCriteria(String name, String date, String type, Integer rows, Integer page, String orderBy, String orderType) throws Exception;
 	public List<OutsiteService> selectSentOSByCriteria(String name, String date, String type, Integer rows, Integer page, String orderBy, String orderType) throws Exception;

@@ -253,7 +253,35 @@
 					</tr>
 					<tr>
 						<td valign="top" style="padding-top:9px;"><label><fmt:message key="outsiteService_repairing" />:</label></td>
-						<td colspan="5" align="left"><div class="rowElem"><form:textarea path="repairing" rows="5" col="30" class="textareaMockup" style="width:98%"></form:textarea><label class="error" for="problem" generated="true" style="display: none; float:left; padding-left:10px"></label></div></td>
+						<td colspan="5" align="left"><div class="rowElem"><form:textarea path="repairing" rows="5" col="30" class="textareaMockup" style="width:98%"></form:textarea><label class="error" for="repairing" generated="true" style="display: none; float:left; padding-left:10px"></label></div></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td colspan="5">
+							<div class="rowElem">
+								<form:radiobutton path="costing" id="costing_cost" value="cost"/> <label style="float:left;"><fmt:message key="outsiteService_costing_cost" /></label> <form:radiobutton path="costing" id="costing_free" value="free"/> <label style="float:left;"><fmt:message key="outsiteService_costing_free" /></label>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td width="13%"></td>
+						<td colspan="5">
+							<table id="serviceTable">
+								<tr>
+									<td colspan="2"><fmt:message key="serviceList" /></td>
+								</tr>
+								<c:forEach var="i" begin="1" end="4" step="1" varStatus ="status">
+								<tr class="serviceList">
+									<td><form:input path="serviceDesc_${i}" class="serviceDesc textboxMockup" onBlur="calculateNetAmount();"/></td>
+									<td><form:input path="servicePrice_${i}" class="number servicePrice textboxMockup" style="text-align:right" size="4" onBlur="calculateNetAmount();"/></td>
+								</tr>
+								</c:forEach>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td><label><fmt:message key="serviceOrder_netAmount" />:</label></td>
+						<td colspan="5"><div class="rowElem"><form:input path="netAmount" class="textboxMockup" id="netAmount" readonly="true" cssStyle="text-align:right" /><span style="float:left; margin-top:6px">&nbsp;<fmt:message key="baht" /></span></div></td>
 					</tr>
 					<!-- tr>
 						<td></td>
@@ -345,7 +373,7 @@ $(document).ready(function(){
 
 	
 	$('#costing_cost').click(function() {
-		$('#costingRow').css("display", "table-row");
+/*		$('#costingRow').css("display", "table-row");
 		//$('#serviceDesc_1').rules("add", {required: function(element){ return $('#servicePrice_1').val() != ''; }});
 		//$('#servicePrice_1').rules("add", {required: function(element){ return $('#serviceDesc_1').val() != ''; }});
 		
@@ -361,7 +389,7 @@ $(document).ready(function(){
 				});
 			}*/
 			
-			calculateNetAmount();
+/*			calculateNetAmount();
 		});
 		
 		$('#serviceDesc_1').blur(function() {
@@ -386,7 +414,7 @@ $(document).ready(function(){
 			}*/
 			
 			// Sum net amount. Check if service desc is described
-			calculateNetAmount();
+/*			calculateNetAmount();
 			
 		});
 		
@@ -401,15 +429,33 @@ $(document).ready(function(){
 		});
 		
 		calculateNetAmount();
+		*/
+		$('#serviceDesc_1').removeAttr('disabled');
+		$('#servicePrice_1').removeAttr('disabled');
+		$('#serviceDesc_2').removeAttr('disabled');
+		$('#servicePrice_2').removeAttr('disabled');
+		$('#serviceDesc_3').removeAttr('disabled');
+		$('#servicePrice_3').removeAttr('disabled');
+		$('#serviceDesc_4').removeAttr('disabled');
+		$('#servicePrice_4').removeAttr('disabled');
 	});
 	
 	$('#costing_free').click(function() {
-		$('#costingRow').css("display", "none");
+/*		$('#costingRow').css("display", "none");
 		$('#serviceCost').val(0);
 		
 		$("#netAmount").val("0.00");
 		//$("#serviceDesc_1").rules("remove", "required");
 		//$("#servicePrice_1").rules("remove", "required");
+*/
+		$('#serviceDesc_1').attr('disabled', 'disabled');
+		$('#servicePrice_1').attr('disabled', 'disabled');
+		$('#serviceDesc_2').attr('disabled', 'disabled');
+		$('#servicePrice_2').attr('disabled', 'disabled');
+		$('#serviceDesc_3').attr('disabled', 'disabled');
+		$('#servicePrice_3').attr('disabled', 'disabled');
+		$('#serviceDesc_4').attr('disabled', 'disabled');
+		$('#servicePrice_4').attr('disabled', 'disabled');
 	});
 	
 	$('#repair_add').click(function() {
@@ -531,8 +577,8 @@ $(document).ready(function(){
 	//serviceList_checkRequired();
 	
 	// initial value.
-	$("#servicePrice_1").val("0");
-	$("#repairPrice_1").val("0");
+	//$("#servicePrice_1").val("0");
+	//$("#repairPrice_1").val("0");
 });
 
 function serviceList_checkRequired(){
@@ -597,12 +643,12 @@ function calculateNetAmount(){
        // alert('serviceDesc = '+serviceDesc+' servicePrice = '+servicePrice);
         
 		if (serviceDesc !== "" && !isNaN(servicePrice)){
-			netAmount = netAmount + parseFloat(servicePrice)
+			netAmount = netAmount + parseFloat(servicePrice);
 		}
 
 	});
 	
-	$('.repairList').each(function() {
+	/*$('.repairList').each(function() {
 		var repairDesc = $(this).find(".repairDesc").val();
         var repairPrice = $(this).find(".repairPrice").val();
         
@@ -612,9 +658,8 @@ function calculateNetAmount(){
 			netAmount = netAmount + parseFloat(repairPrice);
 		}
 
-	});
+	});*/
 
-	
 	$("#netAmount").val(netAmount);
 }
 

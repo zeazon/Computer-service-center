@@ -24,6 +24,7 @@ import com.twobytes.model.Customer;
 import com.twobytes.model.Employee;
 import com.twobytes.model.GridResponse;
 import com.twobytes.model.OutsiteService;
+import com.twobytes.model.OutsiteServiceDetail;
 import com.twobytes.model.ServiceOrder;
 import com.twobytes.model.Type;
 import com.twobytes.repair.form.OutsiteServiceForm;
@@ -151,42 +152,42 @@ public class ReceivedOutsiteServiceController {
 			return "loginScreen";
 		}
 		OutsiteService os = osService.selectByID(outsiteServiceID);
-		OutsiteServiceForm form = new OutsiteServiceForm();
-		form.setOutsiteServiceID(os.getOutsiteServiceID().toString());
-		form.setOutsiteServiceDate(sdfDateTime.format(os.getOutsiteServiceDate()));
-		form.setServiceType(os.getServiceType());
-		if(os.getServiceOrder() != null){
-			form.setServiceOrderID(os.getServiceOrder().getServiceOrderID());
-			form.setServiceOrder(os.getServiceOrder());
-		}
-		form.setCustomerName(os.getCustomerName());
-		form.setTel(os.getTel());
-		form.setMobileTel(os.getMobileTel());
-		if(os.getType() != null){
-			form.setTypeID(os.getType().getTypeID());
-			form.setTypeName(os.getType().getName());
-		}
-		if(os.getBrand() != null){
-			form.setBrandID(os.getBrand().getBrandID());
-			form.setBrandName(os.getBrand().getName());
-		}
-		if(os.getModel() != null){
-			form.setModelID(os.getModel().getModelID());
-			form.setModelName(os.getModel().getName());
-		}
-		form.setSerialNo(os.getSerialNo());
-		form.setOutsiteCompanyID(os.getOutsiteCompany().getOutsiteCompanyID());
-		form.setTransportCompanyID(os.getTransportCompany().getTransportCompanyID());
+		OutsiteServiceForm form = modelToForm(os, new OutsiteServiceForm());
+//		form.setOutsiteServiceID(os.getOutsiteServiceID().toString());
+//		form.setOutsiteServiceDate(sdfDateTime.format(os.getOutsiteServiceDate()));
+//		form.setServiceType(os.getServiceType());
+//		if(os.getServiceOrder() != null){
+//			form.setServiceOrderID(os.getServiceOrder().getServiceOrderID());
+//			form.setServiceOrder(os.getServiceOrder());
+//		}
+//		form.setCustomerName(os.getCustomerName());
+//		form.setTel(os.getTel());
+//		form.setMobileTel(os.getMobileTel());
+//		if(os.getType() != null){
+//			form.setTypeID(os.getType().getTypeID());
+//			form.setTypeName(os.getType().getName());
+//		}
+//		if(os.getBrand() != null){
+//			form.setBrandID(os.getBrand().getBrandID());
+//			form.setBrandName(os.getBrand().getName());
+//		}
+//		if(os.getModel() != null){
+//			form.setModelID(os.getModel().getModelID());
+//			form.setModelName(os.getModel().getName());
+//		}
+//		form.setSerialNo(os.getSerialNo());
+//		form.setOutsiteCompanyID(os.getOutsiteCompany().getOutsiteCompanyID());
+//		form.setTransportCompanyID(os.getTransportCompany().getTransportCompanyID());
+//		
+//		form.setAccessories(os.getAccessories());
+//		form.setProblem(os.getProblem());
+//		form.setTransportCompanyName(os.getTransportCompany().getName());
+//		form.setOutsiteCompanyName(os.getOutsiteCompany().getName());
+//		
+//		form.setSentDate(sdfDate.format(os.getSentDate()));
+//		form.setSentTransportNo(os.getSentTransportNo());
 		
-		form.setAccessories(os.getAccessories());
-		form.setProblem(os.getProblem());
-		form.setTransportCompanyName(os.getTransportCompany().getName());
-		form.setOutsiteCompanyName(os.getOutsiteCompany().getName());
-		
-		form.setSentDate(sdfDate.format(os.getSentDate()));
-		form.setSentTransportNo(os.getSentTransportNo());
-		
-		form.setCosting("free");
+		form.setCosting("cost");
 		form.setNetAmount(0.00);
 		
 //		String[] serviceDesc = {this.messages.getMessage("serviceCost", null, new Locale("th", "TH")),"kkkk"};
@@ -194,6 +195,11 @@ public class ReceivedOutsiteServiceController {
 //		System.out.println("serviceDesc[0]------>"+serviceDesc[0]);
 		
 //		form.setServiceDesc(serviceDesc);
+		
+		form.setServicePrice_1(0.00);
+		form.setServicePrice_2(0.00);
+		form.setServicePrice_3(0.00);
+		form.setServicePrice_4(0.00);
 		
 		model.addAttribute("form", form);
 //		model.addAttribute("fullAddr", os.getServiceOrder().getCustomer().getAddress()+" "+this.messages.getMessage("subdistrict_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getSubdistrict().getName()+" "+this.messages.getMessage("district_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getDistrict().getName()+" "+this.messages.getMessage("province_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getProvince().getName());
@@ -218,10 +224,9 @@ public class ReceivedOutsiteServiceController {
 			os.setSentDate(now);
 		}
 		os.setReceivedTransportNo(form.getReceivedTransportNo());
-//		os.setRepairing(form.getRepairing());
-//		os.setCosting(form.getCosting());
+		os.setRepairing(form.getRepairing());
+		os.setCosting(form.getCosting());
 		
-//		os.setNetAmount(form.getNetAmount());
 		os.setStatus(OutsiteService.CLOSE);
 		os.setUpdatedBy(user.getEmployeeID());
 		os.setUpdatedDate(now);
@@ -237,15 +242,15 @@ public class ReceivedOutsiteServiceController {
 			}
 		}
 		
-		/*String[] serviceDescArry = form.getServiceDesc();
-		Double[] servicePriceArry = form.getServicePrice();
+//		String[] serviceDescArry = form.getServiceDesc();
+//		Double[] servicePriceArry = form.getServicePrice();
 		
-		String[] repairDescArry = form.getRepairDesc();
-		Double[] repairPriceArry = form.getRepairPrice();
+		/*String[] repairDescArry = form.getRepairDesc();
+		Double[] repairPriceArry = form.getRepairPrice();*/
 		
 		List<OutsiteServiceDetail> osdList = new ArrayList<OutsiteServiceDetail>();
 		
-		if(form.getCosting().equals("cost")){
+		/*if(form.getCosting().equals("cost")){
 //			for(String serviceDesc:form.getServiceDesc()){
 			for(int i=0; i<serviceDescArry.length; i++){
 				String serviceDesc = serviceDescArry[i];
@@ -288,6 +293,68 @@ public class ReceivedOutsiteServiceController {
 			}
 		}*/
 		
+		if(form.getCosting().equals("cost")){
+			if(form.getServiceDesc_1() != "" && (form.getServicePrice_1() != null && form.getServicePrice_1() > 0)){
+				OutsiteServiceDetail osd = new OutsiteServiceDetail();
+				osd.setOutsiteService(os);
+				osd.setType(OutsiteServiceDetail.TYPE_SERVICE);
+				osd.setDesc(form.getServiceDesc_1());
+				osd.setPrice(form.getServicePrice_1());
+				osd.setCreatedBy(user.getEmployeeID());
+				osd.setCreatedDate(now);
+				osd.setUpdatedBy(user.getEmployeeID());
+				osd.setUpdatedDate(now);
+				
+				osdList.add(osd);
+			}
+			
+			if(form.getServiceDesc_2() != "" && (form.getServicePrice_2() != null && form.getServicePrice_2() > 0)){
+				OutsiteServiceDetail osd = new OutsiteServiceDetail();
+				osd.setOutsiteService(os);
+				osd.setType(OutsiteServiceDetail.TYPE_SERVICE);
+				osd.setDesc(form.getServiceDesc_2());
+				osd.setPrice(form.getServicePrice_2());
+				osd.setCreatedBy(user.getEmployeeID());
+				osd.setCreatedDate(now);
+				osd.setUpdatedBy(user.getEmployeeID());
+				osd.setUpdatedDate(now);
+				
+				osdList.add(osd);
+			}
+	
+			if(form.getServiceDesc_3() != "" && (form.getServicePrice_3() != null && form.getServicePrice_3() > 0)){
+				OutsiteServiceDetail osd = new OutsiteServiceDetail();
+				osd.setOutsiteService(os);
+				osd.setType(OutsiteServiceDetail.TYPE_SERVICE);
+				osd.setDesc(form.getServiceDesc_3());
+				osd.setPrice(form.getServicePrice_3());
+				osd.setCreatedBy(user.getEmployeeID());
+				osd.setCreatedDate(now);
+				osd.setUpdatedBy(user.getEmployeeID());
+				osd.setUpdatedDate(now);
+				
+				osdList.add(osd);
+			}
+			
+			if(form.getServiceDesc_4() != "" && (form.getServicePrice_4() != null && form.getServicePrice_4() > 0)){
+				OutsiteServiceDetail osd = new OutsiteServiceDetail();
+				osd.setOutsiteService(os);
+				osd.setType(OutsiteServiceDetail.TYPE_SERVICE);
+				osd.setDesc(form.getServiceDesc_4());
+				osd.setPrice(form.getServicePrice_4());
+				osd.setCreatedBy(user.getEmployeeID());
+				osd.setCreatedDate(now);
+				osd.setUpdatedBy(user.getEmployeeID());
+				osd.setUpdatedDate(now);
+				
+				osdList.add(osd);
+			}
+			
+			os.setNetAmount(form.getNetAmount());
+		}else if(form.getCosting().equals("free")){
+			os.setNetAmount(0.00);
+		}
+			
 //		System.out.println("form.getServiceDesc().length = "+form.getServiceDesc().length);
 //		for(String serviceDesc:form.getServiceDesc()){
 //			System.out.println("serviceDesc = "+serviceDesc);	
@@ -298,13 +365,14 @@ public class ReceivedOutsiteServiceController {
 //			System.out.println("servicePrice = "+servicePrice);	
 //		}
 		
-		boolean canSave;
+		boolean canSave = false;
 		try{
-			//canSave = osService.received(os, osdList);
-			canSave = osService.received(os);
+			canSave = osService.received(os, osdList);
+			//canSave = osService.received(os);
 		}catch(Exception e){
 			e.printStackTrace();
 			model.addAttribute("errMsg", e.getMessage());
+			form = modelToForm(os, form);
 			model.addAttribute("form",form);
 //			model.addAttribute("fullAddr", os.getServiceOrder().getCustomer().getAddress()+" "+this.messages.getMessage("subdistrict_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getSubdistrict().getName()+" "+this.messages.getMessage("district_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getDistrict().getName()+" "+this.messages.getMessage("province_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getProvince().getName());
 			return VIEWNAME_FORM;
@@ -312,6 +380,7 @@ public class ReceivedOutsiteServiceController {
 		
 		if(!canSave){
 			model.addAttribute("errMsg", this.messages.getMessage("error.cannotSave", null, new Locale("th", "TH")));
+			form = modelToForm(os, form);
 			model.addAttribute("form",form);
 //			model.addAttribute("fullAddr", os.getServiceOrder().getCustomer().getAddress()+" "+this.messages.getMessage("subdistrict_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getSubdistrict().getName()+" "+this.messages.getMessage("district_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getDistrict().getName()+" "+this.messages.getMessage("province_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getProvince().getName());
 			return VIEWNAME_FORM;
@@ -323,5 +392,42 @@ public class ReceivedOutsiteServiceController {
 		OutsiteServiceSearchForm searchForm = new OutsiteServiceSearchForm();
 		model.addAttribute("searchForm", searchForm);
 		return VIEWNAME_SEARCH;
+	}
+	
+	private OutsiteServiceForm modelToForm(OutsiteService os, OutsiteServiceForm form){
+		form.setOutsiteServiceID(os.getOutsiteServiceID().toString());
+		form.setOutsiteServiceDate(sdfDateTime.format(os.getOutsiteServiceDate()));
+		form.setServiceType(os.getServiceType());
+		if(os.getServiceOrder() != null){
+			form.setServiceOrderID(os.getServiceOrder().getServiceOrderID());
+			form.setServiceOrder(os.getServiceOrder());
+		}
+		form.setCustomerName(os.getCustomerName());
+		form.setTel(os.getTel());
+		form.setMobileTel(os.getMobileTel());
+		if(os.getType() != null){
+			form.setTypeID(os.getType().getTypeID());
+			form.setTypeName(os.getType().getName());
+		}
+		if(os.getBrand() != null){
+			form.setBrandID(os.getBrand().getBrandID());
+			form.setBrandName(os.getBrand().getName());
+		}
+		if(os.getModel() != null){
+			form.setModelID(os.getModel().getModelID());
+			form.setModelName(os.getModel().getName());
+		}
+		form.setSerialNo(os.getSerialNo());
+		form.setOutsiteCompanyID(os.getOutsiteCompany().getOutsiteCompanyID());
+		form.setTransportCompanyID(os.getTransportCompany().getTransportCompanyID());
+		
+		form.setAccessories(os.getAccessories());
+		form.setProblem(os.getProblem());
+		form.setTransportCompanyName(os.getTransportCompany().getName());
+		form.setOutsiteCompanyName(os.getOutsiteCompany().getName());
+		
+		form.setSentDate(sdfDate.format(os.getSentDate()));
+		form.setSentTransportNo(os.getSentTransportNo());
+		return form;
 	}
 }

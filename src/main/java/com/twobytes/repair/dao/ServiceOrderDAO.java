@@ -5,6 +5,7 @@ import java.util.List;
 import com.twobytes.model.ServiceOrder;
 import com.twobytes.report.form.NumRepairByEmpReportForm;
 import com.twobytes.report.form.NumRepairReportForm;
+import com.twobytes.report.form.SumAmountReportForm;
 
 public interface ServiceOrderDAO {
 	public boolean save(ServiceOrder serviceOrder) throws Exception;
@@ -19,7 +20,8 @@ public interface ServiceOrderDAO {
 	public List<ServiceOrder> selectSOForCloseByCriteria(Integer employeeID, String name, String startDate, String endDate, String type, String serialNo, Integer rows, Integer page, String orderBy, String orderType) throws Exception;
 	public List<ServiceOrder> selectFixedSOByCriteria(String name, String date, String type, Integer rows, Integer page, String orderBy, String orderType) throws Exception;
 	
-	public List<ServiceOrder> getRepairReport(String startDate, String endDate) throws Exception;
+	public List<ServiceOrder> getRepairReport(String startDate, String endDate, String status) throws Exception;
 	public NumRepairReportForm getNumRepairReport(String date) throws Exception;
 	public List<NumRepairByEmpReportForm> getNumRepairByEmpReport(String startDate, String endDate, Integer employeeID) throws Exception;
+	public List<SumAmountReportForm> getSumAmountReport(String startDate, String endDate) throws Exception;
 }

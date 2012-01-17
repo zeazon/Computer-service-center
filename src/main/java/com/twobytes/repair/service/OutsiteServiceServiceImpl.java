@@ -65,6 +65,7 @@ public class OutsiteServiceServiceImpl implements OutsiteServiceService {
 			soDAO.edit(outsiteService.getServiceOrder());
 		}
 		
+		osdDAO.delete(outsiteService.getOutsiteServiceID());
 		if(outsiteServiceDetailList.size()>0){
 			for(OutsiteServiceDetail osd:outsiteServiceDetailList){
 				osdDAO.save(osd);
@@ -172,14 +173,14 @@ public class OutsiteServiceServiceImpl implements OutsiteServiceService {
 
 	@Override
 	@Transactional
-	public OutsiteService selectByServiceOrderID(String serviceOrderID) {
-		OutsiteService os = new OutsiteService();
+	public List<OutsiteService> selectByServiceOrderID(String serviceOrderID) {
+		List<OutsiteService> osList = new ArrayList<OutsiteService>();
 		try {
-			os = osDAO.selectByServiceOrderID(serviceOrderID);
+			osList = osDAO.selectByServiceOrderID(serviceOrderID);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return os;
+		return osList;
 	}
 
 	@Override

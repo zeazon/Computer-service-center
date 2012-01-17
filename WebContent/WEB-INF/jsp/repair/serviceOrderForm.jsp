@@ -401,6 +401,89 @@
 						<td valign="top" style="padding-top:4px;"><label><fmt:message key="fix" />:</label></td>
 						<td colspan="5" align="left"><div class="rowElem">${form.fixDesc}</div></td>
 					</tr>
+					<c:if test="${fn:length(osdfList) gt 0}">
+					<tr>
+						<td valign="top" style="padding-top:7px;"><label><fmt:message key="outsiteService" />:</label></td>
+						<td colspan="5">
+							<div class="rowElem">
+								<div id="tabs">
+									<ul>
+										<c:forEach var="osdf" items="${osdfList}" varStatus="rowIndex">
+											<li><a href="#tabs-${rowIndex.count}">${osdf.outsiteServiceID}</a></li>
+										</c:forEach> 
+									</ul>
+									<c:forEach var="osdf" items="${osdfList}" varStatus="rowIndex">
+										<div id="tabs-${rowIndex.count}">
+											<table>
+												<tr>
+													<td><label><fmt:message key="serviceOrderDate" />:</label></td>
+													<td><fmt:formatDate value="${osdf.outsiteServiceDate}" type="both" timeStyle="short" dateStyle="short" /></td>
+												</tr>
+												<tr>
+													<td><label><fmt:message key="outsiteServiceServiceType" />:</label></td>
+													<td>
+														<c:if test="${osdf.serviceType == 'warranty'}">
+															<fmt:message key="outsiteServiceServiceType_inWarranty" />
+														</c:if>
+														<c:if test="${osdf.serviceType == 'repair'}">
+															<fmt:message key="outsiteServiceServiceType_outWarranty" />
+														</c:if>
+													</td>
+												</tr>
+												<tr>
+													<td><label><fmt:message key="outsiteService_sentDate" />:</label></td>
+													<td><fmt:formatDate value="${osdf.sentDate}" type="date" dateStyle="short" /></td>
+												</tr>
+												<tr>
+													<td><label><fmt:message key="outsiteService_receivedDate" />:</label></td>
+													<td><div class="rowElem"><fmt:formatDate value="${osdf.receivedDate}" type="date" dateStyle="short" /></div></td>
+												</tr>
+												<tr>
+													<td><label><fmt:message key="outsiteService_repairing" />:</label></td>
+													<td><pre style="font-size:16px;">${osdf.repairing}</pre></td>
+												</tr>
+												<tr>
+													<td></td>
+													<td>
+														<c:if test="${osdf.costing == 'cost'}">
+															<fmt:message key="outsiteService_costing_cost" />
+																<c:if test="${fn:length(osdf.detailList) gt 0}">
+																	<table>
+																		<tr>
+																			<td class="ui-widget-header ui-corner-all"><fmt:message key="serviceList" /></td>
+																			<td class="ui-widget-header ui-corner-all"><fmt:message key="price" /></td>
+																		</tr>
+																		<c:forEach var="osd" items="${osdf.detailList}">
+																		<tr class="serviceList">
+																			<td>${osd.desc}</td>
+																			<td>${osd.price}</td>
+																		</tr>
+																		</c:forEach>
+																	</table>
+																</c:if>
+														</c:if>
+														<c:if test="${osdf.costing == 'free'}">
+															<fmt:message key="outsiteService_costing_free" />
+														</c:if>
+													</td>
+												</tr>
+												<tr>
+													<td><label><fmt:message key="serviceOrder_netAmount" />:</label></td>
+													<td><div class="rowElem">${osdf.netAmount}&nbsp;<fmt:message key="baht" /></div></td>
+												</tr>
+											</table>
+										</div>
+									</c:forEach>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<script type="text/javascript">
+						$(function() {
+							$("#tabs").tabs();
+						});
+						</script>
+					</c:if>
 					<tr>
 						<td></td>
 						<td colspan="5">

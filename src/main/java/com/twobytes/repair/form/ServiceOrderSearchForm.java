@@ -11,6 +11,7 @@ public class ServiceOrderSearchForm {
 	private String serialNo;
 	
 	private String employee;
+	private String status;
 	
 	public String getName() {
 		return name;
@@ -59,6 +60,12 @@ public class ServiceOrderSearchForm {
 	}
 	public void setEmployee(String employee) {
 		this.employee = employee;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 }
