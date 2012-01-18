@@ -577,21 +577,56 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 	public List<SumAmountReportForm> getSumAmountReport(String startDate,
 			String endDate) throws Exception {
 		// select concat(e.name,' ',e.surname) fullName, count(so.serviceOrderID) numServiceOrder, sum(so.totalPrice) amount from serviceOrder so, employee e where so.empFix = e.employeeID and so.status = 'close' group by fullName order by fullName;
+		
+//		SELECT count( a.serviceOrderID ) numServiceOrder, concat( emp.name, ' ', emp.surname ) fullName, sum( a.totalPrice ) , sum( a.service_price ) , sum( a.part_price )
+//		FROM (
+//			SELECT so.serviceOrderID serviceOrderID, so.returnDate, so.empFix, so.totalPrice totalPrice, IFNULL( sum( sl.price ) , 0 ) service_price, IFNULL( sum( sp.price ) , 0 ) part_price
+//			FROM `serviceOrder` so
+//			LEFT JOIN serviceList sl ON so.serviceOrderID = sl.serviceOrderID
+//			AND so.totalPrice >0
+//			AND so.status = 'close'
+//			LEFT JOIN issuePart sp ON so.serviceOrderID = sp.serviceOrderID
+//			AND so.totalPrice >0
+//			AND so.status = 'close'
+//			WHERE STATUS = 'close'
+//			GROUP BY so.serviceOrderID
+//		)a, employee emp
+//		WHERE a.empFix = emp.employeeID
+//		GROUP BY fullName
+//		ORDER BY fullName
+		
 		StringBuilder sql = new StringBuilder();
-		sql.append("select concat(e.name,' ',e.surname) fullName, count(so.serviceOrderID) numServiceOrder, sum(so.totalPrice) amount from serviceOrder so, employee e where so.empFix = e.employeeID and so.status = 'close' ");
+//		sql.append("select concat(e.name,' ',e.surname) fullName, count(so.serviceOrderID) numServiceOrder, sum(so.totalPrice) amount from serviceOrder so, employee e where so.empFix = e.employeeID and so.status = 'close' ");
+		sql.append("SELECT count( a.serviceOrderID ) numServiceOrder, concat( emp.name, ' ', emp.surname ) fullName, sum( a.totalPrice ) amount, sum( a.service_price ) sumService, sum( a.part_price ) sumPart " +
+				"FROM ( " +
+				"	SELECT so.serviceOrderID serviceOrderID, so.returnDate, so.empFix, so.totalPrice totalPrice, IFNULL( sum( sl.price ) , 0 ) service_price, IFNULL( sum( sp.price ) , 0 ) part_price " +
+				"	FROM `serviceOrder` so " +
+				"	LEFT JOIN serviceList sl ON so.serviceOrderID = sl.serviceOrderID " +
+				"	AND so.totalPrice >0 " +
+				"	AND so.status = 'close' " +
+				"	LEFT JOIN issuePart sp ON so.serviceOrderID = sp.serviceOrderID " +
+				"	AND so.totalPrice >0 " +
+				"	AND so.status = 'close' " +
+				"	WHERE STATUS = 'close' " +
+				"	GROUP BY so.serviceOrderID " +
+				")a, employee emp " +
+				"WHERE a.empFix = emp.employeeID ");
+		
 		if((null != startDate && !startDate.equals("")) && (null != endDate && !endDate.equals(""))){
-			sql.append("and DATE(so.serviceOrderDate) between :startDate and :endDate ");
+			sql.append("AND DATE(a.returnDate) BETWEEN :startDate AND :endDate ");
 		}else if((null != startDate && !startDate.equals("")) && (null == endDate || endDate.equals(""))){
-			sql.append("and DATE(so.serviceOrderDate) >= :startDate ");
+			sql.append("AND DATE(a.returnDate) >= :startDate ");
 		}else if((null == startDate || startDate.equals("")) && (null != endDate && !endDate.equals(""))){
-			sql.append("and DATE(so.serviceOrderDate) <= :endDate ");
+			sql.append("AND DATE(a.returnDate) <= :endDate ");
 		}
-		sql.append("group by fullName order by fullName ");
+		sql.append("GROUP BY fullName ORDER BY fullName ");
 		
 		Query q = sessionFactory.getCurrentSession().createSQLQuery(sql.toString())
 		.addScalar("fullName", new StringType())
 		.addScalar("numServiceOrder", new IntegerType())
 		.addScalar("amount", new DoubleType())
+		.addScalar("sumService", new DoubleType())
+		.addScalar("sumPart", new DoubleType())
 		.setResultTransformer(Transformers.aliasToBean(SumAmountReportForm.class));
 		
 		if((null != startDate && !startDate.equals("")) && (null != endDate && !endDate.equals(""))){

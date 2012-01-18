@@ -7,6 +7,8 @@ public class SumAmountReportForm implements Serializable{
 	private static final long serialVersionUID = 1442422355056751729L;
 	private String fullName;
 	private Integer numServiceOrder;
+	private Double sumService;
+	private Double sumPart;
 	private Double amount;
 	
 	public String getFullName() {
@@ -20,6 +22,18 @@ public class SumAmountReportForm implements Serializable{
 	}
 	public void setNumServiceOrder(Integer numServiceOrder) {
 		this.numServiceOrder = numServiceOrder;
+	}
+	public Double getSumService() {
+		return sumService;
+	}
+	public void setSumService(Double sumService) {
+		this.sumService = sumService;
+	}
+	public Double getSumPart() {
+		return sumPart;
+	}
+	public void setSumPart(Double sumPart) {
+		this.sumPart = sumPart;
 	}
 	public Double getAmount() {
 		return amount;

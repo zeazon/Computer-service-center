@@ -467,6 +467,7 @@ public class CloseServiceOrderController {
 		if(so.getServiceType() == 4){
 			so.setStatus(ServiceOrder.CLOSE);
 		}else{
+			so.setReturnDate(now);
 			so.setStatus(ServiceOrder.FIXED);
 		}
 		
