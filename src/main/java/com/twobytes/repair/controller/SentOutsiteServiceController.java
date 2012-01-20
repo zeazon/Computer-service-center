@@ -135,6 +135,12 @@ public class SentOutsiteServiceController {
 				if(os.getModel() != null)
 					gridData.setModel(os.getModel().getName());
 				gridData.setProblem(os.getProblem());
+				if(os.getOutsiteCompany() != null){
+					gridData.setOutsiteCompanyName(os.getOutsiteCompany().getName());
+				}
+				if(os.getTransportCompany() != null){
+					gridData.setTransportCompanyName(os.getTransportCompany().getName());
+				}
 				gridData.setStatus(os.getStatus());
 				rowsList.add(gridData);
 			}

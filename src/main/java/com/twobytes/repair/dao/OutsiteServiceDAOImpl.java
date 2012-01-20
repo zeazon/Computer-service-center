@@ -100,10 +100,10 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 	}
 
 	@Override
-	public boolean delete(OutsiteService outsiteService, Integer employeeID) throws Exception{
+	public boolean delete(OutsiteService outsiteService, Integer employeeID, Date time) throws Exception{
 		try{
 			outsiteService.setStatus(OutsiteService.CANCEL);
-			outsiteService.setUpdatedDate(new Date());
+			outsiteService.setUpdatedDate(time);
 			outsiteService.setUpdatedBy(employeeID);
 			sessionFactory.getCurrentSession().update(outsiteService);
 		}catch(Exception e){
@@ -210,7 +210,7 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 	public Integer countUncloseOutsiteService(String serviceOrderID, String outsiteServiceID)
 			throws Exception {
 		StringBuilder sql = new StringBuilder();
-		sql.append("select count(*) numUnclose from outsiteService where serviceOrderID = :serviceOrderID and status != 'close' and outsiteServiceID != :outsiteServiceID ;");
+		sql.append("select count(*) numUnclose from outsiteService where serviceOrderID = :serviceOrderID and status != 'close' and status != 'cancel' and outsiteServiceID != :outsiteServiceID ;");
 		Query q = sessionFactory.getCurrentSession().createSQLQuery(sql.toString()).setString("serviceOrderID", serviceOrderID).setString("outsiteServiceID", outsiteServiceID);
 		return ((BigInteger)q.uniqueResult()).intValue();
 	}

@@ -1,6 +1,7 @@
 package com.twobytes.repair.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.twobytes.model.OutsiteService;
 import com.twobytes.model.OutsiteServiceDetail;
+import com.twobytes.model.ServiceOrder;
 import com.twobytes.repair.dao.OutsiteServiceDAO;
 import com.twobytes.repair.dao.OutsiteServiceDetailDAO;
 import com.twobytes.repair.dao.ServiceOrderDAO;
@@ -129,9 +131,22 @@ public class OutsiteServiceServiceImpl implements OutsiteServiceService {
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public boolean delete(String outsiteServiceID, Integer employeeID) throws Exception{
+		Date now = new Date();
 		OutsiteService os = osDAO.selectByID(outsiteServiceID);
 		if(null != os){
-			return osDAO.delete(os, employeeID);
+			/* Check whether this outsite service refer to service order */
+			if(os.getServiceOrder() != null){
+				Integer count = this.countUncloseOutsiteService(os.getServiceOrder().getServiceOrderID(), outsiteServiceID);
+				if(count != null && count == 0){
+					ServiceOrder so = os.getServiceOrder();
+					so.setStatus(ServiceOrder.FIXING);
+					so.setUpdatedBy(employeeID);
+					so.setUpdatedDate(now);
+					soDAO.save(so);
+				}
+			}
+			
+			return osDAO.delete(os, employeeID, now);
 		}else{
 			return false;
 		}

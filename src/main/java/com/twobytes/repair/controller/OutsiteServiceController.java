@@ -1,5 +1,7 @@
 package com.twobytes.repair.controller;
 
+import groovy.ui.Console;
+
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -131,7 +133,6 @@ public class OutsiteServiceController {
 			e.printStackTrace();
 		}
 		
-//		System.out.println("searchDate = "+searchDate);
 		List<OutsiteService> osList = osService.selectByCriteria(name, surname, searchDate, type, rows, page, sidx, sord);
 		GridResponse response = new GridResponse();
 		
@@ -170,7 +171,16 @@ public class OutsiteServiceController {
 				if(os.getModel() != null)
 					gridData.setModel(os.getModel().getName());
 				gridData.setProblem(os.getProblem());
+				if(os.getSentDate() != null){
+					gridData.setSentDate(sdfDateTime.format(os.getSentDate()));
+				}
+				if(os.getSentTransportNo() != null){
+					gridData.setSentTransportNo(os.getSentTransportNo());
+				}
 				gridData.setStatus(os.getStatus());
+				if(os.getServiceOrder() != null){
+					gridData.setServiceOrderID(os.getServiceOrder().getServiceOrderID());
+				}
 				rowsList.add(gridData);
 			}
 			total_pages = new Double(Math.ceil(((double)osList.size()/(double)rows))).intValue();

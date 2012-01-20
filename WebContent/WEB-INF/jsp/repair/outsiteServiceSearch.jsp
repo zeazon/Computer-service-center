@@ -72,7 +72,7 @@
 			datatype: "json",
 			height: "100%",
 			autowidth: true,
-			colNames:['<fmt:message key="outsiteServiceID" />','<fmt:message key="date" />','<fmt:message key="name" />','<fmt:message key="type" />','<fmt:message key="brand" />','<fmt:message key="model" />','<fmt:message key="serviceOrder_problem" />','<fmt:message key="status" />'],
+			colNames:['<fmt:message key="outsiteServiceID" />','<fmt:message key="date" />','<fmt:message key="name" />','<fmt:message key="type" />','<fmt:message key="brand" />','<fmt:message key="model" />','<fmt:message key="serviceOrder_problem" />','<fmt:message key="status" />','serviceOrderID'],
 			colModel:[
 				{name:'outsiteServiceID',index:'outsiteServiceID'},
 				{name:'outsiteServiceDate', index:'outsiteServiceDate', align:'center', sorttype:'date',formatter:'date', formatoptions: {srcformat:'d/m/Y',newformat:'d/m/Y'}, width:'100', firstSortOrder:'desc'},
@@ -81,7 +81,8 @@
 				{name:'brand',index:'brand', sortable:false, width:'90'},
 				{name:'model',index:'model', sortable:false, width:'90'},
 				{name:'problem',index:'problem', sortable:false, width:'300'},
-				{name:'status',index:'status', formatter:statusFormatter, align:'center', sortable:false, width:'90'}],
+				{name:'status',index:'status', formatter:statusFormatter, align:'center', sortable:false, width:'90'},
+				{name:'serviceOrderID',index:'serviceOrderID', hidden:true}],
 			multiselect: false,
 			rownumbers: true,
 			rowNum:10,
@@ -165,8 +166,7 @@
 			                var new_id = null;
 							return [result.success, errors, new_id];
 						}, 
-						//url: 'serviceOrderID.html?do=delete&serviceOrderID='+gr}); 
-						url: 'outsiteService.html?do=delete&serviceOrderID='+gr});
+						url: 'outsiteService.html?do=delete&outsiteServiceID='+gr});
 				} else { 
 					jQuery("#dialog").text('<fmt:message key='msg.pleaseSelectRow' />');
 					jQuery("#dialog").dialog( 
@@ -194,15 +194,13 @@
 	function statusFormatter (cellvalue, options, rowObject)
 	{
 		if(cellvalue == 'new'){
-			return "<fmt:message key='serviceOrder_status_new' />";
-		}else if(cellvalue == 'fixing'){
-			return "<fmt:message key='serviceOrder_status_fixing' />";
-		}else if(cellvalue == 'outsite'){
-			return "<fmt:message key='serviceOrder_status_outsite' />";
-		}else if(cellvalue == 'fixed'){
-			return "<fmt:message key='serviceOrder_status_fixed' />";
+			return "<fmt:message key='outsiteService_status_new' />";
+		}else if(cellvalue == 'sent'){
+			return "<fmt:message key='outsiteService_status_sent' />";
+		}else if(cellvalue == 'received'){
+			return "<fmt:message key='outsiteService_status_received' />";
 		}else if(cellvalue == 'close'){
-			return "<fmt:message key='serviceOrder_status_close' />";
+			return "<fmt:message key='outsiteService_status_close' />";
 		}
 		return cellvalue;
 	}

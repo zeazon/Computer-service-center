@@ -269,7 +269,11 @@ public class CloseServiceOrderController {
 			if(osList.size()>0){
 				Double netTotal = 0.00;
 				for(OutsiteService os : osList){
-					netTotal = os.getNetAmount() + netTotal;
+					if(os.getNetAmount() != null){
+						netTotal = os.getNetAmount() + netTotal;	
+					}else{
+						netTotal = 0 + netTotal;
+					}
 					List<OutsiteServiceDetail> osdList = osdService.getByOutsiteService(os.getOutsiteServiceID());
 					for(OutsiteServiceDetail osd : osdList){
 						if(form.getServiceList_1() == null){

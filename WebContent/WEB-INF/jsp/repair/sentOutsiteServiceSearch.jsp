@@ -71,7 +71,7 @@
 			datatype: "json",
 			height: "100%",
 			autowidth: true,
-			colNames:['<fmt:message key="outsiteServiceID" />','<fmt:message key="date" />','<fmt:message key="name" />','<fmt:message key="type" />','<fmt:message key="brand" />','<fmt:message key="model" />','<fmt:message key="serviceOrder_problem" />','<fmt:message key="status" />'],
+			colNames:['<fmt:message key="outsiteServiceID" />','<fmt:message key="date" />','<fmt:message key="name" />','<fmt:message key="type" />','<fmt:message key="brand" />','<fmt:message key="model" />','<fmt:message key="serviceOrder_problem" />','<fmt:message key="outsiteService_outsiteCompany" />','<fmt:message key="transportCompany" />','<fmt:message key="status" />'],
 			colModel:[
 				{name:'outsiteServiceID',index:'outsiteServiceID'},
 				{name:'outsiteServiceDate', index:'outsiteServiceDate', align:'center', sorttype:'date',formatter:'date', formatoptions: {srcformat:'d/m/Y',newformat:'d/m/Y'}, width:'100', firstSortOrder:'desc'},
@@ -80,6 +80,8 @@
 				{name:'brand',index:'brand', sortable:false, width:'90'},
 				{name:'model',index:'model', sortable:false, width:'90'},
 				{name:'problem',index:'problem', sortable:false, width:'300'},
+				{name:'outsiteCompanyName',index:'outsiteCompanyName', sortable:false, width:'90'},
+				{name:'transportCompanyName',index:'transportCompanyName', sortable:false, width:'90'},
 				{name:'status',index:'status', formatter:statusFormatter, align:'center', sortable:false, width:'90'}],
 			multiselect: false,
 			rownumbers: true,
