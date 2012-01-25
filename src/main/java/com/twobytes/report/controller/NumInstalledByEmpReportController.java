@@ -13,23 +13,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.twobytes.master.service.EmployeeService;
 import com.twobytes.model.Employee;
-import com.twobytes.repair.service.ServiceOrderService;
-import com.twobytes.report.form.NumRepairByEmpReportForm;
+import com.twobytes.report.form.NumInstalledByEmpReportForm;
+import com.twobytes.report.form.NumInstalledByEmpReportSearchForm;
 import com.twobytes.report.form.NumRepairByEmpReportSearchForm;
+import com.twobytes.report.service.ReportService;
 import com.twobytes.security.form.LoginForm;
 
 @Controller
-public class NumRepairByEmpReportController {
+public class NumInstalledByEmpReportController {
 
 	@Autowired
-	private ServiceOrderService soService;
+	private ReportService reportService;
 	
 	@Autowired
 	private EmployeeService empService;
 	
-	private String VIEWNAME_SEARCH = "numRepairByEmpReport.search";
+	private String VIEWNAME_SEARCH = "numInstalledByEmpReport.search";
 	
-	@RequestMapping(value = "/numRepairByEmpReport")
+	@RequestMapping(value = "/numInstalledByEmpReport")
 	public String view(ModelMap model, HttpServletRequest request) {
 		if (null == request.getSession().getAttribute("UserLogin")) {
 			LoginForm loginForm = new LoginForm();
@@ -37,7 +38,7 @@ public class NumRepairByEmpReportController {
 			return "loginScreen";
 		}
 		
-		NumRepairByEmpReportSearchForm searchForm = new NumRepairByEmpReportSearchForm();
+		NumInstalledByEmpReportSearchForm searchForm = new NumInstalledByEmpReportSearchForm();
 		model.addAttribute("searchForm", searchForm);
 		
 		List<Employee> empList = empService.getAll();
@@ -46,7 +47,7 @@ public class NumRepairByEmpReportController {
 		return VIEWNAME_SEARCH;
 	}
 	
-	@RequestMapping(value = "/numRepairByEmpReport", params = "do=printReport")
+	@RequestMapping(value = "/numInstalledByEmpReport", params = "do=printReport")
 	public String doPrintReport(@ModelAttribute NumRepairByEmpReportSearchForm form,
 			HttpServletRequest request, ModelMap model) throws ParseException {
 		String[] datePart;
@@ -79,12 +80,13 @@ public class NumRepairByEmpReportController {
 			employee = "All";
 		}
 		
-		List<NumRepairByEmpReportForm> reportResultList = soService.getNumRepairByEmpReport(searchStartDate, searchEndDate, employeeID);
+		List<NumInstalledByEmpReportForm> reportResultList = reportService.numInstalled(searchStartDate, searchEndDate, employeeID);
 		
 		model.addAttribute("reportResultList", reportResultList);
 		model.addAttribute("startDate",form.getStartDate());
 		model.addAttribute("endDate",form.getEndDate());
 		model.addAttribute("employee", employee);
-		return "numRepairByEmpReportDoc";
+		return "numInstalledByEmpReportDoc";
 	}
+	
 }

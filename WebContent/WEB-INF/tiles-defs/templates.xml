@@ -237,4 +237,13 @@
 		<put-attribute name="body" value="/WEB-INF/jsp/report/sumAmountReport.jsp"/>
 	</definition>
 	
+	<definition name="countCustomerRegionReport.search" extends=".pageTemplate">
+		<put-attribute name="pageName" value="รายงานจำนวนลูกค้าที่มาซ่อมตามพื้นที่" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/report/countCustomerRegionReport.jsp"/>
+	</definition>
+	
+	<definition name="numInstalledByEmpReport.search" extends=".pageTemplate">
+		<put-attribute name="pageName" value="รายงานจำนวนเครื่องที่ลงโปรแกรม" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/report/numInstalledByEmpReport.jsp"/>
+	</definition>
 </tiles-definitions>

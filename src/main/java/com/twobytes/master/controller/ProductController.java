@@ -21,11 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.twobytes.master.form.CustomerForm;
 import com.twobytes.master.form.ProductForm;
 import com.twobytes.master.form.ProductGridData;
 import com.twobytes.master.form.ProductSearchForm;
 import com.twobytes.master.service.BrandService;
+import com.twobytes.master.service.EmployeeService;
 import com.twobytes.master.service.ModelService;
 import com.twobytes.master.service.ProductService;
 import com.twobytes.master.service.TypeService;
@@ -52,6 +52,9 @@ public class ProductController {
 	
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private EmployeeService employeeService;
 	
 	@Autowired
 	private MessageSource messages;
@@ -198,6 +201,10 @@ public class ProductController {
 		model.addAttribute("typeList", typeList);
 		model.addAttribute("brandList", brandList);
 		model.addAttribute("modelList", modelList);
+		
+		List<Employee> empList = employeeService.getAll();
+		model.addAttribute("employeeList", empList);
+		
 		model.addAttribute("mode", "add");
 		return VIEWNAME_FORM;
 	}
@@ -263,6 +270,10 @@ public class ProductController {
 				model.addAttribute("typeList", typeList);
 				model.addAttribute("brandList", brandList);
 				model.addAttribute("modelList", modelList);
+				
+				List<Employee> empList = employeeService.getAll();
+				model.addAttribute("employeeList", empList);
+				
 				model.addAttribute("mode", mode);
 				return VIEWNAME_FORM;
 			}
@@ -277,15 +288,32 @@ public class ProductController {
 		}
 		product.setDescription(form.getDescription());
 		product.setSerialNo(form.getSerialNo());
+		
+		if(form.getInstalledBy() != null){
+			try {
+				product.setInstalledBy(employeeService.selectByID(form.getInstalledBy()));
+			} catch (Exception e3) {
+				e3.printStackTrace();
+			}
+		}else{
+			product.setInstalledBy(null);
+		}
+		if(form.getInstalledDate() != null && form.getInstalledDate() != ""){
+			try {
+				product.setInstalledDate(sdf.parse(form.getInstalledDate()));
+			} catch (ParseException e) {
+			}
+		}else{
+			product.setInstalledDate(null);
+		}
+		
 		try {
 			product.setWarrantyDate(sdf.parse(form.getWarrantyDate()));
 		} catch (ParseException e2) {
-			e2.printStackTrace();
 		}
 		try {
 			product.setWarrantyExpire(sdf.parse(form.getWarrantyExpire()));
 		} catch (ParseException e2) {
-			e2.printStackTrace();
 		}
 		product.setRemark(form.getRemark());
 		
@@ -344,6 +372,9 @@ public class ProductController {
 			model.addAttribute("typeList", typeList);
 			model.addAttribute("brandList", brandList);
 			model.addAttribute("modelList", modelList);
+			
+			List<Employee> empList = employeeService.getAll();
+			model.addAttribute("employeeList", empList);
 			
 			model.addAttribute("errMsg", e.getMessage());
 			model.addAttribute("mode", mode);
@@ -404,6 +435,12 @@ public class ProductController {
 		form.setTypeID(product.getType().getTypeID());
 		form.setBrandID(product.getBrand().getBrandID());
 		form.setModelID(product.getModel().getModelID());
+		if(null != product.getInstalledBy()){
+			form.setInstalledBy(product.getInstalledBy().getEmployeeID());
+		}
+		if(null != product.getInstalledDate()){
+			form.setInstalledDate(sdf.format(product.getInstalledDate()));
+		}
 		if(null != product.getWarrantyDate()){
 			form.setWarrantyDate(sdf.format(product.getWarrantyDate()));
 		}
@@ -442,6 +479,10 @@ public class ProductController {
 		model.addAttribute("typeList", typeList);
 		model.addAttribute("brandList", brandList);
 		model.addAttribute("modelList", modelList);
+		
+		List<Employee> empList = employeeService.getAll();
+		model.addAttribute("employeeList", empList);
+		
 		model.addAttribute("mode", "edit");
 		model.addAttribute("form", form);
 		return VIEWNAME_FORM;

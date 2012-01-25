@@ -11,25 +11,20 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.twobytes.master.service.EmployeeService;
-import com.twobytes.model.Employee;
-import com.twobytes.repair.service.ServiceOrderService;
-import com.twobytes.report.form.NumRepairByEmpReportForm;
-import com.twobytes.report.form.NumRepairByEmpReportSearchForm;
+import com.twobytes.report.form.CountCustomerRegionReportForm;
+import com.twobytes.report.form.CountCustomerRegionReportSearchForm;
+import com.twobytes.report.service.ReportService;
 import com.twobytes.security.form.LoginForm;
 
 @Controller
-public class NumRepairByEmpReportController {
-
-	@Autowired
-	private ServiceOrderService soService;
+public class CountCustomerRegionReportController {
 	
 	@Autowired
-	private EmployeeService empService;
+	private ReportService reportService;
 	
-	private String VIEWNAME_SEARCH = "numRepairByEmpReport.search";
+	private String VIEWNAME_SEARCH = "countCustomerRegionReport.search";
 	
-	@RequestMapping(value = "/numRepairByEmpReport")
+	@RequestMapping(value = "/countCustomerRegionReport")
 	public String view(ModelMap model, HttpServletRequest request) {
 		if (null == request.getSession().getAttribute("UserLogin")) {
 			LoginForm loginForm = new LoginForm();
@@ -37,23 +32,19 @@ public class NumRepairByEmpReportController {
 			return "loginScreen";
 		}
 		
-		NumRepairByEmpReportSearchForm searchForm = new NumRepairByEmpReportSearchForm();
+		CountCustomerRegionReportSearchForm searchForm = new CountCustomerRegionReportSearchForm();
+		searchForm.setNumRow(10);
 		model.addAttribute("searchForm", searchForm);
-		
-		List<Employee> empList = empService.getAll();
-		model.addAttribute("employeeList", empList);
-		
 		return VIEWNAME_SEARCH;
 	}
 	
-	@RequestMapping(value = "/numRepairByEmpReport", params = "do=printReport")
-	public String doPrintReport(@ModelAttribute NumRepairByEmpReportSearchForm form,
+	@RequestMapping(value = "/countCustomerRegionReport", params = "do=printReport")
+	public String doPrintReport(@ModelAttribute CountCustomerRegionReportSearchForm form,
 			HttpServletRequest request, ModelMap model) throws ParseException {
 		String[] datePart;
 		String searchStartDate = null;
 		String searchEndDate = null;
-		Integer employeeID = 0;
-		String employee = "";
+		
 		if (null != form.getStartDate() && !form.getStartDate().equals("")) {
 			datePart = form.getStartDate().split("/");
 			searchStartDate = datePart[2] + "-" + datePart[1] + "-"
@@ -65,26 +56,12 @@ public class NumRepairByEmpReportController {
 					+ datePart[0];
 		}
 		
-		if(null != form.getEmployeeID() && !form.getEmployeeID().equals("")){
-			employeeID = Integer.parseInt(form.getEmployeeID());
-			Employee emp = new Employee();
-			try {
-				emp = empService.selectByID(employeeID);
-			} catch (Exception e) {
-				e.printStackTrace();
-			} 
-			employee = emp.getName()+" "+emp.getSurname();
-		}else{
-			employeeID = null;
-			employee = "All";
-		}
-		
-		List<NumRepairByEmpReportForm> reportResultList = soService.getNumRepairByEmpReport(searchStartDate, searchEndDate, employeeID);
+		List<CountCustomerRegionReportForm> reportResultList = reportService.countCustomerRegion(searchStartDate, searchEndDate, form.getNumRow());
 		
 		model.addAttribute("reportResultList", reportResultList);
 		model.addAttribute("startDate",form.getStartDate());
 		model.addAttribute("endDate",form.getEndDate());
-		model.addAttribute("employee", employee);
-		return "numRepairByEmpReportDoc";
+		model.addAttribute("numRow", form.getNumRow());
+		return "countCustomerRegionReportDoc";
 	}
 }

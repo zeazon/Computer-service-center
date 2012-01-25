@@ -94,7 +94,7 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 			sql.append("order by serviceOrder.serviceOrderDate desc");
 		}
 		
-		Query q = sessionFactory.getCurrentSession().createQuery(sql.toString());
+		Query q = sessionFactory.getCurrentSession().createQuery(sql.toString()).setFetchSize(rows);
 		if(null != name && !name.equals("")) {
 			q.setString("name", name);
 		}
@@ -165,7 +165,7 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 			sql.append("order by serviceOrder.serviceOrderDate desc");
 		}
 		
-		Query q = sessionFactory.getCurrentSession().createQuery(sql.toString());
+		Query q = sessionFactory.getCurrentSession().createQuery(sql.toString()).setFetchSize(rows);
 		if(null != name && !name.equals("")) {
 			q.setString("name", name);
 		}

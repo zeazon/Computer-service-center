@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -23,6 +24,8 @@ public class Product implements Serializable{
 	private String serialNo;
 	private Date warrantyDate;
 	private Date warrantyExpire;
+	private Employee installedBy;
+	private Date installedDate;
 	private String remark;
 	private Integer createdBy;
 	private Date createdDate;
@@ -103,6 +106,25 @@ public class Product implements Serializable{
 
 	public void setWarrantyExpire(Date warrantyExpire) {
 		this.warrantyExpire = warrantyExpire;
+	}
+
+	@ManyToOne
+	@JoinColumn(name="installedBy",nullable=true)
+	public Employee getInstalledBy() {
+		return installedBy;
+	}
+
+	public void setInstalledBy(Employee installedBy) {
+		this.installedBy = installedBy;
+	}
+
+	@Column(name="installedDate")
+	public Date getInstalledDate() {
+		return installedDate;
+	}
+
+	public void setInstalledDate(Date installedDate) {
+		this.installedDate = installedDate;
 	}
 
 	@Column(name="remark")

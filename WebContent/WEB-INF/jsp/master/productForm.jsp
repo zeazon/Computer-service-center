@@ -70,6 +70,23 @@
 						<td><div class="rowElem"><form:input path="description" class="textboxMockup" maxlength="255"/></div></td>
 					</tr>
 					<tr>
+						<td><label><fmt:message key="installedBy" />:</label></td>
+						<td>
+							<div class="rowElem">
+								<form:select path="installedBy" id="installedBy" cssClass="selectSearch">
+									<form:option value="" label="-"/>
+									<c:forEach items="${employeeList}" var="employee">
+										<form:option value="${employee.employeeID}">${employee.name} ${employee.surname}</form:option>
+									</c:forEach>
+								</form:select>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td><label><fmt:message key="installedDate" />:</label></td>
+						<td><div class="rowElem"><form:input path="installedDate" id="installedDate" readonly="true" size="10"/></div></td>
+					</tr>
+					<tr>
 						<td><label><fmt:message key="warrantyDate"/>:</label></td>
 						<td><div class="rowElem"><form:input path="warrantyDate" id="warrantyDate" class="textboxMockup" readonly="true" size="10" /></div></td>
 					</tr>
@@ -95,8 +112,10 @@
 
 <script type="text/javascript">
 
+
 $("#warrantyDate").calendarsPicker($.extend({calendar: $.calendars.instance('gregorian','th')}));
 $("#warrantyExpire").calendarsPicker($.extend({calendar: $.calendars.instance('gregorian','th')}));
+$("#installedDate").calendarsPicker($.extend({calendar: $.calendars.instance('gregorian','th')}));
 
 $(document).ready(function(){
 	$("#form").validate({

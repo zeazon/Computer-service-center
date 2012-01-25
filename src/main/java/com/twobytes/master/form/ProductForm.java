@@ -7,6 +7,8 @@ public class ProductForm {
 	private Integer brandID;
 	private Integer modelID;
 	private String serialNo;
+	private Integer installedBy;
+	private String installedDate;
 	private String warrantyDate;
 	private String warrantyExpire;
 	private String remark;
@@ -46,6 +48,18 @@ public class ProductForm {
 	}
 	public void setSerialNo(String serialNo) {
 		this.serialNo = serialNo;
+	}
+	public Integer getInstalledBy() {
+		return installedBy;
+	}
+	public void setInstalledBy(Integer installedBy) {
+		this.installedBy = installedBy;
+	}
+	public String getInstalledDate() {
+		return installedDate;
+	}
+	public void setInstalledDate(String installedDate) {
+		this.installedDate = installedDate;
 	}
 	public String getWarrantyDate() {
 		return warrantyDate;
