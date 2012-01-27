@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.twobytes.express.service.ArmasService;
 import com.twobytes.master.form.CustomerForm;
+import com.twobytes.master.form.ModelForm;
 import com.twobytes.master.form.ProductForm;
 import com.twobytes.master.service.BrandService;
 import com.twobytes.master.service.CustomerService;
@@ -437,6 +438,9 @@ public class ServiceOrderController {
 		custForm.setZipcode(((Subdistrict)subdistrictList.get(0)).getZipcode().toString());
 		model.addAttribute("customerForm", custForm);
 
+		ModelForm modelForm = new ModelForm();
+		model.addAttribute("modelForm", modelForm);
+		
 		// get form for print document
 		ServiceOrderDocForm docForm = new ServiceOrderDocForm();
 		model.addAttribute("docForm", docForm);
@@ -699,6 +703,9 @@ public class ServiceOrderController {
 			}
 			model.addAttribute("osdfList", osdfList);
 			
+			ModelForm modelForm = new ModelForm();
+			model.addAttribute("modelForm", modelForm);
+			
 			// get form for print document
 			ServiceOrderDocForm docForm = new ServiceOrderDocForm();
 			model.addAttribute("docForm", docForm);
@@ -800,6 +807,9 @@ public class ServiceOrderController {
 			}
 			model.addAttribute("osdfList", osdfList);
 			
+			ModelForm modelForm = new ModelForm();
+			model.addAttribute("modelForm", modelForm);
+			
 			// get form for print document
 			ServiceOrderDocForm docForm = new ServiceOrderDocForm();
 			model.addAttribute("docForm", docForm);
@@ -889,6 +899,9 @@ public class ServiceOrderController {
 			osdfList.add(osdf);
 		}
 		model.addAttribute("osdfList", osdfList);
+		
+		ModelForm modelForm = new ModelForm();
+		model.addAttribute("modelForm", modelForm);
 		
 		// get data for print document
 		ServiceOrderDocForm docForm = setDocPrintForm(so);
@@ -1071,6 +1084,9 @@ public class ServiceOrderController {
 
 		ProductForm productForm = new ProductForm();
 		model.addAttribute("productForm", productForm);
+		
+		ModelForm modelForm = new ModelForm();
+		model.addAttribute("modelForm", modelForm);
 		
 		model.addAttribute("mode", "edit");
 		return VIEWNAME_FORM;

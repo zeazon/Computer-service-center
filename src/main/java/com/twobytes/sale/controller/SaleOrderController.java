@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.twobytes.master.form.CustomerForm;
+import com.twobytes.master.form.ModelForm;
 import com.twobytes.master.form.ProductForm;
 import com.twobytes.master.service.BrandService;
 import com.twobytes.master.service.CustomerService;
@@ -269,6 +270,9 @@ public class SaleOrderController {
 		List<Employee> empList = employeeService.getAll();
 		model.addAttribute("employeeList", empList);
 		
+		ModelForm modelForm = new ModelForm();
+		model.addAttribute("modelForm", modelForm);
+		
 		model.addAttribute("form", form);
 		model.addAttribute("productForm", productForm);
 		model.addAttribute("mode", "add");
@@ -441,8 +445,12 @@ public class SaleOrderController {
 			
 			List<Employee> empList = employeeService.getAll();
 			model.addAttribute("employeeList", empList);
-						
+			
 			model.addAttribute("productForm", productForm);
+			
+			ModelForm modelForm = new ModelForm();
+			model.addAttribute("modelForm", modelForm);
+			
 			model.addAttribute("mode", mode);
 			return VIEWNAME_FORM;
 		}
@@ -572,6 +580,10 @@ public class SaleOrderController {
 		
 		model.addAttribute("form", form);
 		model.addAttribute("productForm", productForm);
+		
+		ModelForm modelForm = new ModelForm();
+		model.addAttribute("modelForm", modelForm);
+		
 		model.addAttribute("mode", "edit");
 		return VIEWNAME_FORM;
 	}

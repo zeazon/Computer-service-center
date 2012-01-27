@@ -34,7 +34,6 @@ import com.twobytes.model.GridResponse;
 import com.twobytes.model.Province;
 import com.twobytes.model.Subdistrict;
 import com.twobytes.security.form.LoginForm;
-import com.twobytes.util.DocRunningUtil;
 
 @Controller
 public class CustomerController {
@@ -50,9 +49,6 @@ public class CustomerController {
 	
 	@Autowired
 	private ProvinceService provinceService;
-	
-	@Autowired
-	private DocRunningUtil docRunningUtil;
 	
 	@Autowired
 	private CustomerTypeService customerTypeService;
@@ -164,7 +160,6 @@ public class CustomerController {
 		model.addAttribute("provinceList", provinceList);
 		model.addAttribute("districtList", districtList);
 		model.addAttribute("subdistrictList", subdistrictList);
-		//model.addAttribute("zipcode", sd.getZipcode());
 		model.addAttribute("customerTypeList", customerTypeList);
 		model.addAttribute("form", form);
 		return VIEWNAME_FORM;
@@ -181,7 +176,6 @@ public class CustomerController {
 		Employee user = (Employee)request.getSession().getAttribute("UserLogin");
 		Customer customer = new Customer();
 		String msg = "";
-//		if(null != form.getCustomerID()){
 		if (!form.getCustomerID().equals("")) {
 			// update
 			try{
@@ -206,7 +200,6 @@ public class CustomerController {
 			msg = this.messages.getMessage("msg.updateComplete", null, new Locale("th", "TH"));
 		}else{
 			// add
-//			customer.setCustomerID(docRunningUtil.genDoc("customer"));
 			customer.setCreatedBy(user.getEmployeeID());
 			customer.setCreatedDate(now);
 			msg = this.messages.getMessage("msg.addComplete", null, new Locale("th", "TH"));
@@ -238,7 +231,6 @@ public class CustomerController {
 		
 		customer.setUpdatedBy(user.getEmployeeID());
 		customer.setUpdatedDate(now);
-//		boolean canSave;
 		String result = "false";
 		try{
 			result = customerService.save(customer);
@@ -250,13 +242,10 @@ public class CustomerController {
 			List<Subdistrict> subdistrictList = sdService.getByDistrict(form.getDistrictID());
 			List<CustomerType> customerTypeList = customerTypeService.getAll();
 			
-			//Subdistrict sd1 = (Subdistrict) sdService.selectByID(form.getSubdistrictID());
-			
 			model.addAttribute("provinceList", provinceList);
 			model.addAttribute("districtList", districtList);
 			model.addAttribute("subdistrictList", subdistrictList);
 			model.addAttribute("customerTypeList", customerTypeList);
-			//model.addAttribute("zipcode", sd1.getZipcode());
 			return VIEWNAME_FORM;
 		}
 		if (result.equals("false")) {
@@ -264,8 +253,6 @@ public class CustomerController {
 			List<Province> provinceList = provinceService.getAll();
 			List<District> districtList = districtService.getByProvince(form.getProvinceID());
 			List<Subdistrict> subdistrictList = sdService.getByDistrict(form.getDistrictID());
-
-			//Subdistrict sd1 = (Subdistrict) sdService.selectByID(form.getSubdistrictID());
 			
 			List<CustomerType> customerTypeList = customerTypeService.getAll();
 			
@@ -273,7 +260,6 @@ public class CustomerController {
 			model.addAttribute("districtList", districtList);
 			model.addAttribute("subdistrictList", subdistrictList);
 			model.addAttribute("customerTypeList", customerTypeList);
-			//model.addAttribute("zipcode", sd1.getZipcode());
 			return VIEWNAME_FORM;
 		}
 		model.addAttribute("msg", msg);
@@ -348,18 +334,14 @@ public class CustomerController {
 	}
 	
 	@RequestMapping(value = "/customer", params = "do=savePopup")
-	//@ModelAttribute("result")
-//	public boolean doSavePopup(@ModelAttribute("form") CustomerForm form, HttpServletRequest request, ModelMap model){
 	public @ResponseBody CustomGenericResponse doSavePopup(@ModelAttribute CustomerForm form, HttpServletRequest request, ModelMap model){
 		CustomGenericResponse response = new CustomGenericResponse();
 		if(null == request.getSession().getAttribute("UserLogin")){
 			LoginForm loginForm = new LoginForm();
 			model.addAttribute(loginForm);
-//			return "loginScreen";
 			response.setSuccess(false);
 			response.setMessage(this.messages.getMessage("error.cannotSave", null, new Locale("th", "TH")));
 			return response;
-//			return false;
 		}
 		// Because default Tomcat URI encoding is iso-8859-1 so it must encode back to tis620
 		try{
@@ -386,23 +368,6 @@ public class CustomerController {
 		Employee user = (Employee)request.getSession().getAttribute("UserLogin");
 		Customer customer = new Customer();
 
-//		customer.setCustomerID(docRunningUtil.genDoc("customer"));
-//		System.out.println("form.getName() = "+form.getName());
-//		try {
-//			String name1 = new String(form.getName().getBytes("iso-8859-1"), "tis-620");
-//			String name2 = new String(form.getName().getBytes("iso-8859-1"), "UTF8");
-//			String name3 = new String(name2.getBytes("UTF8"), "tis620");
-//			String name4 = new String(form.getName().getBytes("UTF8"), "tis620");
-//			System.out.println("name 1 = "+name1);
-//			System.out.println("name 2 = "+name2);
-//			System.out.println("name 3 = "+name3);
-//			System.out.println("name 4 = "+name4);
-//		} catch (UnsupportedEncodingException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
-//		System.out.println("After form.getName() = "+form.getName());
-//		System.out.println("form.getAddress() = "+form.getAddress());
 		CustomerType customerType = customerTypeService.selectByID(form.getCustomerTypeID());
 		customer.setCustomerType(customerType);
 		customer.setName(form.getName());
@@ -432,23 +397,12 @@ public class CustomerController {
 		customer.setCreatedDate(now);
 		customer.setUpdatedBy(user.getEmployeeID());
 		customer.setUpdatedDate(now);
-//		boolean canSave = false;
 		String result = "";
 		try{
 			result = customerService.save(customer);
 			response.setData(result);
 		}catch(Exception e){
 			e.printStackTrace();
-//			model.addAttribute("errMsg", e.getMessage());
-//			List<Province> provinceList = provinceService.getAll();
-//			List<District> districtList = districtService.getByProvince(form.getProvinceID());
-//			List<Subdistrict> subdistrictList = sdService.getByDistrict(form.getDistrictID());
-//
-//			model.addAttribute("provinceList", provinceList);
-//			model.addAttribute("districtList", districtList);
-//			model.addAttribute("subdistrictList", subdistrictList);
-//			return VIEWNAME_FORM;
-//			return canSave;
 			response.setSuccess(false);
 			response.setMessage(this.messages.getMessage("error.cannotSave", null, new Locale("th", "TH"))+"\n"+e.getMessage());
 			return response;
@@ -457,22 +411,7 @@ public class CustomerController {
 			response.setSuccess(false);
 			response.setMessage(this.messages.getMessage("error.cannotSave", null, new Locale("th", "TH")));
 			return response;
-//			model.addAttribute("errMsg", this.messages.getMessage("error.cannotSave", null, new Locale("th", "TH")));
-//			List<Province> provinceList = provinceService.getAll();
-//			List<District> districtList = districtService.getByProvince(form.getProvinceID());
-//			List<Subdistrict> subdistrictList = sdService.getByDistrict(form.getDistrictID());
-//
-//			model.addAttribute("provinceList", provinceList);
-//			model.addAttribute("districtList", districtList);
-//			model.addAttribute("subdistrictList", subdistrictList);
-//			return VIEWNAME_FORM;
-		//	return false;
 		}
-//		model.addAttribute("msg", msg);
-//		CustomerSearchForm searchForm = new CustomerSearchForm();
-//		model.addAttribute("searchForm", searchForm);
-//		return VIEWNAME_SEARCH;
-//		return canSave;
 		response.setSuccess(true);
 		response.setMessage(this.messages.getMessage("msg.addComplete", null, new Locale("th", "TH")));
 		return response;

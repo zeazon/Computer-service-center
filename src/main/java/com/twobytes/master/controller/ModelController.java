@@ -375,4 +375,67 @@ public class ModelController {
 		
 		return retList;
 	}
+	
+	@RequestMapping(value = "/model", params = "do=savePopup")
+	public @ResponseBody CustomGenericResponse doSavePopup(@ModelAttribute ModelForm form, HttpServletRequest request, ModelMap model){
+		CustomGenericResponse response = new CustomGenericResponse();
+		if(null == request.getSession().getAttribute("UserLogin")){
+			LoginForm loginForm = new LoginForm();
+			model.addAttribute(loginForm);
+			response.setSuccess(false);
+			response.setMessage(this.messages.getMessage("error.cannotSave", null, new Locale("th", "TH")));
+			return response;
+		}
+		
+		// Because default Tomcat URI encoding is iso-8859-1 so it must encode back to tis620
+		try{
+			if(null != form.getName()){
+//				form.setDescription(new String(form.getDescription().getBytes("iso-8859-1"), "tis620"));
+				form.setName(new String(form.getName().getBytes("iso-8859-1"), "UTF-8"));
+			}
+		}catch(UnsupportedEncodingException e){
+			e.printStackTrace();
+		}
+		
+		Date now = new Date();
+		Employee user = (Employee)request.getSession().getAttribute("UserLogin");
+		Model modelObj = new Model();
+		
+		modelObj.setCreatedBy(user.getEmployeeID());
+		modelObj.setCreatedDate(now);
+		
+		modelObj.setName(form.getName());
+		
+		Type type = new Type();
+		try {
+			type = typeService.selectByID(form.getTypeID());
+		} catch (Exception e3) {
+			e3.printStackTrace();
+		}
+		modelObj.setType(type);
+		
+		Brand brand = new Brand();
+		try {
+			brand = brandService.selectByID(form.getBrandID());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		modelObj.setBrand(brand);
+		modelObj.setUpdatedBy(user.getEmployeeID());
+		modelObj.setUpdatedDate(now);
+		
+		try{
+			modelService.save(modelObj);
+			response.setSuccess(true);
+			response.setMessage(this.messages.getMessage("msg.addComplete", null, new Locale("th", "TH")));
+			response.setData(form.getName());
+		}catch(Exception e){
+			e.printStackTrace();
+			response.setSuccess(false);
+			response.setMessage(this.messages.getMessage("error.cannotSave", null, new Locale("th", "TH")));
+			return response;
+		}
+		return response;
+	}
+	
 }

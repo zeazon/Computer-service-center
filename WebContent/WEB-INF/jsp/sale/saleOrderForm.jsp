@@ -109,6 +109,7 @@
 								<form:select path="modelID" id="model">
 									<form:options items="${modelList}" itemValue="modelID" itemLabel="name"/>
 								</form:select>
+								&nbsp;<input type="button" value="+" id="showAddModel"/>
 							</div>
 							<label class="error" for="model" generated="true" style="display: none; padding-left:10px;"></label>
 						</td>
@@ -221,12 +222,6 @@
 					
 						<br><br>
 						<div style="float:left; margin:5px 0 0 0px;"><fmt:message key="zipcode" />:</div>
-						<%--div id="lovForm_zipcode" style="float:left; padding:5px; 0 0 5px">
-							<c:choose>
-								<c:when test="${zipcode == '0'}">-</c:when>
-								<c:otherwise>${zipcode}</c:otherwise>
-							</c:choose>
-						</div--%>
 						<form:input path="zipcode" id="lovForm_zipcode" class="textboxMockup" size="5" maxlength="5"/>
 					</div>
 				</td>
@@ -252,6 +247,44 @@
 </div>
 
 <!-- End walk in customer lov -->
+
+<!-- Start model popup -->
+
+<div id="add-model-form" title='<fmt:message key="addModel" />'>
+	<form:form commandName="modelForm" id="modelForm" class="jqtransform" action="JavaScript:saveModel();">
+		<table width="100%">
+			<tr>
+				<td width="20%"><label><fmt:message key="type" />:</label></td>
+				<td>
+					<div class="rowElem">
+						<form:select path="typeID" id="lovModel_type">
+							<form:options items="${typeList}" itemValue="typeID" itemLabel="name"/>
+						</form:select>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td><label><fmt:message key="brand" />:</label></td>
+				<td id="lovModel_brandRow">
+					<div class="rowElem">
+						<form:select path="brandID" id="lovModel_brand">
+							<form:options items="${brandList}" itemValue="brandID" itemLabel="name"/>
+						</form:select>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td><label><fmt:message key="name" />:<font style="color:red">*</font></label></td>
+				<td><div class="rowElem"><form:input path="name" id="lovModel_name" cssClass="required" maxlength="100"/> <label class="error" for="name" generated="true" style="display: none; padding-left:10px"></label></div></td>
+			</tr>
+			<tr align="center">
+				<td colspan="2"><div class="rowElem"><input type="submit" value='<fmt:message key="button.ok" />' /></div></td>
+			</tr>
+		</table>
+	</form:form>
+</div>
+
+<!-- End model popup -->
 
 
 <!-- Start product lov -->
@@ -412,6 +445,7 @@
 <c:url var="saveCustomerPopupURL" value="/customer.html?do=savePopup" />
 <c:url var="findBrandURL" value="/brand.html?do=getBrandByType" />
 <c:url var="findModelURL" value="/model.html?do=getModel" />
+<c:url var="saveModelPopupURL" value="/model.html?do=savePopup" />
 
 <script type="text/javascript">
 
@@ -485,6 +519,12 @@ $(document).ready(function(){
 		}
 	});
 	
+	$("#modelForm").validate({
+		rules: {
+			name: "required"
+		}
+	});
+	
 	$("#button").click(function(){
 		$("form").valid();
 	});
@@ -505,6 +545,10 @@ $(document).ready(function(){
 		productDialog.dialog("open");
 	});
 	
+	// Add event click to add model button
+	$("#showAddModel").click( function(e){
+		$("#add-model-form").dialog("open");
+	});
 	
 	// walk in customer jqgrid
 	jQuery("#list").jqGrid({
@@ -623,6 +667,15 @@ $(document).ready(function(){
 		width: 900,
 		modal: true
 	});*/
+	
+	// add model
+	
+	$( "#add-model-form" ).dialog({
+		autoOpen: false,
+		height: 240,
+		width: 360,
+		modal: true
+	});
 	
 	$( "#province_autoComplete" ).autocomplete({
 		change: function(event, ui) {
@@ -813,103 +866,6 @@ $(document).ready(function(){
 		}
 	}
 	
-	/*$("#province").change(
-		function() {
-			$.getJSON('${findDistrictByProvinceURL}', {
-				provinceID : $(this).val(),
-				ajax : 'true'
-			}, function(data) {
-				//var html = '<option value="">District</option>';
-				var html = '';
-				var len = data.length;
-				if(len > 0){
-					for ( var i = 0; i < len; i++) {
-						html += '<option value="' + data[i].districtID + '">'
-								+ data[i].name + '</option>';
-					}
-					html += '</option>';
-				}else{
-					html += '<option value=""></option>';
-				}
- 
-				$('#district').html(html);
-				
-				// set change select list dynamic, ref http://www.code-pal.com/the-select-problem-after-using-jqtransform-and-its-solution/ 
-				// bug because ref to color id, it should be td id
-				//var sty = $("#color div.jqTransformSelectWrapper").attr("style");
-				
-				var sels = $("#district").removeClass("jqTransformHidden");
-				var $par = $("#district");
-				$par.parent().replaceWith($par);
-				sels.jqTransSelect();
-				// bug because ref to color id, it should be td id
-				//$("#color div.jqTransformSelectWrapper").attr("style", sty);
-				
-				// trigger event change of district select list
-				$("#district").change();
-			});
-		}
-	);*/
-	
-	/*$("#district").change(
-		function(){
-			$.getJSON('${findSubdistrictByDistrictURL}', {
-				districtID : $(this).val(),
-				ajax : 'true'
-			}, function(data) {
-				var html = '';
-				var len = data.length;
-				if(len > 0){
-					for ( var i = 0; i < len; i++){
-						html += '<option value="' + data[i].subdistrictID + '">'
-								+ data[i].name + '</option>';
-					}
-					html += '</option>';
-				}else{
-					html += '<option value=""></option>';
-				}
-				
-				$('#subdistrict').html(html);
-				
-				// set change select list dynamic, ref http://www.code-pal.com/the-select-problem-after-using-jqtransform-and-its-solution/ 
-				
-				// bug because ref to color id, it should be td id
-				//var sty = $("#color div.jqTransformSelectWrapper").attr("style");
-				
-				var sels = $("#subdistrict").removeClass("jqTransformHidden");
-				var $par = $("#subdistrict");
-				$par.parent().replaceWith($par);
-				sels.jqTransSelect();
-				// bug because ref to color id, it should be td id
-				//$("#color div.jqTransformSelectWrapper").attr("style", sty);
-				
-				// trigger event change of subdistrict select list
-				$("#subdistrict").change();
-			});
-		}
-	);*/
-
-	/*$("#subdistrict").change(
-		function(){
-			if($(this).val() != null){
-				$.getJSON('${findZipcodeBySubdistrictURL}', {
-					subdistrictID : $(this).val(),
-					ajax : 'true'
-				}, function(data) {
-					if(data == '0'){
-						//$("#lovForm_zipcode").html("-");
-						$("#lovForm_zipcode").val("-");
-					}else{
-						//$("#lovForm_zipcode").html(data);
-						$("#lovForm_zipcode").val(data);
-					}
-				});
-			}else{
-				$("#lovForm_zipcode").val("-");
-			}
-		}
-	);*/
-	
 	
 	$( "#type_autoComplete" ).autocomplete({
 		change: function(event, ui) {
@@ -1033,71 +989,8 @@ $(document).ready(function(){
 		}
 	});
 	
-	function getModelSelectList(){
-		var select = $("#brand");
-		$.getJSON('${findModelURL}', {
-			typeID : $("#type").val(),
-			brandID :select.val(),
-			ajax : 'true'
-		}, function(data) {
-			var html = '';
-			var len = data.length;
-			if(len > 0){
-				for ( var i = 0; i < len; i++) {
-					html += '<option value="' + data[i].modelID + '">'
-							+ data[i].name + '</option>';
-				}
-				html += '</option>';
-			}else{
-				html += '<option value=""></option>';
-			}
-			
-			$('#model').html(html);
-			
-			$('#model_autoComplete').width($('#model').width());
-			$('#model_autoComplete').val($("#model :selected").text());
-			
-			$("#modelRow").css("z-index", 8);
-		});
-	}
 	
-	/*$("#type").change(
-		function(){
-			//alert($("#type").val());
-			$.getJSON('${findBrandURL}', {
-				typeID: $(this).val()
-			}, function(data){
-				var html = '';
-				var len = data.length;
-				if(len > 0){
-					for ( var i = 0; i < len; i++) {
-						html += '<option value="' + data[i].brandID + '">'
-								+ data[i].name + '</option>';
-					}
-					html += '</option>';
-				}else{
-					html += '<option value="1">-</option>';
-				}
-				$('#brand').html(html);
-				
-				// set change select list dynamic, ref http://www.code-pal.com/the-select-problem-after-using-jqtransform-and-its-solution/ 
-				// bug because ref to color id, it should be td id
-				//var sty = $("#color div.jqTransformSelectWrapper").attr("style");
-				
-				var sels = $("#brand").removeClass("jqTransformHidden");
-				var $par = $("#brand");
-				$par.parent().replaceWith($par);
-				sels.jqTransSelect();
-				// bug because ref to color id, it should be td id
-				//$("#color div.jqTransformSelectWrapper").attr("style", sty);
-				
-				// trigger event change of district select list
-				$("#brand").change();
-				$("#brandRow div.jqTransformSelectWrapper").css("z-index", 8);
-				
-			});
-		}
-	);*/
+	
 	
 	$("#brand").change(
 		function() {
@@ -1136,7 +1029,100 @@ $(document).ready(function(){
 		}
 	);
 	
-	$("#lovType").change(
+	
+// Change event of model form
+	
+	$( "#lovModel_type_autoComplete" ).autocomplete({
+		change: function(event, ui) {
+			var select = $("#lovModel_type");
+			var selected = select.children( ":selected" );
+			if ( !ui.item ) {
+				var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+					valid = false;
+				select.children( "option" ).each(function() {
+					if ( $( this ).text().match( matcher ) ) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+			 	if ( !valid ){
+					// remove invalid value, as it didn't match anything
+					//$(this).val( "" );
+					//select.val( "" );
+					//this.data( "autocomplete" ).term = "";
+					$( "#lovModel_type_autoComplete" ).data( "autocomplete" ).term = "";
+					// get text from blank value option
+					$( this ).val(select.children( ":selected" ).text());
+					
+					//$("#brand_autoComplete").trigger('change');
+					//getModelSelectList();
+					return false;
+				}
+			 }else{
+				 $.getJSON('${findBrandURL}', {
+					typeID : select.val()
+				}, function(data) {
+					var html = '';
+					var len = data.length;
+					if(len > 0){
+						for ( var i = 0; i < len; i++) {
+							html += '<option value="' + data[i].brandID + '">'
+									+ data[i].name + '</option>';
+						}
+						html += '</option>';
+					}else{
+						html += '<option value=""></option>';
+					}
+					
+					$('#lovModel_brand').html(html);
+					
+					$('#lovModel_brand_autoComplete').width($('#lovModel_brand').width());
+					$('#lovModel_brand_autoComplete').val($("#lovModel_brand :selected").text());
+					
+					$("#lovModel_brandRow").css("z-index", 9);
+					
+					$("#lovModel_brand_autoComplete").trigger('change');
+				});
+			 }
+		}
+	});
+	
+	$( "#lovModel_brand_autoComplete" ).autocomplete({
+		change: function(event, ui) {
+			var select = $("#lovModel_brand");
+			var selected = select.children( ":selected" );
+			if ( !ui.item ) {
+				var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+					valid = false;
+				select.children( "option" ).each(function() {
+					if ( $( this ).text().match( matcher ) ) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+			 	if ( !valid ){
+					// remove invalid value, as it didn't match anything
+				//	$(this).val( "" );
+				//	select.val( "" );
+				//	$( "#lovForm_brand_autoComplete" ).data( "autocomplete" ).term = "";
+					// get text from blank value option
+					$( this ).val(select.children( ":selected" ).text());
+					
+					// set model to empty
+				//	html += '<option value=""></option>';
+				//	$('#model').html(html);
+				//	$('#model_autoComplete').width($('#model').width());
+				//	$('#model_autoComplete').val($("#model :selected").text());
+					
+				//	$("#modelRow").css("z-index", 8);
+					return false;
+				}
+			 }
+		}
+	});
+	
+	
+	/*$("#lovType").change(
 		function(){
 			$.getJSON('${findBrandURL}', {
 				typeID: $(this).val()
@@ -1172,10 +1158,10 @@ $(document).ready(function(){
 				
 			});
 		}
-	);
+	);*/
 	
 	
-	$("#lovBrand").change(
+	/*$("#lovBrand").change(
 		function(){
 			$.getJSON('${findModelURL}', {
 				typeID : $("#lovType").val(),
@@ -1209,7 +1195,7 @@ $(document).ready(function(){
 								
 			});
 		}
-	);
+	);*/
 	
 	
 	$("#searchProductButton").click(function() {
@@ -1354,6 +1340,35 @@ $(document).ready(function(){
 	
 });
 
+//function to update model select list in add product screen
+function getModelSelectList(){
+	var select = $("#brand");
+	$.getJSON('${findModelURL}', {
+		typeID : $("#type").val(),
+		brandID :select.val(),
+		ajax : 'true'
+	}, function(data) {
+		var html = '';
+		var len = data.length;
+		if(len > 0){
+			for ( var i = 0; i < len; i++) {
+				html += '<option value="' + data[i].modelID + '">'
+						+ data[i].name + '</option>';
+			}
+			html += '</option>';
+		}else{
+			html += '<option value=""></option>';
+		}
+		
+		$('#model').html(html);
+		
+		$('#model_autoComplete').width($('#model').width());
+		$('#model_autoComplete').val($("#model :selected").text());
+		
+		$("#modelRow").css("z-index", 8);
+	});
+}
+
 function gridReload(){
 	var name = jQuery("#name").val();
 	//var surname = jQuery("#surname").val();
@@ -1428,6 +1443,46 @@ function setCustomerToForm(dataID){
 	$("#mobileTel").html(mobileTel);
 	$("#email").html(email);
 }
+
+function saveModel(){	
+	$.getJSON('${saveModelPopupURL}', {
+		typeID: $("#lovModel_type").val(),
+		brandID: $("#lovModel_brand").val(),
+		name: $("#lovModel_name").val()
+	}, function(data) {
+		if(data.success == true){
+			jQuery("#dialog").text(data.message.toString());
+			jQuery("#dialog").dialog( 
+				{
+					title: 'Success',
+					modal: true,
+					buttons: {"Ok": function()  {
+						// If add product screen choose same type and brand with added model, then update model list.
+						if(($('#type').val() == $('#lovModel_type').val()) && ($('#brand').val() == $('#lovModel_brand').val())){
+							// select model list in product form
+							getModelSelectList();	
+						}
+						
+						jQuery(this).dialog("close");
+						jQuery("#add-model-form").dialog("close");						
+						}
+				    }
+			});
+		}else{
+			jQuery("#dialog").text(data.message.toString());
+			jQuery("#dialog").dialog( 
+				{
+					title: 'Fail',
+					modal: true,
+					buttons: {"Ok": function()  {
+						jQuery(this).dialog("close");} 
+				    }
+			});
+		}
+	});
+	
+}
+
 
 jQuery.validator.addMethod("require_from_group", function(value, element, options) {
 	var numberRequired = options[0];
