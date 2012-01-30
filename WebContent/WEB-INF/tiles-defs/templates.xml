@@ -246,4 +246,9 @@
 		<put-attribute name="pageName" value="รายงานจำนวนเครื่องที่ลงโปรแกรม" type="string"/>
 		<put-attribute name="body" value="/WEB-INF/jsp/report/numInstalledByEmpReport.jsp"/>
 	</definition>
+	
+	<definition name="numSaleByEmpReport.search" extends=".pageTemplate">
+		<put-attribute name="pageName" value="รายงานการขาย" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/report/numSaleByEmpReport.jsp"/>
+	</definition>
 </tiles-definitions>

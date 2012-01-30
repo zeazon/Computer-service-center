@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import com.twobytes.report.form.CountCustomerRegionReportForm;
 import com.twobytes.report.form.NumInstalledByEmpReportForm;
+import com.twobytes.report.form.NumSaleByEmpReportForm;
 
 @Repository
 public class ReportDAOImpl implements ReportDAO {
@@ -104,6 +105,37 @@ public class ReportDAOImpl implements ReportDAO {
 		}
 		
 		List<NumInstalledByEmpReportForm> retList = q.list();
+		return retList;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<NumSaleByEmpReportForm> numSale(Integer month, Integer year)
+			throws Exception {
+		
+//		select CONCAT(e.name, ' ', e.surname) fullName, IFNULL(n.numNOT,0) numNOT, IFNULL(c.numCOM,0) numCOM, IFNULL(p.numPRN,0) numPRN from employee e left join (select  so.employeeID, CONCAT(e.name,' ',e.surname) fullName, count(so.saleOrderID)  numNOT from saleOrder so, product p, employee e where MONTH(so.saleDate) = 11 and YEAR(so.saleDate) = 2011 and so.productID = p.productID and p.typeID = 'NOT' and so.employeeID = e.employeeID group by fullName) n on e.employeeID = n.employeeID
+//		left join (select  so.employeeID, CONCAT(e.name,' ',e.surname) fullName, count(so.saleOrderID)  numCOM from saleOrder so, product p, employee e where MONTH(so.saleDate) = 11 and YEAR(so.saleDate) = 2011 and so.productID = p.productID and p.typeID = 'COM' and so.employeeID = e.employeeID group by fullName) c on e.employeeID = c.employeeID
+//		left join (select  so.employeeID, CONCAT(e.name,' ',e.surname) fullName, count(so.saleOrderID)  numPRN from saleOrder so, product p, employee e where MONTH(so.saleDate) = 11 and YEAR(so.saleDate) = 2011 and so.productID = p.productID and p.typeID = 'PRN' and so.employeeID = e.employeeID group by fullName) p on e.employeeID = p.employeeID
+//		where e.roleID in (2,4);
+		
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT CONCAT(e.name, ' ', e.surname) fullName, IFNULL(n.numNOT,0) numNOT, IFNULL(c.numCOM,0) numCOM, IFNULL(p.numPRN,0) numPRN FROM employee e LEFT JOIN (SELECT so.employeeID, CONCAT(e.name,' ',e.surname) fullName, count(so.saleOrderID) numNOT FROM saleOrder so, product p, employee e WHERE MONTH(so.saleDate) = :month AND YEAR(so.saleDate) = :year AND so.productID = p.productID AND p.typeID = 'NOT' AND so.employeeID = e.employeeID GROUP BY fullName) n ON e.employeeID = n.employeeID " +
+				"LEFT JOIN (SELECT so.employeeID, CONCAT(e.name,' ',e.surname) fullName, COUNT(so.saleOrderID) numCOM FROM saleOrder so, product p, employee e WHERE MONTH(so.saleDate) = :month AND YEAR(so.saleDate) = :year AND so.productID = p.productID AND p.typeID = 'COM' AND so.employeeID = e.employeeID GROUP BY fullName) c ON e.employeeID = c.employeeID " +
+				"LEFT JOIN (SELECT so.employeeID, CONCAT(e.name,' ',e.surname) fullName, COUNT(so.saleOrderID) numPRN FROM saleOrder so, product p, employee e WHERE MONTH(so.saleDate) = :month AND YEAR(so.saleDate) = :year AND so.productID = p.productID AND p.typeID = 'PRN' AND so.employeeID = e.employeeID GROUP BY fullName) p ON e.employeeID = p.employeeID " +
+				"WHERE e.roleID in (2,4) " +
+				"ORDER BY fullName");
+		
+		Query q = sessionFactory.getCurrentSession().createSQLQuery(sql.toString())
+		.addScalar("fullName", new StringType())
+		.addScalar("numNOT", new IntegerType())
+		.addScalar("numCOM", new IntegerType())
+		.addScalar("numPRN", new IntegerType())
+		.setResultTransformer(Transformers.aliasToBean(NumSaleByEmpReportForm.class));
+		
+		q.setInteger("month", month);
+		q.setInteger("year", year);
+		
+		List<NumSaleByEmpReportForm> retList = q.list();
 		return retList;
 	}
 

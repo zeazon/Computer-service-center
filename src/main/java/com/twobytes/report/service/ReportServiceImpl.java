@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.twobytes.report.dao.ReportDAO;
 import com.twobytes.report.form.CountCustomerRegionReportForm;
 import com.twobytes.report.form.NumInstalledByEmpReportForm;
+import com.twobytes.report.form.NumSaleByEmpReportForm;
 
 @Service
 public class ReportServiceImpl implements ReportService {
@@ -37,6 +38,18 @@ public class ReportServiceImpl implements ReportService {
 		List<NumInstalledByEmpReportForm> retList = new ArrayList<NumInstalledByEmpReportForm>();
 		try{
 			retList = reportDAO.numInstalled(startDate, endDate, employeeID);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return retList;
+	}
+
+	@Override
+	@Transactional
+	public List<NumSaleByEmpReportForm> numSale(Integer month, Integer year) {
+		List<NumSaleByEmpReportForm> retList = new ArrayList<NumSaleByEmpReportForm>();
+		try{
+			retList = reportDAO.numSale(month, year);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
