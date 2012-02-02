@@ -2,12 +2,17 @@ package com.twobytes.repair.dao;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.DoubleType;
 import org.hibernate.type.IntegerType;
@@ -35,13 +40,7 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 	@Override
 	public boolean save(ServiceOrder serviceOrder) throws Exception{
 		Session session = sessionFactory.getCurrentSession();
-//		try{
-			session.saveOrUpdate(serviceOrder);
-//		}catch(Exception e){
-//			e.printStackTrace();
-//			return false;
-//		}
-		//throw new Exception();
+		session.saveOrUpdate(serviceOrder);
 		return true;
 	}
 
@@ -62,9 +61,6 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 		if(null != name && !name.equals("")){
 			sql.append("and serviceOrder.customer.name like :name ");
 		}
-//		if(null != surname && !surname.equals("")){
-//			sql.append("and serviceOrder.customer.surname like :surname ");
-//		}
 		if((null != startDate && !startDate.equals("")) && (null != endDate && !endDate.equals(""))){
 			sql.append("and DATE(serviceOrderDate) between :startDate and :endDate ");
 		}else if((null != startDate && !startDate.equals("")) && (null == endDate || endDate.equals(""))){
@@ -119,7 +115,7 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 		return result;
 	}
 	
-	@Override
+	/*@Override
 	@SuppressWarnings("unchecked")
 	public List<ServiceOrder> selectByCriteria(String name, String startDate,
 			String endDate, String type, String serialNo, String empID,
@@ -130,9 +126,6 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 		if(null != name && !name.equals("")){
 			sql.append("and serviceOrder.customer.name like :name ");
 		}
-//		if(null != surname && !surname.equals("")){
-//			sql.append("and serviceOrder.customer.surname like :surname ");
-//		}
 		if((null != startDate && !startDate.equals("")) && (null != endDate && !endDate.equals(""))){
 			sql.append("and DATE(serviceOrderDate) between :startDate and :endDate ");
 		}else if((null != startDate && !startDate.equals("")) && (null == endDate || endDate.equals(""))){
@@ -169,9 +162,6 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 		if(null != name && !name.equals("")) {
 			q.setString("name", name);
 		}
-//		if(null != surname && !surname.equals("")) {
-//			q.setString("surname", surname);
-//		}
 		if((null != startDate && !startDate.equals("")) && (null != endDate && !endDate.equals(""))){
 			q.setString("startDate", startDate);
 			q.setString("endDate", endDate);
@@ -191,31 +181,127 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 		}
 		List<ServiceOrder> result = q.list();
 		return result;
-	}
+	}*/
 
+	@Override
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> selectByCriteria(String name, String startDate,
+			String endDate, String type, String serialNo, String empID,
+			Integer rows, Integer page, String orderBy, String orderType)
+			throws Exception {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", new Locale ("US"));
+		
+		StringBuilder sql = new StringBuilder();
+		sql.append("from ServiceOrder as serviceOrder where 1=1 ");
+		if(null != name && !name.equals("")){
+			sql.append("and serviceOrder.customer.name like :name ");
+		}
+		if((null != startDate && !startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			sql.append("and DATE(serviceOrderDate) between :startDate and :endDate ");
+		}else if((null != startDate && !startDate.equals("")) && (null == endDate || endDate.equals(""))){
+			sql.append("and DATE(serviceOrderDate) >= :startDate ");
+		}else if((null == startDate || startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			sql.append("and DATE(serviceOrderDate) <= :endDate ");
+		}
+		if(null != type && !type.equals("")){
+			sql.append("and serviceOrder.product.type.typeID = :type ");
+		}
+		if(null != serialNo && !serialNo.equals("")){
+			sql.append("and serviceOrder.product.serialNo like :serialNo ");
+		}
+		if(null != empID && !empID.equals("")){
+			sql.append("and empFix = :empID ");
+		}
+		
+		sql.append("and serviceOrder.status != 'cancel' ");
+		
+		if(!orderBy.equals("")){
+			if(orderBy.equals("name")){
+				orderBy = "serviceOrder.customer.name";
+			}else if(orderBy.equals("surname")){
+				orderBy = "serviceOrder.customer.surname";
+			}else if(orderBy.equals("fullName")){
+				orderBy = "serviceOrder.customer.name "+orderType+", serviceOrder.customer.surname"; 
+			}
+			sql.append("order by "+orderBy+" "+orderType);
+		}else{
+			sql.append("order by serviceOrder.serviceOrderDate desc");
+		}
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		Query q = sessionFactory.getCurrentSession().createQuery(sql.toString()).setFirstResult(rows*page - rows).setMaxResults(rows).setFetchSize(rows);
+		if(null != name && !name.equals("")) {
+			q.setString("name", name);
+		}
+		if((null != startDate && !startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			q.setString("startDate", startDate);
+			q.setString("endDate", endDate);
+		}else if((null != startDate && !startDate.equals("")) && (null == endDate || endDate.equals(""))){
+			q.setString("startDate", startDate);
+		}else if((null == startDate || startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			q.setString("endDate", endDate);
+		}
+		if(null != type && !type.equals("")) {
+			q.setString("type", type);
+		}
+		if(null != serialNo && !serialNo.equals("")) {
+			q.setString("serialNo", serialNo);
+		}
+		if(null != empID && !empID.equals("")){
+			q.setInteger("empID", Integer.parseInt(empID));
+		}
+		List<ServiceOrder> list = q.list();
+		result.put("list", list);
+		
+		
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(ServiceOrder.class, "serviceOrder");
+		if(null != name && !name.equals("")) {
+			criteria.createCriteria("serviceOrder.customer" , "customer");
+			criteria.add(Restrictions.like("customer.name", name));
+		}
+		if((null != startDate && !startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			criteria.add(Restrictions.between("serviceOrderDate", sdf.parse(startDate), sdf.parse(endDate)));
+		}else if((null != startDate && !startDate.equals("")) && (null == endDate || endDate.equals(""))){
+			criteria.add(Restrictions.ge("serviceOrderDate", sdf.parse(startDate)));
+		}else if((null == startDate || startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			criteria.add(Restrictions.le("serviceOrderDate", sdf.parse(endDate)));
+		}
+		if(null != type && !type.equals("")){
+			criteria.createCriteria("serviceOrder.product", "product");
+			criteria.add(Restrictions.eq("product.type.typeID", type));
+		}
+		if(null != serialNo && !serialNo.equals("")){
+			if(null == type || type.equals("")){
+				criteria.createCriteria("serviceOrder.product", "product");
+			}
+			criteria.add(Restrictions.like("product.serialNo", serialNo));
+		}
+		if(null != empID && !empID.equals("")){
+			criteria.createCriteria("serviceOrder.empFix", "empFix");
+			criteria.add(Restrictions.eq("empFix.employeeID", Integer.parseInt(empID)));
+		}
+		
+		criteria.add(Restrictions.ne("status", "cancel"));
+		criteria.setProjection(Projections.rowCount());
+		
+		result.put("maxRows", criteria.list().get(0));
+		return result;
+	}
+	
 	@Override
 	public boolean edit(ServiceOrder serviceOrder) throws Exception{
 		Session session = sessionFactory.getCurrentSession();
-//		try{
-			session.update(serviceOrder);
-//		}catch(Exception e){
-//			e.printStackTrace();
-//			return false;
-//		}
+		session.update(serviceOrder);
 		return true;
 	}
 
 	@Override
 	public boolean delete(ServiceOrder serviceOrder, Integer employeeID) throws Exception{
-//		try{
-			serviceOrder.setStatus(ServiceOrder.CANCEL);
-			serviceOrder.setUpdatedDate(new Date());
-			serviceOrder.setUpdatedBy(employeeID);
-			sessionFactory.getCurrentSession().update(serviceOrder);
-//		}catch(Exception e){
-//			e.printStackTrace();
-//			return false;
-//		}
+		serviceOrder.setStatus(ServiceOrder.CANCEL);
+		serviceOrder.setUpdatedDate(new Date());
+		serviceOrder.setUpdatedBy(employeeID);
+		sessionFactory.getCurrentSession().update(serviceOrder);
 		return true;
 	}
 

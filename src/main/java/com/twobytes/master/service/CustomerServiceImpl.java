@@ -1,6 +1,6 @@
 package com.twobytes.master.service;
 
-import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,14 +41,14 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	@Transactional
-	public List<Customer> selectByCriteria(String name,
+	public Map<String, Object> selectByCriteria(String name,
 			Integer rows, Integer page, String orderBy, String orderType) throws Exception{
 		if(null != name && !name.equals("")) {
 			name = "%"+name+"%";
 		}
 		return customerDAO.selectByCriteria(name, rows, page, orderBy, orderType);
 	}
-
+	
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public boolean edit(Customer customer) throws Exception{

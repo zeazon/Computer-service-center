@@ -1,7 +1,7 @@
 package com.twobytes.sale.service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,6 @@ public class SaleOrderServiceImpl implements SaleOrderService {
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public boolean save(SaleOrder saleOrder, Product product) throws Exception {
-//		productDAO.save(product);
 		productService.save(product);
 		saleOrder.setProduct(product);
 		return saleOrderDAO.save(saleOrder);
@@ -45,15 +44,15 @@ public class SaleOrderServiceImpl implements SaleOrderService {
 
 	@Override
 	@Transactional
-	public List<SaleOrder> selectByCriteria(String date, String employeeID,
+	public Map<String, Object> selectByCriteria(String date, String employeeID,
 			Integer rows, Integer page, String orderBy, String orderType) {
-		List<SaleOrder> modelList = new ArrayList<SaleOrder>();
+		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			modelList = saleOrderDAO.selectByCriteria(date, employeeID, rows, page, orderBy, orderType);
+			result = saleOrderDAO.selectByCriteria(date, employeeID, rows, page, orderBy, orderType);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return modelList;
+		return result;
 	}
 
 	@Override

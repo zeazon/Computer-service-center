@@ -1,10 +1,15 @@
 package com.twobytes.master.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -19,12 +24,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 	@Override
 	public boolean save(Customer customer) throws Exception{
 		Session session = sessionFactory.getCurrentSession();
-//		try{
-			session.saveOrUpdate(customer);
-//		}catch(Exception e){
-//			e.printStackTrace();
-//			return false;
-//		}
+		session.saveOrUpdate(customer);
 		return true;
 	}
 
@@ -34,10 +34,10 @@ public class CustomerDAOImpl implements CustomerDAO {
 		customer = (Customer)sessionFactory.getCurrentSession().get(Customer.class, customerID);
 		return customer;
 	}
-
+	
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Customer> selectByCriteria(String name,
+	public Map<String, Object> selectByCriteria(String name,
 			Integer rows, Integer page, String orderBy, String orderType) throws Exception{
 		StringBuilder sql = new StringBuilder();
 		sql.append("from Customer where 1=1 ");
@@ -52,37 +52,38 @@ public class CustomerDAOImpl implements CustomerDAO {
 				sql.append("order by "+orderBy+" "+orderType);
 			}
 		}
-//		Query q = sessionFactory.getCurrentSession().createQuery(sql.toString()).setFirstResult(rows*page - rows).setMaxResults(rows);
-		Query q = sessionFactory.getCurrentSession().createQuery(sql.toString());
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		Query q = sessionFactory.getCurrentSession().createQuery(sql.toString()).setFirstResult(rows*page - rows).setMaxResults(rows).setFetchSize(rows);
 		if(null != name && !name.equals("")) {
 			q.setString("name", name);
 		}
-		List<Customer> result = q.list();
+		
+		List<Customer> list = q.list();
+		result.put("list", list);
+		
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Customer.class);	
+		if(null != name && !name.equals("")) {
+			criteria.add(Restrictions.like("name", name));
+		}
+		criteria.setProjection(Projections.rowCount());
+		
+		result.put("maxRows", criteria.list().get(0));
 		return result;
 	}
 
+	
 	@Override
 	public boolean edit(Customer customer) throws Exception{
-//		try{
-			Session session = sessionFactory.getCurrentSession();
-//			Transaction tx = session.beginTransaction();
-			session.update(customer);
-//			tx.commit();
-//		}catch(Exception e){
-//			e.printStackTrace();
-//			return false;
-//		}
+		Session session = sessionFactory.getCurrentSession();
+		session.update(customer);
 		return true;
 	}
 
 	@Override
 	public boolean delete(Customer customer) throws Exception{
-//		try{
-			sessionFactory.getCurrentSession().delete(customer);
-//		}catch(Exception e){
-//			e.printStackTrace();
-//			return false;
-//		}
+		sessionFactory.getCurrentSession().delete(customer);
 		return true;
 	}
 

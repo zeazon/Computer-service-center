@@ -1,12 +1,20 @@
 package com.twobytes.repair.dao;
 
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -21,12 +29,7 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 	@Override
 	public boolean save(OutsiteService outsiteService) throws Exception{
 		Session session = sessionFactory.getCurrentSession();
-//		try{
-			session.saveOrUpdate(outsiteService);
-//		}catch(Exception e){
-//			e.printStackTrace();
-//			return false;
-//		}
+		session.saveOrUpdate(outsiteService);
 		return true;
 	}
 
@@ -39,13 +42,15 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<OutsiteService> selectByCriteria(String name, String surname,
+	public Map<String, Object> selectByCriteria(String name, String surname,
 			String date, String type, Integer rows, Integer page,
 			String orderBy, String orderType) throws Exception{
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", new Locale ("US"));
+		
 		StringBuilder sql = new StringBuilder();
 		sql.append("from OutsiteService as outsiteService where 1=1 ");
 		if(null != name && !name.equals("")){
-			sql.append("and outsiteService.serviceOrder.customer.name like :name ");
+			sql.append("and outsiteService.customerName like :name ");
 		}
 		if(null != surname && !surname.equals("")){
 			sql.append("and outsiteService.serviceOrder.customer.surname like :surname ");
@@ -54,23 +59,23 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 			sql.append("and DATE(outsiteServiceDate) = :outsiteServiceDate ");
 		}
 		if(null != type && !type.equals("")){
-			sql.append("and outsiteService.serviceOrder.product.type.typeID = :type ");
+			sql.append("and outsiteService.type.typeID = :type ");
 		}
 		
-		sql.append("and outsiteService.status != 'cancel' ");
+		sql.append("and outsiteService.status != '"+OutsiteService.CANCEL+"' ");
 		
 		if(!orderBy.equals("")){
 			if(orderBy.equals("name")){
-				orderBy = "outsiteService.serviceOrder.customer.name";
-			}else if(orderBy.equals("surname")){
-				orderBy = "outsiteService.serviceOrder.customer.surname";
+				orderBy = "outsiteService.customerName";
 			}
 			sql.append("order by "+orderBy+" "+orderType);
 		}else{
 			sql.append("order by outsiteService.outsiteServiceDate desc");
 		}
 		
-		Query q = sessionFactory.getCurrentSession().createQuery(sql.toString());
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		Query q = sessionFactory.getCurrentSession().createQuery(sql.toString()).setFirstResult(rows*page - rows).setMaxResults(rows).setFetchSize(rows);
 		if(null != name && !name.equals("")) {
 			q.setString("name", name);
 		}
@@ -83,7 +88,28 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 		if(null != type && !type.equals("")) {
 			q.setString("type", type);
 		}
-		List<OutsiteService> result = q.list();
+		List<OutsiteService> list = q.list();
+		result.put("list", list);
+		
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(OutsiteService.class, "outsiteService");
+		if(null != name && !name.equals("")) {
+			criteria.add(Restrictions.like("outsiteService.customerName", name));
+		}
+		if(null != date && !date.equals("")) {
+			Calendar nextDay = Calendar.getInstance();
+			nextDay.setTime(sdf.parse(date));
+			nextDay.add(Calendar.DATE, 1);
+			criteria.add(Restrictions.ge("outsiteService.outsiteServiceDate", sdf.parse(date)));
+			criteria.add(Restrictions.lt("outsiteService.outsiteServiceDate", nextDay.getTime()));
+		}
+		if(null != type && !type.equals("")) {
+			criteria.createCriteria("outsiteService.type", "type");
+			criteria.add(Restrictions.eq("type.typeID", type));
+		}
+		criteria.add(Restrictions.ne("status", OutsiteService.CANCEL));
+		criteria.setProjection(Projections.rowCount());
+		
+		result.put("maxRows", criteria.list().get(0));
 		return result;
 	}
 
@@ -121,27 +147,27 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 		StringBuilder sql = new StringBuilder();
 		sql.append("from OutsiteService as outsiteService where 1=1 ");
 		if(null != name && !name.equals("")){
-			sql.append("and outsiteService.serviceOrder.customer.name like :name ");
+			sql.append("and outsiteService.customerName like :name ");
 		}
 		if(null != date && !date.equals("")){
 			sql.append("and DATE(outsiteServiceDate) = :outsiteServiceDate ");
 		}
 		if(null != type && !type.equals("")){
-			sql.append("and outsiteService.serviceOrder.product.type.typeID = :type ");
+			sql.append("and outsiteService.type.typeID = :type ");
 		}
 		
 		sql.append("and outsiteService.status = '"+OutsiteService.NEW+"' ");
 		
 		if(!orderBy.equals("")){
 			if(orderBy.equals("name")){
-				orderBy = "outsiteService.serviceOrder.customer.name";
+				orderBy = "outsiteService.customerName";
 			}
 			sql.append("order by "+orderBy+" "+orderType);
 		}else{
 			sql.append("order by outsiteService.outsiteServiceDate desc");
 		}
 		
-		Query q = sessionFactory.getCurrentSession().createQuery(sql.toString());
+		Query q = sessionFactory.getCurrentSession().createQuery(sql.toString()).setFetchSize(rows);
 		if(null != name && !name.equals("")) {
 			q.setString("name", name);
 		}
@@ -163,27 +189,27 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 		StringBuilder sql = new StringBuilder();
 		sql.append("from OutsiteService as outsiteService where 1=1 ");
 		if(null != name && !name.equals("")){
-			sql.append("and outsiteService.serviceOrder.customer.name like :name ");
+			sql.append("and outsiteService.customerName like :name ");
 		}
 		if(null != date && !date.equals("")){
 			sql.append("and DATE(outsiteServiceDate) = :outsiteServiceDate ");
 		}
 		if(null != type && !type.equals("")){
-			sql.append("and outsiteService.serviceOrder.product.type.typeID = :type ");
+			sql.append("and outsiteService.type.typeID = :type ");
 		}
 		
 		sql.append("and outsiteService.status = '"+OutsiteService.SENT+"' ");
 		
 		if(!orderBy.equals("")){
 			if(orderBy.equals("name")){
-				orderBy = "outsiteService.serviceOrder.customer.name";
+				orderBy = "outsiteService.customerName";
 			}
 			sql.append("order by "+orderBy+" "+orderType);
 		}else{
 			sql.append("order by outsiteService.outsiteServiceDate desc");
 		}
 		
-		Query q = sessionFactory.getCurrentSession().createQuery(sql.toString());
+		Query q = sessionFactory.getCurrentSession().createQuery(sql.toString()).setFetchSize(rows);
 		if(null != name && !name.equals("")) {
 			q.setString("name", name);
 		}

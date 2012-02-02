@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.twobytes.express.service.ArmasService;
 import com.twobytes.master.form.CustomerForm;
 import com.twobytes.master.form.ModelForm;
 import com.twobytes.master.form.ProductForm;
@@ -29,7 +28,6 @@ import com.twobytes.master.service.BrandService;
 import com.twobytes.master.service.CustomerService;
 import com.twobytes.master.service.CustomerTypeService;
 import com.twobytes.master.service.DistrictService;
-import com.twobytes.master.service.DocRunningService;
 import com.twobytes.master.service.EmployeeService;
 import com.twobytes.master.service.ModelService;
 import com.twobytes.master.service.ProductService;
@@ -63,7 +61,6 @@ import com.twobytes.repair.service.OutsiteServiceService;
 import com.twobytes.repair.service.ServiceListService;
 import com.twobytes.repair.service.ServiceOrderService;
 import com.twobytes.security.form.LoginForm;
-import com.twobytes.util.DocRunningUtil;
 
 @Controller
 public class ServiceOrderController {
@@ -93,22 +90,13 @@ public class ServiceOrderController {
 	private CustomerService customerService;
 
 	@Autowired
-	private DocRunningService docRunningService;
-
-	@Autowired
 	private EmployeeService empService;
 
 	@Autowired
 	private ProductService productService;
-	
-	@Autowired
-	private ArmasService armasService;
 
 	@Autowired
 	private CustomerTypeService customerTypeService;
-	
-	@Autowired
-	private DocRunningUtil docRunningUtil;
 
 	@Autowired
 	private IssuePartService issuePartService;
@@ -169,6 +157,7 @@ public class ServiceOrderController {
 	}
 
 	@RequestMapping(value = "/searchServiceOrder")
+	@SuppressWarnings("unchecked")
 	public @ResponseBody
 	GridResponse getData(
 			@RequestParam(value = "name", required = false) String name,
@@ -193,22 +182,12 @@ public class ServiceOrderController {
 				startDate = new String(startDate.getBytes("iso-8859-1"),
 						"tis620");
 				datePart = startDate.split("/");
-				// Change year to Christ year
-				/*Integer year = Integer.parseInt(datePart[2]);
-				year = year - 543;*/
-				//searchStartDate = year.toString() + "-" + datePart[1] + "-"
-				//		+ datePart[0];
 				searchStartDate = datePart[2] + "-" + datePart[1] + "-"
 						+ datePart[0];
 			}
 			if (null != endDate && !endDate.equals("")) {
 				endDate = new String(endDate.getBytes("iso-8859-1"), "tis620");
 				datePart = endDate.split("/");
-				// Change year to Christ year
-				/*Integer year = Integer.parseInt(datePart[2]);
-				year = year - 543;*/
-				//searchEndDate = year.toString() + "-" + datePart[1] + "-"
-				//		+ datePart[0];
 				searchEndDate = datePart[2] + "-" + datePart[1] + "-"
 						+ datePart[0];
 			}
@@ -219,44 +198,23 @@ public class ServiceOrderController {
 			e.printStackTrace();
 		}
 
-		List<ServiceOrder> soList = soService.selectByCriteria(name,
+		Map<String, Object> ret = new HashMap<String, Object>();
+		ret = soService.selectByCriteria(name,
 				searchStartDate, searchEndDate, type, serialNo, employee, rows, page,
 				sidx, sord);
+		
+		List<ServiceOrder> soList = (List<ServiceOrder>) ret.get("list");
 		GridResponse response = new GridResponse();
-
 		List<ServiceOrderGridData> rowsList = new ArrayList<ServiceOrderGridData>();
-
+		
 		Integer total_pages = 0;
 		if (soList.size() > 0) {
-//			int i=0;
-//			for (ServiceOrder so : soList) {
-//				if(i >= (rows*page - rows) && i <= (rows*page - 1)){
-			int endData = 0;
-			if(soList.size() < (rows*page)){
-				endData = soList.size();
-			}else{
-				endData = (rows*page);
-			}
-			for(int i=(rows*page - rows); i<endData; i++){
-				ServiceOrder so = soList.get(i);
+			for(ServiceOrder so:soList){
 				ServiceOrderGridData gridData = new ServiceOrderGridData();
 				gridData.setServiceOrderID(so.getServiceOrderID());
-				// System.out.println("so.getServiceOrderDate() = "+so.getServiceOrderDate());
-				// System.out.println("sdf.format(so.getServiceOrderDate()) = "+sdf.format(so.getServiceOrderDate()));
-				// System.out.println("sdfDateTime.format(so.getServiceOrderDate()) = "+sdfDateTime.format(so.getServiceOrderDate()));
-				// System.out.println("sdfDateTime2.format(so.getServiceOrderDate()) = "+sdfDateTime2.format(so.getServiceOrderDate()));
-				// System.out.println("sdfDateTimeNoLocale.format(so.getServiceOrderDate()) = "+sdfDateTimeNoLocale.format(so.getServiceOrderDate()));
-				// System.out.println("sdfDateTimeUSLocale.format(so.getServiceOrderDate()) = "+sdfDateTimeUSLocale.format(so.getServiceOrderDate()));
 				gridData.setServiceOrderDate(sdfDateTime.format(so
 						.getServiceOrderDate()));
 				String serviceType = "";
-				
-//				<form:radiobutton path="serviceType" value="1" cssStyle="margin-top:4px" id="serviceType_guarantee" onclick="checkServiceType()" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_guarantee" /></label><form:select path="guaranteeNo" id="guaranteeNo" ><c:forEach var="i" begin="1" end="7" step="1"><form:option value="${i}" /></c:forEach></form:select>
-//				<form:radiobutton path="serviceType" value="2" cssStyle="margin-top:4px;" id="serviceType_repair" onclick="checkServiceType()" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_repair" /></label>
-//				<form:radiobutton path="serviceType" value="3" cssStyle="margin-top:4px" id="serviceType_claim" onclick="checkServiceType()" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_claim" /></label>
-//				<form:radiobutton path="serviceType" value="4" cssStyle="margin-top:4px" id="serviceType_outsiteService" onclick="checkServiceType()" /><label style="float:left; margin-top:4px"><fmt:message key="serviceOrderType_outsiteService" /></label><form:input path="refJobID" class="textboxMockup" id="refJobID" maxlength="30" />
-//				<form:radiobutton path="serviceType" value="5" cssStyle="margin-top:4px" id="serviceType_refix" onclick="checkServiceType()" /><label style="float:left; margin-top:4px;"><fmt:message key="serviceOrderType_refix" /></label><form:input path="refServiceOrder" class="textboxMockup" id="refServiceOrder" maxlength="20" />
-				
 				
 				if (so.getServiceType() == 1) {
 					serviceType = this.messages.getMessage(
@@ -287,32 +245,28 @@ public class ServiceOrderController {
 				}catch(NullPointerException npe){
 					gridData.setAppointmentDate("-");
 				}
-//				if(so.getCustomerType().equals(ServiceOrder.CUSTOMERTYPE_WALKIIN)){
-					Customer customer = so.getCustomer();
-					gridData.setName(customer.getName());
-//					gridData.setSurname(customer.getSurname());
-//					gridData.setFullName(customer.getName()+" "+customer.getSurname());
-					gridData.setEmail(customer.getEmail());
-					gridData.setTel(customer.getTel());
-					gridData.setMobileTel(customer.getMobileTel());
+				Customer customer = so.getCustomer();
+				gridData.setName(customer.getName());
+				gridData.setEmail(customer.getEmail());
+				gridData.setTel(customer.getTel());
+				gridData.setMobileTel(customer.getMobileTel());
 					
-					gridData.setCustomer(customer);
-					gridData.setCustomerFullAddress(customer.getAddress()
-							+ " "
-							+ this.messages.getMessage("subdistrict_abbr", null,
-									new Locale("th", "TH"))
-							+ " "
-							+ customer.getSubdistrict().getName()
-							+ " "
-							+ this.messages.getMessage("district_abbr", null,
-									new Locale("th", "TH"))
-							+ " "
-							+ customer.getDistrict().getName()
-							+ " "
-							+ this.messages.getMessage("province_abbr", null,
-									new Locale("th", "TH")) + " "
-							+ customer.getProvince().getName());
-//				}
+				gridData.setCustomer(customer);
+				gridData.setCustomerFullAddress(customer.getAddress()
+						+ " "
+						+ this.messages.getMessage("subdistrict_abbr", null,
+								new Locale("th", "TH"))
+						+ " "
+						+ customer.getSubdistrict().getName()
+						+ " "
+						+ this.messages.getMessage("district_abbr", null,
+								new Locale("th", "TH"))
+						+ " "
+						+ customer.getDistrict().getName()
+						+ " "
+						+ this.messages.getMessage("province_abbr", null,
+								new Locale("th", "TH")) + " "
+						+ customer.getProvince().getName());
 				gridData.setDeliveryCustomer(so.getDeliveryCustomer());
 				gridData.setDeliveryEmail(so.getDeliveryEmail());
 				gridData.setDeliveryTel(so.getDeliveryTel());
@@ -339,15 +293,11 @@ public class ServiceOrderController {
 				
 				rowsList.add(gridData);
 			}
-			total_pages = new Double(
-					Math.ceil(((double) soList.size() / (double) rows)))
-					.intValue();
+			total_pages = new Double(Math.ceil(((double)(Long) ret.get("maxRows")/(double)rows))).intValue();
 		}
-
-		if (page > total_pages)
-			page = total_pages;
+		if (page > total_pages) page=total_pages;
 		response.setPage(page.toString());
-		response.setRecords(String.valueOf(soList.size()));
+		response.setRecords(((Long) ret.get("maxRows")).toString());
 		response.setTotal(total_pages.toString());
 		response.setRows(rowsList);
 		return response;
@@ -364,14 +314,7 @@ public class ServiceOrderController {
 		ServiceOrderForm form = new ServiceOrderForm();
 		ProductForm productForm = new ProductForm();
 		Date now = new Date();
-		// System.out.println("now = "+now);
 		form.setServiceOrderDate(sdfDateTime.format(now));
-		// System.out.println("ServiceOrderController:preAdd");
-		// System.out.println("sdfDateTime.format(now) = "+sdfDateTime.format(now));
-		// System.out.println("sdfDateTime.parse(form.getServiceOrderDate()) = "+sdfDateTime.parse(form.getServiceOrderDate()));
-		// System.out.println("sdfDateTimeNoLocale.parse(form.getServiceOrderDate()) = "+sdfDateTimeNoLocale.parse(form.getServiceOrderDate()));
-		// System.out.println("sdfDateTimeUSLocale.parse(form.getServiceOrderDate()) = "+sdfDateTimeUSLocale.parse(form.getServiceOrderDate()));
-		// System.out.println("sdfDateTime2.parse(form.getServiceOrderDate()) = "+sdfDateTime2.parse(form.getServiceOrderDate()));
 		form.setServiceType(2);
 		form.setCustomerType(ServiceOrder.CUSTOMERTYPE_SHOP);
 		List<Type> typeList = new ArrayList<Type>();
@@ -426,7 +369,6 @@ public class ServiceOrderController {
 		model.addAttribute("provinceList", provinceList);
 		model.addAttribute("districtList", districtList);
 		model.addAttribute("subdistrictList", subdistrictList);
-		//model.addAttribute("zipcode", sd.getZipcode());
 		model.addAttribute("customerTypeList", customerTypeList);
 
 		CustomerForm custForm = new CustomerForm();
@@ -481,11 +423,6 @@ public class ServiceOrderController {
 			}
 		} else {
 			// add
-			// DocRunning docRunning = docRunningService.getDoc("SO");
-			// String serviceOrderID =
-			// docRunning.getPref ix()+"-"+docRunning.getYear()+docRunning.getMonth()+"-"+docRunning.getRunningNumber();
-			// String serviceOrderID = genDocNo();
-//			String serviceOrderID = docRunningUtil.genDoc("SO");
 			so.setServiceType(form.getServiceType());
 			if(form.getServiceType() == 1){
 				so.setGuaranteeNo(form.getGuaranteeNo());
@@ -498,20 +435,14 @@ public class ServiceOrderController {
 			if(form.getServiceType() == 5){
 				so.setRefServiceOrder(form.getRefServiceOrder());
 			}
-			// System.out.println("serviceOrderID = "+serviceOrderID);
 			try {
 				so.setServiceOrderDate(sdfDateTime.parse(form
 						.getServiceOrderDate()));
-				// so.setServiceOrderDate(sdfDateTimeUSLocale.parse(form.getServiceOrderDate()));
-				// System.out.println("form.getServiceOrderDate() = "+form.getServiceOrderDate());
-				// System.out.println("sdfDateTime.parse(form.getServiceOrderDate()) = "+sdfDateTime.parse(form.getServiceOrderDate()));
-				// System.out.println("so.getServiceOrderDate = "+so.getServiceOrderDate());
 			} catch (ParseException e) {
 				e.printStackTrace();
 				so.setServiceOrderDate(new Date());
 			}
-
-//			so.setServiceOrderID(serviceOrderID);
+			
 			so.setEmpOpen(user);
 			so.setCreatedBy(user.getEmployeeID());
 			so.setCreatedDate(now);
@@ -528,83 +459,49 @@ public class ServiceOrderController {
 			}
 		}
 		
+		Customer customer = new Customer();
+		try {
+			customer = customerService.selectByID(form.getCustomerID());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		so.setCustomer(customer);
+		model.addAttribute("customer", customer);
 		
-//		if(form.getCustomerType().equals("walkin")){
-			Customer customer = new Customer();
-			try {
-				customer = customerService.selectByID(form.getCustomerID());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			so.setCustomer(customer);
-			model.addAttribute("customer", customer);
-			
-			so.setDeliveryCustomer(form.getDeliveryCustomer());
-			so.setDeliveryEmail(form.getDeliveryEmail());
-			so.setDeliveryMobileTel(form.getDeliveryMobileTel());
-			so.setDeliveryTel(form.getDeliveryTel());
-			
-			model.addAttribute(
-					"fullAddr",
-					so.getCustomer().getAddress()
-							+ " "
-							+ this.messages.getMessage("subdistrict_abbr", null,
-									new Locale("th", "TH"))
-							+ " "
-							+ so.getCustomer().getSubdistrict().getName()
-							+ " "
-							+ this.messages.getMessage("district_abbr", null,
-									new Locale("th", "TH"))
-							+ " "
-							+ so.getCustomer().getDistrict().getName()
-							+ " "
-							+ this.messages.getMessage("province_abbr", null,
-									new Locale("th", "TH")) + " "
-							+ so.getCustomer().getProvince().getName());
+		so.setDeliveryCustomer(form.getDeliveryCustomer());
+		so.setDeliveryEmail(form.getDeliveryEmail());
+		so.setDeliveryMobileTel(form.getDeliveryMobileTel());
+		so.setDeliveryTel(form.getDeliveryTel());
+		
+		model.addAttribute(
+				"fullAddr",
+				so.getCustomer().getAddress()
+						+ " "
+						+ this.messages.getMessage("subdistrict_abbr", null,
+								new Locale("th", "TH"))
+						+ " "
+						+ so.getCustomer().getSubdistrict().getName()
+						+ " "
+						+ this.messages.getMessage("district_abbr", null,
+								new Locale("th", "TH"))
+						+ " "
+						+ so.getCustomer().getDistrict().getName()
+						+ " "
+						+ this.messages.getMessage("province_abbr", null,
+								new Locale("th", "TH")) + " "
+						+ so.getCustomer().getProvince().getName());
 
-			model.addAttribute("product", so.getProduct());
+		model.addAttribute("product", so.getProduct());
 
-			
-			
-//		}else if(form.getCustomerType().equals("shop")){
-//			Armas armas = new Armas();
-//			armas = armasService.selectByID(form.getCustomerID());
-//			so.setShopCustomerID(armas.getCuscod());
-//			model.addAttribute("armas", armas);
-//		}
-//		Type type = new Type();
-//		try {
-//			type = typeService.selectByID(form.getTypeID());
-//		} catch (Exception e1) {
-//			e1.printStackTrace();
-//		}
-//		Brand brand = new Brand();
-//		try {
-//			brand = brandService.selectByID(form.getBrandID());
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
 		Product product = new Product();
 		product = productService.selectByID(form.getProductID());
 		so.setProduct(product);
-//		so.setType(type);
-//		so.setBrand(brand);
-//		so.setModel(form.getModel());
-//		so.setSerialNo(form.getSerialNo());
 		so.setAccessories(form.getAccessories());
 		so.setDescription(form.getDesc());
 		so.setProblem(form.getProblem());
 
 		so.setUpdatedBy(user.getEmployeeID());
 		so.setUpdatedDate(now);
-		// if(form.getTypeID().length > 0){
-		// Set<Type> typeList = new HashSet<Type>();
-		// for(Integer typeID:form.getTypeID()){
-		// Type type = typeService.selectByID(typeID);
-		// typeList.add(type);
-		// }
-		// brand.setTypes(typeList);
-		// }
 		String result;
 		try {
 			result = soService.save(so);
@@ -612,21 +509,14 @@ public class ServiceOrderController {
 			e.printStackTrace();
 			model.addAttribute("errMsg", e.getMessage());
 			
-//			if(form.getCustomerType().equals("walkin")){
-				Customer customer1 = new Customer();
-				try {
-					customer1 = customerService.selectByID(form.getCustomerID());
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-				so.setCustomer(customer1);
-				model.addAttribute("customer", customer1);
-//			}else if(form.getCustomerType().equals("shop")){
-//				Armas armas = new Armas();
-//				armas = armasService.selectByID(form.getCustomerID());
-//				so.setShopCustomerID(armas.getCuscod());
-//				model.addAttribute("armas", armas);
-//			}
+			Customer customer1 = new Customer();
+			try {
+				customer1 = customerService.selectByID(form.getCustomerID());
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+			so.setCustomer(customer1);
+			model.addAttribute("customer", customer1);
 			
 			List<Type> typeList = new ArrayList<Type>();
 			try {
@@ -716,21 +606,14 @@ public class ServiceOrderController {
 			model.addAttribute("errMsg", this.messages.getMessage(
 					"error.cannotSave", null, new Locale("th", "TH")));
 			
-//			if(form.getCustomerType().equals("walkin")){
-				Customer customer1 = new Customer();
-				try {
-					customer1 = customerService.selectByID(form.getCustomerID());
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-				so.setCustomer(customer1);
-				model.addAttribute("customer", customer1);
-	//		}else if(form.getCustomerType().equals("shop")){
-	//			Armas armas = new Armas();
-	//			armas = armasService.selectByID(form.getCustomerID());
-	//			so.setShopCustomerID(armas.getCuscod());
-	//			model.addAttribute("armas", armas);
-	//		}
+			Customer customer1 = new Customer();
+			try {
+				customer1 = customerService.selectByID(form.getCustomerID());
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+			so.setCustomer(customer1);
+			model.addAttribute("customer", customer1);
 			
 			List<Type> typeList = new ArrayList<Type>();
 			try {
@@ -819,11 +702,7 @@ public class ServiceOrderController {
 		so.setServiceOrderID(result);
 		form.setServiceOrderID(result);
 		model.addAttribute("msg", msg);
-		// ServiceOrderSearchForm searchForm = new ServiceOrderSearchForm();
-		// model.addAttribute("searchForm", searchForm);
-		// return VIEWNAME_SEARCH;
 
-		// model.addAttribute("action", "print");
 		List<Type> typeList = new ArrayList<Type>();
 		try {
 			typeList = typeService.getAll();
@@ -946,14 +825,6 @@ public class ServiceOrderController {
 		form.setDesc(so.getDescription());
 		form.setProblem(so.getProblem());
 		form.setStatus(so.getStatus());
-		// form.setName(brand.getName());
-		// List<Integer> l = new ArrayList<Integer>();
-		// for(Type type:brand.getTypes()){
-		// l.add(type.getTypeID());
-		// }
-		// Integer ia[] = new Integer[l.size()];
-		// ia = l.toArray(ia);
-		// form.setTypeID(ia);
 
 		List<Type> typeList = new ArrayList<Type>();
 		try {
@@ -1110,43 +981,7 @@ public class ServiceOrderController {
 		return response;
 	}
 
-	/*
-	 * private String genDocNo(){ // Calendar now = Calendar.getInstance(new
-	 * Locale ( "th", "TH" )); Calendar now = Calendar.getInstance(new Locale (
-	 * "US" )); // System.out.println("month = "+now.get(Calendar.MONTH)); //
-	 * System.out.println("year = "+now.get(Calendar.YEAR)); String docNo = "";
-	 * Integer nMonth = now.get(Calendar.MONTH) + 1; Integer nYear =
-	 * now.get(Calendar.YEAR); Integer nDate = now.get(Calendar.DATE); //
-	 * Integer nYear = now.get(Calendar.YEAR) + 1; // DocRunning docRunning =
-	 * docRunningService.getDoc("SO"); // DocRunning docRunning =
-	 * docRunningService.getDocByYearMonth("SO", nYear, nMonth); DocRunning
-	 * docRunning = docRunningService.getDocByYearMonthDate("SO", nYear, nMonth,
-	 * nDate); if(null == docRunning){ // save new docrunning docRunning = new
-	 * DocRunning(); docRunning.setDocument("SO"); docRunning.setPrefix("so");
-	 * docRunning.setMonth(now.get(Calendar.MONTH) + 1);
-	 * docRunning.setYear(now.get(Calendar.YEAR));
-	 * docRunning.setDate(now.get(Calendar.DATE));
-	 * docRunning.setRunningNumber(1);
-	 * docRunningService.createNewDocRunning(docRunning); } String month =
-	 * docRunning.getMonth().toString(); if(month.length() == 1){ month =
-	 * "0"+month; } String year = docRunning.getYear().toString(); year =
-	 * year.substring(2, 4); String date = docRunning.getDate().toString();
-	 * if(date.length() == 1){ date = "0"+date; } // docNo =
-	 * docRunning.getPrefix()+"-"+year+month+"-"+docRunning.getRunningNumber();
-	 * docNo = year+month+date+"-"+docRunning.getRunningNumber();
-	 * 
-	 * // increse running no
-	 * 
-	 * docRunning.setRunningNumber(docRunning.getRunningNumber()+1);
-	 * docRunningService.updateDocRunning(docRunning);
-	 * 
-	 * return docNo; }
-	 */
-
 	@RequestMapping(value = "/serviceOrder", params = "do=print")
-	// public String doPrint(ModelMap model,
-	// @RequestParam(value="serviceOrderID") String serviceOrderID,
-	// @RequestParam(required=false) String serviceOrderDate){
 	public String doPrint(@ModelAttribute ServiceOrderDocForm docForm,
 			HttpServletRequest request, ModelMap model) {
 
@@ -1200,14 +1035,7 @@ public class ServiceOrderController {
 	@RequestMapping(value = "/serviceOrder", params = "do=printExcel")
 	public String doPrintExcel(@ModelAttribute ServiceOrderDocForm docForm,
 			HttpServletRequest request, ModelMap model) {
-		
-//        List wordList = new ArrayList();
-//        wordList.add("hello");
-//        wordList.add("world");
-//		
-//        model.addAttribute("wordList", wordList);
         model.addAttribute("form", docForm);
-        
 		return "serviceOrderDocExcel";
 	}
 	
@@ -1278,7 +1106,6 @@ public class ServiceOrderController {
 	private ServiceOrderDocForm setDocPrintForm(ServiceOrder so){
 		ServiceOrderDocForm docForm = new ServiceOrderDocForm();
 		docForm.setServiceOrderID(so.getServiceOrderID());
-//		docForm.setServiceOrderDate(sdfDateTime.format(so.getServiceOrderDate()));
 		docForm.setServiceOrderDate(sdf.format(so.getServiceOrderDate()));
 		docForm.setServiceOrderTime(sdfTime.format(so.getServiceOrderDate()));
 		docForm.setAppointmentDate(sdfDateTime.format(so.getServiceOrderDate()));
@@ -1293,18 +1120,6 @@ public class ServiceOrderController {
 		if(so.getServiceType() == 5){
 			docForm.setRefServiceOrder(so.getRefServiceOrder());
 		}
-		
-//		docForm.setContactName(so.getCustomer().getName() + " "
-//				+ so.getCustomer().getSurname());
-		
-		
-//		if(so.getCustomerType().equals("walkin")){
-//			docForm.setContactName(so.getCustomer().getName() + " "
-//				+ so.getCustomer().getSurname());
-//		}else if(so.getCustomerType().equals("shop")){
-//			docForm.setContactName("");
-//		}
-		
 		
 		docForm.setCustomerID(so.getCustomer().getCustomerID());
 		docForm.setName(so.getCustomer().getName());

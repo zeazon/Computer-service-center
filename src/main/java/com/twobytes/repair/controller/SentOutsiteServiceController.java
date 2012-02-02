@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.twobytes.master.service.TypeService;
-import com.twobytes.model.Customer;
 import com.twobytes.model.Employee;
 import com.twobytes.model.GridResponse;
 import com.twobytes.model.OutsiteService;
@@ -88,9 +87,6 @@ public class SentOutsiteServiceController {
 			if(null != date && !date.equals("")){
 				date = new String(date.getBytes("iso-8859-1"), "tis620");
 				datePart = date.split("/");
-				// Change year to Christ year
-//				Integer year = Integer.parseInt(datePart[2]);				
-//				year = year - 543;
 				searchDate = datePart[2]+"-"+datePart[1]+"-"+datePart[0];
 			}
 			if(null != type){
@@ -107,9 +103,6 @@ public class SentOutsiteServiceController {
 		
 		Integer total_pages = 0;
 		if(osList.size() > 0){
-//			int i=0;
-//			for(OutsiteService os:osList){
-//				if(i >= (rows*page - rows) && i <= (rows*page - 1)){
 			int endData = 0;
 			if(osList.size() < (rows*page)){
 				endData = osList.size();

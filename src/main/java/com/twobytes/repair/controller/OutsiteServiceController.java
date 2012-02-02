@@ -1,14 +1,14 @@
 package com.twobytes.repair.controller;
 
-import groovy.ui.Console;
-
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -107,6 +107,7 @@ public class OutsiteServiceController {
 	}
 	
 	@RequestMapping(value="/searchOutsiteService")
+	@SuppressWarnings("unchecked")
 	public @ResponseBody GridResponse getData(@RequestParam(value="name", required=false) String name, @RequestParam(value="surname", required=false) String surname, @RequestParam(value="date", required=false) String date, @RequestParam(value="type", required=false) String type, @RequestParam("rows") Integer rows, @RequestParam("page") Integer page, @RequestParam("sidx") String sidx, @RequestParam("sord") String sord){
 		String[] datePart;
 		String searchDate = null;
@@ -121,9 +122,6 @@ public class OutsiteServiceController {
 			if(null != date && !date.equals("")){
 				date = new String(date.getBytes("iso-8859-1"), "tis620");
 				datePart = date.split("/");
-				// Change year to Christ year
-//				Integer year = Integer.parseInt(datePart[2]);				
-//				year = year - 543;
 				searchDate = datePart[2]+"-"+datePart[1]+"-"+datePart[0];
 			}
 			if(null != type){
@@ -133,41 +131,25 @@ public class OutsiteServiceController {
 			e.printStackTrace();
 		}
 		
-		List<OutsiteService> osList = osService.selectByCriteria(name, surname, searchDate, type, rows, page, sidx, sord);
+		Map<String, Object> ret = new HashMap<String, Object>();
+		ret = osService.selectByCriteria(name, surname, searchDate, type, rows, page, sidx, sord);
+		
+		List<OutsiteService> osList = (List<OutsiteService>) ret.get("list");
 		GridResponse response = new GridResponse();
 		
 		List<OutsiteServiceGridData> rowsList = new ArrayList<OutsiteServiceGridData>();
 		
 		Integer total_pages = 0;
 		if(osList.size() > 0){
-			int endData = 0;
-			if(osList.size() < (rows*page)){
-				endData = osList.size();
-			}else{
-				endData = (rows*page);
-			}
-			for(int i=(rows*page - rows); i<endData; i++){
-				OutsiteService os = osList.get(i);
+			for(OutsiteService os:osList){
 				OutsiteServiceGridData gridData = new OutsiteServiceGridData();
 				gridData.setOutsiteServiceID(os.getOutsiteServiceID().toString());
-//				System.out.println("so.getServiceOrderDate() = "+so.getServiceOrderDate());
-//				System.out.println("sdf.format(so.getServiceOrderDate()) = "+sdf.format(so.getServiceOrderDate()));
-//				System.out.println("sdfDateTime.format(so.getServiceOrderDate()) = "+sdfDateTime.format(so.getServiceOrderDate()));
-//				System.out.println("sdfDateTime2.format(so.getServiceOrderDate()) = "+sdfDateTime2.format(so.getServiceOrderDate()));
-//				System.out.println("sdfDateTimeNoLocale.format(so.getServiceOrderDate()) = "+sdfDateTimeNoLocale.format(so.getServiceOrderDate()));
-//				System.out.println("sdfDateTimeUSLocale.format(so.getServiceOrderDate()) = "+sdfDateTimeUSLocale.format(so.getServiceOrderDate()));
 				gridData.setOutsiteServiceDate(sdfDateTime.format(os.getOutsiteServiceDate()));
-//				Customer customer = os.getServiceOrder().getCustomer();
-//				gridData.setName(customer.getName());
-//				gridData.setSurname(customer.getSurname());
 				gridData.setName(os.getCustomerName());
-//				gridData.setType(os.getServiceOrder().getProduct().getType().getName());
 				if(os.getType() != null)
 					gridData.setType(os.getType().getName());
-//				gridData.setBrand(os.getServiceOrder().getProduct().getBrand().getName());
 				if(os.getBrand() != null)
 					gridData.setBrand(os.getBrand().getName());
-//				gridData.setModel(os.getServiceOrder().getProduct().getModel().getName());
 				if(os.getModel() != null)
 					gridData.setModel(os.getModel().getName());
 				gridData.setProblem(os.getProblem());
@@ -183,12 +165,12 @@ public class OutsiteServiceController {
 				}
 				rowsList.add(gridData);
 			}
-			total_pages = new Double(Math.ceil(((double)osList.size()/(double)rows))).intValue();
+			total_pages = new Double(Math.ceil(((double)(Long) ret.get("maxRows")/(double)rows))).intValue();
 		}
 		
 		if (page > total_pages) page=total_pages;
 		response.setPage(page.toString());
-		response.setRecords(String.valueOf(osList.size()));
+		response.setRecords(((Long) ret.get("maxRows")).toString());
 		response.setTotal(total_pages.toString());
 		response.setRows(rowsList);
 		return response;
@@ -384,10 +366,6 @@ public class OutsiteServiceController {
 //			String serviceOrderID = docRunningUtil.genDoc("SO");
 			try {
 				os.setOutsiteServiceDate(sdfDateTime.parse(form.getOutsiteServiceDate()));
-//				so.setServiceOrderDate(sdfDateTimeUSLocale.parse(form.getServiceOrderDate()));
-//				System.out.println("form.getServiceOrderDate() = "+form.getServiceOrderDate());
-//				System.out.println("sdfDateTime.parse(form.getServiceOrderDate()) = "+sdfDateTime.parse(form.getServiceOrderDate()));
-//				System.out.println("so.getServiceOrderDate = "+so.getServiceOrderDate());
 			} catch (ParseException e) {
 				e.printStackTrace();
 				os.setOutsiteServiceDate(new Date());

@@ -2,7 +2,9 @@ package com.twobytes.repair.service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -104,7 +106,7 @@ public class OutsiteServiceServiceImpl implements OutsiteServiceService {
 
 	@Override
 	@Transactional
-	public List<OutsiteService> selectByCriteria(String name, String surname,
+	public Map<String, Object> selectByCriteria(String name, String surname,
 			String date, String type, Integer rows, Integer page,
 			String orderBy, String orderType) {
 		if(null != name && !name.equals("")) {
@@ -113,13 +115,13 @@ public class OutsiteServiceServiceImpl implements OutsiteServiceService {
 		if(null != surname && !surname.equals("")) {
 			surname = "%"+surname+"%";
 		}
-		List<OutsiteService> modelList = new ArrayList<OutsiteService>();
+		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			modelList = osDAO.selectByCriteria(name, surname, date, type, rows, page, orderBy, orderType);
+			result = osDAO.selectByCriteria(name, surname, date, type, rows, page, orderBy, orderType);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return modelList;
+		return result;
 	}
 
 	@Override

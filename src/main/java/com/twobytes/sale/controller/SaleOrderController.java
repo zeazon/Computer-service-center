@@ -6,8 +6,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -118,6 +120,7 @@ public class SaleOrderController {
 	}
 	
 	@RequestMapping(value = "/searchSaleOrder")
+	@SuppressWarnings("unchecked")
 	public @ResponseBody
 	GridResponse getData(
 			@RequestParam(value = "date", required = false) String date,
@@ -141,24 +144,17 @@ public class SaleOrderController {
 			e.printStackTrace();
 		}
 		
-		List<SaleOrder> soList = saleOrderService.selectByCriteria(searchDate, employeeID, rows, page,
+		Map<String, Object> ret = new HashMap<String, Object>();
+		ret = saleOrderService.selectByCriteria(searchDate, employeeID, rows, page,
 				sidx, sord);
+		
+		List<SaleOrder> soList = (List<SaleOrder>) ret.get("list");
 		GridResponse response = new GridResponse();
 		
 		List<SaleOrderGridData> rowsList = new ArrayList<SaleOrderGridData>();
 		Integer total_pages = 0;
 		if (soList.size() > 0) {
-//			int i=0;
-//			for (ServiceOrder so : soList) {
-//				if(i >= (rows*page - rows) && i <= (rows*page - 1)){
-			int endData = 0;
-			if(soList.size() < (rows*page)){
-				endData = soList.size();
-			}else{
-				endData = (rows*page);
-			}
-			for(int i=(rows*page - rows); i<endData; i++){
-				SaleOrder so = soList.get(i);
+			for(SaleOrder so:soList){
 				SaleOrderGridData gridData = new SaleOrderGridData();
 				gridData.setSaleOrderID(so.getSaleOrderID().toString());
 				gridData.setSaleDate(sdf.format(so.getSaleDate()));
@@ -183,7 +179,7 @@ public class SaleOrderController {
 		if (page > total_pages)
 			page = total_pages;
 		response.setPage(page.toString());
-		response.setRecords(String.valueOf(soList.size()));
+		response.setRecords(((Long) ret.get("maxRows")).toString());
 		response.setTotal(total_pages.toString());
 		response.setRows(rowsList);
 		return response;

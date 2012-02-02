@@ -245,7 +245,7 @@
 		var surname = jQuery("#surname").val();
 		var startDate = jQuery("#dateInput").val();
 		var endDate = jQuery("#endDateInput").val();
-		var type = jQuery("#serialNo").val();
+		var type = jQuery("#type").val();
 		var serialNo = jQuery("#serialNo").val();
 		var employee = jQuery("#employee").val();
 		jQuery("#list").jqGrid('setGridParam',{url:"searchServiceOrder.html?name="+name+"&surname="+surname+"&startDate="+startDate+"&endDate="+endDate+"&type="+type+"&serialNo="+serialNo+"&employee="+employee,page:1}).trigger("reloadGrid");

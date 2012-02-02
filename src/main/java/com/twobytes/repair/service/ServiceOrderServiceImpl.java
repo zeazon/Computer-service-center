@@ -1,7 +1,9 @@
 package com.twobytes.repair.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -81,7 +83,7 @@ public class ServiceOrderServiceImpl implements ServiceOrderService {
 
 	@Override
 	@Transactional
-	public List<ServiceOrder> selectByCriteria(String name, String startDate,
+	public Map<String, Object> selectByCriteria(String name, String startDate,
 			String endDate, String type, String serialNo, String employee,
 			Integer rows, Integer page, String orderBy, String orderType) {
 		if(null != name && !name.equals("")) {
@@ -90,16 +92,16 @@ public class ServiceOrderServiceImpl implements ServiceOrderService {
 		if(null != serialNo && !serialNo.equals("")) {
 			serialNo = "%"+serialNo+"%";
 		}
-		List<ServiceOrder> modelList = new ArrayList<ServiceOrder>();
-
+		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			modelList = soDAO.selectByCriteria(name, startDate, endDate, type, serialNo, employee, rows, page, orderBy, orderType);
+			result = soDAO.selectByCriteria(name, startDate, endDate, type, serialNo, employee, rows, page, orderBy, orderType);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return modelList;
+		return result;
 	}
 
+	
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public boolean edit(ServiceOrder serviceOrder) throws Exception{

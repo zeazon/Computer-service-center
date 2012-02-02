@@ -1,6 +1,7 @@
 package com.twobytes.repair.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.twobytes.model.OutsiteService;
 import com.twobytes.model.OutsiteServiceDetail;
@@ -8,7 +9,7 @@ import com.twobytes.model.OutsiteServiceDetail;
 public interface OutsiteServiceService {
 	public String save(OutsiteService outsiteService) throws Exception;
 	public OutsiteService selectByID(String outsiteServiceID);
-	public List<OutsiteService> selectByCriteria(String name, String surname, String date, String type, Integer rows, Integer page, String orderBy, String orderType);
+	public Map<String, Object> selectByCriteria(String name, String surname, String date, String type, Integer rows, Integer page, String orderBy, String orderType);
 	public boolean edit(OutsiteService outsiteService) throws Exception;
 	public boolean delete(String outsiteServiceID, Integer employeeID) throws Exception;
 	public boolean sent(OutsiteService outsiteService) throws Exception;
