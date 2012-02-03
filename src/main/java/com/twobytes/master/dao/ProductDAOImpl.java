@@ -1,10 +1,15 @@
 package com.twobytes.master.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -32,7 +37,7 @@ public class ProductDAOImpl implements ProductDAO {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Product> selectByCriteria(String typeID, String brandID,
+	public Map<String, Object> selectByCriteria(String typeID, String brandID,
 			String modelID, String serialNo, Integer rows, Integer page, String orderBy,
 			String orderType) throws Exception {
 		StringBuilder sql = new StringBuilder();
@@ -62,7 +67,7 @@ public class ProductDAOImpl implements ProductDAO {
 			}
 		}
 		
-		Query q = sessionFactory.getCurrentSession().createQuery(sql.toString());
+		Query q = sessionFactory.getCurrentSession().createQuery(sql.toString()).setFirstResult(rows*page - rows).setMaxResults(rows).setFetchSize(rows);
 		if(null != typeID && !typeID.equals("")){
 			q.setString("type", typeID);
 		}
@@ -76,7 +81,31 @@ public class ProductDAOImpl implements ProductDAO {
 			q.setString("serialNo", serialNo);
 		}
 		
-		List<Product> result = q.list();
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		List<Product> list = q.list();
+		result.put("list", list);
+		
+		
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Product.class, "product");
+		if(null != typeID && !typeID.equals("")){
+			criteria.createCriteria("product.type" , "type");
+			criteria.add(Restrictions.eq("type.typeID", typeID));
+		}
+		if(null != brandID && !brandID.equals("")){
+			criteria.createCriteria("product.brand" , "brand");
+			criteria.add(Restrictions.eq("brand.brandID", Integer.valueOf(brandID)));
+		}
+		if(null != modelID && !modelID.equals("")){
+			criteria.createCriteria("product.model" , "model");
+			criteria.add(Restrictions.eq("model.modelID", Integer.valueOf(modelID)));
+		}
+		if(null != serialNo && !serialNo.equals("")){
+			criteria.add(Restrictions.like("serialNo", serialNo));
+		}
+		criteria.setProjection(Projections.rowCount());
+		
+		result.put("maxRows", criteria.list().get(0));
 		return result;
 	}
 

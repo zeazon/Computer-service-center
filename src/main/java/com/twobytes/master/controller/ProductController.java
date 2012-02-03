@@ -5,8 +5,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.twobytes.master.form.ModelForm;
 import com.twobytes.master.form.ProductForm;
 import com.twobytes.master.form.ProductGridData;
 import com.twobytes.master.form.ProductSearchForm;
@@ -96,6 +99,7 @@ public class ProductController {
 	}
 	
 	@RequestMapping(value="/searchProduct")
+	@SuppressWarnings("unchecked")
 	public @ResponseBody GridResponse getData(@RequestParam(value="serialNo", required=false) String serialNo, @RequestParam(value="typeID", required=false) String typeID, @RequestParam(value="brandID", required=false) String brandID, @RequestParam(value="modelID", required=false) String modelID, @RequestParam("rows") Integer rows, @RequestParam("page") Integer page, @RequestParam("sidx") String sidx, @RequestParam("sord") String sord){
 		// Because default Tomcat URI encoding is iso-8859-1 so it must encode back to tis620
 		try{
@@ -115,22 +119,17 @@ public class ProductController {
 			e.printStackTrace();
 		}
 		List<Product> productList = new ArrayList<Product>();
-
-		productList = productService.selectByCriteria(typeID, brandID, modelID, serialNo, rows, page, sidx, sord);
+		Map<String, Object> ret = new HashMap<String, Object>();
+		
+		ret = productService.selectByCriteria(typeID, brandID, modelID, serialNo, rows, page, sidx, sord);
+		productList = (List<Product>) ret.get("list");
 		
 		GridResponse response = new GridResponse();
 		List<ProductGridData> rowsList = new ArrayList<ProductGridData>();
 		
 		Integer total_pages = 0;
 		if(productList.size() > 0){
-			int endData = 0;
-			if(productList.size() < (rows*page)){
-				endData = productList.size();
-			}else{
-				endData = (rows*page);
-			}
-			for(int i=(rows*page - rows); i<endData; i++){
-				Product product = productList.get(i);
+			for(Product product:productList){
 				ProductGridData gridData = new ProductGridData();
 				gridData.setProductID(product.getProductID());
 				gridData.setTypeName(product.getType().getName());
@@ -144,12 +143,12 @@ public class ProductController {
 				gridData.setSerialNo(product.getSerialNo());
 				rowsList.add(gridData);
 			}
-			total_pages = new Double(Math.ceil(((double)productList.size()/(double)rows))).intValue();
+			total_pages = new Double(Math.ceil(((double)(Long) ret.get("maxRows")/(double)rows))).intValue();
 		}
 		
 		if (page > total_pages) page=total_pages;
 		response.setPage(page.toString());
-		response.setRecords(String.valueOf(productList.size()));
+		response.setRecords(((Long) ret.get("maxRows")).toString());
 		response.setTotal(total_pages.toString());
 		response.setRows(rowsList);
 		return response;
@@ -204,6 +203,9 @@ public class ProductController {
 		
 		List<Employee> empList = employeeService.getAll();
 		model.addAttribute("employeeList", empList);
+		
+		ModelForm modelForm = new ModelForm();
+		model.addAttribute("modelForm", modelForm);
 		
 		model.addAttribute("mode", "add");
 		return VIEWNAME_FORM;
@@ -273,6 +275,9 @@ public class ProductController {
 				
 				List<Employee> empList = employeeService.getAll();
 				model.addAttribute("employeeList", empList);
+				
+				ModelForm modelForm = new ModelForm();
+				model.addAttribute("modelForm", modelForm);
 				
 				model.addAttribute("mode", mode);
 				return VIEWNAME_FORM;
@@ -375,6 +380,9 @@ public class ProductController {
 			
 			List<Employee> empList = employeeService.getAll();
 			model.addAttribute("employeeList", empList);
+			
+			ModelForm modelForm = new ModelForm();
+			model.addAttribute("modelForm", modelForm);
 			
 			model.addAttribute("errMsg", e.getMessage());
 			model.addAttribute("mode", mode);
@@ -482,6 +490,9 @@ public class ProductController {
 		
 		List<Employee> empList = employeeService.getAll();
 		model.addAttribute("employeeList", empList);
+		
+		ModelForm modelForm = new ModelForm();
+		model.addAttribute("modelForm", modelForm);
 		
 		model.addAttribute("mode", "edit");
 		model.addAttribute("form", form);

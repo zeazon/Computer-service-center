@@ -270,12 +270,14 @@ public class BrandController {
 		try {
 			type = typeService.selectByID(typeID);
 			List<Brand> retList = new ArrayList<Brand>();
-			for(int i=0; i<type.getBrands().size(); i++){
-				Brand brand = type.getBrands().get(i);
-				Brand dataBrand = new Brand();
-				dataBrand.setBrandID(brand.getBrandID());
-				dataBrand.setName(brand.getName());
-				retList.add(dataBrand);
+			if(type.getBrands() != null){
+				for(int i=0; i<type.getBrands().size(); i++){
+					Brand brand = type.getBrands().get(i);
+					Brand dataBrand = new Brand();
+					dataBrand.setBrandID(brand.getBrandID());
+					dataBrand.setName(brand.getName());
+					retList.add(dataBrand);
+				}
 			}
 			return retList;
 		} catch (Exception e) {

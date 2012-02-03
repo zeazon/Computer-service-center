@@ -1,7 +1,7 @@
 package com.twobytes.master.service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,19 +48,19 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	@Transactional
-	public List<Product> selectByCriteria(String typeID, String brandID,
+	public Map<String, Object> selectByCriteria(String typeID, String brandID,
 			String modelID, String serialNo, Integer rows, Integer page, String orderBy,
 			String orderType){
 		if(null != serialNo && !serialNo.equals("")) {
 			serialNo = "%"+serialNo+"%";
 		}
-		List<Product> modelList = new ArrayList<Product>();
+		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			modelList = productDAO.selectByCriteria(typeID, brandID, modelID, serialNo, rows, page, orderBy, orderType);
+			result = productDAO.selectByCriteria(typeID, brandID, modelID, serialNo, rows, page, orderBy, orderType);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		return modelList;
+		return result;
 	}
 
 	@Override
