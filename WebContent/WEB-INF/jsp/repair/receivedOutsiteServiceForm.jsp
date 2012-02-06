@@ -249,7 +249,7 @@
 						<td><label><fmt:message key="outsiteService_receivedDate" />:<font color="red">*</font></label></td>
 						<td colspan="2"><div class="rowElem"><form:input class="required textboxMockup" id="receivedDate" path="receivedDate" readonly="readonly" size="10"/></div></td>
 						<td><label><fmt:message key="outsiteService_receivedTransportNo" />:<font color="red">*</font></label></td>
-						<td colspan="2"><div class="rowElem"><form:input class="required textboxMockup" path="receivedTransportNo" /></div></td>
+						<td colspan="2"><div class="rowElem"><form:input class="required textboxMockup" path="receivedTransportNo" maxlength="20" /></div></td>
 					</tr>
 					<tr>
 						<td valign="top" style="padding-top:9px;"><label><fmt:message key="outsiteService_repairing" />:</label></td>

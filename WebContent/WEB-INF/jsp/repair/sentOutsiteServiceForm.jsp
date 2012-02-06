@@ -244,7 +244,7 @@
 						<td><label><fmt:message key="outsiteService_sentDate" />:<font color="red">*</font></label></td>
 						<td colspan="2"><div class="rowElem"><form:input class="required textboxMockup" id="sentDate" path="sentDate" readonly="readonly" size="10"/></div></td>
 						<td><label><fmt:message key="outsiteService_sentTransportNo" />:<font color="red">*</font></label></td>
-						<td colspan="2"><div class="rowElem"><form:input class="required textboxMockup" path="sentTransportNo" /></div></td>
+						<td colspan="2"><div class="rowElem"><form:input class="required textboxMockup" path="sentTransportNo" maxlength="20"/></div></td>
 					</tr>
 					<tr>
 						<td colspan="6" align="center"><div class="rowElem"><input type="submit" value="<fmt:message key='button.ok' />" /></div></td>
