@@ -291,60 +291,13 @@
 							</table>
 						</td>
 					</tr>
-					
-					
-					
-					
-					<%-- tr>
-						<td colspan="6">
-							<div id="shopCustomerDetail">
-								<table width="100%" cellpadding="0" cellspacing="0">
-									<tr>
-										<td width="13%"><label><fmt:message key="name" />:</label></td>
-										<td><div class="rowElem"><span id="div_shopCus_name"></span>&nbsp;</div></td>
-									</tr>
-									<tr>
-										<td><label><fmt:message key="address" />:</label></td>
-										<td><div class="rowElem"><span id="div_shopCus_addr">${fullAddr}</span>&nbsp;</div></td>
-									</tr>
-									<tr>
-										<td><label><fmt:message key="tel" />:</label></td>
-										<td><div class="rowElem"><span id="div_shopCus_tel"></span>&nbsp;</div></td>
-									</tr>
-									<tr>
-										<td><label><fmt:message key="contactName" />:</label></td>
-										<td><div class="rowElem"><span id="div_shopCus_contact"></span>&nbsp;</div></td>
-									</tr>
-									<tr>
-										<td><label><fmt:message key="remark" />:</label></td>
-										<td><div class="rowElem"><span id="div_shopCus_remark"></span>&nbsp;</div></td>
-									</tr>
-								</table>
-							</div>
-							<div id="walkinCustomerDetail">
-								<table width="100%" cellpadding="0" cellspacing="0">
-									<tr>
-										<td width="13%"><label><fmt:message key="name" />:</label></td>
-										<td width="37%"><div class="rowElem"><span id="div_walkinCus_name">${customer.name}&nbsp;${customer.surname}</span>&nbsp;</div></td>
-										<td width="13%"><label><fmt:message key="companyName" />:</label></td>
-										<td><div class="rowElem"><span id="div_walkinCus_company"></span>&nbsp;</div></td>
-									</tr>
-									<tr>
-										<td><label><fmt:message key="address" />:</label></td>
-										<td colspan="3"><div class="rowElem"><span id="div_walkinCus_addr">${fullAddr}&nbsp;</span></div></td>
-									</tr>
-									<tr>
-										<td><label><fmt:message key="tel" />:</label></td>
-										<td colspan="3"><div class="rowElem"><span id="div_walkinCus_tel">${customer.tel}</span>&nbsp;</div></td>
-									</tr>
-									<tr>
-										<td><label><fmt:message key="mobileTel" />:</label></td>
-										<td colspan="3"><div class="rowElem"><span id="div_walkinCus_mobileTel">${customer.mobileTel}</span>&nbsp;</div></td>
-									</tr>
-								</table>
-							</div>
-						</td>
-					</tr--%>
+					<c:if test="${form.status == 'new' || mode == 'add'}">
+					<tr>
+						<td valign="top" style="padding-top:7px;"><label><fmt:message key="remark"/>:</label></td>
+						<td colspan="5"><div class="rowElem"><form:textarea path="remark" rows="5" col="30" class="textareaMockup" style="width:98%"></form:textarea></div></td>
+					</tr>
+					</c:if>
+
 					
 					<c:if test="${form.status == 'fixing' || form.status == 'outsite'}">
 					<tr>
@@ -360,6 +313,10 @@
 								</form:select>
 							</div>
 						</td>
+					</tr>
+					<tr>
+						<td valign="top" style="padding-top:7px;"><label><fmt:message key="remark"/>:</label></td>
+						<td colspan="5"><div class="rowElem"><form:textarea path="remark" rows="5" col="30" class="textareaMockup" style="width:98%"></form:textarea></div></td>
 					</tr>
 					</c:if>
 					
@@ -554,12 +511,26 @@
 						</tr>
 						<tr>
 							<td valign="top" style="padding-top:5px;"><label><fmt:message key="remark"/>:</label></td>
-							<td colspan="5" align="left"><div class="rowElem"><pre style="font-size:16px;">${form.remark}</pre></div></td>
+							<td colspan="5">
+								<div class="rowElem">
+									<c:choose>
+										<c:when test="${form.status != 'close'}">
+											<form:textarea path="remark" rows="5" col="30" class="textareaMockup" style="width:98%"></form:textarea>
+										</c:when>
+										<c:otherwise>
+											<pre style="font-size:16px;">${form.remark}</pre>
+										</c:otherwise>
+									</c:choose>
+								</div>
+							</td>
+							<%--td colspan="5" align="left"><div class="rowElem"><pre style="font-size:16px;">${form.remark}</pre></div></td--%>
 						</tr>
 						<tr align="center">
 							<td colspan="6">
 								<div class="rowElem">
-									<input type="submit" value="<fmt:message key='button.ok' />" />
+									<c:if test="${form.status != 'close'}">
+										<input type="submit" value="<fmt:message key='button.ok' />" />
+									</c:if>
 								</div>
 							</td>
 						</tr>

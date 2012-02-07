@@ -472,6 +472,7 @@ public class ServiceOrderController {
 		so.setDeliveryEmail(form.getDeliveryEmail());
 		so.setDeliveryMobileTel(form.getDeliveryMobileTel());
 		so.setDeliveryTel(form.getDeliveryTel());
+		so.setRemark(form.getRemark());
 		
 		model.addAttribute(
 				"fullAddr",
@@ -703,6 +704,37 @@ public class ServiceOrderController {
 		form.setServiceOrderID(result);
 		model.addAttribute("msg", msg);
 
+		// for closed service order
+		if(!so.getStatus().equals(ServiceOrder.NEW)){
+			if(so.getStartFix() != null){
+				form.setStartFix(sdfDateTime.format(so.getStartFix()));
+			}else{
+				form.setStartFix("-");
+			}
+			if(so.getEndFix() != null){
+				form.setEndFix(sdfDateTime.format(so.getEndFix()));
+			}else{
+				form.setEndFix("-");
+			}
+			form.setRealProblem(so.getRealProblem());
+			form.setCause(so.getCause());
+			form.setFixDesc(so.getFixDesc());
+			form.setCosting(so.getCosting());
+			
+			List<ServiceList> serviceList = serviceListService.getByServiceOrder(so.getServiceOrderID());
+			model.addAttribute("serviceList", serviceList);
+			
+			List<IssuePart> issuePartList = issuePartService.getByServiceOrder(so.getServiceOrderID());
+			if(issuePartList.size() > 0){
+				form.setIssuePart("haveIssuedPart");
+			}else{
+				form.setIssuePart("noIssuedPart");
+			}
+			model.addAttribute("issuePartList", issuePartList);
+			form.setNetAmount(so.getTotalPrice());
+			form.setRemark(so.getRemark());
+		}
+		
 		List<Type> typeList = new ArrayList<Type>();
 		try {
 			typeList = typeService.getAll();
