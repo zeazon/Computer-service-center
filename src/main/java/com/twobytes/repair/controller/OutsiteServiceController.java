@@ -703,7 +703,7 @@ public class OutsiteServiceController {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-		Type type = typeList.get(0);
+		Type type = os.getType();
 		
 		List<Model> modelList = new ArrayList<Model>();
 		List<Brand> brandList = new ArrayList<Brand>();
