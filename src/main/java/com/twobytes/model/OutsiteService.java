@@ -36,6 +36,7 @@ public class OutsiteService implements Serializable {
 	private Date sentDate;
 	private String sentTransportNo;
 	private Date receivedDate;
+	private TransportCompany receivedTransportCompany;
 	private String receivedTransportNo;
 	private String repairing;
 	private String costing;
@@ -194,7 +195,7 @@ public class OutsiteService implements Serializable {
 		this.outsiteCompany = outsiteCompany;
 	}
 	
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name="transportCompanyID")
 	public TransportCompany getTransportCompany() {
 		return transportCompany;
@@ -213,6 +214,17 @@ public class OutsiteService implements Serializable {
 		this.sentDate = sentDate;
 	}
 	
+	@ManyToOne
+	@JoinColumn(name="receivedTransportCompanyID")
+	public TransportCompany getReceivedTransportCompany() {
+		return receivedTransportCompany;
+	}
+
+	public void setReceivedTransportCompany(
+			TransportCompany receivedTransportCompany) {
+		this.receivedTransportCompany = receivedTransportCompany;
+	}
+
 	@Column(name="sentTransportNo")
 	public String getSentTransportNo() {
 		return sentTransportNo;

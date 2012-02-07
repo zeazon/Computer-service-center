@@ -247,7 +247,17 @@
 					</tr>
 					<tr>
 						<td><label><fmt:message key="outsiteService_receivedDate" />:<font color="red">*</font></label></td>
-						<td colspan="2"><div class="rowElem"><form:input class="required textboxMockup" id="receivedDate" path="receivedDate" readonly="readonly" size="10"/></div></td>
+						<td colspan="5"><div class="rowElem"><form:input class="required textboxMockup" id="receivedDate" path="receivedDate" readonly="readonly" size="10"/></div></td>
+					</tr>
+					<tr>
+						<td><label><fmt:message key="transportCompany" />:</label></td>
+						<td colspan="2">
+							<div class="rowElem">
+								<form:select path="receivedTransportCompanyID" id="receivedTransportCompany">
+									<form:options items="${transportCompanyList}" itemValue="transportCompanyID" itemLabel="name"/>
+								</form:select>
+							</div>
+						</td>
 						<td><label><fmt:message key="outsiteService_receivedTransportNo" />:<font color="red">*</font></label></td>
 						<td colspan="2"><div class="rowElem"><form:input class="required textboxMockup" path="receivedTransportNo" maxlength="20" /></div></td>
 					</tr>

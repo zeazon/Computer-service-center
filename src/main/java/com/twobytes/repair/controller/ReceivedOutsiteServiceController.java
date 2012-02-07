@@ -19,13 +19,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.twobytes.master.service.TransportCompanyService;
 import com.twobytes.master.service.TypeService;
-import com.twobytes.model.Customer;
 import com.twobytes.model.Employee;
 import com.twobytes.model.GridResponse;
 import com.twobytes.model.OutsiteService;
 import com.twobytes.model.OutsiteServiceDetail;
 import com.twobytes.model.ServiceOrder;
+import com.twobytes.model.TransportCompany;
 import com.twobytes.model.Type;
 import com.twobytes.repair.form.OutsiteServiceForm;
 import com.twobytes.repair.form.OutsiteServiceGridData;
@@ -41,6 +42,9 @@ public class ReceivedOutsiteServiceController {
 	
 	@Autowired
 	private TypeService typeService;
+	
+	@Autowired
+	private TransportCompanyService transportCompanyService;
 	
 	@Autowired
 	private MessageSource messages;
@@ -204,6 +208,14 @@ public class ReceivedOutsiteServiceController {
 		model.addAttribute("form", form);
 //		model.addAttribute("fullAddr", os.getServiceOrder().getCustomer().getAddress()+" "+this.messages.getMessage("subdistrict_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getSubdistrict().getName()+" "+this.messages.getMessage("district_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getDistrict().getName()+" "+this.messages.getMessage("province_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getProvince().getName());
 		
+		List<TransportCompany> tcList = new ArrayList<TransportCompany>();
+		try {
+			tcList = transportCompanyService.getAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		model.addAttribute("transportCompanyList", tcList);
+		
 		return VIEWNAME_FORM;
 	}
 	
@@ -223,6 +235,14 @@ public class ReceivedOutsiteServiceController {
 			e.printStackTrace();
 			os.setSentDate(now);
 		}
+		TransportCompany tc = new TransportCompany();
+		try {
+			tc = transportCompanyService.selectByID(form.getReceivedTransportCompanyID());
+		} catch (Exception e2) {
+			e2.printStackTrace();
+			tc = null;
+		}
+		os.setReceivedTransportCompany(tc);
 		os.setReceivedTransportNo(form.getReceivedTransportNo());
 		os.setRepairing(form.getRepairing());
 		os.setCosting(form.getCosting());
@@ -375,6 +395,13 @@ public class ReceivedOutsiteServiceController {
 			form = modelToForm(os, form);
 			model.addAttribute("form",form);
 //			model.addAttribute("fullAddr", os.getServiceOrder().getCustomer().getAddress()+" "+this.messages.getMessage("subdistrict_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getSubdistrict().getName()+" "+this.messages.getMessage("district_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getDistrict().getName()+" "+this.messages.getMessage("province_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getProvince().getName());
+			List<TransportCompany> tcList = new ArrayList<TransportCompany>();
+			try {
+				tcList = transportCompanyService.getAll();
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+			model.addAttribute("transportCompanyList", tcList);
 			return VIEWNAME_FORM;
 		}
 		
@@ -383,6 +410,13 @@ public class ReceivedOutsiteServiceController {
 			form = modelToForm(os, form);
 			model.addAttribute("form",form);
 //			model.addAttribute("fullAddr", os.getServiceOrder().getCustomer().getAddress()+" "+this.messages.getMessage("subdistrict_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getSubdistrict().getName()+" "+this.messages.getMessage("district_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getDistrict().getName()+" "+this.messages.getMessage("province_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getProvince().getName());
+			List<TransportCompany> tcList = new ArrayList<TransportCompany>();
+			try {
+				tcList = transportCompanyService.getAll();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			model.addAttribute("transportCompanyList", tcList);
 			return VIEWNAME_FORM;
 		}
 		

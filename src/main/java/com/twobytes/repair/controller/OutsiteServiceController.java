@@ -684,6 +684,9 @@ public class OutsiteServiceController {
 		if(os.getReceivedDate() != null){
 			form.setReceivedDate(sdfDate.format(os.getReceivedDate()));
 		}
+		if(os.getReceivedTransportCompany() != null){
+			form.setReceivedTransportCompanyID(os.getReceivedTransportCompany().getTransportCompanyID());
+		}
 		form.setReceivedTransportNo(os.getReceivedTransportNo());
 		form.setRepairing(os.getRepairing());
 		form.setCosting(os.getCosting());

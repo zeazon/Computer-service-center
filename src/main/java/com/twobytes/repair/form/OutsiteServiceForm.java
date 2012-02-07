@@ -31,6 +31,7 @@ public class OutsiteServiceForm {
 	private String sentTransportNo;
 	
 	private String receivedDate;
+	private Integer receivedTransportCompanyID;
 	private String receivedTransportNo;
 	private String repairing;
 	private String costing;
@@ -122,6 +123,12 @@ public class OutsiteServiceForm {
 	}
 	public void setReceivedDate(String receivedDate) {
 		this.receivedDate = receivedDate;
+	}
+	public Integer getReceivedTransportCompanyID() {
+		return receivedTransportCompanyID;
+	}
+	public void setReceivedTransportCompanyID(Integer receivedTransportCompanyID) {
+		this.receivedTransportCompanyID = receivedTransportCompanyID;
 	}
 	public String getReceivedTransportNo() {
 		return receivedTransportNo;

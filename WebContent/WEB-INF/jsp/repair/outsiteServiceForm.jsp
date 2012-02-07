@@ -305,7 +305,18 @@
 							</tr>
 							<tr>
 								<td><label><fmt:message key="outsiteService_receivedDate" />:</label></td>
-								<td colspan="2"><div class="rowElem">${form.receivedDate}</div></td>
+								<td colspan="5"><div class="rowElem">${form.receivedDate}</div></td>
+							</tr>
+							<tr>
+								<td><label><fmt:message key="transportCompany" />:</label></td>
+								<td colspan="2">
+									<div class="rowElem">
+										<form:select path="receivedTransportCompanyID" id="receivedTransportCompany" disabled="disabled">
+											<form:option value="">-</form:option>
+											<form:options items="${transportCompanyList}" itemValue="transportCompanyID" itemLabel="name"/>
+										</form:select>
+									</div>
+								</td>
 								<td><label><fmt:message key="outsiteService_receivedTransportNo" />:</label></td>
 								<td colspan="2"><div class="rowElem">${form.receivedTransportNo}</div></td>
 							</tr>
