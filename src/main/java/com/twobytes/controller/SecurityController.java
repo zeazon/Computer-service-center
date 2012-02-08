@@ -68,18 +68,14 @@ public class SecurityController {
 			// If cannot login securityService.login will return null
 			emp = securityService.login(form.getLogin(), form.getPassword());
 		}catch(Exception e){
+			e.printStackTrace();
 			errMsg = e.getMessage();
-//			mav.addObject("errMsg", errMsg);
-//			mav.setViewName("loginScreen");
-//			return mav;
 			model.addAttribute("errMsg", errMsg);
 			return "loginScreen";
 		}
 		
 		if(null == emp){
 			// Can't login
-//			mav.addObject("errMsg", errMsg);
-//			mav.setViewName("loginScreen");
 			errMsg = this.messages.getMessage("error.login", null, new Locale("th", "TH"));
 			model.addAttribute("errMsg", errMsg);
 			return "loginScreen";
@@ -147,10 +143,6 @@ public class SecurityController {
 	
 	@RequestMapping(value = "/logout")
 	public String logout(HttpServletRequest request, ModelMap model) {
-//		ModelAndView mav = new ModelAndView();
-//		request.getSession().removeAttribute("UserLogin");
-//		mav.setViewName("indexScreen");
-//		return mav;
 		request.getSession().removeAttribute("UserLogin");
 		LoginForm loginForm = new LoginForm();
 		model.addAttribute(loginForm);

@@ -290,6 +290,7 @@ public class ServiceOrderController {
 					gridData.setEmpFix(so.getEmpFix().getName() + " "
 						+ so.getEmpFix().getSurname());
 				}
+				gridData.setCannotMakeContact(so.getCannotMakeContact());
 				
 				rowsList.add(gridData);
 			}
@@ -472,6 +473,7 @@ public class ServiceOrderController {
 		so.setDeliveryEmail(form.getDeliveryEmail());
 		so.setDeliveryMobileTel(form.getDeliveryMobileTel());
 		so.setDeliveryTel(form.getDeliveryTel());
+		so.setCannotMakeContact(form.getCannotMakeContact());
 		so.setRemark(form.getRemark());
 		
 		model.addAttribute(
@@ -598,7 +600,7 @@ public class ServiceOrderController {
 			model.addAttribute("modelForm", modelForm);
 			
 			// get form for print document
-			ServiceOrderDocForm docForm = new ServiceOrderDocForm();
+			ServiceOrderDocForm docForm = setDocPrintForm(so);
 			model.addAttribute("docForm", docForm);
 			model.addAttribute("mode", mode);
 			return VIEWNAME_FORM;
@@ -695,7 +697,7 @@ public class ServiceOrderController {
 			model.addAttribute("modelForm", modelForm);
 			
 			// get form for print document
-			ServiceOrderDocForm docForm = new ServiceOrderDocForm();
+			ServiceOrderDocForm docForm = setDocPrintForm(so);
 			model.addAttribute("docForm", docForm);
 			model.addAttribute("mode", mode);
 			return VIEWNAME_FORM;
@@ -816,9 +818,24 @@ public class ServiceOrderController {
 		
 		// get data for print document
 		ServiceOrderDocForm docForm = setDocPrintForm(so);
+		
+		if(so.getStatus().equals(ServiceOrder.FIXED)|| so.getStatus().equals(ServiceOrder.CLOSE)){
+			docForm.setStartFix(sdf.format(so.getStartFix()));
+			docForm.setStartFixTime(sdfTime.format(so.getStartFix()));
+			docForm.setEndFix(sdfDateTime.format(so.getEndFix()));
+			docForm.setEmpFix(so.getEmpFix().getName());
+			
+			docForm.setCosting(so.getCosting());
+			docForm.setRealProblem(so.getRealProblem());
+			docForm.setCause(so.getCause());
+			docForm.setFixDesc(so.getFixDesc());
+			docForm.setTotalPrice(so.getTotalPrice());
+		}
 
 		model.addAttribute("docForm", docForm);
-		model.addAttribute("action", "print");
+		if(mode.equals("add")){
+			model.addAttribute("action", "print");
+		}
 		model.addAttribute("mode", "edit");
 		return VIEWNAME_FORM;
 	}
@@ -856,6 +873,7 @@ public class ServiceOrderController {
 		form.setAccessories(so.getAccessories());
 		form.setDesc(so.getDescription());
 		form.setProblem(so.getProblem());
+		form.setCannotMakeContact(so.getCannotMakeContact());
 		form.setStatus(so.getStatus());
 
 		List<Type> typeList = new ArrayList<Type>();
@@ -1067,6 +1085,32 @@ public class ServiceOrderController {
 	@RequestMapping(value = "/serviceOrder", params = "do=printExcel")
 	public String doPrintExcel(@ModelAttribute ServiceOrderDocForm docForm,
 			HttpServletRequest request, ModelMap model) {
+		ServiceOrder so = soService.selectByID(docForm.getServiceOrderID());
+		
+		docForm = setDocPrintForm(so);
+		
+		if(so.getStatus().equals(ServiceOrder.FIXED)|| so.getStatus().equals(ServiceOrder.CLOSE)){
+			docForm.setStartFix(sdf.format(so.getStartFix()));
+			docForm.setStartFixTime(sdfTime.format(so.getStartFix()));
+			docForm.setEndFix(sdfDateTime.format(so.getEndFix()));
+			docForm.setEmpFix(so.getEmpFix().getName());
+			
+			docForm.setCosting(so.getCosting());
+			docForm.setRealProblem(so.getRealProblem());
+			docForm.setCause(so.getCause());
+			docForm.setFixDesc(so.getFixDesc());
+			docForm.setTotalPrice(so.getTotalPrice());
+			
+			List<IssuePart> issuePartList = new ArrayList<IssuePart>();
+			issuePartList = issuePartService.getByServiceOrder(so.getServiceOrderID());
+			
+			List<ServiceList> serviceList = new ArrayList<ServiceList>();
+			serviceList = serviceListService.getByServiceOrder(so.getServiceOrderID());
+			
+			docForm.setIssuePartList(issuePartList);
+			docForm.setServiceList(serviceList);
+		}
+		
         model.addAttribute("form", docForm);
 		return "serviceOrderDocExcel";
 	}
@@ -1189,7 +1233,8 @@ public class ServiceOrderController {
 		docForm.setEmpOpenID(so.getEmpOpen().getEmployeeID().toString());
 		docForm.setEmpOpen(so.getEmpOpen().getName() + " "
 				+ so.getEmpOpen().getSurname());
-
+		docForm.setStatus(so.getStatus());
+		
 		return docForm; 
 	}
 }

@@ -85,17 +85,17 @@
 	//$("#endDateInput").calendarsPicker($.extend({calendar: $.calendars.instance('thai','th')}));
 	$("#dateInput").calendarsPicker($.extend({calendar: $.calendars.instance('gregorian','th')}));
 	$("#endDateInput").calendarsPicker($.extend({calendar: $.calendars.instance('gregorian','th')}));
-
+	
 	jQuery().ready(function (){
 		//find all form with class jqtransform and apply the plugin
 		$("form.jqtransform").jqTransform();
-		
+
 		jQuery("#list").jqGrid({
 			url:"searchServiceOrder.html",
 			datatype: "json",
 			height: "100%",
 			autowidth: true,
-			colNames:['<fmt:message key="serviceOrderID" />','<fmt:message key="date" />','<fmt:message key="name" />','<fmt:message key="tel" />','<fmt:message key="mobileTel" />','<fmt:message key="type" />','<fmt:message key="brand" />','<fmt:message key="model" />','<fmt:message key="serialNo" />','<fmt:message key="serviceOrder_empFix" />','<fmt:message key="status" />'],
+			colNames:['<fmt:message key="serviceOrderID" />','<fmt:message key="date" />','<fmt:message key="name" />','<fmt:message key="tel" />','<fmt:message key="mobileTel" />','<fmt:message key="type" />','<fmt:message key="brand" />','<fmt:message key="model" />','<fmt:message key="serialNo" />','<fmt:message key="serviceOrder_empFix" />','<fmt:message key="status" />','<fmt:message key="cannotMakeContact" />'],
 			colModel:[
 				{name:'serviceOrderID',index:'serviceOrderID', width:'200'},
 				{name:'serviceOrderDate', index:'serviceOrderDate', align:'center', sorttype:'date',formatter:'date', formatoptions: {srcformat:'d/m/Y',newformat:'d/m/Y'}, width:'100', firstSortOrder:'desc'},
@@ -107,7 +107,8 @@
 				{name:'model',index:'model', sortable:false},
 				{name:'serialNo',index:'serialNo', sortable:false},
 				{name:'empFix',index:'empFix', sortable:true},
-				{name:'status',index:'status', formatter:statusFormatter, align:'center'}],
+				{name:'status',index:'status', formatter:statusFormatter, align:'center'},
+				{name:'cannotMakeContact',index:'cannotMakeContact',hidden:true}],
 			multiselect: false,
 			rownumbers: true,
 			rowNum:10,
@@ -118,7 +119,16 @@
 				id: "serviceOrderID"
 			},
 			pager: '#pager',
-			toppager: true
+			toppager: true,
+			loadComplete: function(data){
+				$.each(data.rows,function(i,item){
+					if(data.rows[i].cannotMakeContact == 1){
+						$("#" + data.rows[i].serviceOrderID).find("td").css("color", "red");
+						//$("#" + data.rows[i].serviceOrderID).find("td").css("background-color", "#FF1111");
+						//$("#" + data.rows[i].serviceOrderID).find("td").css("color", "silver");
+					}
+		        });
+		    }
 		}).navGrid("#pager",{edit:false,add:false,del:false,search:false,refresh:false,cloneToTop:true})
 		.navButtonAdd('#list_toppager',
 		{
@@ -223,9 +233,10 @@
 		$("#search_list", bottomPagerDiv).remove();
 		
 	});
+
 	
 	function statusFormatter (cellvalue, options, rowObject)
-	{
+	{	
 		if(cellvalue == 'new'){
 			return "<fmt:message key='serviceOrder_status_new' />";
 		}else if(cellvalue == 'fixing'){

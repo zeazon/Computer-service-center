@@ -45,6 +45,7 @@ public class ServiceOrder extends BaseColumn implements Serializable {
 	private Date returnDate;
 	private Double totalPrice;
 	private String remark;
+	private Integer cannotMakeContact;
 	private String status;
 	
 	public static String CUSTOMERTYPE_SHOP="shop";
@@ -324,6 +325,15 @@ public class ServiceOrder extends BaseColumn implements Serializable {
 		this.remark = remark;
 	}
 	
+	@Column(name="cannotMakeContact")
+	public Integer getCannotMakeContact() {
+		return cannotMakeContact;
+	}
+
+	public void setCannotMakeContact(Integer cannotMakeContact) {
+		this.cannotMakeContact = cannotMakeContact;
+	}
+
 	@Column(name="status")
 	public String getStatus() {
 		return status;

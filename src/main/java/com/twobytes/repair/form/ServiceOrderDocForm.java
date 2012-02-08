@@ -62,6 +62,8 @@ public class ServiceOrderDocForm implements Serializable {
 	private List<IssuePart> issuePartList;
 	private List<ServiceList> serviceList;
 	
+	private String status;
+	
 	public String getServiceOrderID() {
 		return serviceOrderID;
 	}
@@ -350,5 +352,10 @@ public class ServiceOrderDocForm implements Serializable {
 	public void setReturnDate(String returnDate) {
 		this.returnDate = returnDate;
 	}
-	
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
 }

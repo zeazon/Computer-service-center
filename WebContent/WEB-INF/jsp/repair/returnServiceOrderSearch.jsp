@@ -11,10 +11,6 @@
 						<td><label><fmt:message key="name" />:</label></td>
 						<td><div class="rowElem"><form:input path="name" type="text" id="name" class="textboxMockup" /></div></td>
 					</tr>
-					<%--tr>
-						<td><label><fmt:message key="surname" />:</label></td>
-						<td><div class="rowElem"><form:input path="surname" type="text" id="surname" class="textboxMockup" /></div></td>
-					</tr--%>
 					<tr>
 						<td><label><fmt:message key="date" />:</label></td>
 						<td><div class="rowElem" style="z-index:200"><form:input path="date" type="text" class="textboxMockup" id="dateInput" size="9"/></div></td>
@@ -27,7 +23,6 @@
 									<form:option value="">All</form:option>
 									<form:options items="${typeList}" itemValue="typeID" itemLabel="name"/>
 								</form:select>
-								<%--form:checkboxes path="type" items="${typeList}" itemValue="typeID" itemLabel="name" element="div style='float:left'" /--%>
 							</div>
 						</td>
 					</tr>
@@ -93,14 +88,15 @@
 			datatype: "json",
 			height: "100%",
 			autowidth: true,
-			colNames:['<fmt:message key="serviceOrderID" />','<fmt:message key="date" />','<fmt:message key="name" />','<fmt:message key="tel" />','<fmt:message key="mobileTel" />','<fmt:message key="status" />'],
+			colNames:['<fmt:message key="serviceOrderID" />','<fmt:message key="date" />','<fmt:message key="name" />','<fmt:message key="tel" />','<fmt:message key="mobileTel" />','<fmt:message key="status" />','<fmt:message key="cannotMakeContact" />'],
 			colModel:[
 				{name:'serviceOrderID',index:'serviceOrderID'},
 				{name:'serviceOrderDate', index:'serviceOrderDate', align:'center', sorttype:'date',formatter:'date', formatoptions: {srcformat:'d/m/Y',newformat:'d/m/Y'}, width:'100', firstSortOrder:'desc'},
 				{name:'name',index:'name'},
 				{name:'tel',index:'tel', sortable:false},
 				{name:'mobileTel',index:'mobileTel', sortable:false},
-				{name:'status',index:'status', formatter:statusFormatter, align:'center'}],
+				{name:'status',index:'status', formatter:statusFormatter, align:'center'},
+				{name:'cannotMakeContact',index:'cannotMakeContact',hidden:true}],
 			multiselect: false,
 			rownumbers: true,
 			rowNum:10,
@@ -111,7 +107,14 @@
 				id: "serviceOrderID"
 			},
 			pager: '#pager',
-			toppager: true
+			toppager: true,
+			loadComplete: function(data){
+				$.each(data.rows,function(i,item){
+					if(data.rows[i].cannotMakeContact == 1){
+						$("#" + data.rows[i].serviceOrderID).find("td").css("color", "red");
+					}
+		        });
+		    }
 		}).navGrid("#pager",{edit:false,add:false,del:false,search:false,refresh:false,cloneToTop:true})
 		.navButtonAdd('#list_toppager',
 		{

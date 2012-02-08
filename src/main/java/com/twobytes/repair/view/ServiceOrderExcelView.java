@@ -1,6 +1,7 @@
 package com.twobytes.repair.view;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +11,7 @@ import jxl.format.BorderLineStyle;
 import jxl.format.Border;
 import jxl.format.VerticalAlignment;
 import jxl.write.Label;
+import jxl.write.Number;
 import jxl.write.WritableCellFormat;
 import jxl.write.WritableFont;
 import jxl.write.WritableImage;
@@ -18,6 +20,9 @@ import jxl.write.WritableWorkbook;
 
 import org.springframework.web.servlet.view.document.AbstractJExcelView;
 
+import com.twobytes.model.IssuePart;
+import com.twobytes.model.ServiceList;
+import com.twobytes.model.ServiceOrder;
 import com.twobytes.repair.form.ServiceOrderDocForm;
 
 public class ServiceOrderExcelView extends AbstractJExcelView {
@@ -179,6 +184,68 @@ public class ServiceOrderExcelView extends AbstractJExcelView {
         
         sheet1.mergeCells(2, 32, 9, 39);
         sheet1.addCell(new Label(2, 32, form.getProblem(), wrap));
+        
+        
+        /*
+         * Add close data
+         */
+        if(form.getStatus().equals(ServiceOrder.FIXED)|| form.getStatus().equals(ServiceOrder.CLOSE)){
+        	WritableCellFormat border_top_right_thin_bottom_dotted = new WritableCellFormat();
+    		border_top_right_thin_bottom_dotted.setBorder(Border.LEFT, BorderLineStyle.THIN);
+    		border_top_right_thin_bottom_dotted.setBorder(Border.RIGHT, BorderLineStyle.THIN);
+    		border_top_right_thin_bottom_dotted.setBorder(Border.BOTTOM, BorderLineStyle.DOTTED);
+        	
+    		WritableCellFormat border_right_top_thin_bottom_double = new WritableCellFormat();
+    		border_right_top_thin_bottom_double.setBorder(Border.RIGHT, BorderLineStyle.THIN);
+    		border_right_top_thin_bottom_double.setBorder(Border.BOTTOM, BorderLineStyle.DOUBLE);
+    		border_right_top_thin_bottom_double.setBorder(Border.TOP, BorderLineStyle.THIN);
+    		
+	        List<IssuePart> issuePartList = form.getIssuePartList();
+			List<ServiceList> serviceList = form.getServiceList();
+	        
+	        sheet1.addCell(new Label(20, 5, form.getStartFix(), border_top_bottom));
+	        sheet1.addCell(new Label(20, 6, form.getStartFixTime(), border_top_bottom));
+	        sheet1.addCell(new Label(20, 7, form.getEndFix(), border_top_bottom));
+	        sheet1.addCell(new Label(20, 8, form.getEmpFix(), border_top_bottom));
+			
+			sheet1.mergeCells(2, 41, 9, 42);
+			sheet1.mergeCells(2, 43, 9, 44);
+			sheet1.mergeCells(2, 45, 9, 48);
+			
+			sheet1.addCell(new Label(2, 41, form.getRealProblem(), wrap));
+			sheet1.addCell(new Label(2, 43, form.getCause(), wrap));
+			sheet1.addCell(new Label(2, 45, form.getFixDesc(), wrap));
+			
+			int row = 0;
+			for(int i=0; i<issuePartList.size(); i++){
+				if(i>0){
+					row = i+1;
+					sheet1.mergeCells(15, 30+row, 19, 30+row);
+				}else{
+					row = i;
+					sheet1.mergeCells(15, 30+row, 19, 30+row+1);
+					sheet1.mergeCells(20, 30+row, 20, 30+row+1);
+					sheet1.mergeCells(21, 30+row, 21, 30+row+1);
+				}
+				
+				IssuePart ip = issuePartList.get(i);
+				sheet1.addCell(new Label(11, 30+row, ip.getCode(), border_top_right_thin_bottom_dotted));
+				sheet1.addCell(new Label(15, 30+row, ip.getName(), border_top_right_thin_bottom_dotted));
+				sheet1.addCell(new Number(20, 30+row, ip.getQuantity(), border_top_right_thin_bottom_dotted));
+				sheet1.addCell(new Number(21, 30+row, ip.getPrice(), border_top_right_thin_bottom_dotted));
+			}
+			
+			for(int j=0; j<serviceList.size(); j++){
+				ServiceList sl = serviceList.get(j);
+				sheet1.addCell(new Number(11, 43+j, j+1, border_top_right_thin_bottom_dotted));
+				sheet1.mergeCells(14, 43+j, 20, 43+j);
+				sheet1.addCell(new Label(14, 43+j, sl.getServiceName(), border_bottom_dotted));
+				sheet1.addCell(new Number(21, 43+j, sl.getPrice(), border_top_right_thin_bottom_dotted));
+			}
+			
+			sheet1.addCell(new Number(21, 47, form.getTotalPrice(), border_right_top_thin_bottom_double));
+        }		
+		
 	}
 
 }

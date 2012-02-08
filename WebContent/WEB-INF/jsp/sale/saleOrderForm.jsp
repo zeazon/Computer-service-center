@@ -448,6 +448,7 @@
 <c:url var="saveModelPopupURL" value="/model.html?do=savePopup" />
 
 <script type="text/javascript">
+$.ajaxSetup({ cache: false });
 
 //init walk in customer lov dialog
 var tDialog = $( "#dialog-modal" ).dialog({

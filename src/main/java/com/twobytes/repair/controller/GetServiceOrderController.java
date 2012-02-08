@@ -141,6 +141,7 @@ public class GetServiceOrderController {
 					gridData.setEmpFix(so.getEmpFix().getName() + " "
 						+ so.getEmpFix().getSurname());
 				}
+				gridData.setCannotMakeContact(so.getCannotMakeContact());
 
 				rowsList.add(gridData);
 			}

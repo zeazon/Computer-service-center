@@ -115,10 +115,10 @@ public class ReturnServiceOrderController {
 				gridData.setServiceOrderDate(sdfDateTime.format(so.getServiceOrderDate()));
 				Customer customer = so.getCustomer();
 				gridData.setName(customer.getName());
-//				gridData.setSurname(customer.getSurname());
 				gridData.setTel(customer.getTel());
 				gridData.setMobileTel(customer.getMobileTel());
 				gridData.setStatus(so.getStatus());
+				gridData.setCannotMakeContact(so.getCannotMakeContact());
 				rowsList.add(gridData);
 			}
 			total_pages = new Double(Math.ceil(((double)soList.size()/(double)rows))).intValue();

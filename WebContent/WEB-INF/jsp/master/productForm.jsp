@@ -155,7 +155,7 @@
 <c:url var="saveModelPopupURL" value="/model.html?do=savePopup" />
 
 <script type="text/javascript">
-
+$.ajaxSetup({ cache: false });
 
 $("#warrantyDate").calendarsPicker($.extend({calendar: $.calendars.instance('gregorian','th')}));
 $("#warrantyExpire").calendarsPicker($.extend({calendar: $.calendars.instance('gregorian','th')}));

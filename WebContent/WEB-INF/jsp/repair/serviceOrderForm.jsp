@@ -3,6 +3,11 @@
 <%@ taglib prefix="c" uri="/WEB-INF/tld/c.tld"%>
 <%@ taglib prefix="fn" uri="/WEB-INF/tld/fn.tld"%>
 
+<c:if test="${mode == 'edit' }">
+<div class="ui-widget-content">
+<button onclick="document.forms['printJasperForm'].submit();" id="prnBtn"><span class="ui-icon ui-icon-print"></span><fmt:message key="button.print" /></button>
+</div>
+</c:if>
 <table width="100%">
 	<tr>
 		<td>
@@ -56,7 +61,7 @@
 					</tr>
 					<tr>
 						<td><label><fmt:message key="appointmentDate"/>:</label></td>
-						<td colspan="5">
+						<td colspan="3">
 							<div class="rowElem" style="z-index:200">
 								<c:choose>
 									<c:when test="${form.status != 'close'}">
@@ -67,6 +72,9 @@
 									</c:otherwise>
 								</c:choose>
 							</div>
+						</td>
+						<td colspan="2">
+							<form:checkbox path="cannotMakeContact" value="1" />&nbsp;<fmt:message key="cannotMakeContact"/>
 						</td>
 					</tr>
 					<tr>
@@ -957,6 +965,7 @@
 <c:url var="getCustomerByProductURL" value="/saleOrder.html?do=getCustomerByProduct" />
 
 <script type="text/javascript">
+$.ajaxSetup({ cache: false });
 
 // init walk in customer lov dialog
 var tDialog = $( "#dialog-modal" ).dialog({
@@ -1063,6 +1072,7 @@ $(document).ready(function(){
 	$("form.jqtransform").jqTransform();
 	$("form.lov").jqTransform();
 	$("form.customerForm").jqTransform();
+	$("prnBtn").jqTransInputButton();
 	
 	// check type of customer for display detail
 //	checkCustomerType();	

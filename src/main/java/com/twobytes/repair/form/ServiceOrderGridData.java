@@ -31,6 +31,7 @@ public class ServiceOrderGridData {
 	private String status;
 	private String empOpen;
 	private String empFix;
+	private Integer cannotMakeContact;
 	
 	private Customer customer;
 	private String customerFullAddress;
@@ -215,5 +216,10 @@ public class ServiceOrderGridData {
 	public void setModelID(Integer modelID) {
 		this.modelID = modelID;
 	}
-
+	public Integer getCannotMakeContact() {
+		return cannotMakeContact;
+	}
+	public void setCannotMakeContact(Integer cannotMakeContact) {
+		this.cannotMakeContact = cannotMakeContact;
+	}
 }

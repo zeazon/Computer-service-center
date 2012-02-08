@@ -81,7 +81,7 @@
 			datatype: "json",
 			height: "100%",
 			autowidth: true,
-			colNames:['<fmt:message key="serviceOrderID" />','<fmt:message key="date" />','<fmt:message key="name" />','<fmt:message key="tel" />','<fmt:message key="mobileTel" />','<fmt:message key="type" />','<fmt:message key="brand" />','<fmt:message key="model" />','<fmt:message key="serialNo" />','<fmt:message key="status" />'],
+			colNames:['<fmt:message key="serviceOrderID" />','<fmt:message key="date" />','<fmt:message key="name" />','<fmt:message key="tel" />','<fmt:message key="mobileTel" />','<fmt:message key="type" />','<fmt:message key="brand" />','<fmt:message key="model" />','<fmt:message key="serialNo" />','<fmt:message key="status" />','<fmt:message key="cannotMakeContact" />'],
 			colModel:[
 				{name:'serviceOrderID',index:'serviceOrderID', width:'200'},
 				{name:'serviceOrderDate', index:'serviceOrderDate', align:'center', sorttype:'date',formatter:'date', formatoptions: {srcformat:'d/m/Y',newformat:'d/m/Y'}, width:'100', firstSortOrder:'desc'},
@@ -92,7 +92,8 @@
 				{name:'brand',index:'brand', sortable:false},
 				{name:'model',index:'model', sortable:false},
 				{name:'serialNo',index:'serialNo', sortable:false},
-				{name:'status',index:'status', formatter:statusFormatter, align:'center', sortable:false}],
+				{name:'status',index:'status', formatter:statusFormatter, align:'center', sortable:false},
+				{name:'cannotMakeContact',index:'cannotMakeContact',hidden:true}],
 			multiselect: false,
 			rownumbers: true,
 			rowNum:10,
@@ -103,7 +104,14 @@
 				id: "serviceOrderID"
 			},
 			pager: '#pager',
-			toppager: true
+			toppager: true,
+			loadComplete: function(data){
+				$.each(data.rows,function(i,item){
+					if(data.rows[i].cannotMakeContact == 1){
+						$("#" + data.rows[i].serviceOrderID).find("td").css("color", "red");
+					}
+		        });
+		    }
 		}).navGrid("#pager",{edit:false,add:false,del:false,search:false,refresh:false,cloneToTop:true})
 /*		.navButtonAdd('#list_toppager',
 		{

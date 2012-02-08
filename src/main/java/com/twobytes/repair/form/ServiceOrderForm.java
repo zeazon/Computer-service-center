@@ -42,6 +42,7 @@ public class ServiceOrderForm {
 	private String issuePart;
 	private Double netAmount;
 	private String remark;
+	private Integer cannotMakeContact;
 	
 	private String status;
 	
@@ -804,6 +805,14 @@ public class ServiceOrderForm {
 
 	public void setEmpFixID(Integer empFixID) {
 		this.empFixID = empFixID;
+	}
+
+	public Integer getCannotMakeContact() {
+		return cannotMakeContact;
+	}
+
+	public void setCannotMakeContact(Integer cannotMakeContact) {
+		this.cannotMakeContact = cannotMakeContact;
 	}
 
 }
