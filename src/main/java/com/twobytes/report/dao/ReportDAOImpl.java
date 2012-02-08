@@ -67,12 +67,34 @@ public class ReportDAOImpl implements ReportDAO {
 	@SuppressWarnings("unchecked")
 	public List<NumInstalledByEmpReportForm> numInstalled(String startDate,
 			String endDate, Integer employeeID) throws Exception {
+		
+		//2nd query
+		/*SELECT CONCAT(emp.name,' ',emp.surname) fullName, t.name type, b.name brand, m.name model, count(p.productID) num
+		FROM product p, employee emp, type t, brand b, model m
+		WHERE p.installedBy is not null 
+		AND p.installedBy = emp.employeeID 
+		AND t.typeID = p.typeID
+		AND b.brandID = p.brandID
+		AND m.modelID = p.modelID
+		GROUP BY fullName, t.name, b.name, m.name
+		ORDER BY fullName, t.name, b.name, m.name;*/
+		
+		//1st query
 		// SELECT CONCAT(emp.name,' ',emp.surname) fullName, count(p.productID) num FROM product p, employee emp WHERE p.installedBy is not null AND p.installedBy = emp.employeeID GROUP BY fullName;
+		
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT CONCAT(emp.name,' ',emp.surname) fullName, count(p.productID) num " +
-				"FROM product p, employee emp " +
+//		sql.append("SELECT CONCAT(emp.name,' ',emp.surname) fullName, count(p.productID) num " +
+//				"FROM product p, employee emp " +
+//				"WHERE p.installedBy is not null " +
+//				"AND p.installedBy = emp.employeeID ");
+		sql.append("SELECT CONCAT(emp.name,' ',emp.surname) fullName, t.name type, b.name brand, m.name model, count(p.productID) num " +
+				"FROM product p, employee emp, type t, brand b, model m " +
 				"WHERE p.installedBy is not null " +
-				"AND p.installedBy = emp.employeeID ");
+				"AND p.installedBy = emp.employeeID " +
+				"AND t.typeID = p.typeID " +
+				"AND b.brandID = p.brandID " +
+				"AND m.modelID = p.modelID ");
+				
 		
 		if((null != startDate && !startDate.equals("")) && (null != endDate && !endDate.equals(""))){
 			sql.append("and DATE(p.installedDate) between :startDate and :endDate ");
@@ -85,10 +107,15 @@ public class ReportDAOImpl implements ReportDAO {
 			sql.append("and p.installedBy = :empID ");
 		}
 		
-		sql.append("GROUP BY fullName ");
+		sql.append("GROUP BY fullName, t.name, b.name, m.name ");
+		sql.append("ORDER BY fullName, t.name, b.name, m.name ");
+//		sql.append("GROUP BY fullName ");
 		
 		Query q = sessionFactory.getCurrentSession().createSQLQuery(sql.toString())
 		.addScalar("fullName", new StringType())
+		.addScalar("type", new StringType())
+		.addScalar("brand", new StringType())
+		.addScalar("model", new StringType())
 		.addScalar("num", new IntegerType())
 		.setResultTransformer(Transformers.aliasToBean(NumInstalledByEmpReportForm.class));
 		
