@@ -287,12 +287,13 @@ public class SaleOrderController {
 		Employee user = (Employee) request.getSession().getAttribute("UserLogin");
 		SaleOrder so = new SaleOrder();
 		String msg = "";
-		Product product = new Product();
+//		Product product = new Product();
+		Product product = productService.selectByID(form.getProductID());
 		
 		if(null != form.getSaleOrderID()){
 			// update
 			so = saleOrderService.selectByID(form.getSaleOrderID());
-			product = productService.selectByID(form.getProductID());
+			//product = productService.selectByID(form.getProductID());
 			
 			msg = this.messages.getMessage("msg.updateComplete", null, new Locale("th", "TH"));
 		}else{
@@ -331,19 +332,19 @@ public class SaleOrderController {
 		}
 
 		// set product data
-		try {
-			product.setType(typeService.selectByID(form.getTypeID()));
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
-		try {
-			product.setBrand(brandService.selectByID(form.getBrandID()));
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
-		product.setModel(modelService.selectByID(form.getModelID()));
-		product.setSerialNo(form.getSerialNo());
-		product.setDescription(form.getDescription());
+//		try {
+//			product.setType(typeService.selectByID(form.getTypeID()));
+//		} catch (Exception e1) {
+//			e1.printStackTrace();
+//		}
+//		try {
+//			product.setBrand(brandService.selectByID(form.getBrandID()));
+//		} catch (Exception e1) {
+//			e1.printStackTrace();
+//		}
+//		product.setModel(modelService.selectByID(form.getModelID()));
+//		product.setSerialNo(form.getSerialNo());
+//		product.setDescription(form.getDescription());
 		try {
 			product.setWarrantyDate(sdf.parse(form.getWarrantyDate()));
 		} catch (ParseException e1) {
@@ -354,7 +355,7 @@ public class SaleOrderController {
 		} catch (ParseException e1) {
 			e1.printStackTrace();
 		}
-		product.setRemark(form.getRemark());
+//		product.setRemark(form.getRemark());
 		product.setUpdatedBy(user.getEmployeeID());
 		product.setUpdatedDate(now);
 		
@@ -362,7 +363,7 @@ public class SaleOrderController {
 		so.setUpdatedDate(now);
 		
 		try{
-			saleOrderService.save(so, product);		
+			saleOrderService.save(so, product);
 		}catch(Exception e){
 			e.printStackTrace();
 			model.addAttribute("errMsg", e.getMessage());
@@ -475,18 +476,20 @@ public class SaleOrderController {
 		form.setSaleDate(sdf.format(so.getSaleDate()));
 		form.setCustomerID(so.getCustomer().getCustomerID());
 		form.setProductID(so.getProduct().getProductID());
-		form.setTypeID(so.getProduct().getType().getTypeID());
-		form.setBrandID(so.getProduct().getBrand().getBrandID());
-		form.setModelID(so.getProduct().getModel().getModelID());
-		form.setSerialNo(so.getProduct().getSerialNo());
-		form.setDescription(so.getProduct().getDescription());
+//		form.setTypeID(so.getProduct().getType().getTypeID());
+//		form.setBrandID(so.getProduct().getBrand().getBrandID());
+//		form.setModelID(so.getProduct().getModel().getModelID());
+//		form.setSerialNo(so.getProduct().getSerialNo());
+//		form.setDescription(so.getProduct().getDescription());
 		if(so.getProduct().getWarrantyDate() != null){
 			form.setWarrantyDate(sdf.format(so.getProduct().getWarrantyDate()));
 		}
 		if(so.getProduct().getWarrantyExpire() != null){
 			form.setWarrantyExpire(sdf.format(so.getProduct().getWarrantyExpire()));
 		}
-		form.setRemark(so.getProduct().getRemark());
+//		form.setRemark(so.getProduct().getRemark());
+		
+		model.addAttribute("product", so.getProduct());
 		
 		ProductForm productForm = new ProductForm();
 		

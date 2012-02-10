@@ -141,6 +141,12 @@ public class ProductController {
 				}
 				gridData.setDescription(product.getDescription());
 				gridData.setSerialNo(product.getSerialNo());
+				if(product.getWarrantyDate() != null){
+					gridData.setWarrantyDate(sdf.format(product.getWarrantyDate()));
+				}
+				if(product.getWarrantyExpire() != null){
+					gridData.setWarrantyExpire(sdf.format(product.getWarrantyExpire()));
+				}
 				rowsList.add(gridData);
 			}
 			total_pages = new Double(Math.ceil(((double)(Long) ret.get("maxRows")/(double)rows))).intValue();
@@ -225,7 +231,7 @@ public class ProductController {
 		if(mode.equals("edit")){
 			// update
 			try{
-				product = productService.selectByID(form.getProductID());
+			//	product = productService.selectByID(form.getProductID());
 			}catch(Exception e){
 				e.printStackTrace();
 				model.addAttribute("errMsg", e.getMessage());
@@ -560,6 +566,23 @@ public class ProductController {
 		} catch (ParseException e2) {
 			e2.printStackTrace();
 		}
+		if(form.getInstalledBy() != null){
+			Employee installedBy = new Employee();
+			try {
+				installedBy = employeeService.selectByID(form.getInstalledBy());
+			} catch (Exception e) {
+				e.printStackTrace();
+				installedBy = null;
+			}
+			product.setInstalledBy(installedBy);
+		}
+		if(form.getInstalledDate() != null && form.getInstalledDate() != ""){
+			try {
+				product.setInstalledDate(sdf.parse(form.getInstalledDate()));
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
 		product.setRemark(form.getRemark());
 		
 		Type type = new Type();
@@ -600,6 +623,36 @@ public class ProductController {
 		}
 		response.setSuccess(true);
 		response.setMessage(this.messages.getMessage("msg.addComplete", null, new Locale("th", "TH")));
+		return response;
+	}
+	
+	@RequestMapping(value = "/product", params = "do=countSerialNo")
+	public @ResponseBody CustomGenericResponse countSerialNo(@RequestParam String serialNo, HttpServletRequest request){
+		CustomGenericResponse response = new CustomGenericResponse();
+		Long result = productService.countBySerialNo(serialNo);
+		if(result == -1){
+			response.setSuccess(false);
+			response.setData(result.toString());
+			response.setMessage(this.messages.getMessage("error.cannotConnectServer", null, new Locale("th", "TH")));
+		}else{
+			response.setData(result.toString());
+			response.setSuccess(true);
+		}
+		return response;
+	}
+	
+	@RequestMapping(value = "/product", params = "do=countSerialNoForEdit")
+	public @ResponseBody CustomGenericResponse countSerialNoForEdit(@RequestParam String serialNo, @RequestParam String productID){
+		CustomGenericResponse response = new CustomGenericResponse();
+		Long result = productService.countBySerialNoForEdit(serialNo, productID);
+		if(result == -1){
+			response.setSuccess(false);
+			response.setData(result.toString());
+			response.setMessage(this.messages.getMessage("error.cannotConnectServer", null, new Locale("th", "TH")));
+		}else{
+			response.setData(result.toString());
+			response.setSuccess(true);
+		}
 		return response;
 	}
 }

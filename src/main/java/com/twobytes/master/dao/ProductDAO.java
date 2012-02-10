@@ -10,4 +10,7 @@ public interface ProductDAO {
 	public Map<String, Object> selectByCriteria(String typeID, String brandID, String modelID, String serialNo, Integer rows, Integer page, String orderBy, String orderType) throws Exception;
 	public boolean edit(Product product) throws Exception;
 	public boolean delete(Product product) throws Exception;
+	
+	public Long countBySerialNo(String serialNo) throws Exception;
+	public Long countBySerialNoForEdit(String serialNo, String productID) throws Exception;
 }

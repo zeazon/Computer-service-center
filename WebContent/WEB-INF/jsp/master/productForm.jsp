@@ -17,11 +17,7 @@
 						<td width="40%"><label><fmt:message key="productID" />:</label></td>
 						<td>
 							<div class="rowElem">
-								<form:input path="productID" class="textboxMockup" readonly="true" maxlength="20"/>
-								<%--c:choose>
-									<c:when test="${mode == 'add'}"><form:input path="productID" class="textboxMockup" maxlength="20" /></c:when>
-									<c:otherwise><form:input path="productID" class="textboxMockup" readonly="true" maxlength="20"/></c:otherwise>
-								</c:choose--%>
+								<form:input path="productID" id="productID" class="textboxMockup" readonly="true" maxlength="20"/>
 							</div>
 						</td>
 					</tr>
@@ -64,7 +60,7 @@
 					</tr>
 					<tr>
 						<td><label><fmt:message key="serialNo" />:<font style="color:red">*</font></label></td>
-						<td><div class="rowElem"><form:input path="serialNo" id="serialNo" class="textboxMockup" maxlength="100"/> <label class="error" for="name" generated="true" style="display: none; padding-left:10px"></label></div></td>
+						<td><div class="rowElem"><form:input path="serialNo" id="serialNo" class="textboxMockup" maxlength="100"/> <label class="error" for="serialNo" generated="true" style="display: none; padding-left:10px"></label></div></td>
 					</tr>
 					<tr>
 						<td><label><fmt:message key="description" />:</label></td>
@@ -153,6 +149,8 @@
 <c:url var="findBrandURL" value="/brand.html?do=getBrandByType" />
 <c:url var="findModelURL" value="/model.html?do=getModel" />
 <c:url var="saveModelPopupURL" value="/model.html?do=savePopup" />
+<c:url var="countSerialNoURL" value="/product.html?do=countSerialNo" />
+<c:url var="countSerialNoForEditURL" value="/product.html?do=countSerialNoForEdit" />
 
 <script type="text/javascript">
 $.ajaxSetup({ cache: false });
@@ -162,9 +160,10 @@ $("#warrantyExpire").calendarsPicker($.extend({calendar: $.calendars.instance('g
 $("#installedDate").calendarsPicker($.extend({calendar: $.calendars.instance('gregorian','th')}));
 
 $(document).ready(function(){
+	
 	$("#form").validate({
 		rules: {
-			serialNo: "required",
+			serialNo: {required:true},
 			typeID: "required",
 			brandID: "required",
 			modelID: "required",
@@ -173,6 +172,12 @@ $(document).ready(function(){
 			}
 		}
 	});
+	
+	if('${mode}' == 'add'){
+		$("#serialNo").rules("add", { checkDupSerialNo: true });
+	}else if('${mode}' == 'edit'){
+		$("#serialNo").rules("add", { checkDupSerialNoForEdit: true });
+	}
 	
 	// add model
 	$( "#add-model-form" ).dialog({
@@ -480,5 +485,49 @@ function saveModel(){
 	});
 	
 }
-	
+
+jQuery.validator.addMethod("checkDupSerialNo", function(value, element, options) {
+	var validOrNot = true;
+	$.ajax({
+		url: '${countSerialNoURL}', 
+		data: {serialNo:value},
+		async: false,
+		success:
+			function(msg){
+				if(msg.success == false){
+					validOrNot = false;
+				}else{
+					if(msg.data > 0){
+						validOrNot = false;
+					}else{
+						validOrNot = true;
+					}
+				}
+			}
+	});
+	return validOrNot;
+},'<fmt:message key="error.duplicateSerialNo" />');
+
+jQuery.validator.addMethod("checkDupSerialNoForEdit", function(value, element, options) {
+	var validOrNot = true;
+	$.ajax({
+		url: '${countSerialNoForEditURL}', 
+		data: {serialNo:value, productID:$('#productID').val()},
+		async: false,
+		success:
+			function(msg){
+				if(msg.success == false){
+					validOrNot = false;
+				}else{
+					if(msg.data > 0){
+						validOrNot = false;
+					}else{
+						validOrNot = true;
+					}
+				}
+			}
+	});
+	return validOrNot;
+},'<fmt:message key="error.duplicateSerialNo" />');
+
 </script>

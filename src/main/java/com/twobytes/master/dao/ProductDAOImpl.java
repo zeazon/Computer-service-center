@@ -122,4 +122,24 @@ public class ProductDAOImpl implements ProductDAO {
 		return true;
 	}
 
+	@Override
+	public Long countBySerialNo(String serialNo) throws Exception {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Product.class, "product");
+		criteria.add(Restrictions.eq("serialNo", serialNo));
+		criteria.setProjection(Projections.rowCount());
+		Long result = (Long)criteria.list().get(0);
+		return result;
+	}
+
+	@Override
+	public Long countBySerialNoForEdit(String serialNo, String productID)
+			throws Exception {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Product.class, "product");
+		criteria.add(Restrictions.eq("serialNo", serialNo));
+		criteria.add(Restrictions.ne("productID", productID));
+		criteria.setProjection(Projections.rowCount());
+		Long result = (Long)criteria.list().get(0);
+		return result;
+	}
+
 }

@@ -24,6 +24,12 @@ public class SaleOrderServiceImpl implements SaleOrderService {
 	
 	@Override
 	@Transactional(rollbackFor = Exception.class)
+	public boolean save(SaleOrder saleOrder) throws Exception {
+		return saleOrderDAO.save(saleOrder);
+	}
+	
+	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public boolean save(SaleOrder saleOrder, Product product) throws Exception {
 		productService.save(product);
 		saleOrder.setProduct(product);

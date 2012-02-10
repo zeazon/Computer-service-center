@@ -963,6 +963,7 @@
 <c:url var="findModelURL" value="/model.html?do=getModel" />
 <c:url var="saveModelPopupURL" value="/model.html?do=savePopup" />
 <c:url var="getCustomerByProductURL" value="/saleOrder.html?do=getCustomerByProduct" />
+<c:url var="countSerialNoURL" value="/product.html?do=countSerialNo" />
 
 <script type="text/javascript">
 $.ajaxSetup({ cache: false });
@@ -1049,7 +1050,7 @@ $(document).ready(function(){
 	
 	$("#productForm").validate({
 		rules: {
-			serialNo: "required",
+			serialNo: {required:true, checkDupSerialNo:true},
 			brandID: "required",
 			modelID: "required",
 			remark:{
@@ -2419,5 +2420,27 @@ jQuery.validator.addMethod("require_from_group", function(value, element, option
 jQuery.validator.addMethod("checkZipcode", function(value, element, param) {
 	return value.match(new RegExp("^[0-9\-]+$"));
 },"<fmt:message key='error.checkZipcode' />");
+
+jQuery.validator.addMethod("checkDupSerialNo", function(value, element, options) {
+	var validOrNot = true;
+	$.ajax({
+		url: '${countSerialNoURL}', 
+		data: {serialNo:value},
+		async: false,
+		success:
+			function(msg){
+				if(msg.success == false){
+					validOrNot = false;
+				}else{
+					if(msg.data > 0){
+						validOrNot = false;
+					}else{
+						validOrNot = true;
+					}
+				}
+			}
+	});
+	return validOrNot;
+},'<fmt:message key="error.duplicateSerialNo" />');
 
 </script>

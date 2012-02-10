@@ -473,7 +473,11 @@ public class ServiceOrderController {
 		so.setDeliveryEmail(form.getDeliveryEmail());
 		so.setDeliveryMobileTel(form.getDeliveryMobileTel());
 		so.setDeliveryTel(form.getDeliveryTel());
-		so.setCannotMakeContact(form.getCannotMakeContact());
+		if(form.getCannotMakeContact() == null){
+			so.setCannotMakeContact(0);	
+		}else{
+			so.setCannotMakeContact(form.getCannotMakeContact());
+		}
 		so.setRemark(form.getRemark());
 		
 		model.addAttribute(

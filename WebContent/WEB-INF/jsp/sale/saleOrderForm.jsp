@@ -71,7 +71,7 @@
 						<td><label><fmt:message key="productID" />:</label></td>
 						<td colspan="7">
 							<div class="rowElem">
-								<form:input path="productID" class="textboxMockup" style="float:left" id="productID" readonly="true" size="18" maxlength="20"/>
+								<form:input path="productID" class="textboxMockup" style="float:left" id="productID" readonly="true" size="18" maxlength="20"/> <input type="button" id="productLov" value="..." >
 								<%--c:if test="${mode == 'add'}">
 									<form:input path="productID" class="textboxMockup" style="float:left" id="productID" size="18" maxlength="20"/> <!-- input type="button" id="productLov" value="..." > <label class="error" for="productID" generated="true" style="display: none; float:left; padding-left:10px"></label-->
 								</c:if>
@@ -82,6 +82,32 @@
 						</td>
 					</tr>
 					<tr>
+						<td><label><fmt:message key="type" />:</label></td>
+						<td>
+							<div class="rowElem">
+								<span id="typeTxt">${product.type.name}&nbsp;</span>
+							</div>
+						</td>
+						<td><label><fmt:message key="brand" />:</label></td>
+						<td>
+							<div class="rowElem">
+								<span id="brandTxt">${product.brand.name}&nbsp;</span>
+							</div>
+						</td>
+						<td><label><fmt:message key="model" />:</label></td>
+						<td><div class="rowElem"><span id="modelTxt">${product.model.name}&nbsp;</span></span></div></td>
+						<td><label><fmt:message key="serialNo" />:</label></td>
+						<td><div class="rowElem"><span id="serialNoTxt">${product.serialNo}&nbsp;</span></div></td>
+					</tr>
+					<tr>
+						<td><label><fmt:message key="warrantyDate"/>:</label></td>
+						<td colspan="7"><div class="rowElem"><form:input path="warrantyDate" id="warrantyDate" class="textboxMockup" readonly="true" size="10" /></div></td>
+					</tr>
+					<tr>
+						<td><label><fmt:message key="warrantyExpire"/>:</label></td>
+						<td colspan="7"><div class="rowElem"><form:input path="warrantyExpire" id="warrantyExpire" class="textboxMockup" readonly="true" size="10" /></div></td>
+					</tr>
+					<!-- tr>
 						<td><label><fmt:message key="type" />:</label></td>
 						<td colspan="7">
 							<div class="rowElem">
@@ -116,7 +142,7 @@
 					</tr>
 					<tr>
 						<td><label><fmt:message key="serialNo" />:<font style="color:red">*</font></label></td>
-						<td colspan="7"><div class="rowElem"><form:input path="serialNo" id="serialNo" class="textboxMockup" /> <label class="error" for="name" generated="true" style="display: none; padding-left:10px"></label></div></td>
+						<td colspan="7"><div class="rowElem"><form:input path="serialNo" id="serialNo" class="textboxMockup" /> <label class="error" for="serialNo" generated="true" style="display: none; padding-left:10px"></label></div></td>
 					</tr>
 					<tr>
 						<td><label><fmt:message key="description" />:</label></td>
@@ -133,7 +159,7 @@
 					<tr>
 						<td valign="top" style="padding-top:7px;"><label><fmt:message key="remark"/>:</label></td>
 						<td colspan="7"><div class="rowElem"><form:textarea path="remark" rows="5" col="30" class="textareaMockup" style="width:98%" name="remark" ></form:textarea></div></td>
-					</tr>
+					</tr-->
 					<tr align="center">
 						<td colspan="8"><div class="rowElem"><input type="submit" value="<fmt:message key='button.ok' />" /></div></td>
 					</tr>
@@ -289,7 +315,7 @@
 
 <!-- Start product lov -->
 
-<%--div id="product-dialog-modal" title='<fmt:message key="searchProduct" />'>
+<div id="product-dialog-modal" title='<fmt:message key="searchProduct" />'>
 	<table>
 		<tr>
 			<td>
@@ -300,7 +326,7 @@
 							<td><label><fmt:message key="type" />:</label></td>
 							<td>
 								<div class="rowElem">
-									<select id="lovType">
+									<select id="lovType" class="selectSearch">
 										<option value="">-</option>
 										<c:forEach var="type" items="${typeList}">
 											<option value="${type.typeID}">${type.name}</option>
@@ -313,7 +339,7 @@
 							<td><label><fmt:message key="brand" />:</label></td>
 							<td id="brandRow" style="z-index:9">
 								<div class="rowElem">
-									<select id="lovBrand">
+									<select id="lovBrand" class="selectSearch">
 										<option value="">-</option>
 											<c:forEach var="brand" items="${brandList}">
 												<c:if test="${brand.brandID != null }">
@@ -328,7 +354,7 @@
 							<td><label><fmt:message key="model" />:</label></td>
 							<td id="modelRow" style="z-index:8">
 								<div class="rowElem">
-									<select id="lovModel">
+									<select id="lovModel" class="selectSearch">
 										<option value="">-</option>
 											<c:forEach var="model" items="${modelList}">
 												<c:if test="${model.modelID != null}">
@@ -338,6 +364,10 @@
 									</select>
 								</div>
 							</td>
+						</tr>
+						<tr>
+							<td><label><fmt:message key="serialNo" />:</label></td>
+							<td><div class="rowElem"><input type="text" name="serialNo" id="lovSerialNo" class="textboxMockup" /></div></td>
 						</tr>
 						<tr>
 							<td></td>
@@ -360,6 +390,8 @@
 		<input type="hidden" id="lov_product_brand" name="brandName"/>
 		<input type="hidden" id="lov_product_model" name="modelName"/>
 		<input type="hidden" id="lov_product_serialNo" name="serialNo"/>
+		<input type="hidden" id="lov_product_warrantyDate" name="warrantyDate"/>
+		<input type="hidden" id="lov_product_warrantyExpire" name="warrantyExpire"/>
 	</form>
 </div>
 
@@ -367,10 +399,10 @@
 	<form:form commandName="productForm" id="productForm" class="jqtransform" action="JavaScript:saveProduct();">
 		<table width="100%">
 			<tr>
-				<td width="40%"><label><fmt:message key="productID" />:<font style="color:red">*</font></label></td>
+				<td width="20%"><label><fmt:message key="productID" />:<font style="color:red">*</font></label></td>
 				<td>
 					<div class="rowElem">
-						<form:input type="text" path="productID" class="textboxMockup"  />
+						<form:input path="productID" id="lovForm_productID" readonly="true" class="textboxMockup"  />
 					</div>
 				</td>
 			</tr>
@@ -378,7 +410,7 @@
 				<td><label><fmt:message key="type" />:</label></td>
 				<td>
 					<div class="rowElem">
-						<form:select path="typeID" id="type">
+						<form:select path="typeID" id="lovForm_type">
 							<form:options items="${typeList}" itemValue="typeID" itemLabel="name"/>
 						</form:select>
 					</div>
@@ -388,7 +420,7 @@
 				<td><label><fmt:message key="brand" />:</label></td>
 				<td id="brandRow">
 					<div class="rowElem">
-						<form:select path="brandID" id="brand">
+						<form:select path="brandID" id="lovForm_brand">
 							<form:options items="${brandList}" itemValue="brandID" itemLabel="name"/>
 						</form:select>
 					</div>
@@ -399,39 +431,40 @@
 				<td><label><fmt:message key="model" />:</label></td>
 				<td id="modelRow">
 					<div class="rowElem">
-						<form:select path="modelID" id="model">
+						<form:select path="modelID" id="lovForm_model">
 							<form:options items="${modelList}" itemValue="modelID" itemLabel="name"/>
 						</form:select>
+						&nbsp;<input type="button" value="+" id="showAddModel"/>
 					</div>
 					<label class="error" for="model" generated="true" style="display: none; padding-left:10px;"></label>
 				</td>
 			</tr>
 			<tr>
 				<td><label><fmt:message key="serialNo" />:<font style="color:red">*</font></label></td>
-				<td><div class="rowElem"><form:input type="text" path="serialNo" class="textboxMockup" /> <label class="error" for="name" generated="true" style="display: none; padding-left:10px"></label></div></td>
+				<td><div class="rowElem"><form:input path="serialNo" id="lovForm_serialNo" class="textboxMockup" /> <label class="error" for="name" generated="true" style="display: none; padding-left:10px"></label></div></td>
 			</tr>
 			<tr>
 				<td><label><fmt:message key="description" />:</label></td>
-				<td><div class="rowElem"><form:input type="text" path="description" class="textboxMockup" /></div></td>
+				<td><div class="rowElem"><form:input path="description" id="lovForm_description" class="textboxMockup" /></div></td>
 			</tr>
 			<tr>
 				<td><label><fmt:message key="warrantyDate"/>:</label></td>
-				<td><div class="rowElem"><form:input path="warrantyDate" id="warrantyDate" class="textboxMockup" readonly="true" size="10" /></div></td>
+				<td><div class="rowElem"><form:input path="warrantyDate" id="lovForm_warrantyDate" class="textboxMockup" readonly="true" size="10" /></div></td>
 			</tr>
 			<tr>
 				<td><label><fmt:message key="warrantyExpire"/>:</label></td>
-				<td><div class="rowElem"><form:input path="warrantyExpire" id="warrantyExpire" class="textboxMockup" readonly="true" size="10" /></div></td>
+				<td><div class="rowElem"><form:input path="warrantyExpire" id="lovForm_warrantyExpire" class="textboxMockup" readonly="true" size="10" /></div></td>
 			</tr>
 			<tr>
 				<td valign="top" style="padding-top:7px;"><label><fmt:message key="remark"/>:</label></td>
-				<td><div class="rowElem"><form:textarea path="remark" rows="5" col="30" class="textareaMockup" style="width:98%" name="remark" ></form:textarea></div></td>
+				<td><div class="rowElem"><form:textarea path="remark" id="lovForm_remark" rows="5" col="30" class="textareaMockup" style="width:98%" ></form:textarea></div></td>
 			</tr>
 			<tr align="center">
 				<td colspan="2"><div class="rowElem"><input type="submit" value='<fmt:message key="button.ok" />' /></div></td>
 			</tr>
 		</table>
 	</form:form>
-</div--%>
+</div>
 
 <!-- End product lov -->
 
@@ -443,9 +476,11 @@
 <c:url var="findSubdistrictByDistrictURL" value="/findSubdistrict.html" />
 <c:url var="findZipcodeBySubdistrictURL" value="/findZipcode.html" />
 <c:url var="saveCustomerPopupURL" value="/customer.html?do=savePopup" />
+<c:url var="saveProductPopupURL" value="/product.html?do=savePopup" />
 <c:url var="findBrandURL" value="/brand.html?do=getBrandByType" />
 <c:url var="findModelURL" value="/model.html?do=getModel" />
 <c:url var="saveModelPopupURL" value="/model.html?do=savePopup" />
+<c:url var="countSerialNoURL" value="/product.html?do=countSerialNo" />
 
 <script type="text/javascript">
 $.ajaxSetup({ cache: false });
@@ -496,7 +531,8 @@ $(document).ready(function(){
 	
 	$("#form").validate({
 		rules: {
-			customerID: "required"
+			customerID: "required",
+			serialNo: {required:true, checkDupSerialNo:true},
 		}
 	});
 	
@@ -511,7 +547,7 @@ $(document).ready(function(){
 	
 	$("#productForm").validate({
 		rules: {
-			serialNo: "required",
+			serialNo: {required:true, checkDupSerialNo:true},
 			brandID: "required",
 			modelID: "required",
 			remark:{
@@ -662,12 +698,12 @@ $(document).ready(function(){
 	
 	// add product
 	
-	/*$( "#add-product-form" ).dialog({
+	$( "#add-product-form" ).dialog({
 		autoOpen: false,
 		height: 540,
 		width: 900,
 		modal: true
-	});*/
+	});
 	
 	// add model
 	
@@ -868,9 +904,9 @@ $(document).ready(function(){
 	}
 	
 	
-	$( "#type_autoComplete" ).autocomplete({
+	$( "#lovForm_type_autoComplete" ).autocomplete({
 		change: function(event, ui) {
-			var select = $("#type");
+			var select = $("#lovForm_type");
 			var selected = select.children( ":selected" );
 			if ( !ui.item ) {
 				var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
@@ -886,7 +922,7 @@ $(document).ready(function(){
 					//$(this).val( "" );
 					//select.val( "" );
 					//this.data( "autocomplete" ).term = "";
-					$( "#type_autoComplete" ).data( "autocomplete" ).term = "";
+					$( "#lovForm_type_autoComplete" ).data( "autocomplete" ).term = "";
 					// get text from blank value option
 					$( this ).val(select.children( ":selected" ).text());
 					
@@ -910,23 +946,23 @@ $(document).ready(function(){
 						html += '<option value=""></option>';
 					}
 					
-					$('#brand').html(html);
+					$('#lovForm_brand').html(html);
 					
-					$('#brand_autoComplete').width($('#brand').width());
-					$('#brand_autoComplete').val($("#brand :selected").text());
+					$('#lovForm_brand_autoComplete').width($('#lovForm_brand').width());
+					$('#lovForm_brand_autoComplete').val($("#lovForm_brand :selected").text());
 					
 					$("#brandRow").css("z-index", 9);
 					
-					$("#brand_autoComplete").trigger('change');
+					$("#lovForm_brand_autoComplete").trigger('change');
 					getModelSelectList();
 				});
 			 }
 		}
 	});
 	
-	$( "#brand_autoComplete" ).autocomplete({
+	$( "#lovForm_brand_autoComplete" ).autocomplete({
 		change: function(event, ui) {
-			var select = $("#brand");
+			var select = $("#lovForm_brand");
 			var selected = select.children( ":selected" );
 			if ( !ui.item ) {
 				var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
@@ -960,9 +996,9 @@ $(document).ready(function(){
 		}
 	});
 	
-	$( "#model_autoComplete" ).autocomplete({
+	$( "#lovForm_model_autoComplete" ).autocomplete({
 		change: function(event, ui) {
-			var select = $("#model");
+			var select = $("#lovForm_model");
 			var selected = select.children( ":selected" );
 			if ( !ui.item ) {
 				var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
@@ -1123,7 +1159,87 @@ $(document).ready(function(){
 	});
 	
 	
-	/*$("#lovType").change(
+	// lov search product
+	
+	$( "#lovType_autoComplete" ).autocomplete({
+		change: function(event, ui) {
+			var select = $("#lovType");
+			var selected = select.children( ":selected" );
+			if ( !ui.item ) {
+				var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+					valid = false;
+				select.children( "option" ).each(function() {
+					if ( $( this ).text().match( matcher ) ) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+			 	if ( !valid ){
+					// remove invalid value, as it didn't match anything
+					$( "#lovType_autoComplete" ).data( "autocomplete" ).term = "";
+					// get text from blank value option
+					$( this ).val(select.children( ":selected" ).text());
+					
+					return false;
+				}
+			 }else{
+				 $.getJSON('${findBrandURL}', {
+					typeID : select.val()
+				}, function(data) {
+					var html = '';
+					var len = data.length;
+					if(len > 0){
+						for ( var i = 0; i < len; i++) {
+							html += '<option value="' + data[i].brandID + '">'
+									+ data[i].name + '</option>';
+						}
+						html += '</option>';
+					}else{
+						html += '<option value=""></option>';
+					}
+					
+					$('#lovBrand').html(html);
+					
+					$('#lovBrand_autoComplete').width($('#lovBrand').width());
+					$('#lovBrand_autoComplete').val($("#lovBrand :selected").text());
+					
+					$("#brandRow").css("z-index", 9);
+					
+					$("#lovBrand_autoComplete").trigger('change');
+					getModelLovSelectList();
+				});
+			 }
+		}
+	});
+
+	$( "#lovBrand_autoComplete" ).autocomplete({
+		change: function(event, ui) {
+			var select = $("#lovBrand");
+			var selected = select.children( ":selected" );
+			if ( !ui.item ) {
+				var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+					valid = false;
+				select.children( "option" ).each(function() {
+					if ( $( this ).text().match( matcher ) ) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+			 	if ( !valid ){
+					// remove invalid value, as it didn't match anything
+
+					// get text from blank value option
+					$( this ).val(select.children( ":selected" ).text());
+					
+					return false;
+				}
+			 }else{
+				 getModelLovSelectList();
+			 }
+		}
+	});
+	
+	/* $("#lovType").change(
 		function(){
 			$.getJSON('${findBrandURL}', {
 				typeID: $(this).val()
@@ -1159,10 +1275,10 @@ $(document).ready(function(){
 				
 			});
 		}
-	);*/
+	); */
 	
 	
-	/*$("#lovBrand").change(
+	/* $("#lovBrand").change(
 		function(){
 			$.getJSON('${findModelURL}', {
 				typeID : $("#lovType").val(),
@@ -1196,7 +1312,7 @@ $(document).ready(function(){
 								
 			});
 		}
-	);*/
+	); */
 	
 	
 	$("#searchProductButton").click(function() {
@@ -1209,14 +1325,16 @@ $(document).ready(function(){
 		datatype: "json",
 		height: "100%",
 		autowidth: true,
-		colNames:['<fmt:message key="type" />','<fmt:message key="brand" />','<fmt:message key="model" />','<fmt:message key="productID" />','<fmt:message key="description" />','<fmt:message key="serialNo" />'],
+		colNames:['<fmt:message key="type" />','<fmt:message key="brand" />','<fmt:message key="model" />','<fmt:message key="productID" />','<fmt:message key="description" />','<fmt:message key="serialNo" />','<fmt:message key="warrantyDate" />','<fmt:message key="warrantyExpire" />'],
 		colModel:[
 		    {name:'typeName',index:'typeName'},
 		    {name:'brandName',index:'brandName'},
 			{name:'modelName',index:'modelName'},
 			{name:'productID',index:'productID'},
 			{name:'description',index:'description'},
-			{name:'serialNo',index:'serialNo'}],
+			{name:'serialNo',index:'serialNo'},
+			{name:'warrantyDate',index:'warrantyDate',hidden:true},
+			{name:'warrantyExpire',index:'warrantyExpire',hidden:true}],
 		multiselect: false,
 		rownumbers: true,
 		rowNum:10,
@@ -1245,8 +1363,10 @@ $(document).ready(function(){
 				
 				$("#add-product-form").dialog({
 					open: function(event, ui){
-						$("#warrantyDate").calendarsPicker($.extend({calendar: $.calendars.instance('gregorian','th')}));
-						$("#warrantyExpire").calendarsPicker($.extend({calendar: $.calendars.instance('gregorian','th')}));
+						$("#lovForm_warrantyDate").calendarsPicker($.extend({calendar: $.calendars.instance('gregorian','th')}));
+						$("#lovForm_warrantyExpire").calendarsPicker($.extend({calendar: $.calendars.instance('gregorian','th')}));
+						$("#lovForm_warrantyDate").val($("#warrantyDate").val());
+						$("#lovForm_warrantyExpire").val($("#warrantyExpire").val());
 					}
 				});
 				
@@ -1285,12 +1405,16 @@ $(document).ready(function(){
 		var lov_brand_val = $("#lov_product_brand").val();
 		var lov_model_val = $("#lov_product_model").val();
 		var lov_serialNo_val = $("#lov_product_serialNo").val();
+		var lov_warrantyDate_val = $("#lov_product_warrantyDate").val();
+		var lov_warrantyExpire_val = $("#lov_product_warrantyExpire").val();
 		
 		$("#productID").val(lov_id_val);
 		$("#typeTxt").html(lov_type_val);
 		$("#brandTxt").html(lov_brand_val);
 		$("#modelTxt").html(lov_model_val);
 		$("#serialNoTxt").html(lov_serialNo_val);
+		$("#warrantyDate").val(lov_warrantyDate_val);
+		$("#warrantyExpire").val(lov_warrantyExpire_val);
 		
 		/*$("#custID").val(lov_id_val);
 		$("#address").html($("#lov_shopCustomer_address").val());
@@ -1324,7 +1448,8 @@ $(document).ready(function(){
 		var typeID = jQuery("#lovType").val();
 		var brandID = jQuery("#lovBrand").val();
 		var modelID = jQuery("#lovModel").val();
-		jQuery("#productList").jqGrid('setGridParam',{url:"searchProduct.html?&typeID="+typeID+"&brandID="+brandID+"&modelID="+modelID,page:1}).trigger("reloadGrid");
+		var serialNo = jQuery("#lovSerialNo").val();
+		jQuery("#productList").jqGrid('setGridParam',{url:"searchProduct.html?&typeID="+typeID+"&brandID="+brandID+"&modelID="+modelID+"&serialNo="+serialNo,page:1}).trigger("reloadGrid");
 	}
 	
 	// check for enter key
@@ -1341,11 +1466,11 @@ $(document).ready(function(){
 	
 });
 
-//function to update model select list in add product screen
-function getModelSelectList(){
-	var select = $("#brand");
+//function to update model select list in search product lov screen
+function getModelLovSelectList(){
+	var select = $("#lovBrand");
 	$.getJSON('${findModelURL}', {
-		typeID : $("#type").val(),
+		typeID : $("#lovType").val(),
 		brandID :select.val(),
 		ajax : 'true'
 	}, function(data) {
@@ -1361,10 +1486,39 @@ function getModelSelectList(){
 			html += '<option value=""></option>';
 		}
 		
-		$('#model').html(html);
+		$('#lovModel').html(html);
 		
-		$('#model_autoComplete').width($('#model').width());
-		$('#model_autoComplete').val($("#model :selected").text());
+		$('#lovModel_autoComplete').width($('#lovModel').width());
+		$('#lovModel_autoComplete').val($("#lovModel :selected").text());
+		
+		$("#modelRow").css("z-index", 8);
+	});
+}
+
+//function to update model select list in add product screen
+function getModelSelectList(){
+	var select = $("#lovForm_brand");
+	$.getJSON('${findModelURL}', {
+		typeID : $("#lovForm_type").val(),
+		brandID :select.val(),
+		ajax : 'true'
+	}, function(data) {
+		var html = '';
+		var len = data.length;
+		if(len > 0){
+			for ( var i = 0; i < len; i++) {
+				html += '<option value="' + data[i].modelID + '">'
+						+ data[i].name + '</option>';
+			}
+			html += '</option>';
+		}else{
+			html += '<option value=""></option>';
+		}
+		
+		$('#lovForm_model').html(html);
+		
+		$('#lovForm_model_autoComplete').width($('#lovForm_model').width());
+		$('#lovForm_model_autoComplete').val($("#lovForm_model :selected").text());
 		
 		$("#modelRow").css("z-index", 8);
 	});
@@ -1445,7 +1599,69 @@ function setCustomerToForm(dataID){
 	$("#email").html(email);
 }
 
-function saveModel(){	
+
+function saveProduct(){
+	$.getJSON('${saveProductPopupURL}', {
+		productID: $("#lovForm_productID").val(),
+		typeID: $("#lovForm_type").val(),
+		brandID: $("#lovForm_brand").val(),
+		modelID: $("#lovForm_model").val(),
+		serialNo:  $("#lovForm_serialNo").val(),
+		description: $("#lovForm_description").val(),
+		warrantyDate: $("#lovForm_warrantyDate").val(),
+		warrantyExpire: $("#lovForm_warrantyExpire").val(),
+		remark: $("#lovForm_remark").val()
+	}, function(data) {
+		if(data.success == true){
+			//alert('Add complete');
+			jQuery("#dialog").text(data.message.toString());
+			jQuery("#dialog").dialog( 
+				{
+					title: 'Success',
+					modal: true,
+					buttons: {"Ok": function()  {
+						jQuery(this).dialog("close");
+						jQuery("#add-product-form").dialog("close");
+						//gridProductReload();
+						
+						setProductToForm(data.data);
+						$("#product-dialog-modal").dialog("close");
+						}
+				    }
+			});
+		}else{
+			jQuery("#dialog").text(data.message.toString());
+			jQuery("#dialog").dialog( 
+				{
+					title: 'Fail',
+					modal: true,
+					buttons: {"Ok": function()  {
+						jQuery(this).dialog("close");} 
+				    }
+			});
+		}
+	});	
+}
+
+function setProductToForm(dataID){
+	// set value to form
+	var type = $("#lovForm_type :selected").text();
+	var brand = $("#lovForm_brand :selected").text();
+	var model = $("#lovForm_model :selected").text();
+	var serialNo = $("#lovForm_serialNo").val();
+	var warrantyDate = $("#lovForm_warrantyDate").val();
+	var warrantyExpire = $("#lovForm_warrantyExpire").val();
+	
+	$("#productID").val(dataID);
+	$("#typeTxt").html(type);
+	$("#brandTxt").html(brand);
+	$("#modelTxt").html(model);
+	$("#warrantyDate").val(warrantyDate);
+	$("#warrantyExpire").val(warrantyExpire);
+}
+
+
+function saveModel(){
 	$.getJSON('${saveModelPopupURL}', {
 		typeID: $("#lovModel_type").val(),
 		brandID: $("#lovModel_brand").val(),
@@ -1459,7 +1675,7 @@ function saveModel(){
 					modal: true,
 					buttons: {"Ok": function()  {
 						// If add product screen choose same type and brand with added model, then update model list.
-						if(($('#type').val() == $('#lovModel_type').val()) && ($('#brand').val() == $('#lovModel_brand').val())){
+						if(($('#lovForm_type').val() == $('#lovModel_type').val()) && ($('#lovForm_brand').val() == $('#lovModel_brand').val())){
 							// select model list in product form
 							getModelSelectList();	
 						}
@@ -1522,5 +1738,27 @@ jQuery.validator.addMethod("require_from_group", function(value, element, option
 jQuery.validator.addMethod("checkZipcode", function(value, element, param) {
 	return value.match(new RegExp("^[0-9\-]+$"));
 },"<fmt:message key='error.checkZipcode' />");
+
+jQuery.validator.addMethod("checkDupSerialNo", function(value, element, options) {
+	var validOrNot = true;
+	$.ajax({
+		url: '${countSerialNoURL}', 
+		data: {serialNo:value},
+		async: false,
+		success:
+			function(msg){
+				if(msg.success == false){
+					validOrNot = false;
+				}else{
+					if(msg.data > 0){
+						validOrNot = false;
+					}else{
+						validOrNot = true;
+					}
+				}
+			}
+	});
+	return validOrNot;
+},'<fmt:message key="error.duplicateSerialNo" />');
 
 </script>

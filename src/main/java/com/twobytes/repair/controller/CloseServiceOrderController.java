@@ -476,6 +476,13 @@ public class CloseServiceOrderController {
 			so.setStatus(ServiceOrder.FIXED);
 		}
 		
+		/*
+		 * Check if this service order checked cannot make contact with customer, uncheck it
+		 */
+		if(so.getCannotMakeContact() != null && so.getCannotMakeContact() == 1){
+			so.setCannotMakeContact(0);
+		}
+		
 //		Double netAmount = form.getNetAmount();
 //		System.out.println("netAmount = "+netAmount);
 		

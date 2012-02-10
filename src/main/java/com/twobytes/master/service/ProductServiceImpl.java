@@ -80,4 +80,31 @@ public class ProductServiceImpl implements ProductService {
 		}
 	}
 
+	@Override
+	@Transactional
+	public Long countBySerialNo(String serialNo) {
+		Long result = new Long(0);
+		try {
+			result = productDAO.countBySerialNo(serialNo);
+		} catch (Exception e) {
+			result = new Long(-1);
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	@Override
+	@Transactional
+	public Long countBySerialNoForEdit(String serialNo, String productID) {
+		Long result = new Long(0);
+		try {
+			result = productDAO.countBySerialNoForEdit(serialNo, productID);
+			throw new Exception();
+		} catch (Exception e) {
+			result = new Long(-1);
+			e.printStackTrace();
+		}
+		return result;
+	}
+
 }

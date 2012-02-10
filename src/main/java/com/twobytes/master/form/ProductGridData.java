@@ -7,6 +7,8 @@ public class ProductGridData {
 	private String productID;
 	private String description;
 	private String serialNo;
+	private String warrantyDate;
+	private String warrantyExpire;
 	
 	public String getTypeName() {
 		return typeName;
@@ -43,6 +45,18 @@ public class ProductGridData {
 	}
 	public void setSerialNo(String serialNo) {
 		this.serialNo = serialNo;
+	}
+	public String getWarrantyDate() {
+		return warrantyDate;
+	}
+	public void setWarrantyDate(String warrantyDate) {
+		this.warrantyDate = warrantyDate;
+	}
+	public String getWarrantyExpire() {
+		return warrantyExpire;
+	}
+	public void setWarrantyExpire(String warrantyExpire) {
+		this.warrantyExpire = warrantyExpire;
 	}
 	
 }
