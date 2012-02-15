@@ -576,7 +576,7 @@ public class OutsiteServiceController {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-		Type type = typeList.get(0);
+		Type type = os.getType();
 		
 		List<Model> modelList = new ArrayList<Model>();
 		List<Brand> brandList = new ArrayList<Brand>();
@@ -584,7 +584,7 @@ public class OutsiteServiceController {
 			brandList = type.getBrands();
 			form.setBrandID(form.getBrandID());
 			
-			Brand brand = brandList.get(0);
+			Brand brand = os.getBrand();
 			modelList = modelService.getModelByTypeAndBrand(type.getTypeID(), brand.getBrandID());
 		} else {
 			Brand blankBrand = new Brand();

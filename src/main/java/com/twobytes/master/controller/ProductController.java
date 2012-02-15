@@ -629,13 +629,18 @@ public class ProductController {
 	@RequestMapping(value = "/product", params = "do=countSerialNo")
 	public @ResponseBody CustomGenericResponse countSerialNo(@RequestParam String serialNo, HttpServletRequest request){
 		CustomGenericResponse response = new CustomGenericResponse();
-		Long result = productService.countBySerialNo(serialNo);
-		if(result == -1){
-			response.setSuccess(false);
-			response.setData(result.toString());
-			response.setMessage(this.messages.getMessage("error.cannotConnectServer", null, new Locale("th", "TH")));
+		/* If inputed serial no is "-" not check duplicate */ 
+		if(!serialNo.equals("-")){
+			Long result = productService.countBySerialNo(serialNo);
+			if(result == -1){
+				response.setSuccess(false);
+				response.setData(result.toString());
+				response.setMessage(this.messages.getMessage("error.cannotConnectServer", null, new Locale("th", "TH")));
+			}else{
+				response.setData(result.toString());
+				response.setSuccess(true);
+			}
 		}else{
-			response.setData(result.toString());
 			response.setSuccess(true);
 		}
 		return response;
@@ -644,13 +649,18 @@ public class ProductController {
 	@RequestMapping(value = "/product", params = "do=countSerialNoForEdit")
 	public @ResponseBody CustomGenericResponse countSerialNoForEdit(@RequestParam String serialNo, @RequestParam String productID){
 		CustomGenericResponse response = new CustomGenericResponse();
-		Long result = productService.countBySerialNoForEdit(serialNo, productID);
-		if(result == -1){
-			response.setSuccess(false);
-			response.setData(result.toString());
-			response.setMessage(this.messages.getMessage("error.cannotConnectServer", null, new Locale("th", "TH")));
+		/* If inputed serial no is "-" not check duplicate */
+		if(!serialNo.equals("-")){
+			Long result = productService.countBySerialNoForEdit(serialNo, productID);
+			if(result == -1){
+				response.setSuccess(false);
+				response.setData(result.toString());
+				response.setMessage(this.messages.getMessage("error.cannotConnectServer", null, new Locale("th", "TH")));
+			}else{
+				response.setData(result.toString());
+				response.setSuccess(true);
+			}
 		}else{
-			response.setData(result.toString());
 			response.setSuccess(true);
 		}
 		return response;

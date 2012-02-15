@@ -99,7 +99,6 @@ public class ProductServiceImpl implements ProductService {
 		Long result = new Long(0);
 		try {
 			result = productDAO.countBySerialNoForEdit(serialNo, productID);
-			throw new Exception();
 		} catch (Exception e) {
 			result = new Long(-1);
 			e.printStackTrace();
