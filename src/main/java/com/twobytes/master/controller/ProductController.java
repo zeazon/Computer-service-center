@@ -231,7 +231,7 @@ public class ProductController {
 		if(mode.equals("edit")){
 			// update
 			try{
-			//	product = productService.selectByID(form.getProductID());
+				product = productService.selectByID(form.getProductID());
 			}catch(Exception e){
 				e.printStackTrace();
 				model.addAttribute("errMsg", e.getMessage());
@@ -290,9 +290,7 @@ public class ProductController {
 			}
 			msg = this.messages.getMessage("msg.updateComplete", null, new Locale("th", "TH"));
 		}else{
-			// add
-//			product.setProductID(form.getProductID());
-			
+			// add			
 			product.setCreatedBy(user.getEmployeeID());
 			product.setCreatedDate(now);
 			msg = this.messages.getMessage("msg.addComplete", null, new Locale("th", "TH"));
@@ -549,7 +547,6 @@ public class ProductController {
 		Date now = new Date();
 		Employee user = (Employee)request.getSession().getAttribute("UserLogin");
 		Product product = new Product();
-//		product.setProductID(form.getProductID());
 		
 		product.setCreatedBy(user.getEmployeeID());
 		product.setCreatedDate(now);
