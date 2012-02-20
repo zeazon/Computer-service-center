@@ -14,8 +14,17 @@
 				<input type="hidden" name="mode" value="${mode}" />
 				<table width="100%">
 					<tr>
-						<td width="40%"><label><fmt:message key="typeID" />:<font style="color:red">*</font></label></td>
-						<td><div class="rowElem"><form:input path="typeID" maxlength="10" class="textboxMockup" /> <label class="error" for="typeID" generated="true" style="display: none; padding-left:10px"></label></div></td>
+						<td width="40%"><label><fmt:message key="typeID" />:<c:if test="${mode == 'add'}"><font style="color:red">*</font></c:if></label></td>
+						<td>
+							<div class="rowElem">
+								<c:if test="${mode == 'add'}">
+									<form:input path="typeID" maxlength="10" class="textboxMockup" /> <label class="error" for="typeID" generated="true" style="display: none; padding-left:10px"></label>
+								</c:if>
+								<c:if test="${mode == 'edit'}">
+									<form:input path="typeID" maxlength="10" class="textboxMockup" readonly="true" />
+								</c:if> 
+							</div>
+						</td>
 					</tr>
 					<tr>
 						<td><label><fmt:message key="name" />:<font style="color:red">*</font></label></td>

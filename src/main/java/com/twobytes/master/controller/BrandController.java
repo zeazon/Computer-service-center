@@ -181,6 +181,8 @@ public class BrandController {
 				}
 			}
 			brand.setTypes(typeList);
+		}else{
+			brand.setTypes(new HashSet<Type>());
 		}
 //		boolean canSave;
 		try{
