@@ -888,6 +888,7 @@ public class ServiceOrderController {
 		form.setProblem(so.getProblem());
 		form.setCannotMakeContact(so.getCannotMakeContact());
 		form.setStatus(so.getStatus());
+		form.setRemark(so.getRemark());
 
 		List<Type> typeList = new ArrayList<Type>();
 		try {
@@ -933,7 +934,6 @@ public class ServiceOrderController {
 			}
 			model.addAttribute("issuePartList", issuePartList);
 			form.setNetAmount(so.getTotalPrice());
-			form.setRemark(so.getRemark());
 		}
 		
 		List<OutsiteService> osList = osService.selectByServiceOrderID(so.getServiceOrderID());

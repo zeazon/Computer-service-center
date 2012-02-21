@@ -32,6 +32,7 @@ public class ServiceOrderGridData {
 	private String empOpen;
 	private String empFix;
 	private Integer cannotMakeContact;
+	private String remark;
 	
 	private Customer customer;
 	private String customerFullAddress;
@@ -221,5 +222,11 @@ public class ServiceOrderGridData {
 	}
 	public void setCannotMakeContact(Integer cannotMakeContact) {
 		this.cannotMakeContact = cannotMakeContact;
+	}
+	public String getRemark() {
+		return remark;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 }

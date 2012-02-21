@@ -81,7 +81,7 @@
 			datatype: "json",
 			height: "100%",
 			autowidth: true,
-			colNames:['<fmt:message key="serviceOrderID" />','<fmt:message key="date" />','<fmt:message key="name" />','<fmt:message key="tel" />','<fmt:message key="mobileTel" />','<fmt:message key="type" />','<fmt:message key="brand" />','<fmt:message key="model" />','<fmt:message key="serialNo" />','<fmt:message key="status" />','<fmt:message key="cannotMakeContact" />'],
+			colNames:['<fmt:message key="serviceOrderID" />','<fmt:message key="date" />','<fmt:message key="name" />','<fmt:message key="tel" />','<fmt:message key="mobileTel" />','<fmt:message key="type" />','<fmt:message key="brand" />','<fmt:message key="model" />','<fmt:message key="serialNo" />','<fmt:message key="status" />','<fmt:message key="remark" />','<fmt:message key="cannotMakeContact" />'],
 			colModel:[
 				{name:'serviceOrderID',index:'serviceOrderID', width:'200'},
 				{name:'serviceOrderDate', index:'serviceOrderDate', align:'center', sorttype:'date',formatter:'date', formatoptions: {srcformat:'d/m/Y',newformat:'d/m/Y'}, width:'100', firstSortOrder:'desc'},
@@ -93,6 +93,7 @@
 				{name:'model',index:'model', sortable:false},
 				{name:'serialNo',index:'serialNo', sortable:false},
 				{name:'status',index:'status', formatter:statusFormatter, align:'center', sortable:false},
+				{name:'remark',index:'remark', sortable:false},
 				{name:'cannotMakeContact',index:'cannotMakeContact',hidden:true}],
 			multiselect: false,
 			rownumbers: true,

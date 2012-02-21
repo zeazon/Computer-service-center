@@ -35,7 +35,11 @@
 		<property name="basename"><value>resources.messages</value></property>                                                                           
 	</bean-->
 	
-	
+	<!-- not test yet
+	<bean id="localeResolver"
+    	class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+    		<property name="defaultLocale" value="th"/>
+	</bean-->
  
     <tx:annotation-driven />
     <bean id="transactionManager"

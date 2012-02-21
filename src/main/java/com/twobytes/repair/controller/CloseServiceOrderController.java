@@ -163,6 +163,7 @@ public class CloseServiceOrderController {
 				gridData.setSerialNo(so.getProduct().getSerialNo());
 				gridData.setStatus(so.getStatus());
 				gridData.setCannotMakeContact(so.getCannotMakeContact());
+				gridData.setRemark(so.getRemark());
 				rowsList.add(gridData);
 			}
 			total_pages = new Double(Math.ceil(((double)soList.size()/(double)rows))).intValue();
