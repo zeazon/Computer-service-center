@@ -327,7 +327,7 @@
 							<td>
 								<div class="rowElem">
 									<select id="lovType" class="selectSearch">
-										<option value="">-</option>
+										<option value="">All</option>
 										<c:forEach var="type" items="${typeList}">
 											<option value="${type.typeID}">${type.name}</option>
 										</c:forEach>
@@ -340,7 +340,7 @@
 							<td id="brandRow" style="z-index:9">
 								<div class="rowElem">
 									<select id="lovBrand" class="selectSearch">
-										<option value="">-</option>
+										<option value="">All</option>
 											<c:forEach var="brand" items="${brandList}">
 												<c:if test="${brand.brandID != null }">
 													<option value="${brand.brandID}">${brand.name}</option>
@@ -355,7 +355,7 @@
 							<td id="modelRow" style="z-index:8">
 								<div class="rowElem">
 									<select id="lovModel" class="selectSearch">
-										<option value="">-</option>
+										<option value="">All</option>
 											<c:forEach var="model" items="${modelList}">
 												<c:if test="${model.modelID != null}">
 													<option value="${model.modelID}">${model.name}</option>
@@ -1188,6 +1188,7 @@ $(document).ready(function(){
 				}, function(data) {
 					var html = '';
 					var len = data.length;
+					html += '<option value="">All</option>';
 					if(len > 0){
 						for ( var i = 0; i < len; i++) {
 							html += '<option value="' + data[i].brandID + '">'
@@ -1476,6 +1477,7 @@ function getModelLovSelectList(){
 	}, function(data) {
 		var html = '';
 		var len = data.length;
+		html += '<option value="">All</option>';
 		if(len > 0){
 			for ( var i = 0; i < len; i++) {
 				html += '<option value="' + data[i].modelID + '">'
