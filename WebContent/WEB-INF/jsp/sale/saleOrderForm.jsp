@@ -301,7 +301,7 @@
 			</tr>
 			<tr>
 				<td><label><fmt:message key="name" />:<font style="color:red">*</font></label></td>
-				<td><div class="rowElem"><form:input path="name" id="lovModel_name" cssClass="required" maxlength="100"/> <label class="error" for="name" generated="true" style="display: none; padding-left:10px"></label></div></td>
+				<td><div class="rowElem"><form:input path="name" id="lovModel_name" cssClass="required" maxlength="100" size="50"/> <label class="error" for="name" generated="true" style="display: none; padding-left:10px"></label></div></td>
 			</tr>
 			<tr align="center">
 				<td colspan="2"><div class="rowElem"><input type="submit" value='<fmt:message key="button.ok" />' /></div></td>
@@ -367,7 +367,7 @@
 						</tr>
 						<tr>
 							<td><label><fmt:message key="serialNo" />:</label></td>
-							<td><div class="rowElem"><input type="text" name="serialNo" id="lovSerialNo" class="textboxMockup" /></div></td>
+							<td><div class="rowElem"><input type="text" name="serialNo" id="lovSerialNo" class="textboxMockup" size="30"/></div></td>
 						</tr>
 						<tr>
 							<td></td>
@@ -441,7 +441,7 @@
 			</tr>
 			<tr>
 				<td><label><fmt:message key="serialNo" />:<font style="color:red">*</font></label></td>
-				<td><div class="rowElem"><form:input path="serialNo" id="lovForm_serialNo" class="textboxMockup" /> <label class="error" for="name" generated="true" style="display: none; padding-left:10px"></label></div></td>
+				<td><div class="rowElem"><form:input path="serialNo" id="lovForm_serialNo" class="textboxMockup" maxlength="100" size="30" /> <label class="error" for="name" generated="true" style="display: none; padding-left:10px"></label></div></td>
 			</tr>
 			<tr>
 				<td><label><fmt:message key="description" />:</label></td>
@@ -710,7 +710,7 @@ $(document).ready(function(){
 	$( "#add-model-form" ).dialog({
 		autoOpen: false,
 		height: 240,
-		width: 360,
+		width: 500,
 		modal: true
 	});
 	

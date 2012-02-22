@@ -31,7 +31,7 @@
 					</tr>
 					<tr>
 						<td><label><fmt:message key="name" />:</label></td>
-						<td><div class="rowElem"><form:input path="name" type="text" id="name" class="textboxMockup" /></div></td>
+						<td><div class="rowElem"><form:input path="name" type="text" id="name" class="textboxMockup" size="50" /></div></td>
 					</tr>
 					<tr>
 						<td colspan="2"><div class="rowElem"><input type="submit" id="searchButton" value="<fmt:message key='button.search' />" /></div></td>
