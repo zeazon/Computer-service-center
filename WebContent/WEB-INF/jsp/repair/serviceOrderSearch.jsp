@@ -243,6 +243,10 @@
 			return "<fmt:message key='serviceOrder_status_fixing' />";
 		}else if(cellvalue == 'outsite'){
 			return "<fmt:message key='serviceOrder_status_outsite' />";
+		}else if(cellvalue == 'sent'){
+			return "<fmt:message key='outsiteService_status_sent' />";
+		}else if(cellvalue == 'received'){
+			return "<fmt:message key='outsiteService_status_received' />";
 		}else if(cellvalue == 'fixed'){
 			return "<fmt:message key='serviceOrder_status_fixed' />";
 		}else if(cellvalue == 'close'){

@@ -328,7 +328,7 @@
 					</tr>
 					</c:if>
 					
-					<c:if test="${form.status == 'new' || form.status == 'fixing' || mode == 'add'}">
+					<c:if test="${form.status == 'new' || form.status == 'fixing' || mode == 'add' || form.status == 'outsite' || form.status == 'sent' || form.status == 'received'}">
 					<tr align="center">
 						<td colspan="6">
 							<div class="rowElem">
