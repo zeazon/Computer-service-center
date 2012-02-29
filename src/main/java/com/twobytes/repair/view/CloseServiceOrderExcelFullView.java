@@ -232,7 +232,11 @@ public class CloseServiceOrderExcelFullView extends AbstractJExcelView{
 			sheet1.addCell(new Number(21, 43+j, sl.getPrice(), border_top_right_thin_bottom_dotted));
 		}
 		
-		sheet1.addCell(new Number(21, 47, form.getTotalPrice(), border_right_top_thin_bottom_double));
+		if(form.getTotalPrice() != null){
+			sheet1.addCell(new Number(21, 47, form.getTotalPrice(), border_right_top_thin_bottom_double));
+		}else{
+			sheet1.addCell(new Number(21, 47, 0.00, border_right_top_thin_bottom_double));
+		}
 	}
 	
 }
