@@ -170,4 +170,21 @@
 		var name = jQuery("#name").val();
 		jQuery("#list").jqGrid('setGridParam',{url:"searchOutsiteCompany.html?name="+name,page:1}).trigger("reloadGrid");
 	}
+	
+	jQuery(window).bind('resize', function() {
+		// Get width of parent container
+		var width = $('.ui-widget-content')[0].clientWidth;
+		if (width == null || width < 1){
+			// For IE, revert to offsetWidth if necessary
+			width = jQuery('.ui-widget-content')[0].offsetWidth;
+		}
+		width = width - 24; // Fudge factor to prevent horizontal scrollbars
+		if (width > 0 &&
+			// Only resize if new width exceeds a minimal threshold
+			// Fixes IE issue with in-place resizing when mousing-over frame bars
+			Math.abs(width - jQuery("#list").width()) > 5)
+		{
+			jQuery("#list").setGridWidth(width);
+		}
+	}).trigger('resize');
 </script>
