@@ -97,18 +97,24 @@ $(document).ready(function(){
 					$( "#brand_autoComplete" ).data( "autocomplete" ).term = "";
 					return false;
 				}
-			 }else{
-				 $.getJSON('${findBrandURL}', {
+			}else{
+				$.getJSON('${findBrandURL}', {
 					typeID : select.val(),
 					ajax : 'true'
 				}, function(data) {
 					var html = '';
 					var len = data.length;
-					html += '<option value=""></option>'
+					html += '<option value=""></option>';
 					if(len > 0){
 						for ( var i = 0; i < len; i++) {
-							html += '<option value="' + data[i].brandID + '">'
+							/* select first option */
+							if(i == 0){
+								html += '<option value="' + data[i].brandID + '" selected>'
 									+ data[i].name + '</option>';
+							}else{
+								html += '<option value="' + data[i].brandID + '">'
+										+ data[i].name + '</option>';
+							}
 						}
 						html += '</option>';
 					}/*else{

@@ -1103,9 +1103,18 @@ public class ServiceOrderController {
 		docForm = setDocPrintForm(so);
 		
 		if(so.getStatus().equals(ServiceOrder.FIXED)|| so.getStatus().equals(ServiceOrder.CLOSE)){
-			docForm.setStartFix(sdf.format(so.getStartFix()));
-			docForm.setStartFixTime(sdfTime.format(so.getStartFix()));
-			docForm.setEndFix(sdfDateTime.format(so.getEndFix()));
+			if(so.getStartFix() != null){
+				docForm.setStartFix(sdf.format(so.getStartFix()));
+				docForm.setStartFixTime(sdfTime.format(so.getStartFix()));	
+			}else{
+				docForm.setStartFix("-");
+				docForm.setStartFixTime("");
+			}
+			if(so.getEndFix() != null){
+				docForm.setEndFix(sdfDateTime.format(so.getEndFix()));	
+			}else{
+				docForm.setEndFix("-");
+			}
 			docForm.setEmpFix(so.getEmpFix().getName());
 			
 			docForm.setCosting(so.getCosting());
@@ -1176,9 +1185,18 @@ public class ServiceOrderController {
 		
 		docForm = setDocPrintForm(so);
 		
-		docForm.setStartFix(sdf.format(so.getStartFix()));
-		docForm.setStartFixTime(sdfTime.format(so.getStartFix()));
-		docForm.setEndFix(sdfDateTime.format(so.getEndFix()));
+		if(so.getStartFix() != null){
+			docForm.setStartFix(sdf.format(so.getStartFix()));
+			docForm.setStartFixTime(sdfTime.format(so.getStartFix()));	
+		}else{
+			docForm.setStartFix("-");
+			docForm.setStartFixTime("");
+		}
+		if(so.getEndFix() != null){
+			docForm.setEndFix(sdfDateTime.format(so.getEndFix()));	
+		}else{
+			docForm.setEndFix("-");
+		}
 		docForm.setEmpFix(so.getEmpFix().getName());
 		
 		docForm.setCosting(so.getCosting());

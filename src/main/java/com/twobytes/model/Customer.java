@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -29,6 +30,7 @@ public class Customer extends BaseColumn implements Serializable {
 	
 	@Id
     @Column(name="customerID")
+    @GeneratedValue
 	public String getCustomerID() {
 		return customerID;
 	}
