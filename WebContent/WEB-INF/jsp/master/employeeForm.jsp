@@ -45,7 +45,7 @@
 					</tr>
 					<tr>
 						<td><label><fmt:message key="userName" />:<font style="color:red">*</font></label></td>
-						<td><div class="rowElem"><form:input type="text" path="login" class="textboxMockup" maxlength="100"/> <label class="error" for="userName" generated="true" style="display: none; padding-left:10px"></label></div></td>
+						<td><div class="rowElem"><form:input type="text" path="login" class="textboxMockup" maxlength="100"/> <label class="error" for="login" generated="true" style="display: none; padding-left:10px"></label></div></td>
 					</tr>
 					<tr>
 						<td><label><fmt:message key="password" />:<font style="color:red">*</font></label></td>
@@ -72,7 +72,7 @@ $(document).ready(function(){
 		rules: {
 			employeeCode: "required",
 			name: "required",
-			userName: "required",
+			login: "required",
 			password: {
 				required: true
 			},

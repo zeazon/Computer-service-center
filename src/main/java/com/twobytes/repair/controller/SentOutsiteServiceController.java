@@ -76,7 +76,7 @@ public class SentOutsiteServiceController {
 	}
 	
 	@RequestMapping(value="/searchSentOutsiteService")
-	public @ResponseBody GridResponse getData(@RequestParam(value="name", required=false) String name, @RequestParam(value="date", required=false) String date, @RequestParam(value="type", required=false) String type, @RequestParam("rows") Integer rows, @RequestParam("page") Integer page, @RequestParam("sidx") String sidx, @RequestParam("sord") String sord){
+	public @ResponseBody GridResponse getData(@RequestParam(value="name", required=false) String name, @RequestParam(value="date", required=false) String date, @RequestParam(value="type", required=false) String type, @RequestParam(value="serialNo", required=false) String serialNo, @RequestParam("rows") Integer rows, @RequestParam("page") Integer page, @RequestParam("sidx") String sidx, @RequestParam("sord") String sord){
 		// Because default Tomcat URI encoding is iso-8859-1 so it must encode back to tis620
 		String[] datePart;
 		String searchDate = null;
@@ -92,11 +92,14 @@ public class SentOutsiteServiceController {
 			if(null != type){
 				type = new String(type.getBytes("iso-8859-1"), "tis620");	
 			}
+			if(null != serialNo){
+				serialNo = new String(serialNo.getBytes("iso-8859-1"), "tis620");	
+			}
 		}catch(UnsupportedEncodingException e){
 			e.printStackTrace();
 		}
 		
-		List<OutsiteService> osList = osService.selectNewOSByCriteria(name, searchDate, type, rows, page, sidx, sord);
+		List<OutsiteService> osList = osService.selectNewOSByCriteria(name, searchDate, type, serialNo, rows, page, sidx, sord);
 		GridResponse response = new GridResponse();
 		
 		List<OutsiteServiceGridData> rowsList = new ArrayList<OutsiteServiceGridData>();
@@ -127,6 +130,8 @@ public class SentOutsiteServiceController {
 //				gridData.setModel(os.getServiceOrder().getProduct().getModel().getName());
 				if(os.getModel() != null)
 					gridData.setModel(os.getModel().getName());
+				if(os.getSerialNo() != null)
+					gridData.setSerialNo(os.getSerialNo());
 				gridData.setProblem(os.getProblem());
 				if(os.getOutsiteCompany() != null){
 					gridData.setOutsiteCompanyName(os.getOutsiteCompany().getName());

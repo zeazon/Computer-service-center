@@ -23,4 +23,5 @@ public interface EmployeeService {
 	public boolean checkValidLogin(String login, Integer employeeID) throws Exception;
 	
 	public List<Employee> getAll();
+	public List<Employee> getByRole(Integer roleID);
 }

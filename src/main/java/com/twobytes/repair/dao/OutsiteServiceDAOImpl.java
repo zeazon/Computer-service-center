@@ -43,7 +43,7 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 	@Override
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> selectByCriteria(String name, String surname,
-			String date, String type, Integer rows, Integer page,
+			String date, String type, String serialNo, Integer rows, Integer page,
 			String orderBy, String orderType) throws Exception{
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", new Locale ("US"));
 		
@@ -60,6 +60,9 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 		}
 		if(null != type && !type.equals("")){
 			sql.append("and outsiteService.type.typeID = :type ");
+		}
+		if(null != serialNo && !serialNo.equals("")){
+			sql.append("and outsiteService.serialNo like :serialNo ");
 		}
 		
 		sql.append("and outsiteService.status != '"+OutsiteService.CANCEL+"' ");
@@ -88,6 +91,9 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 		if(null != type && !type.equals("")) {
 			q.setString("type", type);
 		}
+		if(null != serialNo && !serialNo.equals("")) {
+			q.setString("serialNo", serialNo);
+		}
 		List<OutsiteService> list = q.list();
 		result.put("list", list);
 		
@@ -105,6 +111,9 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 		if(null != type && !type.equals("")) {
 			criteria.createCriteria("outsiteService.type", "type");
 			criteria.add(Restrictions.eq("type.typeID", type));
+		}
+		if(null != serialNo && !serialNo.equals("")) {
+			criteria.add(Restrictions.like("outsiteService.serialNo", serialNo));
 		}
 		criteria.add(Restrictions.ne("status", OutsiteService.CANCEL));
 		criteria.setProjection(Projections.rowCount());
@@ -142,7 +151,7 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<OutsiteService> selectNewOSByCriteria(String name,
-			String date, String type, Integer rows,
+			String date, String type, String serialNo, Integer rows,
 			Integer page, String orderBy, String orderType) throws Exception{
 		StringBuilder sql = new StringBuilder();
 		sql.append("from OutsiteService as outsiteService where 1=1 ");
@@ -154,6 +163,9 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 		}
 		if(null != type && !type.equals("")){
 			sql.append("and outsiteService.type.typeID = :type ");
+		}
+		if(null != serialNo && !serialNo.equals("")){
+			sql.append("and outsiteService.serialNo like :serialNo ");
 		}
 		
 		sql.append("and outsiteService.status = '"+OutsiteService.NEW+"' ");
@@ -177,6 +189,9 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 		if(null != type && !type.equals("")) {
 			q.setString("type", type);
 		}
+		if(null != serialNo && !serialNo.equals("")) {
+			q.setString("serialNo", serialNo);
+		}
 		List<OutsiteService> result = q.list();
 		return result;
 	}
@@ -184,7 +199,7 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<OutsiteService> selectSentOSByCriteria(String name,
-			String date, String type, Integer rows,
+			String date, String type, String serialNo, Integer rows,
 			Integer page, String orderBy, String orderType) throws Exception{
 		StringBuilder sql = new StringBuilder();
 		sql.append("from OutsiteService as outsiteService where 1=1 ");
@@ -196,6 +211,9 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 		}
 		if(null != type && !type.equals("")){
 			sql.append("and outsiteService.type.typeID = :type ");
+		}
+		if(null != serialNo && !serialNo.equals("")){
+			sql.append("and outsiteService.serialNo like :serialNo ");
 		}
 		
 		sql.append("and outsiteService.status = '"+OutsiteService.SENT+"' ");
@@ -218,6 +236,9 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 		}
 		if(null != type && !type.equals("")) {
 			q.setString("type", type);
+		}
+		if(null != serialNo && !serialNo.equals("")) {
+			q.setString("serialNo", serialNo);
 		}
 		List<OutsiteService> result = q.list();
 		return result;

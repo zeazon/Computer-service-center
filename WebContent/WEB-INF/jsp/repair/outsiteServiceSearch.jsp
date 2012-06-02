@@ -31,6 +31,10 @@
 						</td>
 					</tr>
 					<tr>
+						<td><label><fmt:message key="serialNo" />:</label></td>
+						<td><div class="rowElem"><form:input path="serialNo" id="serialNo" class="textboxMockup" /></div></td>
+					</tr>
+					<tr>
 						<td colspan="2"><div class="rowElem"><input type="submit" id="searchButton" value="<fmt:message key='button.search' />" /></div></td>
 					</tr>
 				</table>
@@ -72,16 +76,17 @@
 			datatype: "json",
 			height: "100%",
 			autowidth: true,
-			colNames:['<fmt:message key="outsiteServiceID" />','<fmt:message key="date" />','<fmt:message key="name" />','<fmt:message key="type" />','<fmt:message key="brand" />','<fmt:message key="model" />','<fmt:message key="serviceOrder_problem" />','<fmt:message key="status" />','serviceOrderID'],
+			colNames:['<fmt:message key="outsiteServiceID" />','<fmt:message key="date" />','<fmt:message key="name" />','<fmt:message key="type" />','<fmt:message key="brand" />','<fmt:message key="model" />','<fmt:message key="serialNo" />','<fmt:message key="serviceOrder_problem" />','<fmt:message key="status" />','serviceOrderID'],
 			colModel:[
-				{name:'outsiteServiceID',index:'outsiteServiceID'},
-				{name:'outsiteServiceDate', index:'outsiteServiceDate', align:'center', sorttype:'date',formatter:'date', formatoptions: {srcformat:'d/m/Y',newformat:'d/m/Y'}, width:'100', firstSortOrder:'desc'},
-				{name:'name',index:'name'},
-				{name:'type',index:'type', sortable:false, width:'90'},
-				{name:'brand',index:'brand', sortable:false, width:'90'},
+				{name:'outsiteServiceID',index:'outsiteServiceID', width:'70'},
+				{name:'outsiteServiceDate', index:'outsiteServiceDate', align:'center', sorttype:'date',formatter:'date', formatoptions: {srcformat:'d/m/Y',newformat:'d/m/Y'}, width:'50', firstSortOrder:'desc'},
+				{name:'name',index:'name', width:'100'},
+				{name:'type',index:'type', sortable:false, width:'70'},
+				{name:'brand',index:'brand', sortable:false, width:'60'},
 				{name:'model',index:'model', sortable:false, width:'90'},
-				{name:'problem',index:'problem', sortable:false, width:'300'},
-				{name:'status',index:'status', formatter:statusFormatter, align:'center', sortable:false, width:'90'},
+				{name:'serialNo',index:'serialNo', sortable:false, width:'90'},
+				{name:'problem',index:'problem', sortable:false},
+				{name:'status',index:'status', formatter:statusFormatter, align:'center', sortable:false, width:'60'},
 				{name:'serviceOrderID',index:'serviceOrderID', hidden:true}],
 			multiselect: false,
 			rownumbers: true,
@@ -209,7 +214,8 @@
 		var name = jQuery("#name").val();
 		var date = jQuery("#dateInput").val();
 		var type = jQuery("#type").val();
-		jQuery("#list").jqGrid('setGridParam',{url:"searchOutsiteService.html?name="+name+"&date="+date+"&type="+type,page:1}).trigger("reloadGrid");
+		var serialNo = jQuery("#serialNo").val();
+		jQuery("#list").jqGrid('setGridParam',{url:"searchOutsiteService.html?name="+name+"&date="+date+"&type="+type+"&serialNo="+serialNo,page:1}).trigger("reloadGrid");
 	}
 	
 	jQuery(window).bind('resize', function() {

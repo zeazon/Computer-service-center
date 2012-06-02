@@ -5,6 +5,7 @@ public class OutsiteServiceSearchForm {
 	private String surname;
 	private String date;
 	private String type;
+	private String serialNo;
 	
 	public String getName() {
 		return name;
@@ -29,6 +30,12 @@ public class OutsiteServiceSearchForm {
 	}
 	public void setType(String type) {
 		this.type = type;
+	}
+	public String getSerialNo() {
+		return serialNo;
+	}
+	public void setSerialNo(String serialNo) {
+		this.serialNo = serialNo;
 	}
 
 }

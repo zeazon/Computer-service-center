@@ -431,11 +431,11 @@ $(document).ready(function(){
 		}*/
 		return validOrNot;
 		// {0} below is the 0th item in the options field
-	}, jQuery.format("<div style='padding-left:10px'>Please fill out at least {0} of these fields.</div>"));
+	}, jQuery.format("<div style='padding-left:10px'><fmt:message key='error.requireFromGroup_th' /></div>"));
 	
 	jQuery.validator.addMethod("checkZipcode", function(value, element, param) {
 		return value.match(new RegExp("^[0-9\-]+$"));
-	},"<fmt:message key='error.checkZipcode' />");
+	},"<fmt:message key='error.checkZipcode_th' />");
 });
 
 </script>

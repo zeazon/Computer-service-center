@@ -8,6 +8,7 @@ public class OutsiteServiceGridData {
 	private String type;
 	private String brand;
 	private String model;
+	private String serialNo;
 	private String problem;
 	private String sentDate;
 	private String sentTransportNo;
@@ -57,6 +58,12 @@ public class OutsiteServiceGridData {
 	}
 	public void setModel(String model) {
 		this.model = model;
+	}
+	public String getSerialNo() {
+		return serialNo;
+	}
+	public void setSerialNo(String serialNo) {
+		this.serialNo = serialNo;
 	}
 	public String getProblem() {
 		return problem;

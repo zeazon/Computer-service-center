@@ -1,6 +1,7 @@
 <%@page pageEncoding="TIS620" %>
 <%@ taglib prefix="c" uri="/WEB-INF/tld/c.tld" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
+<%@ page contentType="text/html; charset=tis-620" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,10 +18,11 @@
 
 <script src="<%=request.getContextPath()%>/script/jQuery/jquery-1.6.1.min.js" type="text/javascript"></script>
 <script src="<%=request.getContextPath()%>/script/jQuery/jquery-ui-1.8.13.custom.min.js" type="text/javascript"></script>
-<script src="<%=request.getContextPath()%>/script/jqGrid/grid.locale-en.js" type="text/javascript"></script>
-<script src="<%=request.getContextPath()%>/script/jqGrid/jquery.jqGrid.min.js" type="text/javascript"></script>
+<script src="<%=request.getContextPath()%>/script/jqGrid/jquery.jqGrid.src-fixed3.js" type="text/javascript"></script>
+<script src="<%=request.getContextPath()%>/script/jqGrid/grid.locale-th.js" type="text/javascript"></script>
 <script src="<%=request.getContextPath()%>/script/jqTransform/jquery.jqtransform.js" type="text/javascript"></script>
 <script src="<%=request.getContextPath()%>/script/jQueryValidate/jquery.validate.min.js" type="text/javascript"></script>
+<script src="<%=request.getContextPath()%>/script/jQueryValidate/messages_th.js" type="text/javascript"></script>
 <script src="<%=request.getContextPath()%>/script/inputFieldEffect.js" type="text/javascript"></script>
 <script src="<%=request.getContextPath()%>/script/jQuery-calendar/jquery.calendars.all.min.js" type="text/javascript"></script>
 <script src="<%=request.getContextPath()%>/script/jQuery-calendar/jquery.calendars.thai.min.js" type="text/javascript"></script>

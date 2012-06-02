@@ -23,4 +23,5 @@ public interface EmployeeDAO {
 	public boolean checkValidLogin(String login, Integer employeeID) throws Exception;
 	
 	public List<Employee> getAll() throws Exception;
+	public List<Employee> getByRole(Integer roleID) throws Exception; 
 }

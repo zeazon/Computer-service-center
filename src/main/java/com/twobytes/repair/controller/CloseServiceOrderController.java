@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.twobytes.master.service.EmployeeService;
 import com.twobytes.master.service.ModelService;
 import com.twobytes.master.service.TypeService;
 import com.twobytes.model.Brand;
@@ -68,6 +69,9 @@ public class CloseServiceOrderController {
 	private IssuePartService ipService;
 	
 	@Autowired
+	private EmployeeService employeeService;
+	
+	@Autowired
 	private MessageSource messages;
 	
 	public void setMessages(MessageSource messages) {
@@ -88,6 +92,11 @@ public class CloseServiceOrderController {
 			return "loginScreen";
 		}
 		ServiceOrderSearchForm searchForm = new ServiceOrderSearchForm();
+		/* If user is technician set default employee search to user login */
+		Employee user = (Employee)request.getSession().getAttribute("UserLogin");
+		if(user.getRoleID().getRoleID() == 4){
+			searchForm.setEmployee(user.getEmployeeID().toString());
+		}
 		model.addAttribute("searchForm", searchForm);
 		List<Type> typeList = new ArrayList<Type>();
 		try {
@@ -96,12 +105,26 @@ public class CloseServiceOrderController {
 			e.printStackTrace();
 		}
 		model.addAttribute("typeList", typeList);
+		
+		// Get only technician
+		List<Employee> empList = employeeService.getByRole(4);
+		model.addAttribute("employeeList", empList);
 		return VIEWNAME_SEARCH;
 	}
 	
 	
 	@RequestMapping(value="/searchCloseServiceOrder")
-	public @ResponseBody GridResponse getData(@RequestParam(value="name", required=false) String name, @RequestParam(value="startDate", required=false) String startDate, @RequestParam(value="endDate", required=false) String endDate, @RequestParam(value="type", required=false) String type, @RequestParam(value="serialNo", required=false) String serialNo, @RequestParam("rows") Integer rows, @RequestParam("page") Integer page, @RequestParam("sidx") String sidx, @RequestParam("sord") String sord, HttpServletRequest request){
+	public @ResponseBody GridResponse getData(@RequestParam(value="name", required=false) String name, 
+												@RequestParam(value="startDate", required=false) String startDate, 
+												@RequestParam(value="endDate", required=false) String endDate, 
+												@RequestParam(value="type", required=false) String type, 
+												@RequestParam(value="serialNo", required=false) String serialNo, 
+												@RequestParam(value="employee", required = false) String employee, 
+												@RequestParam("rows") Integer rows, 
+												@RequestParam("page") Integer page, 
+												@RequestParam("sidx") String sidx, 
+												@RequestParam("sord") String sord, 
+												HttpServletRequest request){
 		// Because default Tomcat URI encoding is iso-8859-1 so it must encode back to tis620
 		String[] datePart;
 		String searchStartDate = null;
@@ -131,10 +154,13 @@ public class CloseServiceOrderController {
 			e.printStackTrace();
 		}
 
-		Employee user = (Employee)request.getSession().getAttribute("UserLogin");
+		/*Employee user = (Employee)request.getSession().getAttribute("UserLogin");
 		
 		List<ServiceOrder> soList = soService.selectSOForCloseByCriteria(user.getEmployeeID(), name,
 				searchStartDate, searchEndDate, type, serialNo, rows, page,
+				sidx, sord);*/
+		List<ServiceOrder> soList = soService.selectSOForCloseByCriteria(name,
+				searchStartDate, searchEndDate, type, serialNo, employee, rows, page,
 				sidx, sord);
 		GridResponse response = new GridResponse();
 		
@@ -161,6 +187,11 @@ public class CloseServiceOrderController {
 				gridData.setBrand(so.getProduct().getBrand().getName());
 				gridData.setModel(so.getProduct().getModel().getName());
 				gridData.setSerialNo(so.getProduct().getSerialNo());
+				if(so.getEmpFix()!=null){
+					gridData.setEmpFix(so.getEmpFix().getName()+" "+so.getEmpFix().getSurname());
+				}else{
+					gridData.setEmpFix("-");
+				}
 				gridData.setStatus(so.getStatus());
 				gridData.setCannotMakeContact(so.getCannotMakeContact());
 				gridData.setRemark(so.getRemark());

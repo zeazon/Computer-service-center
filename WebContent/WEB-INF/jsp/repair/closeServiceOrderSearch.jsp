@@ -40,6 +40,17 @@
 						<td><div class="rowElem"><form:input path="serialNo" class="textboxMockup" id="serialNo"/></div></td>
 					</tr>
 					<tr>
+						<td><label><fmt:message key="serviceOrder_empFix" />:</label></td>
+						<td>
+							<form:select path="employee" id="employee" cssClass="selectSearch">
+								<form:option value="">All</form:option>
+								<c:forEach items="${employeeList}" var="employee">
+									<form:option value="${employee.employeeID}">${employee.name} ${employee.surname}</form:option>
+								</c:forEach>
+							</form:select>
+						</td>
+					</tr>
+					<tr>
 						<td colspan="2"><div class="rowElem"><input type="submit" id="searchButton" value="<fmt:message key='button.search' />" /></div></td>
 					</tr>
 				</table>
@@ -77,11 +88,11 @@
 		$("form.jqtransform").jqTransform();
 		
 		jQuery("#list").jqGrid({
-			url:"searchCloseServiceOrder.html",
+			url:"searchCloseServiceOrder.html?employee="+jQuery("#employee").val(),
 			datatype: "json",
 			height: "100%",
 			autowidth: true,
-			colNames:['<fmt:message key="serviceOrderID" />','<fmt:message key="date" />','<fmt:message key="name" />','<fmt:message key="tel" />','<fmt:message key="mobileTel" />','<fmt:message key="type" />','<fmt:message key="brand" />','<fmt:message key="model" />','<fmt:message key="serialNo" />','<fmt:message key="status" />','<fmt:message key="remark" />','<fmt:message key="cannotMakeContact" />'],
+			colNames:['<fmt:message key="serviceOrderID" />','<fmt:message key="date" />','<fmt:message key="name" />','<fmt:message key="tel" />','<fmt:message key="mobileTel" />','<fmt:message key="type" />','<fmt:message key="brand" />','<fmt:message key="model" />','<fmt:message key="serialNo" />','<fmt:message key="serviceOrder_empFix" />','<fmt:message key="status" />','<fmt:message key="remark" />','<fmt:message key="cannotMakeContact" />'],
 			colModel:[
 				{name:'serviceOrderID',index:'serviceOrderID', width:'200'},
 				{name:'serviceOrderDate', index:'serviceOrderDate', align:'center', sorttype:'date',formatter:'date', formatoptions: {srcformat:'d/m/Y',newformat:'d/m/Y'}, width:'100', firstSortOrder:'desc'},
@@ -89,10 +100,11 @@
 				{name:'tel',index:'tel', sortable:false},
 				{name:'mobileTel',index:'mobileTel', sortable:false, width:'170'},
 				{name:'type',index:'type', sortable:false},
-				{name:'brand',index:'brand', sortable:false},
+				{name:'brand',index:'brand', sortable:false, width:'90'},
 				{name:'model',index:'model', sortable:false},
 				{name:'serialNo',index:'serialNo', sortable:false},
-				{name:'status',index:'status', formatter:statusFormatter, align:'center', sortable:false},
+				{name:'empFix',index:'empFix', sortable:true},
+				{name:'status',index:'status', formatter:statusFormatter, align:'center', width:'100', sortable:false},
 				{name:'remark',index:'remark', sortable:false},
 				{name:'cannotMakeContact',index:'cannotMakeContact',hidden:true}],
 			multiselect: false,
@@ -234,7 +246,8 @@
 		var endDate = jQuery("#endDateInput").val();
 		var type = jQuery("#type").val();
 		var serialNo = jQuery("#serialNo").val();
-		jQuery("#list").jqGrid('setGridParam',{url:"searchCloseServiceOrder.html?name="+name+"&startDate="+startDate+"&endDate="+endDate+"&type="+type+"&serialNo="+serialNo,page:1}).trigger("reloadGrid");
+		var employee = jQuery("#employee").val();
+		jQuery("#list").jqGrid('setGridParam',{url:"searchCloseServiceOrder.html?name="+name+"&startDate="+startDate+"&endDate="+endDate+"&type="+type+"&serialNo="+serialNo+"&employee="+employee,page:1}).trigger("reloadGrid");
 	}
 	
 	jQuery(window).bind('resize', function() {

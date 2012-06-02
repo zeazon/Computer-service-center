@@ -19,6 +19,7 @@ public interface ServiceOrderDAO {
 	public List<ServiceOrder> selectNewSOByCriteria(String name, String date, String type, Integer rows, Integer page, String orderBy, String orderType) throws Exception;
 	public List<ServiceOrder> selectSOForCloseByCriteria(String name, String startDate, String endDate, String type, String serialNo, Integer rows, Integer page, String orderBy, String orderType) throws Exception;
 	public List<ServiceOrder> selectSOForCloseByCriteria(Integer employeeID, String name, String startDate, String endDate, String type, String serialNo, Integer rows, Integer page, String orderBy, String orderType) throws Exception;
+	public List<ServiceOrder> selectSOForCloseByCriteria(String name, String startDate, String endDate, String type, String serialNo, String empFixID, Integer rows, Integer page, String orderBy, String orderType) throws Exception;
 	public List<ServiceOrder> selectFixedSOByCriteria(String name, String date, String type, Integer rows, Integer page, String orderBy, String orderType) throws Exception;
 	
 	public List<ServiceOrder> getRepairReport(String startDate, String endDate, String status) throws Exception;

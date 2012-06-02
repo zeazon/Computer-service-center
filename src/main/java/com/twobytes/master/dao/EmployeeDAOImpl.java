@@ -18,27 +18,8 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 	
 	@Override
 	public boolean save(Employee emp) throws Exception{
-//		Session session = sessionFactory.getCurrentSession();
-//		Transaction tx = session.beginTransaction();
-//		try{
-//			session.save(emp);
-//			if (!tx.wasCommitted()) tx.commit();
-//		}catch (Exception e) {
-//			e.printStackTrace();
-//			tx.rollback();
-//		}
 		Session session = sessionFactory.getCurrentSession();
-//		Transaction tx = session.beginTransaction();
-//		try{
-			session.saveOrUpdate(emp);
-//			if (!tx.wasCommitted()) tx.commit();
-//		}catch (Exception e) {
-//			e.printStackTrace();
-//			tx.rollback();
-//			return false;
-//		}finally{
-//			session.close();
-//		}
+		session.saveOrUpdate(emp);
 		return true;
 	}
 
@@ -51,26 +32,14 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
 	@Override
 	public boolean edit(Employee emp) throws Exception{
-//		try{
-			Session session = sessionFactory.getCurrentSession();
-//			Transaction tx = session.beginTransaction();
-			session.update(emp);
-//			tx.commit();
-//		}catch(Exception e){
-//			e.printStackTrace();
-//			return false;
-//		}
+		Session session = sessionFactory.getCurrentSession();
+		session.update(emp);
 		return true;
 	}
 
 	@Override
 	public boolean delete(Employee emp) throws Exception{
-//		try{
-			sessionFactory.getCurrentSession().delete(emp);
-//		}catch(Exception e){
-//			e.printStackTrace();
-//			return false;
-//		}
+		sessionFactory.getCurrentSession().delete(emp);
 		return true;
 	}
 
@@ -131,6 +100,15 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 	@SuppressWarnings("unchecked")
 	public List<Employee> getAll() throws Exception {
 		Query q = sessionFactory.getCurrentSession().createQuery("from Employee order by name ");
+		List<Employee> retList = q.list();
+		return retList;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Employee> getByRole(Integer roleID) throws Exception {
+		Query q = sessionFactory.getCurrentSession().createQuery("from Employee emp where emp.roleID.roleID = :roleID order by emp.name ");
+		q.setInteger("roleID", roleID);
 		List<Employee> retList = q.list();
 		return retList;
 	}

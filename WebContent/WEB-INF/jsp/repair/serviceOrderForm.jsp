@@ -99,7 +99,7 @@
 									<td colspan="7">
 										<div class="rowElem">
 											<c:if test="${mode == 'add'}">
-												<form:input path="productID" class="textboxMockup" style="float:left" id="productID" readonly="true" size="18" maxlength="20"/> <input type="button" id="productLov" value="..." > <label class="error" for="productID" generated="true" style="display: none; float:left; padding-left:10px"></label>
+											    <form:input path="productID" class="textboxMockup" style="float:left" id="productID" readonly="true" size="18" maxlength="20"/> <input type="button" id="productLov" class="lov_button" value="..." > <label class="error" for="productID" generated="true" style="display: none; float:left; padding-left:10px"></label>
 											</c:if>
 											<c:if test="${mode == 'edit'}">
 												<c:if test="${form.status != 'close'}">
@@ -2415,11 +2415,11 @@ jQuery.validator.addMethod("require_from_group", function(value, element, option
 	}*/
 	return validOrNot;
 	// {0} below is the 0th item in the options field
-}, jQuery.format("<div style='padding-left:10px'>Please fill out at least {0} of these fields.</div>"));
+}, jQuery.format("<div style='padding-left:10px'><fmt:message key='error.requireFromGroup_th' /></div>"));
 
 jQuery.validator.addMethod("checkZipcode", function(value, element, param) {
 	return value.match(new RegExp("^[0-9\-]+$"));
-},"<fmt:message key='error.checkZipcode' />");
+},"<fmt:message key='error.checkZipcode_th' />");
 
 jQuery.validator.addMethod("checkDupSerialNo", function(value, element, options) {
 	var validOrNot = true;
