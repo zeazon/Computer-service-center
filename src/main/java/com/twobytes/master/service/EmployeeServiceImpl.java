@@ -94,4 +94,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return retList;
 	}
 
+	@Override
+	@Transactional(readOnly=true)
+	public List<Employee> getByRole(List<Integer> roleList) {
+		List<Employee> retList = new ArrayList<Employee>();
+		try{
+			retList = employeeDAO.getByRole(roleList);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return retList;
+	}
+
 }

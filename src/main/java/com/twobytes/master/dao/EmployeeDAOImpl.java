@@ -112,5 +112,22 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 		List<Employee> retList = q.list();
 		return retList;
 	}
-	
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Employee> getByRole(List<Integer> roleList) throws Exception {
+		StringBuffer query = new StringBuffer("from Employee emp where emp.roleID.roleID in (");
+		for(int i=0; i<roleList.size(); i++){
+			if(i==0){
+				query.append(roleList.get(i));
+			}else{
+				query.append(", "+roleList.get(i));
+			}
+		}
+		query.append(") order by emp.name");
+		Query q = sessionFactory.getCurrentSession().createQuery(query.toString());
+		List<Employee> retList = q.list();
+		return retList;
+	}
+
 }

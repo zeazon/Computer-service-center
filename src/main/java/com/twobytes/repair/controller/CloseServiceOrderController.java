@@ -92,9 +92,9 @@ public class CloseServiceOrderController {
 			return "loginScreen";
 		}
 		ServiceOrderSearchForm searchForm = new ServiceOrderSearchForm();
-		/* If user is technician set default employee search to user login */
+		/* If user is technician and admin set default employee search to user login */
 		Employee user = (Employee)request.getSession().getAttribute("UserLogin");
-		if(user.getRoleID().getRoleID() == 4){
+		if(user.getRoleID().getRoleID() == 4 || user.getRoleID().getRoleID() == 3){
 			searchForm.setEmployee(user.getEmployeeID().toString());
 		}
 		model.addAttribute("searchForm", searchForm);
@@ -106,12 +106,14 @@ public class CloseServiceOrderController {
 		}
 		model.addAttribute("typeList", typeList);
 		
-		// Get only technician
-		List<Employee> empList = employeeService.getByRole(4);
+		// Get technician and admin
+		List<Integer> roleList = new ArrayList<Integer>();
+		roleList.add(3); // admin
+		roleList.add(4); // technician
+		List<Employee> empList = employeeService.getByRole(roleList);
 		model.addAttribute("employeeList", empList);
 		return VIEWNAME_SEARCH;
 	}
-	
 	
 	@RequestMapping(value="/searchCloseServiceOrder")
 	public @ResponseBody GridResponse getData(@RequestParam(value="name", required=false) String name, 

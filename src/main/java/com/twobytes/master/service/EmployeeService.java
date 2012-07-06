@@ -24,4 +24,5 @@ public interface EmployeeService {
 	
 	public List<Employee> getAll();
 	public List<Employee> getByRole(Integer roleID);
+	public List<Employee> getByRole(List<Integer> roleList);
 }

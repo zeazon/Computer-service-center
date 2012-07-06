@@ -164,6 +164,12 @@ public class OutsiteServiceController {
 				if(os.getSentTransportNo() != null){
 					gridData.setSentTransportNo(os.getSentTransportNo());
 				}
+				if(os.getOutsiteCompany() != null){
+					gridData.setOutsiteCompanyName(os.getOutsiteCompany().getName());
+				}
+				if(os.getTransportCompany() != null){
+					gridData.setTransportCompanyName(os.getTransportCompany().getName());
+				}
 				gridData.setStatus(os.getStatus());
 				if(os.getServiceOrder() != null){
 					gridData.setServiceOrderID(os.getServiceOrder().getServiceOrderID());
