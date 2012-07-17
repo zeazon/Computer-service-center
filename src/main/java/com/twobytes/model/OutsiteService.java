@@ -20,6 +20,7 @@ public class OutsiteService implements Serializable {
 	private String outsiteServiceID;
 	private Date outsiteServiceDate;
 	private ServiceOrder serviceOrder;
+	private String refOutsiteJobID;
 	private String serviceType;
 	private String customerName;
 	private String tel;
@@ -82,6 +83,15 @@ public class OutsiteService implements Serializable {
 		this.serviceOrder = serviceOrder;
 	}
 	
+	@Column(name="refOutsiteJobID")
+	public String getRefOutsiteJobID() {
+		return refOutsiteJobID;
+	}
+
+	public void setRefOutsiteJobID(String refOutsiteJobID) {
+		this.refOutsiteJobID = refOutsiteJobID;
+	}
+
 	@Column(name="serviceType")
 	public String getServiceType() {
 		return serviceType;

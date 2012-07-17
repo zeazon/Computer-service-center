@@ -162,48 +162,9 @@ public class ReceivedOutsiteServiceController {
 		}
 		OutsiteService os = osService.selectByID(outsiteServiceID);
 		OutsiteServiceForm form = modelToForm(os, new OutsiteServiceForm());
-//		form.setOutsiteServiceID(os.getOutsiteServiceID().toString());
-//		form.setOutsiteServiceDate(sdfDateTime.format(os.getOutsiteServiceDate()));
-//		form.setServiceType(os.getServiceType());
-//		if(os.getServiceOrder() != null){
-//			form.setServiceOrderID(os.getServiceOrder().getServiceOrderID());
-//			form.setServiceOrder(os.getServiceOrder());
-//		}
-//		form.setCustomerName(os.getCustomerName());
-//		form.setTel(os.getTel());
-//		form.setMobileTel(os.getMobileTel());
-//		if(os.getType() != null){
-//			form.setTypeID(os.getType().getTypeID());
-//			form.setTypeName(os.getType().getName());
-//		}
-//		if(os.getBrand() != null){
-//			form.setBrandID(os.getBrand().getBrandID());
-//			form.setBrandName(os.getBrand().getName());
-//		}
-//		if(os.getModel() != null){
-//			form.setModelID(os.getModel().getModelID());
-//			form.setModelName(os.getModel().getName());
-//		}
-//		form.setSerialNo(os.getSerialNo());
-//		form.setOutsiteCompanyID(os.getOutsiteCompany().getOutsiteCompanyID());
-//		form.setTransportCompanyID(os.getTransportCompany().getTransportCompanyID());
-//		
-//		form.setAccessories(os.getAccessories());
-//		form.setProblem(os.getProblem());
-//		form.setTransportCompanyName(os.getTransportCompany().getName());
-//		form.setOutsiteCompanyName(os.getOutsiteCompany().getName());
-//		
-//		form.setSentDate(sdfDate.format(os.getSentDate()));
-//		form.setSentTransportNo(os.getSentTransportNo());
 		
 		form.setCosting("cost");
 		form.setNetAmount(0.00);
-		
-//		String[] serviceDesc = {this.messages.getMessage("serviceCost", null, new Locale("th", "TH")),"kkkk"};
-//		System.out.println("serviceDesc------>"+serviceDesc);
-//		System.out.println("serviceDesc[0]------>"+serviceDesc[0]);
-		
-//		form.setServiceDesc(serviceDesc);
 		
 		form.setServicePrice_1(0.00);
 		form.setServicePrice_2(0.00);
@@ -211,7 +172,6 @@ public class ReceivedOutsiteServiceController {
 		form.setServicePrice_4(0.00);
 		
 		model.addAttribute("form", form);
-//		model.addAttribute("fullAddr", os.getServiceOrder().getCustomer().getAddress()+" "+this.messages.getMessage("subdistrict_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getSubdistrict().getName()+" "+this.messages.getMessage("district_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getDistrict().getName()+" "+this.messages.getMessage("province_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getProvince().getName());
 		
 		List<TransportCompany> tcList = new ArrayList<TransportCompany>();
 		try {
@@ -267,56 +227,7 @@ public class ReceivedOutsiteServiceController {
 			}
 		}
 		
-//		String[] serviceDescArry = form.getServiceDesc();
-//		Double[] servicePriceArry = form.getServicePrice();
-		
-		/*String[] repairDescArry = form.getRepairDesc();
-		Double[] repairPriceArry = form.getRepairPrice();*/
-		
-		List<OutsiteServiceDetail> osdList = new ArrayList<OutsiteServiceDetail>();
-		
-		/*if(form.getCosting().equals("cost")){
-//			for(String serviceDesc:form.getServiceDesc()){
-			for(int i=0; i<serviceDescArry.length; i++){
-				String serviceDesc = serviceDescArry[i];
-//				System.out.println("i = "+i+" serviceDesc = "+serviceDesc);
-				if(!serviceDesc.equals("")){
-//					System.out.println("insert detail");
-					OutsiteServiceDetail osd = new OutsiteServiceDetail();
-					osd.setOutsiteService(os);
-					osd.setType(OutsiteServiceDetail.TYPE_SERVICE);
-					osd.setDesc(serviceDesc);
-					Double servicePrice = servicePriceArry[i];
-//					System.out.println("servicePrice = "+servicePrice);
-					osd.setPrice(servicePrice);
-					osd.setCreatedBy(user.getEmployeeID());
-					osd.setCreatedDate(now);
-					osd.setUpdatedBy(user.getEmployeeID());
-					osd.setUpdatedDate(now);
-					
-					osdList.add(osd);
-				}
-			}
-			
-			for(int j=0; j<repairDescArry.length; j++){
-				String repairDesc = repairDescArry[j];
-				if(!repairDesc.equals("")){
-					OutsiteServiceDetail osd = new OutsiteServiceDetail();
-					osd.setOutsiteService(os);
-					osd.setType(OutsiteServiceDetail.TYPE_REPAIR);
-					osd.setDesc(repairDesc);
-					Double repairPrice = repairPriceArry[j];
-//					System.out.println("repairPrice = "+repairPrice);
-					osd.setPrice(repairPrice);
-					osd.setCreatedBy(user.getEmployeeID());
-					osd.setCreatedDate(now);
-					osd.setUpdatedBy(user.getEmployeeID());
-					osd.setUpdatedDate(now);
-					
-					osdList.add(osd);
-				}
-			}
-		}*/
+		List<OutsiteServiceDetail> osdList = new ArrayList<OutsiteServiceDetail>();		
 		
 		if(form.getCosting().equals("cost")){
 			if(form.getServiceDesc_1() != "" && (form.getServicePrice_1() != null && form.getServicePrice_1() > 0)){
@@ -379,16 +290,6 @@ public class ReceivedOutsiteServiceController {
 		}else if(form.getCosting().equals("free")){
 			os.setNetAmount(0.00);
 		}
-			
-//		System.out.println("form.getServiceDesc().length = "+form.getServiceDesc().length);
-//		for(String serviceDesc:form.getServiceDesc()){
-//			System.out.println("serviceDesc = "+serviceDesc);	
-//		}
-		
-//		System.out.println("form.getServicePrice().length = "+form.getServicePrice().length);
-//		for(Double servicePrice:form.getServicePrice()){
-//			System.out.println("servicePrice = "+servicePrice);	
-//		}
 		
 		boolean canSave = false;
 		try{
@@ -414,7 +315,6 @@ public class ReceivedOutsiteServiceController {
 			model.addAttribute("errMsg", this.messages.getMessage("error.cannotSave", null, new Locale("th", "TH")));
 			form = modelToForm(os, form);
 			model.addAttribute("form",form);
-//			model.addAttribute("fullAddr", os.getServiceOrder().getCustomer().getAddress()+" "+this.messages.getMessage("subdistrict_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getSubdistrict().getName()+" "+this.messages.getMessage("district_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getDistrict().getName()+" "+this.messages.getMessage("province_abbr", null, new Locale("th", "TH"))+" "+os.getServiceOrder().getCustomer().getProvince().getName());
 			List<TransportCompany> tcList = new ArrayList<TransportCompany>();
 			try {
 				tcList = transportCompanyService.getAll();
@@ -437,6 +337,9 @@ public class ReceivedOutsiteServiceController {
 		form.setOutsiteServiceID(os.getOutsiteServiceID().toString());
 		form.setOutsiteServiceDate(sdfDateTime.format(os.getOutsiteServiceDate()));
 		form.setServiceType(os.getServiceType());
+		if(os.getRefOutsiteJobID() != null){
+			form.setRefOutsiteJobID(os.getRefOutsiteJobID());
+		}
 		if(os.getServiceOrder() != null){
 			form.setServiceOrderID(os.getServiceOrder().getServiceOrderID());
 			form.setServiceOrder(os.getServiceOrder());

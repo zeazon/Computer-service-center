@@ -44,7 +44,7 @@
 					</tr>
 					<tr>
 						<td><label><fmt:message key="serviceOrderID" />:<c:if test="${form.status != 'close'}"></c:if></label></td>
-						<td colspan="5">
+						<td colspan="2">
 							<div class="rowElem">
 								<c:choose>
 									<c:when test="${form.status != 'close'}">
@@ -52,6 +52,19 @@
 									</c:when>
 									<c:otherwise>
 										${form.serviceOrderID}
+									</c:otherwise>
+								</c:choose>
+							</div>
+						</td>
+						<td><label><fmt:message key="refOutsiteJobID" />:</label></td>
+						<td colspan="2">
+							<div class="rowElem">
+								<c:choose>
+									<c:when test="${form.status != 'close'}">
+										<form:input path="refOutsiteJobID" maxlength="50"/>
+									</c:when>
+									<c:otherwise>
+										${form.refOutsiteJobID}
 									</c:otherwise>
 								</c:choose>
 							</div>

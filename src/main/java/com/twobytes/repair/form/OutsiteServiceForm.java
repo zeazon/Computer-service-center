@@ -9,6 +9,7 @@ public class OutsiteServiceForm {
 	private String accessories;
 	private String problem;
 	private String serviceOrderID;
+	private String refOutsiteJobID;
 	private Integer outsiteCompanyID;
 	private String outsiteCompanyName;
 	private Integer transportCompanyID;
@@ -93,6 +94,12 @@ public class OutsiteServiceForm {
 	}
 	public void setServiceOrder(ServiceOrder serviceOrder) {
 		this.serviceOrder = serviceOrder;
+	}
+	public String getRefOutsiteJobID() {
+		return refOutsiteJobID;
+	}
+	public void setRefOutsiteJobID(String refOutsiteJobID) {
+		this.refOutsiteJobID = refOutsiteJobID;
 	}
 	public String getAccessories() {
 		return accessories;

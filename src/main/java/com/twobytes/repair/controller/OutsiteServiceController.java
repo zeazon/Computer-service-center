@@ -493,6 +493,7 @@ public class OutsiteServiceController {
 			msg = this.messages.getMessage("msg.addComplete", null, new Locale("th", "TH"));
 		}
 		os.setProblem(form.getProblem());
+		os.setRefOutsiteJobID(form.getRefOutsiteJobID());
 		
 		ServiceOrder so = serviceOrderService.selectByID(form.getServiceOrderID());
 		os.setServiceOrder(so);
@@ -659,6 +660,7 @@ public class OutsiteServiceController {
 			form.setServiceOrderID(os.getServiceOrder().getServiceOrderID());
 			form.setServiceOrder(os.getServiceOrder());
 		}
+		form.setRefOutsiteJobID(os.getRefOutsiteJobID());
 		form.setCustomerName(os.getCustomerName());
 		form.setTel(os.getTel());
 		form.setMobileTel(os.getMobileTel());

@@ -35,7 +35,9 @@
 					</tr>
 					<tr>
 						<td><label><fmt:message key="serviceOrderID" />:</label></td>
-						<td colspan="5"><div class="rowElem">${form.serviceOrderID}</div></td>
+						<td colspan="2"><div class="rowElem">${form.serviceOrderID}</div></td>
+						<td><label><fmt:message key="refOutsiteJobID" />:</label></td>
+						<td colspan="2"><div class="rowElem">${form.refOutsiteJobID}</div></td>
 					</tr>
 					<tr>
 						<td colspan="6">
