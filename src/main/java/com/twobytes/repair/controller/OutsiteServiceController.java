@@ -108,7 +108,10 @@ public class OutsiteServiceController {
 	
 	@RequestMapping(value="/searchOutsiteService")
 	@SuppressWarnings("unchecked")
-	public @ResponseBody GridResponse getData(@RequestParam(value="name", required=false) String name, @RequestParam(value="surname", required=false) String surname, @RequestParam(value="date", required=false) String date, @RequestParam(value="type", required=false) String type, @RequestParam(value="serialNo", required=false) String serialNo, @RequestParam("rows") Integer rows, @RequestParam("page") Integer page, @RequestParam("sidx") String sidx, @RequestParam("sord") String sord){
+	public @ResponseBody GridResponse getData(@RequestParam(value="name", required=false) String name, @RequestParam(value="surname", required=false) String surname, 
+												@RequestParam(value="date", required=false) String date, @RequestParam(value="type", required=false) String type, 
+												@RequestParam(value="serialNo", required=false) String serialNo, @RequestParam(value="refOutsiteJobID", required=false) String refOutsiteJobID, 
+												@RequestParam("rows") Integer rows, @RequestParam("page") Integer page, @RequestParam("sidx") String sidx, @RequestParam("sord") String sord){
 		String[] datePart;
 		String searchDate = null;
 		// Because default Tomcat URI encoding is iso-8859-1 so it must encode back to tis620
@@ -130,12 +133,15 @@ public class OutsiteServiceController {
 			if(null != serialNo){
 				serialNo = new String(serialNo.getBytes("iso-8859-1"), "tis620");
 			}
+			if(null != refOutsiteJobID){
+				refOutsiteJobID = new String(refOutsiteJobID.getBytes("iso-8859-1"), "tis620");	
+			}
 		}catch(UnsupportedEncodingException e){
 			e.printStackTrace();
 		}
 		
 		Map<String, Object> ret = new HashMap<String, Object>();
-		ret = osService.selectByCriteria(name, surname, searchDate, type, serialNo, rows, page, sidx, sord);
+		ret = osService.selectByCriteria(name, surname, searchDate, type, serialNo, refOutsiteJobID, rows, page, sidx, sord);
 		
 		List<OutsiteService> osList = (List<OutsiteService>) ret.get("list");
 		GridResponse response = new GridResponse();
@@ -166,6 +172,9 @@ public class OutsiteServiceController {
 				}
 				if(os.getOutsiteCompany() != null){
 					gridData.setOutsiteCompanyName(os.getOutsiteCompany().getName());
+				}
+				if(os.getRefOutsiteJobID() != null && !os.getRefOutsiteJobID().equals("")){
+					gridData.setRefOutsiteJobID(os.getRefOutsiteJobID());
 				}
 				if(os.getTransportCompany() != null){
 					gridData.setTransportCompanyName(os.getTransportCompany().getName());

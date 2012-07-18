@@ -3,6 +3,7 @@ package com.twobytes.repair.form;
 public class OutsiteServiceGridData {
 	private String outsiteServiceID;
 	private String outsiteServiceDate;
+	private String refOutsiteJobID;
 	private String name;
 	private String surname;
 	private String type;
@@ -28,6 +29,12 @@ public class OutsiteServiceGridData {
 	}
 	public void setOutsiteServiceDate(String outsiteServiceDate) {
 		this.outsiteServiceDate = outsiteServiceDate;
+	}
+	public String getRefOutsiteJobID() {
+		return refOutsiteJobID;
+	}
+	public void setRefOutsiteJobID(String refOutsiteJobID) {
+		this.refOutsiteJobID = refOutsiteJobID;
 	}
 	public String getName() {
 		return name;

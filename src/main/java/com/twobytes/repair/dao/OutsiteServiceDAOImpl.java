@@ -43,7 +43,7 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 	@Override
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> selectByCriteria(String name, String surname,
-			String date, String type, String serialNo, Integer rows, Integer page,
+			String date, String type, String serialNo, String refOutsiteJobID, Integer rows, Integer page,
 			String orderBy, String orderType) throws Exception{
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", new Locale ("US"));
 		
@@ -63,6 +63,9 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 		}
 		if(null != serialNo && !serialNo.equals("")){
 			sql.append("and outsiteService.serialNo like :serialNo ");
+		}
+		if(null != refOutsiteJobID && !refOutsiteJobID.equals("")){
+			sql.append("and outsiteService.refOutsiteJobID like :refOutsiteJobID ");
 		}
 		
 		sql.append("and outsiteService.status != '"+OutsiteService.CANCEL+"' ");
@@ -94,6 +97,9 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 		if(null != serialNo && !serialNo.equals("")) {
 			q.setString("serialNo", serialNo);
 		}
+		if(null != refOutsiteJobID && !refOutsiteJobID.equals("")) {
+			q.setString("refOutsiteJobID", refOutsiteJobID);
+		}
 		List<OutsiteService> list = q.list();
 		result.put("list", list);
 		
@@ -115,6 +121,9 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 		if(null != serialNo && !serialNo.equals("")) {
 			criteria.add(Restrictions.like("outsiteService.serialNo", serialNo));
 		}
+		if(null != refOutsiteJobID && !refOutsiteJobID.equals("")) {
+			criteria.add(Restrictions.like("outsiteService.refOutsiteJobID", refOutsiteJobID));
+		}		
 		criteria.add(Restrictions.ne("status", OutsiteService.CANCEL));
 		criteria.setProjection(Projections.rowCount());
 		

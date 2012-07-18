@@ -10,14 +10,14 @@
 					<tr>
 						<td><label><fmt:message key="name" />:</label></td>
 						<td><div class="rowElem"><form:input path="name" type="text" id="name" class="textboxMockup" /></div></td>
+						<td><label><fmt:message key="serialNo" />:</label></td>
+						<td><div class="rowElem"><form:input path="serialNo" id="serialNo" class="textboxMockup" /></div></td>
 					</tr>
-					<%--tr>
-						<td><label><fmt:message key="surname" />:</label></td>
-						<td><div class="rowElem"><form:input path="surname" type="text" id="surname" class="textboxMockup" /></div></td>
-					</tr--%>
 					<tr>
 						<td><label><fmt:message key="date" />:</label></td>
 						<td><div class="rowElem" style="z-index:200"><form:input path="date" type="text" class="textboxMockup" id="dateInput" size="9"/></div></td>
+						<td><label><fmt:message key="refOutsiteJobID" />:</label></td>
+						<td><div class="rowElem"><form:input path="refOutsiteJobID" id="refOutsiteJobID" /></div></td>
 					</tr>
 					<tr>
 						<td><label><fmt:message key="type" />:</label></td>
@@ -29,13 +29,10 @@
 								</form:select>
 							</div>
 						</td>
+						<td colspan="2"></td>
 					</tr>
 					<tr>
-						<td><label><fmt:message key="serialNo" />:</label></td>
-						<td><div class="rowElem"><form:input path="serialNo" id="serialNo" class="textboxMockup" /></div></td>
-					</tr>
-					<tr>
-						<td colspan="2"><div class="rowElem"><input type="submit" id="searchButton" value="<fmt:message key='button.search' />" /></div></td>
+						<td colspan="4"><div class="rowElem"><input type="submit" id="searchButton" value="<fmt:message key='button.search' />" /></div></td>
 					</tr>
 				</table>
 			</form:form>
@@ -76,7 +73,7 @@
 			datatype: "json",
 			height: "100%",
 			autowidth: true,
-			colNames:['<fmt:message key="outsiteServiceID" />','<fmt:message key="date" />','<fmt:message key="name" />','<fmt:message key="type" />','<fmt:message key="brand" />','<fmt:message key="model" />','<fmt:message key="serialNo" />','<fmt:message key="serviceOrder_problem" />','<fmt:message key="outsiteService_outsiteCompany" />','<fmt:message key="transportCompany" />','<fmt:message key="status" />','serviceOrderID'],
+			colNames:['<fmt:message key="outsiteServiceID" />','<fmt:message key="date" />','<fmt:message key="name" />','<fmt:message key="type" />','<fmt:message key="brand" />','<fmt:message key="model" />','<fmt:message key="serialNo" />','<fmt:message key="serviceOrder_problem" />','<fmt:message key="outsiteService_outsiteCompany" />','<fmt:message key="refOutsiteJobID" />','<fmt:message key="transportCompany" />','<fmt:message key="status" />','serviceOrderID'],
 			colModel:[
 				{name:'outsiteServiceID',index:'outsiteServiceID', width:'80'},
 				{name:'outsiteServiceDate', index:'outsiteServiceDate', align:'center', sorttype:'date',formatter:'date', formatoptions: {srcformat:'d/m/Y',newformat:'d/m/Y'}, width:'50', firstSortOrder:'desc'},
@@ -87,6 +84,7 @@
 				{name:'serialNo',index:'serialNo', sortable:false, width:'90'},
 				{name:'problem',index:'problem', sortable:false},
 				{name:'outsiteCompanyName',index:'outsiteCompanyName', sortable:true, width:'60'},
+				{name:'refOutsiteJobID',index:'refOutsiteJobID', sortable:true, width:'60'},
 				{name:'transportCompanyName',index:'transportCompanyName', sortable:true, width:'60'},
 				{name:'status',index:'status', formatter:statusFormatter, align:'center', sortable:false, width:'60'},
 				{name:'serviceOrderID',index:'serviceOrderID', hidden:true}],
@@ -217,7 +215,8 @@
 		var date = jQuery("#dateInput").val();
 		var type = jQuery("#type").val();
 		var serialNo = jQuery("#serialNo").val();
-		jQuery("#list").jqGrid('setGridParam',{url:"searchOutsiteService.html?name="+name+"&date="+date+"&type="+type+"&serialNo="+serialNo,page:1}).trigger("reloadGrid");
+		var refOutsiteJobID = jQuery("#refOutsiteJobID").val();
+		jQuery("#list").jqGrid('setGridParam',{url:"searchOutsiteService.html?name="+name+"&date="+date+"&type="+type+"&serialNo="+serialNo+"&refOutsiteJobID="+refOutsiteJobID,page:1}).trigger("reloadGrid");
 	}
 	
 	jQuery(window).bind('resize', function() {

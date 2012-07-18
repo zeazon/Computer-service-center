@@ -6,6 +6,7 @@ public class OutsiteServiceSearchForm {
 	private String date;
 	private String type;
 	private String serialNo;
+	private String refOutsiteJobID;
 	
 	public String getName() {
 		return name;
@@ -36,6 +37,12 @@ public class OutsiteServiceSearchForm {
 	}
 	public void setSerialNo(String serialNo) {
 		this.serialNo = serialNo;
+	}
+	public String getRefOutsiteJobID() {
+		return refOutsiteJobID;
+	}
+	public void setRefOutsiteJobID(String refOutsiteJobID) {
+		this.refOutsiteJobID = refOutsiteJobID;
 	}
 
 }
