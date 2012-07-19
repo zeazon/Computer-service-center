@@ -445,10 +445,6 @@
 							<td><label><fmt:message key="name" />:</label></td>
 							<td><div class="rowElem"><input type="text" id="name" class="textboxMockup"></div></td>
 						</tr>
-						<%--tr>
-							<td><label><fmt:message key="surname" />:</label></td>
-							<td><div class="rowElem"><input type="text" id="surname" class="textboxMockup"></div></td>
-						</tr--%>
 						<tr>
 							<td></td>
 							<td><div class="rowElem"><input type="button" id="searchServiceOrderButton" value='<fmt:message key="button.search" />' ></div></td>
@@ -580,7 +576,7 @@ $(document).ready(function(){
 			{name:'serviceOrderDate', index:'serviceOrderDate', align:'center', sorttype:'date',formatter:'date', formatoptions: {srcformat:'d/m/Y H:i',newformat:'d/m/Y H:i'}, width:'140', firstSortOrder:'desc'},
 			{name:'serviceType',index:'serviceType', hidden:true},
 			{name:'customer.customerID',index:'customerID', hidden:true},
-			{name:'name',index:'name', editable:true},
+			{name:'name',index:'name', width:'300'},
 			{name:'company',index:'company', hidden:true},
 			{name:'customerFullAddress',index:'address', hidden:true},
 			{name:'email',index:'email', hidden:true},
@@ -898,6 +894,12 @@ $(document).ready(function(){
 		});
 		
 	}
+	
+	//check for enter key
+	$('#name').bind('keypress', function(event){
+		if(event.keyCode == '13') {gridReload(); return false;}
+		else return true;
+	});
 	
 	function setBrandModelSelectList(){
 		
