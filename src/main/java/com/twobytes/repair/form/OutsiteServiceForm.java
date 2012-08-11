@@ -51,6 +51,17 @@ public class OutsiteServiceForm {
 	private Double servicePrice_3;
 	private Double servicePrice_4;
 	
+	private String repairDesc_1;
+	private String repairDesc_2;
+	private String repairDesc_3;
+	private String repairDesc_4;
+	private Double repairPrice_1;
+	private Double repairPrice_2;
+	private Double repairPrice_3;
+	private Double repairPrice_4;
+	
+	private Double outsiteRepairPrice;
+	
 	private String status;
 
 	public String getOutsiteServiceID() {
@@ -310,6 +321,60 @@ public class OutsiteServiceForm {
 	}
 	public void setServicePrice_4(Double servicePrice_4) {
 		this.servicePrice_4 = servicePrice_4;
+	}
+	public String getRepairDesc_1() {
+		return repairDesc_1;
+	}
+	public void setRepairDesc_1(String repairDesc_1) {
+		this.repairDesc_1 = repairDesc_1;
+	}
+	public String getRepairDesc_2() {
+		return repairDesc_2;
+	}
+	public void setRepairDesc_2(String repairDesc_2) {
+		this.repairDesc_2 = repairDesc_2;
+	}
+	public String getRepairDesc_3() {
+		return repairDesc_3;
+	}
+	public void setRepairDesc_3(String repairDesc_3) {
+		this.repairDesc_3 = repairDesc_3;
+	}
+	public String getRepairDesc_4() {
+		return repairDesc_4;
+	}
+	public void setRepairDesc_4(String repairDesc_4) {
+		this.repairDesc_4 = repairDesc_4;
+	}
+	public Double getRepairPrice_1() {
+		return repairPrice_1;
+	}
+	public void setRepairPrice_1(Double repairPrice_1) {
+		this.repairPrice_1 = repairPrice_1;
+	}
+	public Double getRepairPrice_2() {
+		return repairPrice_2;
+	}
+	public void setRepairPrice_2(Double repairPrice_2) {
+		this.repairPrice_2 = repairPrice_2;
+	}
+	public Double getRepairPrice_3() {
+		return repairPrice_3;
+	}
+	public void setRepairPrice_3(Double repairPrice_3) {
+		this.repairPrice_3 = repairPrice_3;
+	}
+	public Double getRepairPrice_4() {
+		return repairPrice_4;
+	}
+	public void setRepairPrice_4(Double repairPrice_4) {
+		this.repairPrice_4 = repairPrice_4;
+	}
+	public Double getOutsiteRepairPrice() {
+		return outsiteRepairPrice;
+	}
+	public void setOutsiteRepairPrice(Double outsiteRepairPrice) {
+		this.outsiteRepairPrice = outsiteRepairPrice;
 	}
 	
 }

@@ -8,6 +8,7 @@ public class SumAmountReportForm implements Serializable{
 	private String fullName;
 	private Integer numServiceOrder;
 	private Double sumService;
+	private Double sumOutsiteRepair;
 	private Double sumPart;
 	private Double amount;
 	
@@ -28,6 +29,12 @@ public class SumAmountReportForm implements Serializable{
 	}
 	public void setSumService(Double sumService) {
 		this.sumService = sumService;
+	}
+	public Double getSumOutsiteRepair() {
+		return sumOutsiteRepair;
+	}
+	public void setSumOutsiteRepair(Double sumOutsiteRepair) {
+		this.sumOutsiteRepair = sumOutsiteRepair;
 	}
 	public Double getSumPart() {
 		return sumPart;

@@ -171,6 +171,13 @@ public class ReceivedOutsiteServiceController {
 		form.setServicePrice_3(0.00);
 		form.setServicePrice_4(0.00);
 		
+		/*form.setRepairPrice_1(0.00);
+		form.setRepairPrice_2(0.00);
+		form.setRepairPrice_3(0.00);
+		form.setRepairPrice_4(0.00);*/
+		
+		form.setOutsiteRepairPrice(0.00);
+		
 		model.addAttribute("form", form);
 		
 		List<TransportCompany> tcList = new ArrayList<TransportCompany>();
@@ -286,11 +293,81 @@ public class ReceivedOutsiteServiceController {
 				osdList.add(osd);
 			}
 			
+			/*if(form.getRepairDesc_1() != "" && (form.getRepairPrice_1() != null && form.getRepairPrice_1() > 0)){
+				OutsiteServiceDetail osd = new OutsiteServiceDetail();
+				osd.setOutsiteService(os);
+				osd.setType(OutsiteServiceDetail.TYPE_REPAIR);
+				osd.setDesc(form.getRepairDesc_1());
+				osd.setPrice(form.getRepairPrice_1());
+				osd.setCreatedBy(user.getEmployeeID());
+				osd.setCreatedDate(now);
+				osd.setUpdatedBy(user.getEmployeeID());
+				osd.setUpdatedDate(now);
+				
+				osdList.add(osd);
+			}
+			
+			if(form.getRepairDesc_2() != "" && (form.getRepairPrice_2() != null && form.getRepairPrice_2() > 0)){
+				OutsiteServiceDetail osd = new OutsiteServiceDetail();
+				osd.setOutsiteService(os);
+				osd.setType(OutsiteServiceDetail.TYPE_REPAIR);
+				osd.setDesc(form.getRepairDesc_2());
+				osd.setPrice(form.getRepairPrice_2());
+				osd.setCreatedBy(user.getEmployeeID());
+				osd.setCreatedDate(now);
+				osd.setUpdatedBy(user.getEmployeeID());
+				osd.setUpdatedDate(now);
+				
+				osdList.add(osd);
+			}
+			
+			if(form.getRepairDesc_3() != "" && (form.getRepairPrice_3() != null && form.getRepairPrice_3() > 0)){
+				OutsiteServiceDetail osd = new OutsiteServiceDetail();
+				osd.setOutsiteService(os);
+				osd.setType(OutsiteServiceDetail.TYPE_REPAIR);
+				osd.setDesc(form.getRepairDesc_3());
+				osd.setPrice(form.getRepairPrice_3());
+				osd.setCreatedBy(user.getEmployeeID());
+				osd.setCreatedDate(now);
+				osd.setUpdatedBy(user.getEmployeeID());
+				osd.setUpdatedDate(now);
+				
+				osdList.add(osd);
+			}
+			
+			if(form.getRepairDesc_4() != "" && (form.getRepairPrice_4() != null && form.getRepairPrice_4() > 0)){
+				OutsiteServiceDetail osd = new OutsiteServiceDetail();
+				osd.setOutsiteService(os);
+				osd.setType(OutsiteServiceDetail.TYPE_REPAIR);
+				osd.setDesc(form.getRepairDesc_4());
+				osd.setPrice(form.getRepairPrice_4());
+				osd.setCreatedBy(user.getEmployeeID());
+				osd.setCreatedDate(now);
+				osd.setUpdatedBy(user.getEmployeeID());
+				osd.setUpdatedDate(now);
+				
+				osdList.add(osd);
+			}*/
+			
+			if(form.getOutsiteRepairPrice() > 0){
+				OutsiteServiceDetail osd = new OutsiteServiceDetail();
+				osd.setOutsiteService(os);
+				osd.setType(OutsiteServiceDetail.TYPE_REPAIR);
+				osd.setDesc(this.messages.getMessage("outsiteFixCost", null, new Locale("th", "TH")));
+				osd.setPrice(form.getOutsiteRepairPrice());
+				osd.setCreatedBy(user.getEmployeeID());
+				osd.setCreatedDate(now);
+				osd.setUpdatedBy(user.getEmployeeID());
+				osd.setUpdatedDate(now);
+				
+				osdList.add(osd);
+			}
+			
 			os.setNetAmount(form.getNetAmount());
 		}else if(form.getCosting().equals("free")){
 			os.setNetAmount(0.00);
 		}
-		
+				
 		boolean canSave = false;
 		try{
 			canSave = osService.received(os, osdList);

@@ -305,33 +305,55 @@ public class CloseServiceOrderController {
 				Double netTotal = 0.00;
 				for(OutsiteService os : osList){
 					if(os.getNetAmount() != null){
-						netTotal = os.getNetAmount() + netTotal;	
+						netTotal = os.getNetAmount() + netTotal;
 					}else{
 						netTotal = 0 + netTotal;
 					}
 					List<OutsiteServiceDetail> osdList = osdService.getByOutsiteService(os.getOutsiteServiceID());
 					for(OutsiteServiceDetail osd : osdList){
-						if(form.getServiceList_1() == null){
-							form.setServiceList_1(osd.getDesc());
-							form.setServicePrice_1(osd.getPrice());
-						}else if(form.getServiceList_2() == null){
-							form.setServiceList_2(osd.getDesc());
-							form.setServicePrice_2(osd.getPrice());
-						}else if(form.getServiceList_3() == null){
-							form.setServiceList_3(osd.getDesc());
-							form.setServicePrice_3(osd.getPrice());
-						}else if(form.getServiceList_4() == null){
-							form.setServiceList_4(osd.getDesc());
-							form.setServicePrice_4(osd.getPrice());
-						}else{
-							form.setServiceList_4(form.getServiceList_4()+"+"+osd.getDesc());
-							form.setServicePrice_4(form.getServicePrice_4()+osd.getPrice());
+						if(osd.getType().equals(OutsiteServiceDetail.TYPE_SERVICE)){
+							if(form.getServiceList_1() == null){
+								form.setServiceList_1(osd.getDesc());
+								form.setServicePrice_1(osd.getPrice());
+							}else if(form.getServiceList_2() == null){
+								form.setServiceList_2(osd.getDesc());
+								form.setServicePrice_2(osd.getPrice());
+							}else if(form.getServiceList_3() == null){
+								form.setServiceList_3(osd.getDesc());
+								form.setServicePrice_3(osd.getPrice());
+							}else if(form.getServiceList_4() == null){
+								form.setServiceList_4(osd.getDesc());
+								form.setServicePrice_4(osd.getPrice());
+							}else{
+								form.setServiceList_4(form.getServiceList_4()+"+"+osd.getDesc());
+								form.setServicePrice_4(form.getServicePrice_4()+osd.getPrice());
+							}
+						}else if(osd.getType().equals(OutsiteServiceDetail.TYPE_REPAIR)){
+							if(form.getOutsiteRepairPrice() == null) form.setOutsiteRepairPrice(0.00);
+							form.setOutsiteRepairPrice(form.getOutsiteRepairPrice()+osd.getPrice());
+							/*if(form.getRepairList_1() == null){
+								form.setRepairList_1(osd.getDesc());
+								form.setRepairPrice_1(osd.getPrice());
+							}else if(form.getRepairList_2() == null){
+								form.setRepairList_2(osd.getDesc());
+								form.setRepairPrice_2(osd.getPrice());
+							}else if(form.getRepairList_3() == null){
+								form.setRepairList_3(osd.getDesc());
+								form.setRepairPrice_3(osd.getPrice());
+							}else if(form.getRepairList_4() == null){
+								form.setRepairList_4(osd.getDesc());
+								form.setRepairPrice_4(osd.getPrice());
+							}else{
+								form.setRepairList_4(form.getRepairList_4()+"+"+osd.getDesc());
+								form.setRepairPrice_4(form.getRepairPrice_4()+osd.getPrice());
+							}*/
 						}
 					}
 				}
 				form.setNetAmount(netTotal);
 			}else{
-				form.setNetAmount(0.00);	
+				form.setOutsiteRepairPrice(0.00);
+				form.setNetAmount(0.00);
 			}
 		}else if(so.getStatus().equals(ServiceOrder.FIXED)){
 			form.setCosting(so.getCosting());
@@ -361,6 +383,34 @@ public class CloseServiceOrderController {
 				}else if(i == 3){
 					form.setServiceList_4(sl.getServiceName());
 					form.setServicePrice_4(sl.getPrice());
+				}
+			}
+			
+			if(osList.size()>0){
+				for(OutsiteService os : osList){
+					List<OutsiteServiceDetail> osdList = osdService.getByOutsiteService(os.getOutsiteServiceID());
+					for(OutsiteServiceDetail osd : osdList){
+						if(osd.getType().equals(OutsiteServiceDetail.TYPE_REPAIR)){
+							if(form.getOutsiteRepairPrice() == null) form.setOutsiteRepairPrice(0.00);
+							form.setOutsiteRepairPrice(form.getOutsiteRepairPrice()+osd.getPrice());
+							/*if(form.getRepairList_1() == null){
+								form.setRepairList_1(osd.getDesc());
+								form.setRepairPrice_1(osd.getPrice());
+							}else if(form.getRepairList_2() == null){
+								form.setRepairList_2(osd.getDesc());
+								form.setRepairPrice_2(osd.getPrice());
+							}else if(form.getRepairList_3() == null){
+								form.setRepairList_3(osd.getDesc());
+								form.setRepairPrice_3(osd.getPrice());
+							}else if(form.getRepairList_4() == null){
+								form.setRepairList_4(osd.getDesc());
+								form.setRepairPrice_4(osd.getPrice());
+							}else{
+								form.setRepairList_4(form.getRepairList_4()+"+"+osd.getDesc());
+								form.setRepairPrice_4(form.getRepairPrice_4()+osd.getPrice());
+							}*/
+						}
+					}
 				}
 			}
 			
@@ -528,7 +578,6 @@ public class CloseServiceOrderController {
 		if(form.getIssuePartCode_1() != "" && form.getIssuePartName_1() != "" && (form.getIssuePartQty_1() != null && form.getIssuePartQty_1() > 0) && (form.getIssuePartPrice_1() != null && form.getIssuePartPrice_1() > 0)){
 			// Add to table issuePart
 			Double netPrice = form.getIssuePartQty_1().doubleValue() * form.getIssuePartPrice_1();
-//			System.out.println("sumPrice_1 = "+netPrice);
 			IssuePart ip = new IssuePart();
 			ip.setServiceOrder(so);
 			ip.setCode(form.getIssuePartCode_1());
@@ -545,7 +594,6 @@ public class CloseServiceOrderController {
 		if(form.getIssuePartCode_2() != "" && form.getIssuePartName_2() != "" && (form.getIssuePartQty_2() != null && form.getIssuePartQty_2() > 0) && (form.getIssuePartPrice_2() != null && form.getIssuePartPrice_2() > 0)){
 			// Add to table issuePart
 			Double netPrice = form.getIssuePartQty_2().doubleValue() * form.getIssuePartPrice_2();
-//			System.out.println("sumPrice_2 = "+netPrice);
 			IssuePart ip = new IssuePart();
 			ip.setServiceOrder(so);
 			ip.setCode(form.getIssuePartCode_2());
@@ -562,7 +610,6 @@ public class CloseServiceOrderController {
 		if(form.getIssuePartCode_3() != "" && form.getIssuePartName_3() != "" && (form.getIssuePartQty_3() != null && form.getIssuePartQty_3() > 0) && (form.getIssuePartPrice_3() != null && form.getIssuePartPrice_3() > 0)){
 			// Add to table issuePart
 			Double netPrice = form.getIssuePartQty_3().doubleValue() * form.getIssuePartPrice_3();
-//			System.out.println("sumPrice_3 = "+netPrice);
 			IssuePart ip = new IssuePart();
 			ip.setServiceOrder(so);
 			ip.setCode(form.getIssuePartCode_3());
@@ -579,7 +626,6 @@ public class CloseServiceOrderController {
 		if(form.getIssuePartCode_4() != "" && form.getIssuePartName_4() != "" && (form.getIssuePartQty_4() != null && form.getIssuePartQty_4() > 0) && (form.getIssuePartPrice_4() != null && form.getIssuePartPrice_4() > 0)){
 			// Add to table issuePart
 			Double netPrice = form.getIssuePartQty_4().doubleValue() * form.getIssuePartPrice_4();
-//			System.out.println("sumPrice_4 = "+netPrice);
 			IssuePart ip = new IssuePart();
 			ip.setServiceOrder(so);
 			ip.setCode(form.getIssuePartCode_4());
@@ -596,7 +642,6 @@ public class CloseServiceOrderController {
 		if(form.getIssuePartCode_5() != "" && form.getIssuePartName_5() != "" && (form.getIssuePartQty_5() != null && form.getIssuePartQty_5() > 0) && (form.getIssuePartPrice_5() != null && form.getIssuePartPrice_5() > 0)){
 			// Add to table issuePart
 			Double netPrice = form.getIssuePartQty_5().doubleValue() * form.getIssuePartPrice_5();
-//			System.out.println("sumPrice_5 = "+netPrice);
 			IssuePart ip = new IssuePart();
 			ip.setServiceOrder(so);
 			ip.setCode(form.getIssuePartCode_5());
@@ -613,7 +658,6 @@ public class CloseServiceOrderController {
 		if(form.getIssuePartCode_6() != "" && form.getIssuePartName_6() != "" && (form.getIssuePartQty_6() != null && form.getIssuePartQty_6() > 0) && (form.getIssuePartPrice_6() != null && form.getIssuePartPrice_6() > 0)){
 			// Add to table issuePart
 			Double netPrice = form.getIssuePartQty_6().doubleValue() * form.getIssuePartPrice_6();
-//			System.out.println("sumPrice_6 = "+netPrice);
 			IssuePart ip = new IssuePart();
 			ip.setServiceOrder(so);
 			ip.setCode(form.getIssuePartCode_6());
@@ -630,7 +674,6 @@ public class CloseServiceOrderController {
 		if(form.getIssuePartCode_7() != "" && form.getIssuePartName_7() != "" && (form.getIssuePartQty_7() != null && form.getIssuePartQty_7() > 0) && (form.getIssuePartPrice_7() != null && form.getIssuePartPrice_7() > 0)){
 			// Add to table issuePart
 			Double netPrice = form.getIssuePartQty_7().doubleValue() * form.getIssuePartPrice_7();
-//			System.out.println("sumPrice_7 = "+netPrice);
 			IssuePart ip = new IssuePart();
 			ip.setServiceOrder(so);
 			ip.setCode(form.getIssuePartCode_7());
@@ -647,7 +690,6 @@ public class CloseServiceOrderController {
 		if(form.getIssuePartCode_8() != "" && form.getIssuePartName_8() != "" && (form.getIssuePartQty_8() != null && form.getIssuePartQty_8() > 0) && (form.getIssuePartPrice_8() != null && form.getIssuePartPrice_8() > 0)){
 			// Add to table issuePart
 			Double netPrice = form.getIssuePartQty_8().doubleValue() * form.getIssuePartPrice_8();
-//			System.out.println("sumPrice_8 = "+netPrice);
 			IssuePart ip = new IssuePart();
 			ip.setServiceOrder(so);
 			ip.setCode(form.getIssuePartCode_8());
@@ -664,7 +706,6 @@ public class CloseServiceOrderController {
 		if(form.getIssuePartCode_9() != "" && form.getIssuePartName_9() != "" && (form.getIssuePartQty_9() != null && form.getIssuePartQty_9() > 0) && (form.getIssuePartPrice_9() != null && form.getIssuePartPrice_9() > 0)){
 			// Add to table issuePart
 			Double netPrice = form.getIssuePartQty_9().doubleValue() * form.getIssuePartPrice_9();
-//			System.out.println("sumPrice_9 = "+netPrice);
 			IssuePart ip = new IssuePart();
 			ip.setServiceOrder(so);
 			ip.setCode(form.getIssuePartCode_9());
@@ -681,7 +722,6 @@ public class CloseServiceOrderController {
 		if(form.getIssuePartCode_10() != "" && form.getIssuePartName_10() != "" && (form.getIssuePartQty_10() != null && form.getIssuePartQty_10() > 0) && (form.getIssuePartPrice_10() != null && form.getIssuePartPrice_10() > 0)){
 			// Add to table issuePart
 			Double netPrice = form.getIssuePartQty_10().doubleValue() * form.getIssuePartPrice_10();
-//			System.out.println("sumPrice_10 = "+netPrice);
 			IssuePart ip = new IssuePart();
 			ip.setServiceOrder(so);
 			ip.setCode(form.getIssuePartCode_10());
@@ -698,7 +738,6 @@ public class CloseServiceOrderController {
 		if(form.getIssuePartCode_11() != "" && form.getIssuePartName_11() != "" && (form.getIssuePartQty_11() != null && form.getIssuePartQty_11() > 0) && (form.getIssuePartPrice_11() != null && form.getIssuePartPrice_11() > 0)){
 			// Add to table issuePart
 			Double netPrice = form.getIssuePartQty_11().doubleValue() * form.getIssuePartPrice_11();
-//			System.out.println("sumPrice_11 = "+netPrice);
 			IssuePart ip = new IssuePart();
 			ip.setServiceOrder(so);
 			ip.setCode(form.getIssuePartCode_11());

@@ -44,6 +44,7 @@ import com.twobytes.model.GridResponse;
 import com.twobytes.model.IssuePart;
 import com.twobytes.model.Model;
 import com.twobytes.model.OutsiteService;
+import com.twobytes.model.OutsiteServiceDetail;
 import com.twobytes.model.Product;
 import com.twobytes.model.Province;
 import com.twobytes.model.ServiceList;
@@ -1169,6 +1170,20 @@ public class ServiceOrderController {
 		
 		List<ServiceList> serviceList = new ArrayList<ServiceList>();
 		serviceList = serviceListService.getByServiceOrder(so.getServiceOrderID());
+		
+		List<OutsiteService> osList = osService.selectByServiceOrderID(so.getServiceOrderID());
+		for(OutsiteService os : osList){
+			List<OutsiteServiceDetail> osdl = osdService.getByOutsiteService(os.getOutsiteServiceID());
+			for(OutsiteServiceDetail osd : osdl){
+				if(osd.getType().equals(OutsiteServiceDetail.TYPE_REPAIR)){
+					ServiceList sl = new ServiceList();
+					sl.setServiceOrder(os.getServiceOrder());
+					sl.setServiceName(osd.getDesc());
+					sl.setPrice(osd.getPrice());
+					serviceList.add(sl);
+				}
+			}
+		}
 		
 		docForm.setIssuePartList(issuePartList);
 		docForm.setServiceList(serviceList);

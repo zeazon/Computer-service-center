@@ -748,7 +748,6 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 	@SuppressWarnings("unchecked")
 	public List<SumAmountReportForm> getSumAmountReport(String startDate,
 			String endDate) throws Exception {
-		// select concat(e.name,' ',e.surname) fullName, count(so.serviceOrderID) numServiceOrder, sum(so.totalPrice) amount from serviceOrder so, employee e where so.empFix = e.employeeID and so.status = 'close' group by fullName order by fullName;
 		
 //		SELECT count( a.serviceOrderID ) numServiceOrder, concat( emp.name, ' ', emp.surname ) fullName, sum( a.totalPrice ) , sum( a.service_price ) , sum( a.part_price )
 //		FROM (
@@ -766,10 +765,66 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 //		WHERE a.empFix = emp.employeeID
 //		GROUP BY fullName
 //		ORDER BY fullName
+
+		
+//		SELECT count( a.serviceOrderID ) numServiceOrder, concat( emp.name, ' ', emp.surname ) fullName, sum( a.totalPrice ) , sum( a.service_price ) ,  IFNULL(sum(b.price), 0) , sum( a.part_price )
+//		FROM (
+//			SELECT so.serviceOrderID serviceOrderID, so.returnDate, so.empFix, so.totalPrice totalPrice, IFNULL( sum( sl.price ) , 0 ) service_price, IFNULL( sum( sp.price ) , 0 ) part_price
+//			FROM `serviceOrder` so
+//			LEFT JOIN serviceList sl ON so.serviceOrderID = sl.serviceOrderID
+//			AND so.totalPrice >0
+//			AND so.status = 'close'
+//			LEFT JOIN issuePart sp ON so.serviceOrderID = sp.serviceOrderID
+//			AND so.totalPrice >0
+//			AND so.status = 'close'
+//			WHERE STATUS = 'close'
+//			GROUP BY so.serviceOrderID
+//		)a
+//		LEFT JOIN 
+//		( select os.serviceOrderID,  osd.price from outsiteService os, outsiteServiceDetail osd where os.outsiteServiceID = osd.outsiteServiceID and osd.costType = 'repair') b
+//		ON a.serviceOrderID = b.serviceOrderID , employee emp
+//		WHERE a.empFix = emp.employeeID
+//		GROUP BY fullName
+//		ORDER BY fullName;
+		
+
+		/* New Query */
+/*		SELECT COUNT( a.serviceOrderID ) numServiceOrder , CONCAT( emp.name,  ' ', emp.surname ) fullName, SUM( a.totalPrice ) amount , IFNULL( SUM(b.sumService), 0 ) sumService , IFNULL(sum(d.price), 0) sumOutsiteRepair , IFNULL( SUM(c.sumNetPrice), 0 ) sumPart
+		FROM (
+
+		SELECT serviceOrderID, totalPrice, empFix, returnDate
+		FROM  `serviceorder` 
+		WHERE status = 'close'
+		)a
+		LEFT JOIN (
+
+		SELECT sl.serviceOrderID, SUM( price ) sumService
+		FROM serviceList sl
+		GROUP BY sl.serviceOrderID
+		)b ON a.serviceOrderID = b.serviceOrderID
+		LEFT JOIN (
+
+		SELECT ip.serviceOrderID, SUM( netprice ) sumNetPrice
+		FROM issuePart ip
+		GROUP BY ip.serviceOrderID
+		)c ON a.serviceOrderID = c.serviceOrderID
+		LEFT JOIN
+		(
+		SELECT os.serviceOrderID, osd.price 
+		FROM outsiteService os, outsiteServiceDetail osd 
+		WHERE os.outsiteServiceID = osd.outsiteServiceID AND osd.costType = 'repair'
+		) d ON a.serviceOrderID = d.serviceOrderID
+		, employee emp
+		WHERE a.empFix = emp.employeeID
+		AND DATE( a.returnDate ) between  '2012-07-01' and '2012-07-7'
+		GROUP BY fullName
+		ORDER BY fullName*/
+		
+		
 		
 		StringBuilder sql = new StringBuilder();
-//		sql.append("select concat(e.name,' ',e.surname) fullName, count(so.serviceOrderID) numServiceOrder, sum(so.totalPrice) amount from serviceOrder so, employee e where so.empFix = e.employeeID and so.status = 'close' ");
-		sql.append("SELECT count( a.serviceOrderID ) numServiceOrder, concat( emp.name, ' ', emp.surname ) fullName, sum( a.totalPrice ) amount, sum( a.service_price ) sumService, sum( a.part_price ) sumPart " +
+		
+/*		sql.append("SELECT count( a.serviceOrderID ) numServiceOrder, concat( emp.name, ' ', emp.surname ) fullName, sum( a.totalPrice ) amount, sum( a.service_price ) sumService, sum( a.part_price ) sumPart " +
 				"FROM ( " +
 				"	SELECT so.serviceOrderID serviceOrderID, so.returnDate, so.empFix, so.totalPrice totalPrice, IFNULL( sum( sl.price ) , 0 ) service_price, IFNULL( sum( sp.price ) , 0 ) part_price " +
 				"	FROM `serviceOrder` so " +
@@ -782,7 +837,51 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 				"	WHERE STATUS = 'close' " +
 				"	GROUP BY so.serviceOrderID " +
 				")a, employee emp " +
+				"WHERE a.empFix = emp.employeeID ");*/
+	
+		/*sql.append("SELECT count( a.serviceOrderID ) numServiceOrder, concat( emp.name, ' ', emp.surname ) fullName, sum( a.totalPrice ) amount , sum( a.service_price ) sumService ,  IFNULL(sum(b.price), 0) sumOutsiteRepair , sum( a.part_price ) sumPart " +
+				"FROM ( " +
+				"	SELECT so.serviceOrderID serviceOrderID, so.returnDate, so.empFix, so.totalPrice totalPrice, IFNULL( sum( sl.price ) , 0 ) service_price, IFNULL( sum( sp.price ) , 0 ) part_price " +
+				"	FROM `serviceOrder` so " +
+				"	LEFT JOIN serviceList sl ON so.serviceOrderID = sl.serviceOrderID " +
+				"	AND so.totalPrice >0 " +
+				"	AND so.status = 'close' " +
+				"	LEFT JOIN issuePart sp ON so.serviceOrderID = sp.serviceOrderID " +
+				"	AND so.totalPrice >0 " +
+				"	AND so.status = 'close' " +
+				"	WHERE STATUS = 'close' " +
+				"	GROUP BY so.serviceOrderID " +
+				")a " +
+				"LEFT JOIN " + 
+				"( select os.serviceOrderID,  osd.price from outsiteService os, outsiteServiceDetail osd where os.outsiteServiceID = osd.outsiteServiceID and osd.costType = 'repair') b " +
+				"ON a.serviceOrderID = b.serviceOrderID , employee emp " +
+				"WHERE a.empFix = emp.employeeID ");*/
+		
+		sql.append("SELECT COUNT( a.serviceOrderID ) numServiceOrder , CONCAT( emp.name,  ' ', emp.surname ) fullName, SUM( a.totalPrice ) amount , IFNULL( SUM(b.sumService), 0 ) sumService , IFNULL(sum(d.price), 0) sumOutsiteRepair , IFNULL( SUM(c.sumNetPrice), 0 ) sumPart " +
+				"FROM ( " +
+				"	SELECT serviceOrderID, totalPrice, empFix, returnDate " +
+				"	FROM  `serviceorder` " + 
+				"	WHERE status = 'close' " +
+				")a " +
+				"LEFT JOIN ( " +
+				"	SELECT sl.serviceOrderID, SUM( price ) sumService " +
+				"	FROM serviceList sl " +
+				"	GROUP BY sl.serviceOrderID " +
+				")b ON a.serviceOrderID = b.serviceOrderID " +
+				"LEFT JOIN ( " +
+				"	SELECT ip.serviceOrderID, SUM( netprice ) sumNetPrice " +
+				"	FROM issuePart ip " +
+				"	GROUP BY ip.serviceOrderID " +
+				")c ON a.serviceOrderID = c.serviceOrderID " +
+				"LEFT JOIN " +
+				"( " +
+				"	SELECT os.serviceOrderID, osd.price " +
+				"	FROM outsiteService os, outsiteServiceDetail osd " +
+				"	WHERE os.outsiteServiceID = osd.outsiteServiceID AND osd.costType = 'repair' " +
+				") d ON a.serviceOrderID = d.serviceOrderID " +
+				", employee emp " +
 				"WHERE a.empFix = emp.employeeID ");
+		
 		
 		if((null != startDate && !startDate.equals("")) && (null != endDate && !endDate.equals(""))){
 			sql.append("AND DATE(a.returnDate) BETWEEN :startDate AND :endDate ");
@@ -798,6 +897,7 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 		.addScalar("numServiceOrder", new IntegerType())
 		.addScalar("amount", new DoubleType())
 		.addScalar("sumService", new DoubleType())
+		.addScalar("sumOutsiteRepair", new DoubleType())
 		.addScalar("sumPart", new DoubleType())
 		.setResultTransformer(Transformers.aliasToBean(SumAmountReportForm.class));
 		

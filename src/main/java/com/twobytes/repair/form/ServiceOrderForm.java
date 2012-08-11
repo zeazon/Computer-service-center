@@ -55,6 +55,17 @@ public class ServiceOrderForm {
 	private Double servicePrice_3;
 	private Double servicePrice_4;
 	
+	private String repairList_1;
+	private String repairList_2;
+	private String repairList_3;
+	private String repairList_4;
+	private Double repairPrice_1;
+	private Double repairPrice_2;
+	private Double repairPrice_3;
+	private Double repairPrice_4;
+	
+	private Double outsiteRepairPrice;
+	
 	private String issuePartCode_1;
 	private String issuePartCode_2;
 	private String issuePartCode_3;
@@ -813,6 +824,78 @@ public class ServiceOrderForm {
 
 	public void setCannotMakeContact(Integer cannotMakeContact) {
 		this.cannotMakeContact = cannotMakeContact;
+	}
+
+	public String getRepairList_1() {
+		return repairList_1;
+	}
+
+	public void setRepairList_1(String repairList_1) {
+		this.repairList_1 = repairList_1;
+	}
+
+	public String getRepairList_2() {
+		return repairList_2;
+	}
+
+	public void setRepairList_2(String repairList_2) {
+		this.repairList_2 = repairList_2;
+	}
+
+	public String getRepairList_3() {
+		return repairList_3;
+	}
+
+	public void setRepairList_3(String repairList_3) {
+		this.repairList_3 = repairList_3;
+	}
+
+	public String getRepairList_4() {
+		return repairList_4;
+	}
+
+	public void setRepairList_4(String repairList_4) {
+		this.repairList_4 = repairList_4;
+	}
+
+	public Double getRepairPrice_1() {
+		return repairPrice_1;
+	}
+
+	public void setRepairPrice_1(Double repairPrice_1) {
+		this.repairPrice_1 = repairPrice_1;
+	}
+
+	public Double getRepairPrice_2() {
+		return repairPrice_2;
+	}
+
+	public void setRepairPrice_2(Double repairPrice_2) {
+		this.repairPrice_2 = repairPrice_2;
+	}
+
+	public Double getRepairPrice_3() {
+		return repairPrice_3;
+	}
+
+	public void setRepairPrice_3(Double repairPrice_3) {
+		this.repairPrice_3 = repairPrice_3;
+	}
+
+	public Double getRepairPrice_4() {
+		return repairPrice_4;
+	}
+
+	public void setRepairPrice_4(Double repairPrice_4) {
+		this.repairPrice_4 = repairPrice_4;
+	}
+
+	public Double getOutsiteRepairPrice() {
+		return outsiteRepairPrice;
+	}
+
+	public void setOutsiteRepairPrice(Double outsiteRepairPrice) {
+		this.outsiteRepairPrice = outsiteRepairPrice;
 	}
 
 }

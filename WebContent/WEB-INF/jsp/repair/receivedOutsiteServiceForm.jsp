@@ -289,8 +289,27 @@
 								</tr>
 								</c:forEach>
 							</table>
+							<!-- table>
+								<tr>
+									<td colspan="2"><fmt:message key="outsiteFixList" /></td>
+								</tr>
+								<c:forEach var="i" begin="1" end="4" step="1" varStatus ="status">
+								<tr class="repairList">
+									<td><form:input path="repairDesc_${i}" class="repairDesc" onBlur="calculateNetAmount();"/></td>
+									<td><form:input path="repairPrice_${i}" class="number repairPrice" style="text-align:right" size="4" onBlur="calculateNetAmount();"/></td>
+								</tr>
+								</c:forEach>
+							</table-->
 						</td>
 					</tr>
+					
+					
+					<tr>
+						<td><label><fmt:message key="outsiteFixCost" />:</label></td>
+						<td colspan="5"><div class="rowElem"><form:input path="outsiteRepairPrice" id="outsiteRepairPrice" class="number" onBlur="calculateNetAmount();" cssStyle="text-align:right" /><span style="float:left; margin-top:6px">&nbsp;<fmt:message key="baht" /></span><label class="error" for="outsiteRepairPrice" generated="true" style="display: none; padding-left:10px"></label></div></td>
+					</tr>
+					
+					
 					<tr>
 						<td><label><fmt:message key="serviceOrder_netAmount" />:</label></td>
 						<td colspan="5"><div class="rowElem"><form:input path="netAmount" class="textboxMockup" id="netAmount" readonly="true" cssStyle="text-align:right" /><span style="float:left; margin-top:6px">&nbsp;<fmt:message key="baht" /></span></div></td>
@@ -442,14 +461,15 @@ $(document).ready(function(){
 		
 		calculateNetAmount();
 		*/
-		$('#serviceDesc_1').removeAttr('disabled');
-		$('#servicePrice_1').removeAttr('disabled');
-		$('#serviceDesc_2').removeAttr('disabled');
-		$('#servicePrice_2').removeAttr('disabled');
-		$('#serviceDesc_3').removeAttr('disabled');
-		$('#servicePrice_3').removeAttr('disabled');
-		$('#serviceDesc_4').removeAttr('disabled');
-		$('#servicePrice_4').removeAttr('disabled');
+		for(row=1; row<5; row++){
+			$('#serviceDesc_'+row).removeAttr('disabled');
+			$('#servicePrice_'+row).removeAttr('disabled');
+			
+			/*$('#repairDesc_'+row).removeAttr('disabled');
+			$('#repairPrice_'+row).removeAttr('disabled');*/
+		}
+		
+		$("#outsiteRepairPrice").removeAttr('disabled');
 	});
 	
 	$('#costing_free').click(function() {
@@ -460,14 +480,16 @@ $(document).ready(function(){
 		//$("#serviceDesc_1").rules("remove", "required");
 		//$("#servicePrice_1").rules("remove", "required");
 */
-		$('#serviceDesc_1').attr('disabled', 'disabled');
-		$('#servicePrice_1').attr('disabled', 'disabled');
-		$('#serviceDesc_2').attr('disabled', 'disabled');
-		$('#servicePrice_2').attr('disabled', 'disabled');
-		$('#serviceDesc_3').attr('disabled', 'disabled');
-		$('#servicePrice_3').attr('disabled', 'disabled');
-		$('#serviceDesc_4').attr('disabled', 'disabled');
-		$('#servicePrice_4').attr('disabled', 'disabled');
+		
+		for(row=1; row<5; row++){
+			$('#serviceDesc_'+row).attr('disabled', 'disabled');
+			$('#servicePrice_'+row).attr('disabled', 'disabled');
+			
+			/*$('#repairDesc_'+row).attr('disabled', 'disabled');
+			$('#repairPrice_'+row).attr('disabled', 'disabled');*/
+		}
+		
+		$("#outsiteRepairPrice").attr('disabled', 'disabled');
 	});
 	
 	$('#repair_add').click(function() {
@@ -593,7 +615,7 @@ $(document).ready(function(){
 	//$("#repairPrice_1").val("0");
 });
 
-function serviceList_checkRequired(){
+/*function serviceList_checkRequired(){
 	$('.serviceList').each(function() {
 		var serviceDesc = $(this).find(".serviceDesc");
         var servicePrice = $(this).find(".servicePrice");
@@ -642,10 +664,9 @@ function serviceList_checkRequired(){
 		});
       	
 	});
-}
+}*/
 
 function calculateNetAmount(){
-	//alert('calculateNetAmount');
 	var netAmount = 0.00;
 	
 	$('.serviceList').each(function() {
@@ -671,7 +692,9 @@ function calculateNetAmount(){
 		}
 
 	});*/
-
+	
+	netAmount = netAmount + parseFloat($("#outsiteRepairPrice").val());
+	
 	$("#netAmount").val(netAmount);
 }
 

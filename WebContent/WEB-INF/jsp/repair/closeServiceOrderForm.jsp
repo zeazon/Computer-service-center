@@ -283,13 +283,26 @@
 																<c:if test="${fn:length(osdf.detailList) gt 0}">
 																	<table>
 																		<tr>
-																			<td colspan="2"><fmt:message key="serviceList" /></td>
+																			<td colspan="2"><u><fmt:message key="serviceList" /></u></td>
 																		</tr>
 																		<c:forEach var="osd" items="${osdf.detailList}">
-																		<tr class="serviceList">
-																			<td>${osd.desc}</td>
-																			<td>${osd.price}</td>
+																			<c:if test="${osd.type == 'service'}">
+																			<tr class="serviceList">
+																				<td>${osd.desc}</td>
+																				<td>${osd.price}</td>
+																			</tr>
+																			</c:if>
+																		</c:forEach>
+																		<tr>
+																			<td colspan="2"><u><fmt:message key="outsiteFixList" /></u></td>
 																		</tr>
+																		<c:forEach var="osd" items="${osdf.detailList}">
+																			<c:if test="${osd.type == 'repair'}">
+																			<tr class="serviceList">
+																				<td>${osd.desc}</td>
+																				<td>${osd.price}</td>
+																			</tr>
+																			</c:if>
 																		</c:forEach>
 																	</table>
 																</c:if>
@@ -337,34 +350,77 @@
 						</td-->
 						<td></td>
 						<td colspan="5">
-							<table border="0">
+							<table>
 								<tr>
-									<th class="ui-widget-header ui-corner-all"><fmt:message key="serviceOrder_partList" /></th>
-									<th class="ui-widget-header ui-corner-all"><fmt:message key="price" /></th>
-								</tr>
-								<c:forEach var="i" begin="1" end="4" step="1" varStatus ="status">
-								<tr class="serviceList">
-									<td><form:input path="serviceList_${i}" class="serviceList textboxMockup" onBlur="calculateNetAmount();"/></td>
-									<td><form:input path="servicePrice_${i}" class="number servicePrice textboxMockup" style="text-align:right" size="4" onBlur="calculateNetAmount();"/></td>
-								</tr>
-								</c:forEach>
-								<!-- tr>
-									<td><form:input path="serviceList_1" class="serviceList textboxMockup" /></td>
-									<td><form:input path="servicePrice_1" class="servicePrice textboxMockup" style="text-align:right" id="serviceCost" size="4" value="0"/></td>
+									<td>
+									
+									
+										<table border="0">
+											<tr>
+												<th class="ui-widget-header ui-corner-all"><fmt:message key="serviceOrder_partList" /></th>
+												<th class="ui-widget-header ui-corner-all"><fmt:message key="price" /></th>
+											</tr>
+											<c:forEach var="i" begin="1" end="4" step="1" varStatus ="status">
+											<tr class="serviceList">
+												<td><form:input path="serviceList_${i}" class="serviceList textboxMockup" onBlur="calculateNetAmount();"/></td>
+												<td><form:input path="servicePrice_${i}" class="number servicePrice textboxMockup" style="text-align:right" size="4" onBlur="calculateNetAmount();"/></td>
+											</tr>
+											</c:forEach>
+											
+											
+											
+											<!-- tr>
+												<td><form:input path="serviceList_1" class="serviceList textboxMockup" /></td>
+												<td><form:input path="servicePrice_1" class="servicePrice textboxMockup" style="text-align:right" id="serviceCost" size="4" value="0"/></td>
+											</tr>
+											<tr>
+												<td><form:input path="serviceList_2" class="serviceList textboxMockup" /></td>
+												<td><form:input path="servicePrice_2" class="servicePrice textboxMockup" style="text-align:right" id="serviceCost" size="4" value="0"/><!-- span style="float:left; margin-top:6px">&nbsp;<fmt:message key="baht" /></span--></td>
+											<!-- /tr>
+											<tr>
+												<td><form:input path="serviceList_3" class="serviceList textboxMockup" /></td>
+												<td><form:input path="servicePrice_3" class="servicePrice textboxMockup" style="text-align:right" id="serviceCost" size="4" value="0"/></td>
+											</tr>
+											<tr>
+												<td><form:input path="serviceList_4" class="serviceList textboxMockup" /></td>
+												<td><form:input path="servicePrice_4" class="servicePrice textboxMockup" style="text-align:right" id="serviceCost" size="4" value="0"/></td>
+											</tr-->
+										</table>
+									
+									
+									</td>
+									<!-- td>&nbsp;</td>
+									<td>
+									
+									
+										<table>
+											<tr>
+												<th class="ui-widget-header ui-corner-all"><fmt:message key="outsiteFixList" /></th>
+												<th class="ui-widget-header ui-corner-all"><fmt:message key="price" /></th>
+											</tr>
+											<c:forEach var="i" begin="1" end="4" step="1" varStatus ="status">
+											<tr class="repairList">
+												<td><form:input path="repairList_${i}" class="repairList" readonly="true" onBlur="calculateNetAmount();"/></td>
+												<td><form:input path="repairPrice_${i}" class="number repairPrice" style="text-align:right" size="4" readonly="true" onBlur="calculateNetAmount();"/></td>
+											</tr>
+											</c:forEach>
+										</table>
+										
+									
+									</td-->
 								</tr>
 								<tr>
-									<td><form:input path="serviceList_2" class="serviceList textboxMockup" /></td>
-									<td><form:input path="servicePrice_2" class="servicePrice textboxMockup" style="text-align:right" id="serviceCost" size="4" value="0"/><!-- span style="float:left; margin-top:6px">&nbsp;<fmt:message key="baht" /></span--></td>
-								<!-- /tr>
-								<tr>
-									<td><form:input path="serviceList_3" class="serviceList textboxMockup" /></td>
-									<td><form:input path="servicePrice_3" class="servicePrice textboxMockup" style="text-align:right" id="serviceCost" size="4" value="0"/></td>
+									<td>
+										<table>
+											<tr>
+												<td><label><fmt:message key="outsiteFixCost" />:</label></td>
+												<td><div class="rowElem"><form:input path="outsiteRepairPrice" id="outsiteRepairPrice" readonly="true" size="10" class="number" cssStyle="text-align:right" /><span style="float:left; margin-top:6px">&nbsp;<fmt:message key="baht" /></span></div></td>
+											</tr>
+										</table>
+									</td>
 								</tr>
-								<tr>
-									<td><form:input path="serviceList_4" class="serviceList textboxMockup" /></td>
-									<td><form:input path="servicePrice_4" class="servicePrice textboxMockup" style="text-align:right" id="serviceCost" size="4" value="0"/></td>
-								</tr-->
 							</table>
+									
 						</td>
 					</tr>
 					<tr>
@@ -526,7 +582,19 @@ function calculateNetAmount(){
 	       // alert('serviceList = '+serviceList+' servicePrice = '+servicePrice);
 	        
 			if (serviceList !== "" && !isNaN(servicePrice)){
-				netAmount = netAmount + parseFloat(servicePrice)
+				netAmount = netAmount + parseFloat(servicePrice);
+			}
+	
+		});
+		
+		$('.repairList').each(function() {
+			var repairList = $(this).find(".repairList").val();
+	        var repairPrice = $(this).find(".repairPrice").val();
+	        
+	       // alert('serviceList = '+serviceList+' servicePrice = '+servicePrice);
+	        
+			if (repairList !== "" && !isNaN(repairPrice)){
+				netAmount = netAmount + parseFloat(repairPrice);
 			}
 	
 		});
