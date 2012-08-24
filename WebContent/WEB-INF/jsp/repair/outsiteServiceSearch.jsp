@@ -12,12 +12,21 @@
 						<td><div class="rowElem"><form:input path="name" type="text" id="name" class="textboxMockup" /></div></td>
 						<td><label><fmt:message key="serialNo" />:</label></td>
 						<td><div class="rowElem"><form:input path="serialNo" id="serialNo" class="textboxMockup" /></div></td>
+						<td style="padding-left:10px;"><label><fmt:message key="transportCompany" />:</label></td>
+						<td>
+							<div class="rowElem" style="z-index:100">
+								<form:select path="transportCompanyID" id="transportCompanyID" cssClass="selectSearch">
+									<form:option value="">All</form:option>
+									<form:options items="${transportCompanyList}" itemValue="transportCompanyID" itemLabel="name"/>
+								</form:select>
+							</div>
+						</td>
 					</tr>
 					<tr>
 						<td><label><fmt:message key="date" />:</label></td>
 						<td><div class="rowElem" style="z-index:200"><form:input path="date" type="text" class="textboxMockup" id="dateInput" size="9"/></div></td>
 						<td><label><fmt:message key="refOutsiteJobID" />:</label></td>
-						<td><div class="rowElem"><form:input path="refOutsiteJobID" id="refOutsiteJobID" /></div></td>
+						<td colspan="3"><div class="rowElem"><form:input path="refOutsiteJobID" id="refOutsiteJobID" /></div></td>
 					</tr>
 					<tr>
 						<td><label><fmt:message key="type" />:</label></td>
@@ -29,10 +38,18 @@
 								</form:select>
 							</div>
 						</td>
-						<td colspan="2"></td>
+						<td><label><fmt:message key="outsiteService_outsiteCompany" />:</label></td>
+						<td colspan="3">
+							<div class="rowElem" style="z-index:100">
+								<form:select path="outsiteCompanyID" id="outsiteCompanyID" cssClass="selectSearch">
+									<form:option value="">All</form:option>
+									<form:options items="${outsiteCompanyList}" itemValue="outsiteCompanyID" itemLabel="name"/>
+								</form:select>
+							</div>
+						</td>
 					</tr>
 					<tr>
-						<td colspan="4"><div class="rowElem"><input type="submit" id="searchButton" value="<fmt:message key='button.search' />" /></div></td>
+						<td colspan="6"><div class="rowElem"><input type="submit" id="searchButton" value="<fmt:message key='button.search' />" /></div></td>
 					</tr>
 				</table>
 			</form:form>
@@ -67,6 +84,10 @@
 	jQuery().ready(function (){
 		//find all form with class jqtransform and apply the plugin
 		$("form.jqtransform").jqTransform();
+	
+		$('#type_autoComplete').width($('#type').width());
+		$('#outsiteCompanyID_autoComplete').width($('#outsiteCompanyID').width());
+		$('#transportCompanyID_autoComplete').width($('#transportCompanyID').width());
 		
 		jQuery("#list").jqGrid({
 			url:"searchOutsiteService.html",
@@ -216,7 +237,9 @@
 		var type = jQuery("#type").val();
 		var serialNo = jQuery("#serialNo").val();
 		var refOutsiteJobID = jQuery("#refOutsiteJobID").val();
-		jQuery("#list").jqGrid('setGridParam',{url:"searchOutsiteService.html?name="+name+"&date="+date+"&type="+type+"&serialNo="+serialNo+"&refOutsiteJobID="+refOutsiteJobID,page:1}).trigger("reloadGrid");
+		var outsiteCompanyID = jQuery("#outsiteCompanyID").val();
+		var transportCompanyID = jQuery("#transportCompanyID").val();
+		jQuery("#list").jqGrid('setGridParam',{url:"searchOutsiteService.html?name="+name+"&date="+date+"&type="+type+"&serialNo="+serialNo+"&refOutsiteJobID="+refOutsiteJobID+"&outsiteCompanyID="+outsiteCompanyID+"&transportCompanyID="+transportCompanyID,page:1}).trigger("reloadGrid");
 	}
 	
 	jQuery(window).bind('resize', function() {

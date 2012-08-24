@@ -96,6 +96,7 @@ public class OutsiteServiceController {
 		}
 		OutsiteServiceSearchForm searchForm = new OutsiteServiceSearchForm();
 		model.addAttribute("searchForm", searchForm);
+		
 		List<Type> typeList = new ArrayList<Type>();
 		try {
 			typeList = typeService.getAll();
@@ -103,6 +104,21 @@ public class OutsiteServiceController {
 			e.printStackTrace();
 		}
 		model.addAttribute("typeList", typeList);
+		
+		List<OutsiteCompany> ocList = new ArrayList<OutsiteCompany>();
+		try{
+			ocList = outsiteCompanyService.getAll();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		List<TransportCompany> tcList = new ArrayList<TransportCompany>();
+		try{
+			tcList = transportCompanyService.getAll();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		model.addAttribute("outsiteCompanyList", ocList);
+		model.addAttribute("transportCompanyList", tcList);
 		return VIEWNAME_SEARCH;
 	}
 	
@@ -111,6 +127,7 @@ public class OutsiteServiceController {
 	public @ResponseBody GridResponse getData(@RequestParam(value="name", required=false) String name, @RequestParam(value="surname", required=false) String surname, 
 												@RequestParam(value="date", required=false) String date, @RequestParam(value="type", required=false) String type, 
 												@RequestParam(value="serialNo", required=false) String serialNo, @RequestParam(value="refOutsiteJobID", required=false) String refOutsiteJobID, 
+												@RequestParam(value="outsiteCompanyID", required=false) String outsiteCompanyID, @RequestParam(value="transportCompanyID", required=false) String transportCompanyID, 
 												@RequestParam("rows") Integer rows, @RequestParam("page") Integer page, @RequestParam("sidx") String sidx, @RequestParam("sord") String sord){
 		String[] datePart;
 		String searchDate = null;
@@ -141,7 +158,7 @@ public class OutsiteServiceController {
 		}
 		
 		Map<String, Object> ret = new HashMap<String, Object>();
-		ret = osService.selectByCriteria(name, surname, searchDate, type, serialNo, refOutsiteJobID, rows, page, sidx, sord);
+		ret = osService.selectByCriteria(name, surname, searchDate, type, serialNo, refOutsiteJobID, outsiteCompanyID, transportCompanyID, rows, page, sidx, sord);
 		
 		List<OutsiteService> osList = (List<OutsiteService>) ret.get("list");
 		GridResponse response = new GridResponse();

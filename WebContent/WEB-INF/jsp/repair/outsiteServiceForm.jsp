@@ -369,7 +369,7 @@
 							</c:if>
 						</c:when>
 						<c:otherwise>
-							<c:if test="${form.status == 'sent' || form.status == 'received'}">
+							<c:if test="${form.status == 'sent' || form.status == 'close'}">
 							<tr>
 								<td><label><fmt:message key="outsiteService_sentDate" />:<font color="red">*</font></label></td>
 								<td colspan="2"><div class="rowElem"><form:input class="required textboxMockup" id="sentDate" path="sentDate" readonly="readonly" size="10"/></div></td>
@@ -377,7 +377,7 @@
 								<td colspan="2"><div class="rowElem"><form:input class="required textboxMockup" path="sentTransportNo" /></div></td>
 							</tr>
 							</c:if>
-							<c:if test="${form.status == 'received'}">
+							<c:if test="${form.status == 'close'}">
 							<tr>
 								<td><label><fmt:message key="outsiteService_receivedDate" />:<font color="red">*</font></label></td>
 								<td colspan="2"><div class="rowElem"><form:input class="required textboxMockup" id="receivedDate" path="receivedDate" readonly="readonly" size="10"/></div></td>
@@ -393,6 +393,7 @@
 								<td></td>
 								<td colspan="5">
 									<div class="rowElem">
+										--${form.costing}++
 										<form:radiobutton path="costing" id="costing_cost" value="cost" disabled="true"/> <label style="float:left;"><fmt:message key="outsiteService_costing_cost" /></label> <form:radiobutton path="costing" id="costing_free" value="free" disabled="true"/> <label style="float:left;"><fmt:message key="outsiteService_costing_free" /></label>
 									</div>
 								</td>

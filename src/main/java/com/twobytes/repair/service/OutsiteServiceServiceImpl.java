@@ -107,8 +107,9 @@ public class OutsiteServiceServiceImpl implements OutsiteServiceService {
 	@Override
 	@Transactional
 	public Map<String, Object> selectByCriteria(String name, String surname,
-			String date, String type, String serialNo, String refOutsiteJobID, Integer rows, Integer page,
-			String orderBy, String orderType) {
+			String date, String type, String serialNo, String refOutsiteJobID, 
+			String outsiteCompanyID, String transportCompanyID, 
+			Integer rows, Integer page, String orderBy, String orderType) {
 		if(null != name && !name.equals("")) {
 			name = "%"+name+"%";
 		}
@@ -123,7 +124,7 @@ public class OutsiteServiceServiceImpl implements OutsiteServiceService {
 		}
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			result = osDAO.selectByCriteria(name, surname, date, type, serialNo, refOutsiteJobID, rows, page, orderBy, orderType);
+			result = osDAO.selectByCriteria(name, surname, date, type, serialNo, refOutsiteJobID, outsiteCompanyID, transportCompanyID, rows, page, orderBy, orderType);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -183,17 +184,21 @@ public class OutsiteServiceServiceImpl implements OutsiteServiceService {
 	@Override
 	@Transactional
 	public List<OutsiteService> selectSentOSByCriteria(String name,
-			String date, String type, String serialNo, Integer rows,
-			Integer page, String orderBy, String orderType) {
+			String date, String type, String serialNo, String refOutsiteJobID, 
+			String outsiteCompanyID, String transportCompanyID, 
+			Integer rows, Integer page, String orderBy, String orderType) {
 		if(null != name && !name.equals("")) {
 			name = "%"+name+"%";
 		}
 		if(null != serialNo && !serialNo.equals("")) {
 			serialNo = "%"+serialNo+"%";
 		}
+		if(null != refOutsiteJobID && !refOutsiteJobID.equals("")){
+			refOutsiteJobID = "%"+refOutsiteJobID+"%";
+		}
 		List<OutsiteService> modelList = new ArrayList<OutsiteService>();
 		try {
-			modelList = osDAO.selectSentOSByCriteria(name, date, type, serialNo, rows, page, orderBy, orderType);
+			modelList = osDAO.selectSentOSByCriteria(name, date, type, serialNo, refOutsiteJobID, outsiteCompanyID, transportCompanyID, rows, page, orderBy, orderType);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

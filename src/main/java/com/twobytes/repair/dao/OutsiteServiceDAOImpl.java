@@ -43,7 +43,9 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 	@Override
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> selectByCriteria(String name, String surname,
-			String date, String type, String serialNo, String refOutsiteJobID, Integer rows, Integer page,
+			String date, String type, String serialNo, String refOutsiteJobID, 
+			String outsiteCompanyID, String transportCompanyID, 
+			Integer rows, Integer page,
 			String orderBy, String orderType) throws Exception{
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", new Locale ("US"));
 		
@@ -66,6 +68,12 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 		}
 		if(null != refOutsiteJobID && !refOutsiteJobID.equals("")){
 			sql.append("and outsiteService.refOutsiteJobID like :refOutsiteJobID ");
+		}
+		if(null != outsiteCompanyID && !outsiteCompanyID.equals("")){
+			sql.append("and outsiteService.outsiteCompany.outsiteCompanyID = :outsiteCompanyID ");
+		}
+		if(null != transportCompanyID && !transportCompanyID.equals("")){
+			sql.append("and outsiteService.transportCompany.transportCompanyID = :transportCompanyID ");
 		}
 		
 		sql.append("and outsiteService.status != '"+OutsiteService.CANCEL+"' ");
@@ -100,6 +108,12 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 		if(null != refOutsiteJobID && !refOutsiteJobID.equals("")) {
 			q.setString("refOutsiteJobID", refOutsiteJobID);
 		}
+		if(null != outsiteCompanyID && !outsiteCompanyID.equals("")) {
+			q.setInteger("outsiteCompanyID", Integer.valueOf(outsiteCompanyID));
+		}
+		if(null != transportCompanyID && !transportCompanyID.equals("")) {
+			q.setInteger("transportCompanyID", Integer.valueOf(transportCompanyID));
+		}
 		List<OutsiteService> list = q.list();
 		result.put("list", list);
 		
@@ -123,7 +137,15 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 		}
 		if(null != refOutsiteJobID && !refOutsiteJobID.equals("")) {
 			criteria.add(Restrictions.like("outsiteService.refOutsiteJobID", refOutsiteJobID));
-		}		
+		}
+		if(null != outsiteCompanyID && !outsiteCompanyID.equals("")) {
+			criteria.createCriteria("outsiteService.outsiteCompany", "outsiteCompany");
+			criteria.add(Restrictions.eq("outsiteCompany.outsiteCompanyID", Integer.valueOf(outsiteCompanyID)));
+		}
+		if(null != transportCompanyID && !transportCompanyID.equals("")) {
+			criteria.createCriteria("outsiteService.transportCompany", "transportCompany");
+			criteria.add(Restrictions.eq("transportCompany.transportCompanyID", Integer.valueOf(transportCompanyID)));
+		}
 		criteria.add(Restrictions.ne("status", OutsiteService.CANCEL));
 		criteria.setProjection(Projections.rowCount());
 		
@@ -208,8 +230,10 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<OutsiteService> selectSentOSByCriteria(String name,
-			String date, String type, String serialNo, Integer rows,
-			Integer page, String orderBy, String orderType) throws Exception{
+			String date, String type, String serialNo, String refOutsiteJobID,
+			String outsiteCompanyID, String transportCompanyID,
+			Integer rows, Integer page, 
+			String orderBy, String orderType) throws Exception{
 		StringBuilder sql = new StringBuilder();
 		sql.append("from OutsiteService as outsiteService where 1=1 ");
 		if(null != name && !name.equals("")){
@@ -223,6 +247,15 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 		}
 		if(null != serialNo && !serialNo.equals("")){
 			sql.append("and outsiteService.serialNo like :serialNo ");
+		}
+		if(null != refOutsiteJobID && !refOutsiteJobID.equals("")){
+			sql.append("and outsiteService.refOutsiteJobID like :refOutsiteJobID ");
+		}
+		if(null != outsiteCompanyID && !outsiteCompanyID.equals("")){
+			sql.append("and outsiteService.outsiteCompany.outsiteCompanyID = :outsiteCompanyID ");
+		}
+		if(null != transportCompanyID && !transportCompanyID.equals("")){
+			sql.append("and outsiteService.transportCompany.transportCompanyID = :transportCompanyID ");
 		}
 		
 		sql.append("and outsiteService.status = '"+OutsiteService.SENT+"' ");
@@ -249,6 +282,16 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 		if(null != serialNo && !serialNo.equals("")) {
 			q.setString("serialNo", serialNo);
 		}
+		if(null != refOutsiteJobID && !refOutsiteJobID.equals("")) {
+			q.setString("refOutsiteJobID", refOutsiteJobID);
+		}
+		if(null != outsiteCompanyID && !outsiteCompanyID.equals("")) {
+			q.setInteger("outsiteCompanyID", Integer.valueOf(outsiteCompanyID));
+		}
+		if(null != transportCompanyID && !transportCompanyID.equals("")) {
+			q.setInteger("transportCompanyID", Integer.valueOf(transportCompanyID));
+		}
+		
 		List<OutsiteService> result = q.list();
 		return result;
 	}

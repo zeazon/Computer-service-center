@@ -7,7 +7,15 @@ public class OutsiteServiceSearchForm {
 	private String type;
 	private String serialNo;
 	private String refOutsiteJobID;
+	private String outsiteCompanyID;
+	private String transportCompanyID;
 	
+	public String getTransportCompanyID() {
+		return transportCompanyID;
+	}
+	public void setTransportCompanyID(String transportCompanyID) {
+		this.transportCompanyID = transportCompanyID;
+	}
 	public String getName() {
 		return name;
 	}
@@ -43,6 +51,12 @@ public class OutsiteServiceSearchForm {
 	}
 	public void setRefOutsiteJobID(String refOutsiteJobID) {
 		this.refOutsiteJobID = refOutsiteJobID;
+	}
+	public String getOutsiteCompanyID() {
+		return outsiteCompanyID;
+	}
+	public void setOutsiteCompanyID(String outsiteCompanyID) {
+		this.outsiteCompanyID = outsiteCompanyID;
 	}
 
 }

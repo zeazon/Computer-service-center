@@ -19,10 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.twobytes.master.service.OutsiteCompanyService;
 import com.twobytes.master.service.TransportCompanyService;
 import com.twobytes.master.service.TypeService;
 import com.twobytes.model.Employee;
 import com.twobytes.model.GridResponse;
+import com.twobytes.model.OutsiteCompany;
 import com.twobytes.model.OutsiteService;
 import com.twobytes.model.OutsiteServiceDetail;
 import com.twobytes.model.ServiceOrder;
@@ -45,6 +47,9 @@ public class ReceivedOutsiteServiceController {
 	
 	@Autowired
 	private TransportCompanyService transportCompanyService;
+	
+	@Autowired
+	private OutsiteCompanyService outsiteCompanyService;
 	
 	@Autowired
 	private MessageSource messages;
@@ -75,11 +80,30 @@ public class ReceivedOutsiteServiceController {
 			e.printStackTrace();
 		}
 		model.addAttribute("typeList", typeList);
+		
+		List<OutsiteCompany> ocList = new ArrayList<OutsiteCompany>();
+		try{
+			ocList = outsiteCompanyService.getAll();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		List<TransportCompany> tcList = new ArrayList<TransportCompany>();
+		try{
+			tcList = transportCompanyService.getAll();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		model.addAttribute("outsiteCompanyList", ocList);
+		model.addAttribute("transportCompanyList", tcList);
 		return VIEWNAME_SEARCH;
 	}
 	
 	@RequestMapping(value="/searchReceivedOutsiteService")
-	public @ResponseBody GridResponse getData(@RequestParam(value="name", required=false) String name, @RequestParam(value="date", required=false) String date, @RequestParam(value="type", required=false) String type, @RequestParam(value="serialNo", required=false) String serialNo, @RequestParam("rows") Integer rows, @RequestParam("page") Integer page, @RequestParam("sidx") String sidx, @RequestParam("sord") String sord){
+	public @ResponseBody GridResponse getData(@RequestParam(value="name", required=false) String name, 
+												@RequestParam(value="date", required=false) String date, @RequestParam(value="type", required=false) String type, 
+												@RequestParam(value="serialNo", required=false) String serialNo, @RequestParam(value="refOutsiteJobID", required=false) String refOutsiteJobID, 
+												@RequestParam(value="outsiteCompanyID", required=false) String outsiteCompanyID, @RequestParam(value="transportCompanyID", required=false) String transportCompanyID, 
+												@RequestParam("rows") Integer rows, @RequestParam("page") Integer page, @RequestParam("sidx") String sidx, @RequestParam("sord") String sord){
 		// Because default Tomcat URI encoding is iso-8859-1 so it must encode back to tis620
 		String[] datePart;
 		String searchDate = null;
@@ -101,11 +125,14 @@ public class ReceivedOutsiteServiceController {
 			if(null != serialNo){
 				serialNo = new String(serialNo.getBytes("iso-8859-1"), "tis620");	
 			}
+			if(null != refOutsiteJobID){
+				refOutsiteJobID = new String(refOutsiteJobID.getBytes("iso-8859-1"), "tis620");	
+			}
 		}catch(UnsupportedEncodingException e){
 			e.printStackTrace();
 		}
 		
-		List<OutsiteService> osList = osService.selectSentOSByCriteria(name, searchDate, type, serialNo, rows, page, sidx, sord);
+		List<OutsiteService> osList = osService.selectSentOSByCriteria(name, searchDate, type, serialNo, refOutsiteJobID, outsiteCompanyID, transportCompanyID, rows, page, sidx, sord);
 		GridResponse response = new GridResponse();
 		
 		List<OutsiteServiceGridData> rowsList = new ArrayList<OutsiteServiceGridData>();
@@ -138,6 +165,18 @@ public class ReceivedOutsiteServiceController {
 					gridData.setModel(os.getModel().getName());
 				if(os.getSerialNo() != null)
 					gridData.setSerialNo(os.getSerialNo());
+				if(os.getSentTransportNo() != null){
+					gridData.setSentTransportNo(os.getSentTransportNo());
+				}
+				if(os.getOutsiteCompany() != null){
+					gridData.setOutsiteCompanyName(os.getOutsiteCompany().getName());
+				}
+				if(os.getRefOutsiteJobID() != null && !os.getRefOutsiteJobID().equals("")){
+					gridData.setRefOutsiteJobID(os.getRefOutsiteJobID());
+				}
+				if(os.getTransportCompany() != null){
+					gridData.setTransportCompanyName(os.getTransportCompany().getName());
+				}
 				gridData.setProblem(os.getProblem());
 				gridData.setStatus(os.getStatus());
 				rowsList.add(gridData);
