@@ -109,6 +109,7 @@ public class OutsiteServiceServiceImpl implements OutsiteServiceService {
 	public Map<String, Object> selectByCriteria(String name, String surname,
 			String date, String type, String serialNo, String refOutsiteJobID, 
 			String outsiteCompanyID, String transportCompanyID, 
+			String status, 
 			Integer rows, Integer page, String orderBy, String orderType) {
 		if(null != name && !name.equals("")) {
 			name = "%"+name+"%";
@@ -124,7 +125,7 @@ public class OutsiteServiceServiceImpl implements OutsiteServiceService {
 		}
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			result = osDAO.selectByCriteria(name, surname, date, type, serialNo, refOutsiteJobID, outsiteCompanyID, transportCompanyID, rows, page, orderBy, orderType);
+			result = osDAO.selectByCriteria(name, surname, date, type, serialNo, refOutsiteJobID, outsiteCompanyID, transportCompanyID, status, rows, page, orderBy, orderType);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

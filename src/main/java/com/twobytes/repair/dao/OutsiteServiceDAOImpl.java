@@ -45,6 +45,7 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 	public Map<String, Object> selectByCriteria(String name, String surname,
 			String date, String type, String serialNo, String refOutsiteJobID, 
 			String outsiteCompanyID, String transportCompanyID, 
+			String status, 
 			Integer rows, Integer page,
 			String orderBy, String orderType) throws Exception{
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", new Locale ("US"));
@@ -74,6 +75,9 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 		}
 		if(null != transportCompanyID && !transportCompanyID.equals("")){
 			sql.append("and outsiteService.transportCompany.transportCompanyID = :transportCompanyID ");
+		}
+		if(null != status && !status.equals("")){
+			sql.append("and outsiteService.status = :status ");
 		}
 		
 		sql.append("and outsiteService.status != '"+OutsiteService.CANCEL+"' ");
@@ -114,6 +118,9 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 		if(null != transportCompanyID && !transportCompanyID.equals("")) {
 			q.setInteger("transportCompanyID", Integer.valueOf(transportCompanyID));
 		}
+		if(null != status && !status.equals("")) {
+			q.setString("status", status);
+		}
 		List<OutsiteService> list = q.list();
 		result.put("list", list);
 		
@@ -145,6 +152,9 @@ public class OutsiteServiceDAOImpl implements OutsiteServiceDAO {
 		if(null != transportCompanyID && !transportCompanyID.equals("")) {
 			criteria.createCriteria("outsiteService.transportCompany", "transportCompany");
 			criteria.add(Restrictions.eq("transportCompany.transportCompanyID", Integer.valueOf(transportCompanyID)));
+		}
+		if(null != status && !status.equals("")) {
+			criteria.add(Restrictions.eq("outsiteService.status", status));
 		}
 		criteria.add(Restrictions.ne("status", OutsiteService.CANCEL));
 		criteria.setProjection(Projections.rowCount());

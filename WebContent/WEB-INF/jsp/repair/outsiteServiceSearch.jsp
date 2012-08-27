@@ -26,7 +26,16 @@
 						<td><label><fmt:message key="date" />:</label></td>
 						<td><div class="rowElem" style="z-index:200"><form:input path="date" type="text" class="textboxMockup" id="dateInput" size="9"/></div></td>
 						<td><label><fmt:message key="refOutsiteJobID" />:</label></td>
-						<td colspan="3"><div class="rowElem"><form:input path="refOutsiteJobID" id="refOutsiteJobID" /></div></td>
+						<td><div class="rowElem"><form:input path="refOutsiteJobID" id="refOutsiteJobID" /></div></td>
+						<td><label><fmt:message key="status" />:</label></td>
+						<td>
+							<form:select path="status" id="status" cssClass="selectSearch">
+								<form:option value="">All</form:option>
+								<form:option value="new"><fmt:message key='outsiteService_status_new' /></form:option>
+								<form:option value="sent"><fmt:message key='outsiteService_status_sent' /></form:option>
+								<form:option value="close"><fmt:message key='outsiteService_status_close' /></form:option>
+							</form:select>
+						</td>
 					</tr>
 					<tr>
 						<td><label><fmt:message key="type" />:</label></td>
@@ -88,6 +97,7 @@
 		$('#type_autoComplete').width($('#type').width());
 		$('#outsiteCompanyID_autoComplete').width($('#outsiteCompanyID').width());
 		$('#transportCompanyID_autoComplete').width($('#transportCompanyID').width());
+		$('#status_autoComplete').width($('#status').width());
 		
 		jQuery("#list").jqGrid({
 			url:"searchOutsiteService.html",
@@ -119,7 +129,16 @@
 				id: "outsiteServiceID"
 			},
 			pager: '#pager',
-			toppager: true
+			toppager: true,
+			loadComplete: function(data){
+				$.each(data.rows,function(i,item){
+					if(data.rows[i].status == 'sent'){
+						$("#" + data.rows[i].outsiteServiceID).find("td").css("background-color", "#fffaa0");
+					}else if(data.rows[i].status == 'new'){
+						$("#" + data.rows[i].outsiteServiceID).find("td").css("background-color", "#ceffca");
+					}
+		        });
+		    }
 		}).navGrid("#pager",{edit:false,add:false,del:false,search:false,refresh:false,cloneToTop:true})
 		.navButtonAdd('#list_toppager',
 		{
@@ -239,7 +258,8 @@
 		var refOutsiteJobID = jQuery("#refOutsiteJobID").val();
 		var outsiteCompanyID = jQuery("#outsiteCompanyID").val();
 		var transportCompanyID = jQuery("#transportCompanyID").val();
-		jQuery("#list").jqGrid('setGridParam',{url:"searchOutsiteService.html?name="+name+"&date="+date+"&type="+type+"&serialNo="+serialNo+"&refOutsiteJobID="+refOutsiteJobID+"&outsiteCompanyID="+outsiteCompanyID+"&transportCompanyID="+transportCompanyID,page:1}).trigger("reloadGrid");
+		var status = jQuery("#status").val();
+		jQuery("#list").jqGrid('setGridParam',{url:"searchOutsiteService.html?name="+name+"&date="+date+"&type="+type+"&serialNo="+serialNo+"&refOutsiteJobID="+refOutsiteJobID+"&outsiteCompanyID="+outsiteCompanyID+"&transportCompanyID="+transportCompanyID+"&status="+status,page:1}).trigger("reloadGrid");
 	}
 	
 	jQuery(window).bind('resize', function() {

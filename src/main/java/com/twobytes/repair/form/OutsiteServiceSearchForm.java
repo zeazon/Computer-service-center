@@ -9,6 +9,7 @@ public class OutsiteServiceSearchForm {
 	private String refOutsiteJobID;
 	private String outsiteCompanyID;
 	private String transportCompanyID;
+	private String status;
 	
 	public String getTransportCompanyID() {
 		return transportCompanyID;
@@ -57,6 +58,12 @@ public class OutsiteServiceSearchForm {
 	}
 	public void setOutsiteCompanyID(String outsiteCompanyID) {
 		this.outsiteCompanyID = outsiteCompanyID;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 }
