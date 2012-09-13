@@ -584,7 +584,7 @@ function calculateNetAmount(){
 			if (serviceList !== "" && !isNaN(servicePrice)){
 				netAmount = netAmount + parseFloat(servicePrice);
 			}
-	
+
 		});
 		
 		$('.repairList').each(function() {
@@ -598,6 +598,11 @@ function calculateNetAmount(){
 			}
 	
 		});
+		
+		if(!isNaN(parseFloat($("#outsiteRepairPrice").val()))){
+			netAmount = netAmount + parseFloat($("#outsiteRepairPrice").val());	
+		}
+		
 	}
 
 	if($('[name="issuePart"]:checked').val() == 'haveIssuedPart'){
