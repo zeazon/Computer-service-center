@@ -160,12 +160,10 @@ public class IssuePartReportController {
 				
 				rowsList.add(gridData);
 			}
-			//total_pages = new Double(Math.ceil(((double)(Long) ret.get("maxRows")/(double)rows))).intValue();
 			total_pages = new Double(Math.ceil(((double)(Integer) ret.get("maxRows")/(double)rows))).intValue();
 		}
 		if (page > total_pages) page=total_pages;
 		response.setPage(page.toString());
-//		response.setRecords(((Long) ret.get("maxRows")).toString());
 		response.setRecords(((Integer) ret.get("maxRows")).toString());
 		response.setTotal(total_pages.toString());
 		response.setRows(rowsList);

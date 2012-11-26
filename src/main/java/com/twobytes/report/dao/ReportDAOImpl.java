@@ -176,7 +176,6 @@ public class ReportDAOImpl implements ReportDAO {
 	public Map<String, Object> issuePart(String startDate, String endDate, String code,
 			Integer rows, Integer page, String orderBy, String orderType)
 			throws Exception {
-		// SELECT so.serviceOrderID, emp.name, emp.surname, so.serviceOrderDate, so.returnDate, costing, totalPrice, quantity FROM `serviceorder` so, issuepart ip, employee emp, model  WHERE so.status = 'close' and so.serviceOrderID = ip.serviceOrderID and emp.employeeID = so.empFix and model.modelID = 125 and os.returnDate
 		
 //		SELECT so.serviceOrderID, CONCAT(emp.name,' ',emp.surname) fixEmp_name, so.serviceOrderDate, so.returnDate, totalPrice, quantity 
 //		FROM serviceorder so, issuepart ip, employee emp
@@ -187,16 +186,11 @@ public class ReportDAOImpl implements ReportDAO {
 //		order by so.serviceOrderDate desc
 		
 		StringBuilder sql = new StringBuilder();
-//		sql.append("SELECT so.serviceOrderID, CONCAT(emp.name,' ',emp.surname) fixEmp_name, so.serviceOrderDate, " +
-//				"so.returnDate, totalPrice, quantity " +
-//				"FROM serviceorder so, issuepart ip, employee emp, model  WHERE so.status = 'close' and so.serviceOrderID = ip.serviceOrderID and emp.employeeID = so.empFix ");
 		sql.append("SELECT so.serviceOrderID, CONCAT(emp.name,' ',emp.surname) fixEmp_name, so.serviceOrderDate, so.returnDate, totalPrice, quantity " + 
 					"FROM serviceorder so, issuepart ip, employee emp "+
 					"WHERE so.status = 'close' " + 
 					"and so.serviceOrderID = ip.serviceOrderID " + 
 					"and emp.employeeID = so.empFix "); 
-					//"and ip.code=:code "+
-	//				"order by so.serviceOrderDate desc"
 		
 		if((null != startDate && !startDate.equals("")) && (null != endDate && !endDate.equals(""))){
 			sql.append("and DATE(so.returnDate) between :startDate and :endDate ");
@@ -205,10 +199,6 @@ public class ReportDAOImpl implements ReportDAO {
 		}else if((null == startDate || startDate.equals("")) && (null != endDate && !endDate.equals(""))){
 			sql.append("and DATE(so.returnDate) <= :endDate ");
 		}
-		/*if(modelID != null && !modelID.equals("")){
-			sql.append("and model.modelID = :modelID ");
-		}
-		sql.append("order by so.serviceOrderDate desc");*/
 		
 		if(code != null && !code.equals("")){
 			sql.append("and ip.code = :code ");
@@ -233,9 +223,6 @@ public class ReportDAOImpl implements ReportDAO {
 		}else if((null == startDate || startDate.equals("")) && (null != endDate && !endDate.equals(""))){
 			q.setString("endDate", endDate);
 		}
-//		if(modelID != null && !modelID.equals("")){
-//			q.setInteger("modelID", Integer.parseInt(modelID));
-//		}
 		if(code != null && !code.equals("")){
 			q.setString("code", code);
 		}
@@ -262,9 +249,6 @@ public class ReportDAOImpl implements ReportDAO {
 		}else if((null == startDate || startDate.equals("")) && (null != endDate && !endDate.equals(""))){
 			q.setString("endDate", endDate);
 		}
-//		if(modelID != null && !modelID.equals("")){
-//			q.setInteger("modelID", Integer.parseInt(modelID));
-//		}
 		if(code != null && !code.equals("")){
 			q.setString("code", code);
 		}
