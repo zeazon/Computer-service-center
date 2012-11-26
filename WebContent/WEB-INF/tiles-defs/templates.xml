@@ -251,4 +251,9 @@
 		<put-attribute name="pageName" value="รายงานการขาย" type="string"/>
 		<put-attribute name="body" value="/WEB-INF/jsp/report/numSaleByEmpReport.jsp"/>
 	</definition>
+	
+	<definition name="issuePartReport.search" extends=".pageTemplate">
+		<put-attribute name="pageName" value="รายงานการเบิก" type="string"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/report/issuePartReport.jsp"/>
+	</definition>
 </tiles-definitions>

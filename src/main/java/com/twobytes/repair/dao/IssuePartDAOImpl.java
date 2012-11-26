@@ -39,5 +39,16 @@ public class IssuePartDAOImpl implements IssuePartDAO {
 		q.executeUpdate();
 		return true;
 	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<String> getPart() throws Exception {
+		// TODO Auto-generated method stub
+		StringBuilder sql = new StringBuilder();
+		sql.append("select distinct code from issuePart order by code");
+		Query q = sessionFactory.getCurrentSession().createSQLQuery(sql.toString());
+		List<String> result = q.list();
+		return result;
+	}
 	
 }

@@ -1,7 +1,9 @@
 package com.twobytes.report.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,6 +56,20 @@ public class ReportServiceImpl implements ReportService {
 			e.printStackTrace();
 		}
 		return retList;
+	}
+
+	@Override
+	@Transactional
+	public Map<String, Object> issuePart(String startDate, String endDate,
+			String code, Integer rows, Integer page, String orderBy,
+			String orderType) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			result = reportDAO.issuePart(startDate, endDate, code, rows, page, orderBy, orderType);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 }

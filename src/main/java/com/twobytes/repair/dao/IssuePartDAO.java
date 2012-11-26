@@ -8,4 +8,5 @@ public interface IssuePartDAO {
 	public boolean save(IssuePart issuePart) throws Exception;
 	public List<IssuePart> getByServiceOrder(String serviceOrderID) throws Exception;
 	public boolean delete(String serviceOrderID) throws Exception;
+	public List<String> getPart() throws Exception;
 }

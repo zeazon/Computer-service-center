@@ -1,16 +1,21 @@
 package com.twobytes.report.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.transform.Transformers;
+import org.hibernate.type.DateType;
+import org.hibernate.type.DoubleType;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.StringType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.twobytes.report.form.CountCustomerRegionReportForm;
+import com.twobytes.report.form.IssuePartReportForm;
 import com.twobytes.report.form.NumInstalledByEmpReportForm;
 import com.twobytes.report.form.NumSaleByEmpReportForm;
 
@@ -164,6 +169,110 @@ public class ReportDAOImpl implements ReportDAO {
 		
 		List<NumSaleByEmpReportForm> retList = q.list();
 		return retList;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> issuePart(String startDate, String endDate, String code,
+			Integer rows, Integer page, String orderBy, String orderType)
+			throws Exception {
+		// SELECT so.serviceOrderID, emp.name, emp.surname, so.serviceOrderDate, so.returnDate, costing, totalPrice, quantity FROM `serviceorder` so, issuepart ip, employee emp, model  WHERE so.status = 'close' and so.serviceOrderID = ip.serviceOrderID and emp.employeeID = so.empFix and model.modelID = 125 and os.returnDate
+		
+//		SELECT so.serviceOrderID, CONCAT(emp.name,' ',emp.surname) fixEmp_name, so.serviceOrderDate, so.returnDate, totalPrice, quantity 
+//		FROM serviceorder so, issuepart ip, employee emp
+//		WHERE so.status = 'close' 
+//		and so.serviceOrderID = ip.serviceOrderID 
+//		and emp.employeeID = so.empFix 
+//		and ip.code='SITTOOSILGLO'
+//		order by so.serviceOrderDate desc
+		
+		StringBuilder sql = new StringBuilder();
+//		sql.append("SELECT so.serviceOrderID, CONCAT(emp.name,' ',emp.surname) fixEmp_name, so.serviceOrderDate, " +
+//				"so.returnDate, totalPrice, quantity " +
+//				"FROM serviceorder so, issuepart ip, employee emp, model  WHERE so.status = 'close' and so.serviceOrderID = ip.serviceOrderID and emp.employeeID = so.empFix ");
+		sql.append("SELECT so.serviceOrderID, CONCAT(emp.name,' ',emp.surname) fixEmp_name, so.serviceOrderDate, so.returnDate, totalPrice, quantity " + 
+					"FROM serviceorder so, issuepart ip, employee emp "+
+					"WHERE so.status = 'close' " + 
+					"and so.serviceOrderID = ip.serviceOrderID " + 
+					"and emp.employeeID = so.empFix "); 
+					//"and ip.code=:code "+
+	//				"order by so.serviceOrderDate desc"
+		
+		if((null != startDate && !startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			sql.append("and DATE(so.returnDate) between :startDate and :endDate ");
+		}else if((null != startDate && !startDate.equals("")) && (null == endDate || endDate.equals(""))){
+			sql.append("and DATE(so.returnDate) >= :startDate ");
+		}else if((null == startDate || startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			sql.append("and DATE(so.returnDate) <= :endDate ");
+		}
+		/*if(modelID != null && !modelID.equals("")){
+			sql.append("and model.modelID = :modelID ");
+		}
+		sql.append("order by so.serviceOrderDate desc");*/
+		
+		if(code != null && !code.equals("")){
+			sql.append("and ip.code = :code ");
+		}
+		sql.append("order by so.serviceOrderDate desc");
+		
+		Query q = sessionFactory.getCurrentSession().createSQLQuery(sql.toString())
+		.addScalar("serviceOrderID", new StringType())
+		.addScalar("fixEmp_name", new StringType())
+		.addScalar("serviceOrderDate", new DateType())
+		.addScalar("returnDate", new DateType())
+		.addScalar("totalPrice", new DoubleType())
+		.addScalar("quantity", new IntegerType())
+		.setResultTransformer(Transformers.aliasToBean(IssuePartReportForm.class))
+		.setFirstResult(rows*page - rows).setMaxResults(rows).setFetchSize(rows);
+		
+		if((null != startDate && !startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			q.setString("startDate", startDate);
+			q.setString("endDate", endDate);
+		}else if((null != startDate && !startDate.equals("")) && (null == endDate || endDate.equals(""))){
+			q.setString("startDate", startDate);
+		}else if((null == startDate || startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			q.setString("endDate", endDate);
+		}
+//		if(modelID != null && !modelID.equals("")){
+//			q.setInteger("modelID", Integer.parseInt(modelID));
+//		}
+		if(code != null && !code.equals("")){
+			q.setString("code", code);
+		}
+		
+		List<IssuePartReportForm> retList = q.list();
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("list", retList);
+		
+		q = sessionFactory.getCurrentSession().createSQLQuery(sql.toString())
+		.addScalar("serviceOrderID", new StringType())
+		.addScalar("fixEmp_name", new StringType())
+		.addScalar("serviceOrderDate", new DateType())
+		.addScalar("returnDate", new DateType())
+		.addScalar("totalPrice", new DoubleType())
+		.addScalar("quantity", new IntegerType())
+		.setResultTransformer(Transformers.aliasToBean(IssuePartReportForm.class));
+		
+		if((null != startDate && !startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			q.setString("startDate", startDate);
+			q.setString("endDate", endDate);
+		}else if((null != startDate && !startDate.equals("")) && (null == endDate || endDate.equals(""))){
+			q.setString("startDate", startDate);
+		}else if((null == startDate || startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			q.setString("endDate", endDate);
+		}
+//		if(modelID != null && !modelID.equals("")){
+//			q.setInteger("modelID", Integer.parseInt(modelID));
+//		}
+		if(code != null && !code.equals("")){
+			q.setString("code", code);
+		}
+		
+		retList = q.list();
+		result.put("maxRows", retList.size());
+		
+		return result;
 	}
 
 }

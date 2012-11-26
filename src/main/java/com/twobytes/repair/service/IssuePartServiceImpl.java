@@ -34,4 +34,16 @@ public class IssuePartServiceImpl implements IssuePartService {
 		return retList;
 	}
 
+	@Override
+	@Transactional
+	public List<String> getPart() {
+		List<String> retList = new ArrayList<String>();
+		try{
+			retList = issuePartDAO.getPart();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return retList;
+	}
+
 }
