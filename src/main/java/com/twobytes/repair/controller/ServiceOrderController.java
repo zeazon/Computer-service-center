@@ -1157,7 +1157,11 @@ public class ServiceOrderController {
 		}else{
 			docForm.setEndFix("-");
 		}
-		docForm.setEmpFix(so.getEmpFix().getName());
+		if(so.getEmpFix() != null){
+			docForm.setEmpFix(so.getEmpFix().getName());
+		}else{
+			docForm.setEmpFix("-");
+		}
 		
 		docForm.setCosting(so.getCosting());
 		docForm.setRealProblem(so.getRealProblem());
