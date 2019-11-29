@@ -1,8 +1,10 @@
 package com.twobytes.repair.form;
 
 public class ServiceOrderSearchForm {
+	private String serviceOrderID;
 	private String name;
 	private String surname;
+	private String mobileTel;
 	private String date;
 	private String type;
 	
@@ -66,6 +68,18 @@ public class ServiceOrderSearchForm {
 	}
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	public String getServiceOrderID() {
+		return serviceOrderID;
+	}
+	public void setServiceOrderID(String serviceOrderID) {
+		this.serviceOrderID = serviceOrderID;
+	}
+	public String getMobileTel() {
+		return mobileTel;
+	}
+	public void setMobileTel(String mobileTel) {
+		this.mobileTel = mobileTel;
 	}
 	
 }
