@@ -8,8 +8,16 @@
 			<form:form commandName="searchForm" id="searchForm" class="jqtransform" method="post" onsubmit="gridReload(); return false;">
 				<table>
 					<tr>
+						<td><label><fmt:message key="serviceOrderID" />:</label></td>
+						<td><div class="rowElem"><form:input path="serviceOrderID" type="text" id="serviceOrderID" class="textboxMockup" /></div></td>
+					</tr>
+					<tr>
 						<td><label><fmt:message key="name" />:</label></td>
 						<td><div class="rowElem"><form:input path="name" type="text" id="name" class="textboxMockup" /></div></td>
+					</tr>
+					<tr>
+						<td><label><fmt:message key="mobileTel" />:</label></td>
+						<td><div class="rowElem"><form:input path="mobileTel" type="text" id="mobileTel" class="textboxMockup" /></div></td>
 					</tr>
 					<%--r>
 						<td><label><fmt:message key="surname" />:</label></td>
@@ -256,14 +264,16 @@
 	}
 	
 	function gridReload(){
+		var serviceOrderID = jQuery("#serviceOrderID").val();
 		var name = jQuery("#name").val();
 		var surname = jQuery("#surname").val();
+		var mobileTel = jQuery("#mobileTel").val();
 		var startDate = jQuery("#dateInput").val();
 		var endDate = jQuery("#endDateInput").val();
 		var type = jQuery("#type").val();
 		var serialNo = jQuery("#serialNo").val();
 		var employee = jQuery("#employee").val();
-		jQuery("#list").jqGrid('setGridParam',{url:"searchServiceOrder.html?name="+name+"&surname="+surname+"&startDate="+startDate+"&endDate="+endDate+"&type="+type+"&serialNo="+serialNo+"&employee="+employee,page:1}).trigger("reloadGrid");
+		jQuery("#list").jqGrid('setGridParam',{url:"searchServiceOrder.html?serviceOrderID="+serviceOrderID+"&name="+name+"&surname="+surname+"&mobileTel="+mobileTel+"&startDate="+startDate+"&endDate="+endDate+"&type="+type+"&serialNo="+serialNo+"&employee="+employee,page:1}).trigger("reloadGrid");
 	}
 	
 	jQuery(window).bind('resize', function() {
