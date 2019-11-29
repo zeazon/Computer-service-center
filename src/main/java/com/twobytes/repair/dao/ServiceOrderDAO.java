@@ -13,6 +13,7 @@ public interface ServiceOrderDAO {
 	public ServiceOrder selectByID(String serviceOrderID) throws Exception;
 	public List<ServiceOrder> selectByCriteria(String name, String startDate, String endDate, String type, String serialNo, Integer rows, Integer page, String orderBy, String orderType) throws Exception;
 	public Map<String, Object> selectByCriteria(String name, String startDate, String endDate, String type, String serialNo, String empID, Integer rows, Integer page, String orderBy, String orderType) throws Exception;
+	public Map<String, Object> selectByCriteria2(String serviceOrderID, String name, String mobileTel, String startDate, String endDate, String type, String serialNo, String empID, Integer rows, Integer page, String orderBy, String orderType) throws Exception;
 	public boolean edit(ServiceOrder serviceOrder) throws Exception;
 	public boolean delete(ServiceOrder serviceOrder, Integer employeeID) throws Exception;
 	

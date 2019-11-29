@@ -306,7 +306,141 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 		result.put("maxRows", criteria.list().get(0));
 		return result;
 	}
-	
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> selectByCriteria2(String serviceOrderID, String name, String mobileTel, String startDate,
+			String endDate, String type, String serialNo, String empID, Integer rows, Integer page, String orderBy,
+			String orderType) throws Exception {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", new Locale ("US"));
+		
+		StringBuilder sql = new StringBuilder();
+		sql.append("from ServiceOrder as serviceOrder where 1=1 ");
+		if(null != serviceOrderID && !serviceOrderID.equals("")){
+			sql.append("and serviceOrder.serviceOrderID = :serviceOrderID ");
+		}
+		if(null != name && !name.equals("")){
+			sql.append("and serviceOrder.customer.name like :name ");
+		}
+		if(null != mobileTel && !mobileTel.equals("")){
+			sql.append("and serviceOrder.customer.mobileTel = :mobileTel ");
+		}
+		if((null != startDate && !startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			sql.append("and DATE(serviceOrderDate) between :startDate and :endDate ");
+		}else if((null != startDate && !startDate.equals("")) && (null == endDate || endDate.equals(""))){
+			sql.append("and DATE(serviceOrderDate) >= :startDate ");
+		}else if((null == startDate || startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			sql.append("and DATE(serviceOrderDate) <= :endDate ");
+		}
+		if(null != type && !type.equals("")){
+			sql.append("and serviceOrder.product.type.typeID = :type ");
+		}
+		if(null != serialNo && !serialNo.equals("")){
+			sql.append("and serviceOrder.product.serialNo like :serialNo ");
+		}
+		if(null != empID && !empID.equals("")){
+			sql.append("and empFix = :empID ");
+		}
+		
+		sql.append("and serviceOrder.status != 'cancel' ");
+		
+		if(!orderBy.equals("")){
+			if(orderBy.equals("name")){
+				orderBy = "serviceOrder.customer.name";
+			}else if(orderBy.equals("surname")){
+				orderBy = "serviceOrder.customer.surname";
+			}else if(orderBy.equals("fullName")){
+				orderBy = "serviceOrder.customer.name "+orderType+", serviceOrder.customer.surname"; 
+			}
+			sql.append("order by "+orderBy+" "+orderType);
+		}else{
+			sql.append("order by serviceOrder.serviceOrderDate desc");
+		}
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		Query q = sessionFactory.getCurrentSession().createQuery(sql.toString()).setFirstResult(rows*page - rows).setMaxResults(rows).setFetchSize(rows);
+		if(null != serviceOrderID && !serviceOrderID.equals("")) {
+			q.setString("serviceOrderID", serviceOrderID);
+		}
+		if(null != name && !name.equals("")) {
+			q.setString("name", name);
+		}
+		if(null != mobileTel && !mobileTel.equals("")) {
+			q.setString("mobileTel", mobileTel);
+		}
+		if((null != startDate && !startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			q.setString("startDate", startDate);
+			q.setString("endDate", endDate);
+		}else if((null != startDate && !startDate.equals("")) && (null == endDate || endDate.equals(""))){
+			q.setString("startDate", startDate);
+		}else if((null == startDate || startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			q.setString("endDate", endDate);
+		}
+		if(null != type && !type.equals("")) {
+			q.setString("type", type);
+		}
+		if(null != serialNo && !serialNo.equals("")) {
+			q.setString("serialNo", serialNo);
+		}
+		if(null != empID && !empID.equals("")){
+			q.setInteger("empID", Integer.parseInt(empID));
+		}
+		List<ServiceOrder> list = q.list();
+		result.put("list", list);
+		
+		
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(ServiceOrder.class, "serviceOrder");
+		
+		if(null != name && !name.equals("")) {
+			criteria.createCriteria("serviceOrder.customer" , "customer");
+			criteria.add(Restrictions.like("customer.name", name));
+		}
+		if((null != startDate && !startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			/*
+			 * Because endDate field in database is timestamp and hibernate don't use Date function to compare date.
+			 * So it'll make mistake to compare because timestamp will compare time too and time to compare is oo:oo.
+			 * For correct compare endDate it must add end date by 1 day and use this date as end date.
+			 */
+			Calendar endDateCal = Calendar.getInstance();
+			endDateCal.setTime(sdf.parse(endDate));
+			endDateCal.add(Calendar.DATE, 1);
+			criteria.add(Restrictions.between("serviceOrderDate", sdf.parse(startDate), endDateCal.getTime()));
+		}else if((null != startDate && !startDate.equals("")) && (null == endDate || endDate.equals(""))){
+			criteria.add(Restrictions.ge("serviceOrderDate", sdf.parse(startDate)));
+		}else if((null == startDate || startDate.equals("")) && (null != endDate && !endDate.equals(""))){
+			/*
+			 * Because endDate field in database is timestamp and hibernate don't use Date function to compare date.
+			 * So it'll make mistake to compare because timestamp will compare time too and time to compare is oo:oo.
+			 * For correct compare endDate it must add end date by 1 day and use this date as end date.
+			 */
+			Calendar endDateCal = Calendar.getInstance();
+			endDateCal.setTime(sdf.parse(endDate));
+			endDateCal.add(Calendar.DATE, 1);
+			criteria.add(Restrictions.lt("serviceOrderDate", endDateCal.getTime()));
+		}
+		if(null != type && !type.equals("")){
+			criteria.createCriteria("serviceOrder.product", "product");
+			criteria.add(Restrictions.eq("product.type.typeID", type));
+		}
+		if(null != serialNo && !serialNo.equals("")){
+			if(null == type || type.equals("")){
+				criteria.createCriteria("serviceOrder.product", "product");
+			}
+			criteria.add(Restrictions.like("product.serialNo", serialNo));
+		}
+		if(null != empID && !empID.equals("")){
+			criteria.createCriteria("serviceOrder.empFix", "empFix");
+			criteria.add(Restrictions.eq("empFix.employeeID", Integer.parseInt(empID)));
+		}
+		
+		criteria.add(Restrictions.ne("status", "cancel"));
+		criteria.setProjection(Projections.rowCount());
+		
+		result.put("maxRows", criteria.list().get(0));
+		return result;
+	}
+
 	@Override
 	public boolean edit(ServiceOrder serviceOrder) throws Exception{
 		Session session = sessionFactory.getCurrentSession();
