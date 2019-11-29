@@ -161,7 +161,9 @@ public class ServiceOrderController {
 	@SuppressWarnings("unchecked")
 	public @ResponseBody
 	GridResponse getData(
+			@RequestParam(value = "serviceOrderID", required = false) String serviceOrderID,
 			@RequestParam(value = "name", required = false) String name,
+			@RequestParam(value = "mobileTel", required = false) String mobileTel,
 			@RequestParam(value = "startDate", required = false) String startDate,
 			@RequestParam(value = "endDate", required = false) String endDate,
 			@RequestParam(value = "type", required = false) String type,
@@ -176,8 +178,14 @@ public class ServiceOrderController {
 		// Because default Tomcat URI encoding is iso-8859-1 so it must encode
 		// back to tis620
 		try {
+			if (null != serviceOrderID) {
+				serviceOrderID = new String(serviceOrderID.getBytes("iso-8859-1"), "tis620");
+			}
 			if (null != name) {
 				name = new String(name.getBytes("iso-8859-1"), "tis620");
+			}
+			if (null != mobileTel) {
+				mobileTel = new String(mobileTel.getBytes("iso-8859-1"), "tis620");
 			}
 			if (null != startDate && !startDate.equals("")) {
 				startDate = new String(startDate.getBytes("iso-8859-1"),
@@ -200,7 +208,10 @@ public class ServiceOrderController {
 		}
 
 		Map<String, Object> ret = new HashMap<String, Object>();
-		ret = soService.selectByCriteria(name,
+//		ret = soService.selectByCriteria(name,
+//				searchStartDate, searchEndDate, type, serialNo, employee, rows, page,
+//				sidx, sord);
+		ret = soService.selectByCriteria2(serviceOrderID, name, mobileTel,
 				searchStartDate, searchEndDate, type, serialNo, employee, rows, page,
 				sidx, sord);
 		
