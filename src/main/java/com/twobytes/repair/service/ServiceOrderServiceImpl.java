@@ -100,8 +100,27 @@ public class ServiceOrderServiceImpl implements ServiceOrderService {
 		}
 		return result;
 	}
-
 	
+	@Override
+	@Transactional
+	public Map<String, Object> selectByCriteria2(String serviceOrderID, String name, String mobileTel, String startDate,
+			String endDate, String type, String serialNo, String employee, Integer rows, Integer page, String orderBy,
+			String orderType) {
+		if(null != name && !name.equals("")) {
+			name = "%"+name+"%";
+		}
+		if(null != serialNo && !serialNo.equals("")) {
+			serialNo = "%"+serialNo+"%";
+		}
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			result = soDAO.selectByCriteria2(serviceOrderID, name, mobileTel, startDate, endDate, type, serialNo, employee, rows, page, orderBy, orderType);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public boolean edit(ServiceOrder serviceOrder) throws Exception{
