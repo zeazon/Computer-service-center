@@ -50,6 +50,16 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 	
 	@Override
+	@Transactional
+	public Map<String, Object> selectByCriteriaNameMobileTel(String name, String mobileTel, Integer rows, Integer page,
+			String orderBy, String orderType) throws Exception {
+		if(null != name && !name.equals("")) {
+			name = "%"+name+"%";
+		}
+		return customerDAO.selectByCriteriaNameMobileTel(name, mobileTel, rows, page, orderBy, orderType);
+	}
+
+	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public boolean edit(Customer customer) throws Exception{
 		return customerDAO.edit(customer);
