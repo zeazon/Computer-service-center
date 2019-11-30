@@ -73,7 +73,53 @@ public class CustomerDAOImpl implements CustomerDAO {
 		return result;
 	}
 
-	
+	@Override
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> selectByCriteriaNameMobileTel(String name, String mobileTel, Integer rows, Integer page,
+			String orderBy, String orderType) throws Exception {
+		StringBuilder sql = new StringBuilder();
+		sql.append("from Customer where 1=1 ");
+		if(null != name && !name.equals("")){
+			sql.append("and name like :name ");
+		}
+		if(null != mobileTel && !mobileTel.equals("")) {
+			sql.append("and mobileTel = :mobileTel ");
+		}
+		
+		if(!orderBy.equals("")){
+			if(orderBy.equals("fullName")){
+				sql.append("order by name "+orderType+", surname "+orderType);
+			}else{
+				sql.append("order by "+orderBy+" "+orderType);
+			}
+		}
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		Query q = sessionFactory.getCurrentSession().createQuery(sql.toString()).setFirstResult(rows*page - rows).setMaxResults(rows).setFetchSize(rows);
+		if(null != name && !name.equals("")) {
+			q.setString("name", name);
+		}
+		if(null != mobileTel && !mobileTel.equals("")) {
+			q.setString("mobileTel", mobileTel);
+		}
+		
+		List<Customer> list = q.list();
+		result.put("list", list);
+		
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Customer.class);	
+		if(null != name && !name.equals("")) {
+			criteria.add(Restrictions.like("name", name));
+		}
+		if(null != mobileTel && !mobileTel.equals("")) {
+			criteria.add(Restrictions.eq("mobileTel", mobileTel));
+		}
+		criteria.setProjection(Projections.rowCount());
+		
+		result.put("maxRows", criteria.list().get(0));
+		return result;
+	}
+
 	@Override
 	public boolean edit(Customer customer) throws Exception{
 		Session session = sessionFactory.getCurrentSession();
