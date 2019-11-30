@@ -392,9 +392,17 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 		
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(ServiceOrder.class, "serviceOrder");
 		
-		if(null != name && !name.equals("")) {
+		if(null != serviceOrderID && !serviceOrderID.equals("")) {
+			criteria.add(Restrictions.eq("serviceOrderID", serviceOrderID));
+		}
+		if((null != name && !name.equals("")) || (null != mobileTel && !mobileTel.equals(""))) {
 			criteria.createCriteria("serviceOrder.customer" , "customer");
-			criteria.add(Restrictions.like("customer.name", name));
+			if(null != name && !name.equals("")) {
+				criteria.add(Restrictions.like("customer.name", name));
+			}
+			if(null != mobileTel && !mobileTel.equals("")) {
+				criteria.add(Restrictions.like("customer.mobileTel", mobileTel));
+			}
 		}
 		if((null != startDate && !startDate.equals("")) && (null != endDate && !endDate.equals(""))){
 			/*
