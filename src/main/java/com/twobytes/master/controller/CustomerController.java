@@ -126,6 +126,59 @@ public class CustomerController {
 		response.setRows(rowsList);
 		return response;
 	}
+
+	@RequestMapping(value="/searchCustomerNameMobileTel")
+	@SuppressWarnings("unchecked")
+	public @ResponseBody GridResponse getDataNameMobileTel(@RequestParam(value="name", required=false) String name, @RequestParam(value="mobileTel", required=false) String mobileTel ,@RequestParam("rows") Integer rows, @RequestParam("page") Integer page, @RequestParam("sidx") String sidx, @RequestParam("sord") String sord){
+		// Because default Tomcat URI encoding is iso-8859-1 so it must encode back to tis620
+		try{
+			if(null != name){
+				name = new String(name.getBytes("iso-8859-1"), "tis620");	
+			}
+			if(null != mobileTel) {
+				mobileTel = new String(mobileTel.getBytes("iso-8859-1"), "tis620");
+			}
+		}catch(UnsupportedEncodingException e){
+			e.printStackTrace();
+		}
+		List<Customer> customerList = new ArrayList<Customer>();
+		Map<String, Object> ret = new HashMap<String, Object>();
+		try{
+			ret = customerService.selectByCriteriaNameMobileTel(name, mobileTel, rows, page, sidx, sord);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		customerList = (List<Customer>) ret.get("list");
+		
+		GridResponse response = new GridResponse();
+		List<CustomerGridData> rowsList = new ArrayList<CustomerGridData>();
+		
+		Integer total_pages = 0;
+		
+		for(Customer customer:customerList){
+			CustomerGridData gridData = new CustomerGridData();
+			gridData.setCustomerID(customer.getCustomerID().toString());
+			gridData.setName(customer.getName());
+			gridData.setTel(customer.getTel());
+			gridData.setMobileTel(customer.getMobileTel());
+			if(customer.getZipcode() != null){
+				gridData.setAddress(customer.getAddress()+" "+this.messages.getMessage("subdistrict_abbr", null, new Locale("th", "TH"))+" "+customer.getSubdistrict().getName()+" "+this.messages.getMessage("district_abbr", null, new Locale("th", "TH"))+" "+customer.getDistrict().getName()+" "+this.messages.getMessage("province_abbr", null, new Locale("th", "TH"))+" "+customer.getProvince().getName()+" "+customer.getZipcode());
+			}else{
+				gridData.setAddress(customer.getAddress()+" "+this.messages.getMessage("subdistrict_abbr", null, new Locale("th", "TH"))+" "+customer.getSubdistrict().getName()+" "+this.messages.getMessage("district_abbr", null, new Locale("th", "TH"))+" "+customer.getDistrict().getName()+" "+this.messages.getMessage("province_abbr", null, new Locale("th", "TH"))+" "+customer.getProvince().getName());
+			}
+			gridData.setEmail(customer.getEmail());
+			
+			rowsList.add(gridData);
+		}
+		total_pages = new Double(Math.ceil(((double)(Long) ret.get("maxRows")/(double)rows))).intValue();
+		
+		if (page > total_pages) page=total_pages;
+		response.setPage(page.toString());
+		response.setRecords(((Long) ret.get("maxRows")).toString());
+		response.setTotal(total_pages.toString());
+		response.setRows(rowsList);
+		return response;
+	}
 	
 	@RequestMapping(value = "/customer", params = "do=preAdd")
 	public String preAdd(ModelMap model, HttpServletRequest request){
