@@ -562,6 +562,10 @@
 							<td><label><fmt:message key="name" />:</label></td>
 							<td><div class="rowElem"><input type="text" id="lovCustomer_name" class="textboxMockup"></div></td>
 						</tr>
+						<tr>
+							<td><label><fmt:message key="mobileTel" />:</label></td>
+							<td><div class="rowElem"><input type="text" id="lovCustomer_mobileTel" class="textboxMockup"></div></td>
+						</tr>
 						<%--tr>
 							<td><label><fmt:message key="surname" />:</label></td>
 							<td><div class="rowElem"><input type="text" id="surname" class="textboxMockup"></div></td>
@@ -972,7 +976,7 @@ $.ajaxSetup({ cache: false });
 var tDialog = $( "#dialog-modal" ).dialog({
 	autoOpen: false,
 	height: 540,
-	width: 530,
+	width: 700,
 	modal: true
 });
 
@@ -980,7 +984,7 @@ function initLov(){
 	tDialog = $( "#dialog-modal" ).dialog({
 		autoOpen: false,
 		height: 540,
-		width: 530,
+		width: 700,
 		modal: true
 	});
 }
@@ -1118,7 +1122,8 @@ $(document).ready(function(){
 	
 	// walk in customer jqgrid
 	jQuery("#list").jqGrid({
-		url:"searchCustomer.html",
+		//url:"searchCustomer.html",
+		url:"searchCustomerNameMobileTel.html",
 		datatype: "json",
 		//height: 230,
 		height: "100%",
@@ -1132,7 +1137,7 @@ $(document).ready(function(){
 			{name:'company',index:'company', hidden:true},
 			{name:'address',index:'address', hidden:true},
 			{name:'tel',index:'tel', hidden:true},
-			{name:'mobileTel',index:'mobileTel', hidden:true},
+			{name:'mobileTel',index:'mobileTel', hidden:false},
 			{name:'email',index:'email', hidden:true}],
 		multiselect: false,
 		//caption: "Manipulating Array Data",
@@ -2150,9 +2155,11 @@ function setCustID(){
 
 function gridReload(){
 	var name = jQuery("#lovCustomer_name").val();
+	var mobileTel = jQuery("#lovCustomer_mobileTel").val();
 	//var surname = jQuery("#surname").val();
 	//jQuery("#list").jqGrid('setGridParam',{url:"searchCustomer.html?name="+name+"&surname="+surname,page:1}).trigger("reloadGrid");
-	jQuery("#list").jqGrid('setGridParam',{url:"searchCustomer.html?name="+name,page:1}).trigger("reloadGrid");
+	//jQuery("#list").jqGrid('setGridParam',{url:"searchCustomer.html?name="+name,page:1}).trigger("reloadGrid");
+	jQuery("#list").jqGrid('setGridParam',{url:"searchCustomerNameMobileTel.html?name="+name+"&mobileTel="+mobileTel,page:1}).trigger("reloadGrid");
 }
 
 function gridShopCustomerReload(){
