@@ -556,7 +556,7 @@
 		<tr>
 			<td>
 				<!--form id="lovform" class="jqtransform" action="#"-->
-				<form id="lovform" class="lov" action="#">
+				<form id="lovform" class="lov" action="#" onsubmit="gridReload(); return false;">
 					<table>
 						<tr>
 							<td><label><fmt:message key="name" />:</label></td>
@@ -572,7 +572,7 @@
 						</tr--%>
 						<tr>
 							<td></td>
-							<td><div class="rowElem"><input type="button" id="searchCustomerButton" value='<fmt:message key="button.search" />' ></div></td>
+							<td><div class="rowElem"><input type="submit" id="searchCustomerButton" value='<fmt:message key="button.search" />' ></div></td>
 						</tr>
 					</table>
 				</form>
@@ -1216,10 +1216,10 @@ $(document).ready(function(){
 		initLov();
 	}
 	
-	
-	$("#searchCustomerButton").click(function() {
-		gridReload();
-	});
+	// not use anymore
+	//$("#searchCustomerButton").click(function() {
+	//	gridReload();
+	//});
 	
 	// add customer
 	
